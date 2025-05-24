@@ -103,43 +103,6 @@
                 opacity: 0;
             }
         }
-        /* Time Dilation Streams - Nolan Style */
-.time-streams {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-    overflow: hidden;
-}
-
-.time-stream {
-    position: absolute;
-    height: 1px;
-    width: 300%;
-    left: -100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(0, 102, 204, 0.3) 45%, 
-        rgba(255, 107, 53, 0.3) 50%,
-        rgba(0, 102, 204, 0.3) 55%,
-        transparent 100%);
-    animation: timeFlow 20s linear infinite;
-    opacity: 0.6;
-}
-
-.time-stream:nth-child(1) { top: 10%; animation-duration: 25s; }
-.time-stream:nth-child(2) { top: 30%; animation-duration: 20s; animation-delay: -5s; }
-.time-stream:nth-child(3) { top: 50%; animation-duration: 30s; animation-delay: -10s; }
-.time-stream:nth-child(4) { top: 70%; animation-duration: 22s; animation-delay: -15s; }
-.time-stream:nth-child(5) { top: 90%; animation-duration: 28s; animation-delay: -7s; }
-
-@keyframes timeFlow {
-    0% { transform: translateX(-33.33%); }
-    100% { transform: translateX(0); }
-}
         
         /* Header - Mission Control */
         header {
@@ -1233,102 +1196,12 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-teal));
         }
-        /* Inception Loading Sequence */
-.loading-sequence {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--void-black, #0a0a0a);
-    z-index: 10000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 1s ease-out;
-}
-
-.loading-sequence.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.loading-level {
-    margin: 1rem 0;
-    opacity: 0;
-    animation: levelAppear 1s ease-out forwards;
-}
-
-.loading-level:nth-child(1) { animation-delay: 0.5s; }
-.loading-level:nth-child(2) { animation-delay: 1s; }
-.loading-level:nth-child(3) { animation-delay: 1.5s; }
-
-.level-text {
-    font-family: var(--font-mono);
-    font-size: 1.2rem;
-    color: var(--accent-cyan);
-    letter-spacing: 3px;
-    margin-bottom: 0.5rem;
-    text-align: center;
-}
-
-.level-bar {
-    width: 300px;
-    height: 2px;
-    background: var(--border-gray);
-    position: relative;
-    overflow: hidden;
-}
-
-.level-bar::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-    animation: loadingBar 2s ease-out forwards;
-    animation-delay: inherit;
-}
-
-@keyframes levelAppear {
-    to { opacity: 1; }
-}
-
-@keyframes loadingBar {
-    to { left: 100%; }
-}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Inception Loading Sequence -->
-<div id="loading-sequence" class="loading-sequence">
-    <div class="loading-level" data-level="1">
-        <div class="level-text">ENTERING ECONOMIC REALITY</div>
-        <div class="level-bar"></div>
-    </div>
-    <div class="loading-level" data-level="2">
-        <div class="level-text">LOADING MATHEMATICAL LIMBO</div>
-        <div class="level-bar"></div>
-    </div>
-    <div class="loading-level" data-level="3">
-        <div class="level-text">ACCESSING DATA UNCONSCIOUS</div>
-        <div class="level-bar"></div>
-    </div>
-</div>
     <!-- Floating Particles -->
     <div class="particles" id="particles"></div>
-    <!-- Time Dilation Streams -->
-<div class="time-streams">
-    <div class="time-stream"></div>
-    <div class="time-stream"></div>
-    <div class="time-stream"></div>
-    <div class="time-stream"></div>
-    <div class="time-stream"></div>
-</div>
 
     <header>
         <div class="nav-container">
