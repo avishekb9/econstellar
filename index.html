@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Avishek Bhandari - Research Station</title>
+    <style>
+        /* Interstellar Research Station - Clean Sci-Fi Minimalism */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-white: #ffffff;
+            --secondary-white: #fafafa;
+            --light-gray: #f5f5f5;
+            --medium-gray: #e8e8e8;
+            --border-gray: #d0d0d0;
+            --text-dark: #1a1a1a;
+            --text-medium: #4a4a4a;
+            --text-light: #6a6a6a;
+            --accent-blue: #0066cc;
+            --accent-cyan: #00bcd4;
+            --accent-teal: #009688;
+            --accent-orange: #ff6b35;
+            --accent-purple: #6366f1;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+            --glow-blue: rgba(0, 102, 204, 0.2);
+            --glow-cyan: rgba(0, 188, 212, 0.2);
+            
+            --font-primary: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--primary-white);
+            color: var(--text-dark);
+            line-height: 1.7;
+            font-size: 16px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Geometric Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, var(--glow-blue) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, var(--glow-cyan) 0%, transparent 50%),
+                linear-gradient(0deg, transparent 24%, rgba(0, 102, 204, 0.02) 25%, rgba(0, 102, 204, 0.02) 26%, transparent 27%, transparent 74%, rgba(0, 102, 204, 0.02) 75%, rgba(0, 102, 204, 0.02) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 188, 212, 0.02) 25%, rgba(0, 188, 212, 0.02) 26%, transparent 27%, transparent 74%, rgba(0, 188, 212, 0.02) 75%, rgba(0, 188, 212, 0.02) 76%, transparent 77%, transparent);
+            background-size: 150px 150px, 200px 200px, 60px 60px, 60px 60px;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+            opacity: 0.3;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* Header - Mission Control */
+        header {
+            background: linear-gradient(135deg, var(--primary-white) 0%, var(--secondary-white) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at top, transparent 60%, var(--glow-blue) 100%),
+                radial-gradient(ellipse at bottom, transparent 60%, var(--glow-cyan) 100%);
+            opacity: 0.1;
+        }
+        
+        /* Navigation - Floating Command Bar */
+        .nav-container {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 50px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .nav-container:hover {
+            background: var(--primary-white);
+            box-shadow: 0 12px 48px var(--shadow-medium);
+            transform: translateX(-50%) translateY(-2px);
+        }
+        
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent-blue);
+            letter-spacing: 1.5px;
+            position: relative;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-cyan);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 var(--glow-cyan); }
+            50% { opacity: 0.7; transform: scale(1.1); box-shadow: 0 0 0 4px transparent; }
+        }
+        
+        nav {
+            display: flex;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            margin: 0;
+            align-items: center;
+        }
+        
+        nav ul li {
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: var(--text-medium);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border: 1px solid transparent;
+            background: rgba(0, 0, 0, 0.02);
+        }
+        
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--glow-blue), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-blue);
+            background: var(--light-gray);
+            border-color: var(--accent-cyan);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px var(--shadow-light);
+        }
+        
+        nav ul li a:hover::before {
+            left: 100%;
+        }
+        
+        /* Separator dots between nav items */
+        nav ul li:not(:last-child)::after {
+            content: '•';
+            position: absolute;
+            right: -0.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--border-gray);
+            font-size: 0.6rem;
+            pointer-events: none;
+        }
+        
+        /* Hero Content - Space Station Interface */
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+            position: relative;
+        }
+        
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            margin: 0 auto 3rem;
+            overflow: hidden;
+            border: 4px solid var(--primary-white);
+            box-shadow: 
+                0 0 0 1px var(--border-gray),
+                0 20px 60px var(--shadow-medium),
+                inset 0 0 30px rgba(0, 102, 204, 0.05);
+            position: relative;
+            animation: levitate 6s ease-in-out infinite;
+        }
+        
+        @keyframes levitate {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-blue), var(--accent-cyan), var(--accent-teal), var(--accent-blue));
+            z-index: -1;
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(1.05) contrast(1.1);
+        }
+        
+        h1 {
+            font-family: var(--font-primary);
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            color: var(--text-dark);
+            letter-spacing: -1px;
+            position: relative;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+        }
+        
+        .title {
+            font-size: 1.2rem;
+            color: var(--accent-blue);
+            margin-bottom: 3rem;
+            font-weight: 500;
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
+            position: relative;
+        }
+        
+        .title::before,
+        .title::after {
+            content: '>';
+            color: var(--accent-cyan);
+            position: absolute;
+            animation: blink 2s infinite;
+        }
+        
+        .title::before {
+            left: -20px;
+        }
+        
+        .title::after {
+            right: -20px;
+            transform: scaleX(-1);
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-medium);
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 20px 60px var(--shadow-light);
+            position: relative;
+        }
+        
+        .intro-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+        }
+        
+        /* Holographic Cards */
+        .holo-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-light);
+        }
+        
+        .holo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 188, 212, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .holo-card:hover::before {
+            left: 100%;
+        }
+        
+        .holo-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 40px 80px var(--shadow-medium);
+            border-color: var(--accent-cyan);
+        }
+        
+        /* Section Layouts */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .section-alt {
+            background: var(--light-gray);
+            margin: 0;
+            max-width: none;
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .section-alt::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+        }
+        
+        .section-alt .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        h2 {
+            font-family: var(--font-primary);
+            font-size: 3rem;
+            margin-bottom: 4rem;
+            color: var(--text-dark);
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: -1px;
+            position: relative;
+        }
+        
+        h2::before {
+            content: attr(data-section);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--accent-cyan);
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan));
+        }
+        
+        h3 {
+            font-family: var(--font-primary);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--accent-blue);
+            font-weight: 500;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Research Grid - Data Visualization Style */
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+        
+        .research-item {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-light);
+        }
+        
+        .research-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-blue), var(--accent-cyan));
+            transition: width 0.3s ease;
+        }
+        
+        .research-item:hover::before {
+            width: 8px;
+        }
+        
+        .research-item:hover {
+            transform: translateY(-20px) scale(1.02);
+            box-shadow: 0 40px 80px var(--shadow-medium);
+            border-color: var(--accent-cyan);
+        }
+        
+        .research-item h4 {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            font-family: var(--font-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .research-item p {
+            color: var(--text-medium);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .tag {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: var(--primary-white);
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .tag:hover::before {
+            left: 100%;
+        }
+        
+        .tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+        }
+        
+        /* Publications - Holographic Data Streams */
+        .publications-list {
+            margin-top: 4rem;
+        }
+        
+        .publication {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-light);
+        }
+        
+        .publication::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-teal));
+            transition: height 0.3s ease;
+        }
+        
+        .publication:hover::before {
+            height: 6px;
+        }
+        
+        .publication:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 40px 80px var(--shadow-medium);
+        }
+        
+        .pub-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            font-family: var(--font-primary);
+        }
+        
+        .pub-authors {
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+            font-style: italic;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+        
+        .pub-venue {
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-mono);
+        }
+        
+        .pub-venue .publisher {
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+            color: var(--primary-white);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-left: 1rem;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .publisher::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .publisher:hover::before {
+            left: 100%;
+        }
+        
+        .pub-abstract {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* Teaching - Mission Modules */
+        .teaching-subsection {
+            margin-bottom: 5rem;
+        }
+        
+        .teaching-subsection h3 {
+            font-size: 2rem;
+            color: var(--accent-blue);
+            margin-bottom: 2.5rem;
+            text-align: left;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-cyan);
+            position: relative;
+        }
+        
+        .teaching-subsection h3::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--accent-blue);
+        }
+        
+        .teaching-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+        }
+        
+        .course {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-light);
+        }
+        
+        .course:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 40px 80px var(--shadow-medium);
+        }
+        
+        .past-course {
+            background: rgba(248, 248, 248, 0.95);
+            border: 1px solid var(--medium-gray);
+        }
+        
+        .past-course:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--border-gray);
+        }
+        
+        .course-institution {
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .course-institution.current {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: var(--primary-white);
+            box-shadow: 0 8px 24px var(--glow-blue);
+        }
+        
+        .course-institution.past {
+            background: linear-gradient(135deg, var(--text-light), var(--text-medium));
+            color: var(--primary-white);
+            box-shadow: 0 8px 24px var(--shadow-light);
+        }
+        
+        .course h4 {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 1.2rem;
+            font-family: var(--font-primary);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        
+        .course p {
+            color: var(--text-medium);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        /* Students Section - Research Pods */
+        .students-section {
+            margin-top: 4rem;
+        }
+        
+        .students-section h3 {
+            font-size: 2rem;
+            color: var(--accent-teal);
+            margin-bottom: 2.5rem;
+            text-align: left;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-cyan);
+            position: relative;
+        }
+        
+        .students-section h3::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--accent-teal);
+        }
+        
+        .students-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+        
+        .student-item {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-light);
+        }
+        
+        .student-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--accent-teal), var(--accent-cyan));
+            transition: width 0.3s ease;
+        }
+        
+        .student-item:hover::before {
+            width: 8px;
+        }
+        
+        .student-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 40px 80px var(--shadow-medium);
+        }
+        
+        .student-item h4 {
+            font-size: 1.4rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-family: var(--font-primary);
+            font-weight: 600;
+        }
+        
+        .student-item p {
+            color: var(--text-medium);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+        
+        /* Contact Section - Command Interface */
+        .contact-info {
+            text-align: center;
+            margin-top: 4rem;
+        }
+        
+        .contact-block {
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            padding: 3.5rem;
+            box-shadow: 0 40px 80px var(--shadow-light);
+            position: relative;
+        }
+        
+        .contact-block::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan), var(--accent-teal));
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .contact-block p {
+            margin-bottom: 1.5rem;
+            color: var(--text-medium);
+        }
+        
+        .contact-block strong {
+            color: var(--accent-blue);
+            font-family: var(--font-primary);
+            font-weight: 600;
+        }
+        
+        .contact-block a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .contact-block a:hover {
+            color: var(--accent-blue);
+            text-shadow: 0 0 10px var(--glow-cyan);
+        }
+        
+        /* Academic Profiles - Control Panel */
+        .academic-profiles {
+            margin-top: 5rem;
+            text-align: center;
+            padding: 4rem 0;
+            border-top: 1px solid var(--border-gray);
+            background: linear-gradient(135deg, transparent, rgba(0, 188, 212, 0.02), transparent);
+        }
+        
+        .profile-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font-mono);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-gray);
+            box-shadow: 0 20px 60px var(--shadow-light);
+            letter-spacing: 0.5px;
+        }
+        
+        .profile-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 188, 212, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .profile-btn:hover::before {
+            left: 100%;
+        }
+        
+        .profile-btn i {
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+        
+        .profile-btn span {
+            z-index: 1;
+        }
+        
+        .linkedin {
+            color: #0077b5;
+        }
+        
+        .linkedin:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(0, 119, 181, 0.3);
+            border-color: #0077b5;
+        }
+        
+        .orcid {
+            color: #a6ce39;
+        }
+        
+        .orcid:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(166, 206, 57, 0.3);
+            border-color: #a6ce39;
+        }
+        
+        .iitbbs {
+            color: var(--accent-blue);
+        }
+        
+        .iitbbs:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px var(--glow-blue);
+            border-color: var(--accent-blue);
+        }
+        
+        .github {
+            color: #333;
+        }
+        
+        .github:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(51, 51, 51, 0.3);
+            border-color: #333;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--secondary-white);
+            border-top: 1px solid var(--border-gray);
+            color: var(--text-light);
+            text-align: center;
+            padding: 3rem;
+            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            right: 2rem;
+            top: 1rem;
+            z-index: 1001;
+        }
+        
+        .hamburger {
+            width: 25px;
+            height: 3px;
+            background: var(--accent-blue);
+            margin: 5px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                transform: none;
+                border-radius: 0;
+                padding: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav {
+                margin-top: 1rem;
+                width: 100%;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+                display: none;
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            header {
+                padding-top: 8rem;
+                min-height: 100vh;
+            }
+            
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            .title {
+                font-size: 1.1rem;
+            }
+            
+            section {
+                padding: 4rem 1rem;
+            }
+            
+            .section-alt {
+                padding: 4rem 0;
+            }
+            
+            .research-grid,
+            .teaching-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .profile-buttons {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .profile-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .profile-photo {
+                width: 140px;
+                height: 140px;
+            }
+            
+            h2 {
+                font-size: 2.2rem;
+            }
+            
+            .intro-text {
+                font-size: 1rem;
+                padding: 2rem;
+            }
+            
+            .holo-card {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+                letter-spacing: -0.5px;
+            }
+            
+            .profile-photo {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .holo-card {
+                padding: 1.5rem;
+            }
+            
+            .contact-block {
+                padding: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Scroll animations */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-on-scroll {
+            animation: slideInUp 0.8s ease-out;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--accent-cyan), var(--accent-teal));
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">RESEARCH_STATION</div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <div class="hamburger"></div>
+                <div class="hamburger"></div>
+                <div class="hamburger"></div>
+            </button>
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#research">RESEARCH</a></li>
+                    <li><a href="#publications">PUBLICATIONS</a></li>
+                    <li><a href="#teaching">TEACHING</a></li>
+                    <li><a href="#students">STUDENTS</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                    <li><a href="rock-universe.html">EXTRAS</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <div class="hero-content">
+            <div class="profile-photo">
+                <img src="https://via.placeholder.com/400x400/ffffff/0066cc?text=AB" alt="Avishek Bhandari">
+            </div>
+            <h1>AVISHEK BHANDARI</h1>
+            <p class="title">NETWORK_RESEARCHER</p>
+            <div class="intro-text">
+                <p>Assistant Professor exploring macroeconomic and financial networks across space and time from IIT Bhubaneswar's research outpost. Interested in how markets adapt, evolve, and communicate—from network-based market efficiency frameworks to cryptocurrency ecosystem dynamics. Currently investigating how information flows create economic contagion patterns and why digital assets behave like they're from a parallel universe.</p>
+            </div>
+        </div>
+    </header>
+
+    <section id="about">
+        <h2 data-section="PROFILE">Mission Brief</h2>
+        <div class="holo-card">
+            <p>Dr. Avishek Bhandari operates from the Economics Research Station at IIT Bhubaneswar, where he studies how financial galaxies interconnect and evolve. His journey began at the University of Hyderabad, earning a Ph.D. while exploring "Interdependence, contagion and long-memory in global equity markets" through wavelet analysis—basically mapping the Force that binds market networks together.</p>
+            
+            <p>Before joining the IIT Bhubaneswar outpost in late 2022, he spent time at IMT Hyderabad's research facility and completed specialized training at Oxford's macroeconomic academy. Think of it as Jedi training, but for understanding why markets do what they do when nobody expects them to.</p>
+            
+            <p>His research universe spans financial econometrics, time series analysis, and the mysterious long-memory patterns that financial markets exhibit across different temporal dimensions. Recent expeditions include cryptocurrency network dynamics and how information flows through economic systems—because even the Death Star needed good communication protocols.</p>
+        </div>
+    </section>
+
+    <div class="section-alt">
+        <div class="section-content">
+            <section id="research">
+                <h2 data-section="RESEARCH">Active Research Modules</h2>
+                <div class="research-grid">
+                    <div class="research-item">
+                        <h4>Network-Adaptive Market Intelligence</h4>
+                        <p>Developing frameworks that integrate network theory, information dynamics, and long-memory processes to enhance understanding of market efficiency. Exploring how directed information flows between assets reveal temporal dependencies and structural patterns across financial networks during various market conditions.</p>
+                        <div class="tags">
+                            <span class="tag">NETWORKS</span>
+                            <span class="tag">EFFICIENCY</span>
+                            <span class="tag">DYNAMICS</span>
+                            <span class="tag">STRUCTURE</span>
+                        </div>
+                    </div>
+                    <div class="research-item">
+                        <h4>Macroeconomic Information Networks</h4>
+                        <p>Developing frameworks for understanding economic contagion that integrate fundamental linkages, pure contagion mechanisms, and information processing heterogeneity. Bridging insights from international macroeconomics, behavioral finance, and network analysis to understand how shocks propagate in the modern global economy through multi-scale analysis of information flows and adaptation dynamics.</p>
+                        <div class="tags">
+                            <span class="tag">CONTAGION</span>
+                            <span class="tag">NETWORKS</span>
+                            <span class="tag">MACRO</span>
+                            <span class="tag">FLOWS</span>
+                        </div>
+                    </div>
+                    <div class="research-item">
+                        <h4>Digital Asset Intelligence</h4>
+                        <p>Investigating how cryptocurrency networks exhibit emergent behaviors through machine learning algorithms and adaptive system analysis. Mapping the evolutionary pathways of digital financial architectures as they interface with traditional economic structures, revealing new paradigms of decentralized value transfer across interconnected global protocols.</p>
+                        <div class="tags">
+                            <span class="tag">EMERGENT</span>
+                            <span class="tag">ADAPTIVE</span>
+                            <span class="tag">PROTOCOLS</span>
+                            <span class="tag">INTERFACE</span>
+                        </div>
+                    </div>
+                    <div class="research-item">
+                        <h4>Global Market Synthesis</h4>
+                        <p>Same math that launches rockets navigates economies—we're just hacking the source code of both. Seeking fellow travelers to forge new statistical learning tools for this cosmic expedition through financial universes. Warning: journey includes black holes, asteroid fields, and the occasional hostile alien economy. <em>"The universe is not only queerer than we suppose, but queerer than we can suppose. We are not going to be able to understand the new economy until we understand that we are part of something much larger than ourselves—a cosmic dance of information, energy, and consciousness flowing through markets like stardust through the fabric of spacetime itself."</em> — Adapted from J.B.S. Haldane & Carl Sagan</p>
+                        <div class="tags">
+                            <span class="tag">COSMIC</span>
+                            <span class="tag">NAVIGATION</span>
+                            <span class="tag">STARDUST</span>
+                            <span class="tag">CONSCIOUSNESS</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <section id="publications">
+        <h2 data-section="PUBLICATIONS">Research Output Database</h2>
+        <div class="publications-list">
+            <div class="publication">
+                <div class="pub-title">Long-memory in the high frequency cryptocurrency markets using fractal connectivity analysis: The impact of COVID-19</div>
+                <div class="pub-authors">Assaf, A., Mokni, K., Yousaf, I., Bhandari, A.</div>
+                <div class="pub-venue">Research in International Business and Finance, Vol. 64, 2023 <span class="publisher">ELSEVIER</span></div>
+                <div class="pub-abstract">Advanced fractal connectivity analysis reveals unprecedented insights into long-memory properties within high-frequency cryptocurrency markets, demonstrating significant structural changes during the COVID-19 pandemic period.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Multivariate Long Memory Structure in the Cryptocurrency Markets: The Impact of COVID-19</div>
+                <div class="pub-authors">Assaf, A., Bhandari, A., Charif, H., Demir, E.</div>
+                <div class="pub-venue">International Review of Financial Analysis, Vol. 82, 2022 <span class="publisher">ELSEVIER</span></div>
+                <div class="pub-abstract">Comprehensive investigation of multivariate long memory structures reveals how pandemic-induced market volatility fundamentally altered cryptocurrency interdependence networks and temporal dependencies.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Long Memory and Correlation Structures of Select Stock Returns Using Novel Wavelet and Fractal Connectivity Networks</div>
+                <div class="pub-authors">Bhandari, A., Assaf, A., Paramanik, R.N.</div>
+                <div class="pub-venue">Studies in International Economics and Finance, 2022 <span class="publisher">SPRINGER</span></div>
+                <div class="pub-abstract">Introduction of revolutionary wavelet and fractal connectivity methodologies enables precise mapping of long memory and correlation structures across diverse global equity markets.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Financial cycle, business cycle and policy uncertainty in India: an empirical investigation</div>
+                <div class="pub-authors">Paramanik, R.N., Bhandari, A., Kamaiah, B.</div>
+                <div class="pub-venue">Bulletin of Economic Research, 2021 <span class="publisher">WILEY</span></div>
+                <div class="pub-abstract">Empirical analysis utilizing advanced econometric frameworks reveals complex interdependencies between financial cycles, business cycles, and policy uncertainty within the Indian economic matrix.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Does climate impact vary across time horizons? A time–frequency analysis of climate-crop yields in India</div>
+                <div class="pub-authors">Padakandla, S.R., Bhandari, A., Atluri, A.K.</div>
+                <div class="pub-venue">Stochastic Environmental Research and Risk Assessment, 2021 <span class="publisher">SPRINGER</span></div>
+                <div class="pub-abstract">Time-frequency domain analysis demonstrates variable climate impact patterns across multiple temporal horizons, providing critical insights for agricultural yield prediction models.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Long Memory and Fractality Among Global Equity Markets: A Multivariate Wavelet Approach</div>
+                <div class="pub-authors">Bhandari, A., Kamaiah, B.</div>
+                <div class="pub-venue">Journal of Quantitative Economics, 2021 <span class="publisher">SPRINGER</span></div>
+                <div class="pub-abstract">Multivariate wavelet analysis framework reveals previously undetected long memory and fractality patterns among global equity markets, advancing understanding of market efficiency and interdependence.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Time-varying Nature of Stock Market Interdependence: A Global Perspective</div>
+                <div class="pub-authors">Bhandari, A., Kamaiah, B.</div>
+                <div class="pub-venue">Economic and Political Weekly, Vol. 55, No. 13, 2020 <span class="publisher">EPW</span></div>
+                <div class="pub-abstract">Investigation of time-varying interdependence patterns among global stock markets using dynamic correlation analysis, revealing structural changes in market connectivity across different economic regimes and crisis periods.</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-alt">
+        <div class="section-content">
+            <section id="teaching">
+                <h2 data-section="EDUCATION">Knowledge Transfer Protocols</h2>
+                
+                <div class="teaching-subsection">
+                    <h3>Current Mission Modules</h3>
+                    <div class="teaching-grid">
+                        <div class="course">
+                            <div class="course-institution current">ACTIVE_DEPLOYMENT</div>
+                            <h4>International Business Systems</h4>
+                            <p>Advanced analysis of global trade networks, foreign exchange mechanisms, multinational corporate structures, and international strategic frameworks. Integrates real-world case studies with theoretical foundations.</p>
+                        </div>
+                        <div class="course">
+                            <div class="course-institution current">ACTIVE_DEPLOYMENT</div>
+                            <h4>Managerial Economics Interface</h4>
+                            <p>Application of economic principles to strategic decision-making processes, covering demand optimization, production theory, market structure analysis, and dynamic pricing algorithms.</p>
+                        </div>
+                        <div class="course">
+                            <div class="course-institution current">ACTIVE_DEPLOYMENT</div>
+                            <h4>Mathematical Economics Framework</h4>
+                            <p>Essential mathematical tools for economic modeling including advanced calculus, linear algebra, optimization techniques, and their applications in contemporary economic analysis.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="teaching-subsection">
+                    <h3>Previous Mission Archives</h3>
+                    <div class="teaching-grid">
+                        <div class="course past-course">
+                            <div class="course-institution past">ARCHIVED_2017_2022</div>
+                            <h4>Macroeconomic Environment Analysis</h4>
+                            <p>Comprehensive coverage of macroeconomic theory, policy frameworks, business cycle dynamics, and their impact on strategic business decision-making processes.</p>
+                        </div>
+                        <div class="course past-course">
+                            <div class="course-institution past">ARCHIVED_2017_2022</div>
+                            <h4>Risk Analytics Systems</h4>
+                            <p>Advanced quantitative risk analysis methodologies, financial risk modeling frameworks, portfolio optimization algorithms, and comprehensive risk management protocols.</p>
+                        </div>
+                        <div class="course past-course">
+                            <div class="course-institution past">ARCHIVED_2017_2022</div>
+                            <h4>Advanced Research Methodology</h4>
+                            <p>Graduate-level research framework covering advanced quantitative methodologies, econometric techniques, and statistical analysis protocols for doctoral research programs.</p>
+                        </div>
+                        <div class="course past-course">
+                            <div class="course-institution past">ARCHIVED_2020</div>
+                            <h4>Mathematical Finance Engine</h4>
+                            <p>Specialized course in mathematical finance modeling, derivatives pricing algorithms, stochastic calculus applications, and advanced financial engineering concepts.</p>
+                        </div>
+                        <div class="course past-course">
+                            <div class="course-institution past">ARCHIVED_2014_2016</div>
+                            <h4>Time Series & Spectral Methods</h4>
+                            <p>Advanced econometric analysis covering time series methodology, spectral analysis techniques, frequency domain analysis, and their applications in economic data processing.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <section id="students">
+        <h2 data-section="RESEARCHERS">Research Pod Members</h2>
+        <div class="students-section">
+            <h3>Active Doctoral Researchers</h3>
+            <div class="students-list">
+                <div class="student-item">
+                    <h4>Ipsita Parida</h4>
+                    <p>Information Processing and Learning Algorithms in Macroeconomic Contagion Network Systems</p>
+                </div>
+                <div class="student-item">
+                    <h4>Hitesh Kumar Sahu</h4>
+                    <p>Network Topology and Statistical Learning Applications in Economics and Financial System Analysis</p>
+                </div>
+                <div class="student-item">
+                    <h4>Shiva Kumar</h4>
+                    <p>Empirical Labor Economics Research (Co-supervised with Dr. Sitakanta Panda)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="extras">
+        <h2 data-section="PORTAL">Parallel Universe Access</h2>
+        <div class="holo-card" style="text-align: center; background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(0, 102, 204, 0.05)); border: 2px solid var(--accent-cyan); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M50,10 Q90,50 50,90 Q10,50 50,10\" fill=\"none\" stroke=\"%2300bcd4\" stroke-width=\"0.5\" opacity=\"0.3\"/></svg>') center/contain no-repeat; animation: rotate 20s linear infinite;"></div>
+            <h3 style="font-size: 2rem; color: var(--accent-blue); margin-bottom: 1.5rem; font-family: var(--font-mono);">MUSICAL DIMENSION</h3>
+            <p style="font-size: 1.2rem; color: var(--text-medium); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">Beyond the equations and econometric models lies another universe—one of six strings, tube amps, and the eternal quest for tone. Enter the parallel dimension where Dr. Bhandari channels legends through Les Pauls and Stratocasters.</p>
+            <a href="rock-universe.html" style="display: inline-block; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); color: white; padding: 1.5rem 3rem; border-radius: 50px; text-decoration: none; font-family: var(--font-mono); font-weight: 600; letter-spacing: 1px; transition: all 0.4s ease; box-shadow: 0 20px 60px var(--shadow-medium); position: relative; z-index: 2;">
+                ENTER_ROCK_UNIVERSE →
+            </a>
+        </div>
+    </section>
+
+    <div class="section-alt">
+        <div class="section-content">
+            <section id="contact">
+                <h2 data-section="COMMUNICATION">Contact Interface</h2>
+                <div class="contact-info">
+                    <div class="contact-block">
+                        <p><strong>Dr. Avishek Bhandari, Ph.D.</strong><br>
+                        Assistant Professor<br>
+                        School of Humanities, Social Sciences and Management<br>
+                        Indian Institute of Technology Bhubaneswar<br>
+                        Research Station Alpha-7<br>
+                        Argul, Khordha, Odisha 752050<br>
+                        India</p>
+                        
+                        <p>Primary Channel: avishekb [AT] iitbbs [DOT] ac [DOT] in<br>
+                        Direct Line: +91 8688764729</p>
+                        
+                        <p>Research Institute: <a href="https://www.iitbbs.ac.in/" target="_blank">https://www.iitbbs.ac.in/</a></p>
+                    </div>
+                </div>
+                
+                <div class="academic-profiles">
+                    <div class="profile-buttons">
+                        <a href="https://www.linkedin.com/in/avishek-bhandari-100b77119/" target="_blank" class="profile-btn linkedin">
+                            <i class="fab fa-linkedin"></i>
+                            <span>NETWORK</span>
+                        </a>
+                        <a href="https://orcid.org/0000-0003-2989-2543" target="_blank" class="profile-btn orcid">
+                            <i class="fab fa-orcid"></i>
+                            <span>RESEARCH_ID</span>
+                        </a>
+                        <a href="https://old.iitbbs.ac.in/profile.php/avishek/" target="_blank" class="profile-btn iitbbs">
+                            <i class="fas fa-university"></i>
+                            <span>INSTITUTE</span>
+                        </a>
+                        <a href="https://github.com/avishekb9" target="_blank" class="profile-btn github">
+                            <i class="fab fa-github"></i>
+                            <span>CODE_REPO</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 RESEARCH_STATION_ALPHA // DATA_INTEGRITY_MAINTAINED</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 15;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = Math.random() * 100 + '%';
+                        particle.style.animationDelay = Math.random() * 20 + 's';
+                        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                        particlesContainer.appendChild(particle);
+                        
+                        // Remove particle after animation
+                        setTimeout(() => {
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                            }
+                        }, 25000);
+                    }, i * 1000);
+                }
+            }
+            
+            // Start particle system
+            createParticles();
+            setInterval(createParticles, 25000);
+
+            // Mobile menu functionality
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mainNav = document.getElementById('mainNav');
+            
+            if (mobileMenuToggle && mainNav) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    this.classList.toggle('active');
+                });
+                
+                // Close mobile menu when clicking on links
+                document.querySelectorAll('#mainNav a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        mainNav.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
+                    });
+                });
+            }
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        const navHeight = document.querySelector('.nav-container').offsetHeight;
+                        const targetPosition = targetSection.offsetTop - navHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-on-scroll');
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.holo-card, .research-item, .publication, .course, .student-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+
+            // Parallax effect for background patterns
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.3;
+                
+                document.body.style.backgroundPosition = `0 ${rate}px`;
+            });
+
+            // Interactive navigation dots
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                setInterval(() => {
+                    const dot = logo.querySelector('::after');
+                    if (Math.random() > 0.7) {
+                        logo.style.setProperty('--pulse-color', '#00bcd4');
+                        setTimeout(() => {
+                            logo.style.setProperty('--pulse-color', '#00bcd4');
+                        }, 200);
+                    }
+                }, 3000);
+            }
+
+            console.log("RESEARCH_STATION initialized successfully");
+            console.log("All systems operational");
+        });
+    </script>
+</body>
+</html>
