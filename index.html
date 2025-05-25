@@ -526,7 +526,7 @@
         
         h2 {
             font-family: var(--font-primary);
-            font-size: 3rem;
+            font-size: 2.4rem;
             margin-bottom: 4rem;
             color: var(--text-dark);
             text-align: center;
@@ -538,11 +538,11 @@
         h2::before {
             content: attr(data-section);
             position: absolute;
-            top: -30px;
+            top: -35px;
             left: 50%;
             transform: translateX(-50%);
             font-family: var(--font-mono);
-            font-size: 0.8rem;
+            font-size: 1rem;
             color: var(--accent-cyan);
             letter-spacing: 2px;
             font-weight: 600;
@@ -1218,7 +1218,7 @@
 
         .portal-dialog p {
             font-size: 1.2rem;
-            color: var(--text-gray);
+            color: #fff;
             margin-bottom: 2rem;
         }
 
@@ -1252,14 +1252,15 @@
         }
 
         .portal-no {
-            background: transparent;
-            color: var(--text-gray);
-            border: 1px solid var(--text-gray);
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-purple));
+            color: var(--primary-white);
+            border: none;
         }
 
         .portal-no:hover {
-            background: var(--text-gray);
-            color: var(--deep-black);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5);
+            /* Optionally, you can use the same hover as .portal-yes */
         }
 
         /* Inception Loading Sequence */
@@ -1441,7 +1442,7 @@
             }
             
             h2 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
             
             .intro-text {
@@ -1511,6 +1512,47 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-teal));
         }
+html {
+    scroll-behavior: smooth;
+}
+
+section[id] {
+    scroll-margin-top: 140px; /* Increased from 90px */
+}
+
+/* Fallback anchor positioning */
+section[id]::before {
+    content: '';
+    display: block;
+    height: 140px;
+    margin-top: -140px;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    section[id]::before {
+        height: 180px;
+        margin-top: -180px;
+    }
+}
+
+
+/* Additional specific targeting for nested sections */
+.section-alt section[id] {
+    scroll-margin-top: 160px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    section[id] {
+        scroll-margin-top: 180px;
+    }
+    
+    .section-alt section[id] {
+        scroll-margin-top: 200px;
+    }
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -1545,31 +1587,31 @@
 
     <header>
         <div class="nav-container">
-            <div class="logo">RESEARCH_STATION</div>
-            <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                <div class="hamburger"></div>
-                <div class="hamburger"></div>
-                <div class="hamburger"></div>
-            </button>
-            <nav>
-                <ul id="mainNav">
-                    <li><a href="#about">ABOUT</a></li>
-                    <li><a href="#research">RESEARCH</a></li>
-                    <li><a href="#publications">PUBLICATIONS</a></li>
-                    <li><a href="#teaching">TEACHING</a></li>
-                    <li><a href="#students">STUDENTS</a></li>
-                    <li><a href="#contact">CONTACT</a></li>
-                    <li><a href="rock-universe.html">EXTRAS</a></li>
-                </ul>
-            </nav>
-        </div>
+  <div class="logo">RESEARCH_STATION</div>
+  <button class="mobile-menu-toggle" aria-label="Toggle menu">
+    <div class="hamburger"></div>
+    <div class="hamburger"></div>
+    <div class="hamburger"></div>
+  </button>
+  <nav aria-label="Main navigation">
+    <ul id="mainNav">
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#research">RESEARCH</a></li>
+      <li><a href="#publications">PUBLICATIONS</a></li>
+      <li><a href="#teaching">TEACHING</a></li>
+      <li><a href="#students">STUDENTS</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+      <li><a href="rock-universe.html">EXTRAS</a></li>
+    </ul>
+  </nav>
+</div>
         
         <div class="hero-content">
             <div class="profile-photo">
                 <img src="https://via.placeholder.com/400x400/ffffff/0066cc?text=AB" alt="Avishek Bhandari">
             </div>
             <h1>AVISHEK BHANDARI</h1>
-            <p class="title">NETWORK_RESEARCHER</p>
+            <p class="title">Dynamic learning voyager | Decoding the cosmic blues of economic networks</p>
             <div class="intro-text">
                 <p>Assistant Professor exploring macroeconomic and financial networks across space and time from IIT Bhubaneswar's research outpost. Interested in how markets adapt, evolve, and communicate—from network-based market efficiency frameworks to cryptocurrency ecosystem dynamics. Currently investigating how information flows create economic contagion patterns and why digital assets behave like they're from a parallel universe.</p>
             </div>
@@ -1624,7 +1666,7 @@
                     </div>
                     <div class="research-item">
                         <h4>Global Market Synthesis</h4>
-                        <p>Same math that launches rockets navigates economies—we're just hacking the source code of both. Seeking fellow travelers to forge new statistical learning tools for this cosmic expedition through financial universes. Warning: journey includes black holes, asteroid fields, and the occasional hostile alien economy. <em>"The universe is not only queerer than we suppose, but queerer than we can suppose. We are not going to be able to understand the new economy until we understand that we are part of something much larger than ourselves—a cosmic dance of information, energy, and consciousness flowing through markets like stardust through the fabric of spacetime itself."</em> — Adapted from J.B.S. Haldane & Carl Sagan</p>
+                        <p>Same math that launches rockets navigates economies—we're just hacking the source code of both. Seeking fellow travelers to forge new statistical learning tools for this cosmic expedition through financial universes-because even the Millennium Falcon needs better AI. Warning: This journey involves dodging black holes of market crashes, asteroid fields of policy shocks,and occasionally hostile economic entities across uncharted financial universes.<em>"The universe is not only queerer than we suppose, but queerer than we can suppose. We are not going to be able to understand the new economy until we understand that we are part of something much larger than ourselves—a cosmic dance of information, energy, and consciousness flowing through markets like stardust through the fabric of spacetime itself."</em> — Adapted from J.B.S. Haldane & Carl Sagan</p>
                         <div class="tags">
                             <span class="tag">COSMIC</span>
                             <span class="tag">NAVIGATION</span>
@@ -1765,8 +1807,8 @@
                     <p>Network Topology and Statistical Learning Applications in Economics and Financial System Analysis</p>
                 </div>
                 <div class="student-item">
-                    <h4>Shiva Kumar</h4>
-                    <p>Empirical Labor Economics Research (Co-supervised with Dr. Sitakanta Panda)</p>
+                    <h4>Shivakumar</h4>
+                    <p>Exploring the universal microeconomic foundations of Law and Economics| Co-Navigator under Mission Commander Dr. Sitakanta Panda</p>
                 </div>
             </div>
         </div>
@@ -1775,7 +1817,7 @@
     <section id="extras">
         <h2 data-section="PORTAL">Parallel Universe Access</h2>
         <div class="holo-card" style="text-align: center; background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(0, 102, 204, 0.05)); border: 2px solid var(--accent-cyan); position: relative; overflow: hidden;">
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><path d=\"M50,10 Q90,50 50,90 Q10,50 50,10\" fill=\"none\" stroke=\"%2300bcd4\" stroke-width=\"0.5\" opacity=\"0.3\"/></svg>') center/contain no-repeat; animation: rotate 20s linear infinite;"></div>
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: url('data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50,10 Q90,50 50,90 Q10,50 50,10' fill='none' stroke='#00bcd4' stroke-width='0.5' opacity='0.3'/></svg>') center/contain no-repeat; animation: rotate 20s linear infinite;"></div>
             <h3 style="font-size: 2rem; color: var(--accent-blue); margin-bottom: 1.5rem; font-family: var(--font-mono); position: relative; z-index: 1;">MUSICAL DIMENSION</h3>
             <p style="font-size: 1.2rem; color: var(--text-medium); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; z-index: 1;">Beyond the equations and econometric models lies another universe—one of six strings, tube amps, and the eternal quest for tone. Enter the parallel dimension where Dr. Bhandari channels legends through Les Pauls and Stratocasters.</p>
             <a href="rock-universe.html" style="display: inline-block; background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); color: white; padding: 1.5rem 3rem; border-radius: 50px; text-decoration: none; font-family: var(--font-mono); font-weight: 600; letter-spacing: 1px; transition: all 0.4s ease; box-shadow: 0 20px 60px var(--shadow-medium); position: relative; z-index: 2;">
@@ -1830,7 +1872,7 @@
     </div>
 
     <footer>
-        <p>© 2024 RESEARCH_STATION_ALPHA // DATA_INTEGRITY_MAINTAINED</p>
+        <p>© 2024 ECONSTELLAR // RESEARCH_STATION_ALPHA // DATA_INTEGRITY_MAINTAINED</p>
     </footer>
 
     <!-- Portal Button -->
@@ -1880,44 +1922,83 @@
             createParticles();
             setInterval(createParticles, 25000);
 
-            // Mobile menu functionality
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            const mainNav = document.getElementById('mainNav');
-            
-            if (mobileMenuToggle && mainNav) {
-                mobileMenuToggle.addEventListener('click', function() {
-                    mainNav.classList.toggle('active');
-                    this.classList.toggle('active');
-                });
-                
-                // Close mobile menu when clicking on links
-                document.querySelectorAll('#mainNav a').forEach(link => {
-                    link.addEventListener('click', function() {
-                        mainNav.classList.remove('active');
-                        mobileMenuToggle.classList.remove('active');
-                    });
-                });
-            }
+            // Enhanced mobile menu functionality
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const mainNav = document.getElementById('mainNav');
 
-            // Smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
+if (mobileMenuToggle && mainNav) {
+    mobileMenuToggle.addEventListener('click', function() {
+        mainNav.classList.toggle('active');
+        this.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking on links with delay for smooth transition
+    document.querySelectorAll('#mainNav a').forEach(link => {
+        link.addEventListener('click', function() {
+            if (mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+                
+                // Small delay to allow menu to close before scrolling
+                setTimeout(() => {
+                    // Trigger scroll after menu closes
                     const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    
-                    if (targetSection) {
-                        const navHeight = document.querySelector('.nav-container').offsetHeight;
-                        const targetPosition = targetSection.offsetTop - navHeight - 20;
-                        
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
+                    if (targetId.startsWith('#')) {
+                        const targetSection = document.querySelector(targetId);
+                        if (targetSection) {
+                            const navHeight = 200; // Fixed height for mobile
+                            const targetRect = targetSection.getBoundingClientRect();
+                            const targetPosition = window.pageYOffset + targetRect.top - navHeight;
+                            
+                            window.scrollTo({
+                                top: Math.max(0, targetPosition),
+                                behavior: 'smooth'
+                            });
+                        }
                     }
-                });
+                }, 300);
+            }
+        });
+    });
+}
+
+
+            // Enhanced smooth scrolling for anchor links
+             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+               anchor.addEventListener('click', function(e) {
+               e.preventDefault();
+        
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+            // Get the actual navigation container
+            const navContainer = document.querySelector('.nav-container');
+            
+            // Calculate dynamic navigation height more accurately
+            let navHeight = 0;
+            if (navContainer) {
+                const navRect = navContainer.getBoundingClientRect();
+                navHeight = navRect.height;
+                
+                // Add extra offset for the top positioning (2rem = 32px typically)
+                const navTopOffset = window.innerWidth > 768 ? 32 : 0;
+                navHeight += navTopOffset;
+            }
+            
+            // Get target position accounting for wrapper divs
+            const targetRect = targetSection.getBoundingClientRect();
+            const targetPosition = window.pageYOffset + targetRect.top - navHeight - 40;
+            
+            // Use requestAnimationFrame for smoother scrolling
+            window.scrollTo({
+                top: Math.max(0, targetPosition),
+                behavior: 'smooth'
             });
+        }
+    });
+});
+
 
             // Intersection Observer for animations
             const observerOptions = {
