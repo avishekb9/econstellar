@@ -1,1 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Rock Universe - Avishek Bhandari</title>
+    <style>
+        /* Rock Universe - Minimalist Blade Runner Style */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --void-black: #0a0a0a;
+            --deep-black: #1a1a1a;
+            --charcoal: #2a2a2a;
+            --steel: #3a3a3a;
+            --neon-orange: #ff6b35;
+            --neon-blue: #00d4ff;
+            --neon-purple: #8a2be2;
+            --neon-green: #39ff14;
+            --text-white: #ffffff;
+            --text-gray: #cccccc;
+            --text-muted: #888888;
+            --glow-orange: rgba(255, 107, 53, 0.5);
+            --glow-blue: rgba(0, 212, 255, 0.5);
+            --glow-purple: rgba(138, 43, 226, 0.5);
+            --glass-black: rgba(26, 26, 26, 0.8);
+            --glass-border: rgba(255, 107, 53, 0.3);
+            
+            --font-primary: 'Rajdhani', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-tech: 'Orbitron', 'Courier New', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--void-black);
+            color: var(--text-white);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated background with music waves */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 40%, var(--glow-orange) 0%, transparent 70%),
+                radial-gradient(circle at 70% 60%, var(--glow-blue) 0%, transparent 70%),
+                linear-gradient(45deg, transparent 30%, rgba(255, 107, 53, 0.03) 50%, transparent 70%);
+            z-index: -2;
+            animation: pulseMusic 8s ease-in-out infinite;
+        }
+        
+        @keyframes pulseMusic {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(1.05); }
+        }
+        
+        /* Sound wave pattern */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 107, 53, 0.02) 11px,
+                    rgba(255, 107, 53, 0.02) 12px
+                );
+            z-index: -1;
+            animation: soundWave 15s linear infinite;
+        }
+        
+        @keyframes soundWave {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(24px); }
+        }
+        
+        /* Navigation - Minimalist Floating */
+        .nav-container {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem 2rem;
+            background: var(--glass-black);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-container:hover {
+            background: rgba(26, 26, 26, 0.95);
+            box-shadow: 0 8px 32px var(--glow-orange);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-family: var(--font-tech);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--neon-orange);
+            background: rgba(255, 107, 53, 0.1);
+            text-shadow: 0 0 10px var(--glow-orange);
+        }
+        
+        .back-button {
+            background: linear-gradient(45deg, var(--neon-orange), var(--neon-purple));
+            color: var(--void-black);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        
+        .back-button:hover {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+            color: var(--text-white);
+        }
+        
+        /* Header - Guitar Hero Style */
+        header {
+            background: linear-gradient(135deg, var(--deep-black) 0%, var(--charcoal) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 25% 25%, var(--glow-orange) 0%, transparent 50%),
+                radial-gradient(ellipse at 75% 75%, var(--glow-blue) 0%, transparent 50%);
+            opacity: 0.1;
+            animation: guitarGlow 12s ease-in-out infinite;
+        }
+        
+        @keyframes guitarGlow {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+        }
+        
+        .guitar-display {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 3rem;
+            position: relative;
+            border-radius: 50%;
+            background: conic-gradient(var(--neon-orange), var(--neon-blue), var(--neon-purple), var(--neon-orange));
+            padding: 4px;
+            animation: spin 20s linear infinite;
+        }
+        
+        .guitar-display::before {
+            content: '🎸';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            background: var(--deep-black);
+            border-radius: 50%;
+            width: calc(100% - 8px);
+            height: calc(100% - 8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        h1 {
+            font-family: var(--font-tech);
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 900;
+            color: var(--text-white);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px var(--glow-orange);
+            animation: flicker 4s ease-in-out infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            97% { opacity: 1; }
+            98% { opacity: 0.8; }
+            99% { opacity: 1; }
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--neon-orange);
+            margin-bottom: 2rem;
+            font-family: var(--font-tech);
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+        
+        .intro-rock {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto;
+            background: var(--glass-black);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Sections */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .section-alt {
+            background: var(--deep-black);
+            margin: 0;
+            max-width: none;
+            padding: 5rem 0;
+        }
+        
+        .section-alt .section-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        h2 {
+            font-family: var(--font-tech);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-white);
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-orange), var(--neon-blue));
+            box-shadow: 0 0 10px var(--glow-orange);
+        }
+        
+        /* Guitar Collection */
+        .guitar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        
+        .guitar-card {
+            background: var(--glass-black);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guitar-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon-orange), var(--neon-blue), var(--neon-purple));
+            border-radius: 15px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .guitar-card:hover::before {
+            opacity: 0.7;
+        }
+        
+        .guitar-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.3);
+        }
+        
+        .guitar-image {
+            width: 100%;
+            height: 200px;
+            background: var(--charcoal);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--neon-orange);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .guitar-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.2), transparent);
+            animation: scan 3s ease-in-out infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: -100%; }
+        }
+        
+        .guitar-card h3 {
+            font-size: 1.5rem;
+            color: var(--neon-orange);
+            margin-bottom: 1rem;
+            font-family: var(--font-tech);
+            font-weight: 600;
+        }
+        
+        .guitar-card p {
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .spec-tag {
+            background: linear-gradient(45deg, var(--neon-orange), var(--neon-purple));
+            color: var(--void-black);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: var(--font-tech);
+        }
+        
+        /* Legends Section */
+        .legends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .legend-card {
+            background: var(--glass-black);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .legend-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+            border-color: var(--neon-blue);
+        }
+        
+        .legend-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            background: var(--charcoal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            border: 3px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--glow-blue);
+        }
+        
+        .legend-card h4 {
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-tech);
+        }
+        
+        .legend-role {
+            color: var(--neon-orange);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .legend-impact {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        /* Gear Section */
+        .gear-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+        
+        .gear-category {
+            background: var(--glass-black);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+        }
+        
+        .gear-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.2);
+        }
+        
+        .gear-category h3 {
+            font-size: 1.4rem;
+            color: var(--neon-purple);
+            margin-bottom: 1.5rem;
+            font-family: var(--font-tech);
+            text-align: center;
+        }
+        
+        .gear-list {
+            list-style: none;
+        }
+        
+        .gear-list li {
+            color: var(--text-gray);
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--steel);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .gear-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .gear-list li:hover {
+            color: var(--neon-green);
+            padding-left: 1rem;
+        }
+        
+        .gear-list li::before {
+            content: '▶';
+            color: var(--neon-orange);
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        /* Philosophy Section */
+        .philosophy {
+            background: var(--glass-black);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .philosophy::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-orange), var(--neon-blue), var(--neon-purple));
+        }
+        
+        .philosophy h3 {
+            font-size: 2rem;
+            color: var(--neon-green);
+            margin-bottom: 2rem;
+            font-family: var(--font-tech);
+        }
+        
+        .philosophy p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Back to Reality */
+        .back-portal {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--deep-black);
+        }
+        
+        .portal-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: var(--text-white);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: var(--font-tech);
+            font-weight: 600;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        }
+        
+        .portal-button:hover {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-orange));
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(138, 43, 226, 0.4);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            section {
+                padding: 3rem 1rem;
+            }
+            
+            .guitar-grid,
+            .legends-grid,
+            .gear-categories {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .nav-container {
+                padding: 0.8rem 1rem;
+                top: 1rem;
+            }
+            
+            .nav-links {
+                gap: 1rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+            
+            .guitar-display {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .guitar-display::before {
+                font-size: 3rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--deep-black);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, var(--neon-orange), var(--neon-blue));
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="nav-container">
+        <div class="nav-links">
+            <a href="index.html" class="back-button">← REALITY</a>
+            <a href="#guitars">GUITARS</a>
+            <a href="#legends">LEGENDS</a>
+            <a href="#gear">GEAR</a>
+            <a href="#philosophy">PHILOSOPHY</a>
+        </div>
+    </nav>
 
+    <header>
+        <div class="hero-content">
+            <div class="guitar-display"></div>
+            <h1>ROCK UNIVERSE</h1>
+            <p class="subtitle">WHERE EQUATIONS MEET GUITAR STRINGS</p>
+            <div class="intro-rock">
+                <p>In this parallel dimension, Dr. Avishek Bhandari trades econometric models for amplifier models, wavelet analysis for waveforms, and statistical significance for sonic significance. Welcome to the universe where mathematics and music converge in perfect harmony.</p>
+            </div>
+        </div>
+    </header>
+
+    <section id="guitars">
+        <h2>The Arsenal</h2>
+        <div class="guitar-grid">
+            <div class="guitar-card">
+                <div class="guitar-image">🎸</div>
+                <h3>Les Paul Studio</h3>
+                <p>The classic rock workhorse. Mahogany body with maple cap delivers that thick, sustaining tone perfect for everything from blues to hard rock. The humbucker pickups provide the warmth and punch that defined rock history.</p>
+                <div class="specs">
+                    <span class="spec-tag">MAHOGANY</span>
+                    <span class="spec-tag">HUMBUCKERS</span>
+                    <span class="spec-tag">SUSTAIN</span>
+                </div>
+            </div>
+            <div class="guitar-card">
+                <div class="guitar-image">🎸</div>
+                <h3>Stratocaster</h3>
+                <p>The versatile legend. Three single-coil pickups offer crystal-clear highs and that iconic Strat bite. Perfect for channeling Hendrix's psychedelic explorations or Clapton's blues mastery.</p>
+                <div class="specs">
+                    <span class="spec-tag">SINGLE-COILS</span>
+                    <span class="spec-tag">VERSATILE</span>
+                    <span class="spec-tag">ICONIC</span>
+                </div>
+            </div>
+            <div class="guitar-card">
+                <div class="guitar-image">🎸</div>
+                <h3>Telecaster</h3>
+                <p>The honest guitar. No-nonsense design with a bite that cuts through any mix. From country twang to punk aggression, the Tele delivers pure, unfiltered tone with attitude.</p>
+                <div class="specs">
+                    <span class="spec-tag">TWANG</span>
+                    <span class="spec-tag">CUT</span>
+                    <span class="spec-tag">PURE</span>
+                </div>
+            </div>
+            <div class="guitar-card">
+                <div class="guitar-image">🎸</div>
+                <h3>Semi-Hollow Body</h3>
+                <p>The jazz-rock hybrid. Combining the warmth of an acoustic with the power of electric, this guitar bridges genres. Perfect for everything from blues to progressive rock soundscapes.</p>
+                <div class="specs">
+                    <span class="spec-tag">HOLLOW</span>
+                    <span class="spec-tag">WARM</span>
+                    <span class="spec-tag">HYBRID</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-alt">
+        <div class="section-content">
+            <section id="legends">
+                <h2>Guitar Gods</h2>
+                <div class="legends-grid">
+                    <div class="legend-card">
+                        <div class="legend-avatar">🎸</div>
+                        <h4>Jimi Hendrix</h4>
+                        <p class="legend-role">The Revolutionary</p>
+                        <p class="legend-impact">Redefined what the electric guitar could do. Turned feedback into art, distortion into poetry. The left-handed genius who played a right-handed Strat upside down and changed music forever.</p>
+                    </div>
+                    <div class="legend-card">
+                        <div class="legend-avatar">🎸</div>
+                        <h4>Eric Clapton</h4>
+                        <p class="legend-role">The Blues Master</p>
+                        <p class="legend-impact">Slowhand himself. Master of tone and feel, proving that it's not about speed but soul. His emotional bends and perfect note choice create magic that speaks directly to the heart.</p>
+                    </div>
+                    <div class="legend-card">
+                        <div class="legend-avatar">🎸</div>
+                        <h4>Steve Vai</h4>
+                        <p class="legend-role">The Virtuoso</p>
+                        <p class="legend-impact">Technical precision meets artistic vision. Frank Zappa's protégé who pushed guitar technique into new dimensions while never losing sight of musicality and emotion.</p>
+                    </div>
+                    <div class="legend-card">
+                        <div class="legend-avatar">🎸</div>
+                        <h4>Joe Satriani</h4>
+                        <p class="legend-role">The Professor</p>
+                        <p class="legend-impact">The guitar teacher who became a legend. Master of melody and technique, proving that instrumental rock can be both technically brilliant and emotionally compelling.</p>
+                    </div>
+                    <div class="legend-card">
+                        <div class="legend-avatar">🎸</div>
+                        <h4>Guthrie Govan</h4>
+                        <p class="legend-role">The Modern Master</p>
+                        <p class="legend-impact">The guitarist's guitarist. Seamlessly blends genres from jazz to metal, acoustic to electric. Technical perfection with musical intelligence and humor.</p>
+                    </div>
+                    <div class="legend-card">
+                        <div class="legend-avatar">🎸</div>
+                        <h4>David Gilmour</h4>
+                        <p class="legend-role">The Architect</p>
+                        <p class="legend-impact">Pink Floyd's sonic architect. Master of space, atmosphere, and the power of simplicity. Every note serves the song, every bend tells a story.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <section id="gear">
+        <h2>The Laboratory</h2>
+        <div class="gear-categories">
+            <div class="gear-category">
+                <h3>Amplification</h3>
+                <ul class="gear-list">
+                    <li>Marshall JCM800 Head</li>
+                    <li>Fender Twin Reverb</li>
+                    <li>Vox AC30 Combo</li>
+                    <li>Orange Rockerverb</li>
+                    <li>Mesa Boogie Mark V</li>
+                    <li>Blackstar HT Club 40</li>
+                </ul>
+            </div>
+            <div class="gear-category">
+                <h3>Effects Pedals</h3>
+                <ul class="gear-list">
+                    <li>Ibanez Tube Screamer</li>
+                    <li>Boss DS-1 Distortion</li>
+                    <li>Electro-Harmonix Big Muff</li>
+                    <li>Strymon Timeline Delay</li>
+                    <li>Boss CE-2 Chorus</li>
+                    <li>Dunlop Cry Baby Wah</li>
+                    <li>TC Electronic Hall of Fame</li>
+                </ul>
+            </div>
+            <div class="gear-category">
+                <h3>Recording Setup</h3>
+                <ul class="gear-list">
+                    <li>Shure SM57 Microphone</li>
+                    <li>Audio-Technica AT2020</li>
+                    <li>Focusrite Scarlett Interface</li>
+                    <li>Logic Pro X DAW</li>
+                    <li>KRK Rokit Monitors</li>
+                    <li>Kemper Profiling Amp</li>
+                </ul>
+            </div>
+            <div class="gear-category">
+                <h3>Accessories</h3>
+                <ul class="gear-list">
+                    <li>D'Addario XL Strings</li>
+                    <li>Dunlop Jazz III Picks</li>
+                    <li>Planet Waves Cables</li>
+                    <li>Boss TU-3 Chromatic Tuner</li>
+                    <li>Ernie Ball Volume Pedal</li>
+                    <li>Fender Custom Shop Straps</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-alt">
+        <div class="section-content">
+            <section id="philosophy">
+                <div class="philosophy">
+                    <h3>The Mathematics of Music</h3>
+                    <p>Just as econometric models reveal hidden patterns in financial markets, guitar playing uncovers the mathematical beauty underlying human emotion. Every bend follows the physics of string tension, every harmony obeys mathematical ratios discovered by Pythagoras. In this universe, wavelets become waveforms, time series become time signatures, and statistical significance becomes sonic significance.</p>
+                    <br>
+                    <p>The guitar is my laboratory for exploring the intersection of precision and passion, where technical analysis meets emotional expression. Whether analyzing long memory in cryptocurrency markets or crafting a melodic phrase that resonates for decades, both require the same fundamental approach: understanding the underlying patterns that create lasting impact.</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="back-portal">
+        <h2 style="color: var(--neon-blue); margin-bottom: 2rem;">End of Transmission</h2>
+        <p style="color: var(--text-gray); margin-bottom: 3rem; font-size: 1.1rem;">The parallel universe session is complete. Time to return to the realm of equations and econometrics.</p>
+        <a href="index.html" class="portal-button">Return to Research Station</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        const navHeight = document.querySelector('.nav-container').offsetHeight;
+                        const targetPosition = targetSection.offsetTop - navHeight - 20;
+                        
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.guitar-card, .legend-card, .gear-category').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+
+            // Random guitar string animation
+            function animateStrings() {
+                const guitarImages = document.querySelectorAll('.guitar-image');
+                guitarImages.forEach(img => {
+                    if (Math.random() > 0.8) {
+                        img.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            img.style.transform = 'scale(1)';
+                        }, 200);
+                    }
+                });
+            }
+
+            setInterval(animateStrings, 2000);
+
+            // Audio visualizer simulation
+            function simulateAudioBars() {
+                const hero = document.querySelector('header');
+                if (Math.random() > 0.9) {
+                    hero.style.filter = 'hue-rotate(10deg)';
+                    setTimeout(() => {
+                        hero.style.filter = 'hue-rotate(0deg)';
+                    }, 100);
+                }
+            }
+
+            setInterval(simulateAudioBars, 500);
+
+            console.log("🎸 ROCK UNIVERSE ACTIVATED 🎸");
+            console.log("Dimensions: Music & Mathematics");
+        });
+    </script>
+</body>
+</html>
