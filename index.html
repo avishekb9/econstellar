@@ -1350,9 +1350,11 @@
             border: none;
             cursor: pointer;
             position: absolute;
-            right: 2rem;
+            left: 82%; /* Move hamburger icon left */
+            right: auto;
             top: 1rem;
             z-index: 1001;
+            transform: translateX(-50%); /* Center relative to new position */
         }
         
         .hamburger {
@@ -1373,10 +1375,10 @@
          /* Full-width containment */
                 width: 100vw;
                 top: 0;
-                left: 0;
+                left: 15px; /* Initial right shift */
                 right: 0;
                 margin: 0 auto;
-                transform: none;
+                transform: translateX(12%); /* Fine-tune positioning */
                 border-radius: 0;
                 padding: 1rem;
                 flex-direction: column;
@@ -1385,6 +1387,8 @@
             nav {
                 margin-top: 1rem;
                 width: 100%;
+                margin-left: 24px; /* Push links from left edge */
+                padding-right: 18px; /* Prevent right-side clipping */
             }
             
             nav ul {
@@ -1398,7 +1402,13 @@
             }
             nav ul li {
                 width: 100%;
-                 max-width: 280px;
+                max-width: 280px;
+            }
+            nav ul li a {
+                max-width: 92vw; /* Constrain width to viewport */
+                padding-right: 8px;
+                white-space: nowrap; /* Prevent text wrapping */
+                overflow: visible;
             }
             nav ul.active {
                 display: flex;
