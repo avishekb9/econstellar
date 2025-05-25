@@ -1368,14 +1368,18 @@
         @media (max-width: 768px) {
             .nav-container {
                 position: fixed;
+                justify-content: center;
+                align-items: center;
+         /* Full-width containment */
+                width: 100vw;
                 top: 0;
                 left: 0;
                 right: 0;
+                margin: 0 auto;
                 transform: none;
                 border-radius: 0;
                 padding: 1rem;
                 flex-direction: column;
-                align-items: center;
             }
             
             nav {
@@ -1384,12 +1388,18 @@
             }
             
             nav ul {
+                width: 100%;
+                padding-left: 0;
+                margin: 0 auto;
                 flex-direction: column;
                 gap: 1rem;
                 text-align: center;
                 display: none;
             }
-            
+            nav ul li {
+                width: 100%;
+                 max-width: 280px;
+            }
             nav ul.active {
                 display: flex;
             }
@@ -1586,22 +1596,22 @@ section[id]::before {
     </div>
 
     <header>
-        <div class="nav-container">
-  <div class="logo">RESEARCH_STATION</div>
-  <button class="mobile-menu-toggle" aria-label="Toggle menu">
-    <div class="hamburger"></div>
-    <div class="hamburger"></div>
-    <div class="hamburger"></div>
-  </button>
-  <nav aria-label="Main navigation">
-    <ul id="mainNav">
-      <li><a href="#about">ABOUT</a></li>
-      <li><a href="#research">RESEARCH</a></li>
-      <li><a href="#publications">PUBLICATIONS</a></li>
-      <li><a href="#teaching">TEACHING</a></li>
-      <li><a href="#students">STUDENTS</a></li>
-      <li><a href="#contact">CONTACT</a></li>
-      <li><a href="rock-universe.html">EXTRAS</a></li>
+    <div class="nav-container">
+        <div class="logo">RESEARCH_STATION</div>
+        <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+     </button>
+        <nav aria-label="Main navigation">
+        <ul id="mainNav">
+       <li><a href="#about">ABOUT</a></li>
+       <li><a href="#research">RESEARCH</a></li>
+       <li><a href="#publications">PUBLICATIONS</a></li>
+       <li><a href="#teaching">TEACHING</a></li>
+       <li><a href="#students">STUDENTS</a></li>
+       <li><a href="#contact">CONTACT</a></li>
+       <li><a href="rock-universe.html">EXTRAS</a></li>
     </ul>
   </nav>
 </div>
@@ -1926,10 +1936,16 @@ section[id]::before {
 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
 const mainNav = document.getElementById('mainNav');
 
-if (mobileMenuToggle && mainNav) {
-    mobileMenuToggle.addEventListener('click', function() {
+  if (mobileMenuToggle && mainNav) {
+      mobileMenuToggle.addEventListener('click', function() {
         mainNav.classList.toggle('active');
         this.classList.toggle('active');
+        // Dynamic viewport centering
+  if (window.innerWidth <= 768) {
+    const navWidth = mainNav.offsetWidth;
+    const viewportCenter = window.innerWidth / 2;
+    mainNav.style.left = `${viewportCenter - (navWidth/2)}px`;
+  }
     });
 
     // Close mobile menu when clicking on links with delay for smooth transition
