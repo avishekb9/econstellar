@@ -1342,84 +1342,54 @@
             font-family: var(--font-mono);
             letter-spacing: 1px;
         }
-                ./* Mobile Menu - REPLACE EXISTING */
+        
+        /* Mobile Menu */
         .mobile-menu-toggle {
             display: none;
             background: none;
             border: none;
             cursor: pointer;
-            position: fixed;
-            right: 1.5rem;
-            top: 1.5rem;
+            position: absolute;
+            left: 82%; /* Move hamburger icon left */
+            right: auto;
+            top: 1rem;
             z-index: 1001;
-            width: 30px;
-            height: 24px;
-            flex-direction: column;
-            justify-content: space-between;
+            transform: translateX(-50%); /* Center relative to new position */
         }
         
         .hamburger {
             width: 25px;
             height: 3px;
-            background: #4A90E2;
-            transition: all 0.3s ease;
+            background: var(--accent-blue);
+            margin: 5px 0;
+            transition: 0.3s;
             border-radius: 2px;
-            transform-origin: center;
         }
         
-        .mobile-menu-toggle.active .hamburger:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .mobile-menu-toggle.active .hamburger:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .mobile-menu-toggle.active .hamburger:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-        
-        /* Responsive Design - REPLACE EXISTING @media block */
+        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-container {
                 position: fixed;
+                position: fixed;
                 top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 280px;
-                max-width: 90vw;
-                background: rgba(255, 255, 255, 0.97);
-                backdrop-filter: blur(15px);
-                border-radius: 0 0 20px 20px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+                left: 0;
+                right: 0;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                border-radius: 0;
+                padding: 1rem 0;
                 z-index: 1000;
-                padding: 1.5rem 0;
-                display: none;
-                opacity: 0;
-                pointer-events: none;
-                border: 1px solid rgba(74, 144, 226, 0.1);
-            }
-            
-            .nav-container.active {
-                display: block;
-                opacity: 1;
-                pointer-events: auto;
-                animation: slideDown 0.3s ease-out;
-            }
-            
-            @keyframes slideDown {
-                from {
-                    opacity: 0;
-                    transform: translateX(-50%) translateY(-20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateX(-50%) translateY(0);
-                }
             }
             
             nav {
                 width: 100%;
+                display: flex;
+                justify-content: center;
                 margin: 0;
                 padding: 0;
             }
@@ -1429,53 +1399,38 @@
                 flex-direction: column;
                 align-items: center;
                 width: 100%;
+                max-width: 300px;
                 padding: 0;
                 margin: 0;
-                gap: 0.75rem;
+                gap: 1rem;
+                text-align: center;
                 list-style: none;
             }
-            
             nav ul li {
-                width: 85%;
+                width: 100%;
                 text-align: center;
             }
-            
             nav ul li a {
                 display: block;
-                padding: 12px 20px;
+                padding: 15px 20px;
                 text-align: center;
                 width: 100%;
                 box-sizing: border-box;
-                font-size: 0.95rem;
-                font-weight: 500;
-                border-radius: 10px;
-                transition: all 0.2s ease;
                 text-decoration: none;
-                color: #333;
-                background: rgba(74, 144, 226, 0.05);
-                border: 1px solid transparent;
+                white-space: nowrap;
             }
-            
-            nav ul li a:hover,
-            nav ul li a:focus {
-                background: rgba(74, 144, 226, 0.15);
-                border-color: rgba(74, 144, 226, 0.3);
-                transform: none;
-                color: #2c3e50;
-            }
-            
-            .mobile-menu-toggle {
+            nav ul.active {
                 display: flex;
             }
             
-            /* Prevent body scroll when menu open */
-            body.menu-open {
-                overflow: hidden;
-                position: fixed;
-                width: 100%;
+            .mobile-menu-toggle {
+                display: block;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+                z-index: 1001;
             }
             
-            /* Rest of existing mobile styles... */
             header {
                 padding-top: 8rem;
                 min-height: 100vh;
@@ -1532,6 +1487,7 @@
                 padding: 2rem;
             }
         }
+        
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.6rem;
@@ -1589,66 +1545,47 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-teal));
         }
-        html {
-            scroll-behavior: smooth;
-        }
+html {
+    scroll-behavior: smooth;
+}
 
-        section[id] {
-            scroll-margin-top: 140px; /* Increased from 90px */
-        }
+section[id] {
+    scroll-margin-top: 140px; /* Increased from 90px */
+}
 
-        /* Fallback anchor positioning */
-        section[id]::before {
-            content: '';
-            display: block;
-            height: 140px;
-            margin-top: -140px;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        
-        @media (max-width: 768px) {
-            section[id]::before {
-                height: 180px;
-                margin-top: -180px;
-            }
-        }
-        
-        
-        /* Additional specific targeting for nested sections */
-        .section-alt section[id] {
-            scroll-margin-top: 160px;
-        }
-        
-        /* Mobile adjustments */
-        @media (max-width: 768px) {
-            section[id] {
-                scroll-margin-top: 180px;
-            }
-            
-            .section-alt section[id] {
-                scroll-margin-top: 200px;
-            }
-        }
-                /* Enhanced scroll behavior - ADD THIS */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        section[id] {
-            scroll-margin-top: 120px;
-        }
-        
-        @media (max-width: 768px) {
-            section[id] {
-                scroll-margin-top: 100px;
-            }
-        }
-        
-        /* Prevent horizontal overflow */
-        body {
-            overflow-x: hidden;
-        }
+/* Fallback anchor positioning */
+section[id]::before {
+    content: '';
+    display: block;
+    height: 140px;
+    margin-top: -140px;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    section[id]::before {
+        height: 180px;
+        margin-top: -180px;
+    }
+}
+
+
+/* Additional specific targeting for nested sections */
+.section-alt section[id] {
+    scroll-margin-top: 160px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    section[id] {
+        scroll-margin-top: 180px;
+    }
+    
+    .section-alt section[id] {
+        scroll-margin-top: 200px;
+    }
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -1986,119 +1923,224 @@
                 <button class="portal-btn portal-no" onclick="document.getElementById('portal-modal').classList.remove('active')">NO</button>
             </div>
         </div>
-    </div>        
-     <script>
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Mobile menu elements
-            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            const navContainer = document.querySelector('.nav-container');
-            const body = document.body;
-            const navLinks = document.querySelectorAll('nav ul li a[href^="#"]');
-        
-            // Mobile menu toggle functionality
-            if (mobileMenuToggle && navContainer) {
-                mobileMenuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Toggle active states
-                    this.classList.toggle('active');
-                    navContainer.classList.toggle('active');
-                    
-                    // Prevent body scroll when menu is open
-                    if (navContainer.classList.contains('active')) {
-                        body.classList.add('menu-open');
-                    } else {
-                        body.classList.remove('menu-open');
-                    }
-                });
-            }
-        
-            // Click outside to close menu
-            document.addEventListener('click', function(event) {
-                if (navContainer && mobileMenuToggle && window.innerWidth <= 768) {
-                    const isClickInsideNav = navContainer.contains(event.target);
-                    const isClickOnToggle = mobileMenuToggle.contains(event.target);
-                    
-                    if (navContainer.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
-                        navContainer.classList.remove('active');
-                        mobileMenuToggle.classList.remove('active');
-                        body.classList.remove('menu-open');
-                    }
-                }
-            });
-        
-            // Enhanced navigation link functionality
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    // Close mobile menu if open
-                    if (navContainer && mobileMenuToggle && window.innerWidth <= 768) {
-                        navContainer.classList.remove('active');
-                        mobileMenuToggle.classList.remove('active');
-                        body.classList.remove('menu-open');
-                    }
-                    
-                    // Get target section
-                    const targetId = this.getAttribute('href');
-                    const targetSection = document.querySelector(targetId);
-                    
-                    if (targetSection) {
-                        // Calculate proper offset
-                        const isMobile = window.innerWidth <= 768;
-                        const navOffset = isMobile ? 100 : 120;
+            // Create floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 15;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = Math.random() * 100 + '%';
+                        particle.style.animationDelay = Math.random() * 20 + 's';
+                        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                        particlesContainer.appendChild(particle);
                         
-                        // Add delay for mobile menu to close
+                        // Remove particle after animation
                         setTimeout(() => {
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                            }
+                        }, 25000);
+                    }, i * 1000);
+                }
+            }
+            
+            // Start particle system
+            createParticles();
+            setInterval(createParticles, 25000);
+
+            // Enhanced mobile menu functionality
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const mainNav = document.getElementById('mainNav');
+
+  if (mobileMenuToggle && mainNav) {
+      mobileMenuToggle.addEventListener('click', function() {
+        mainNav.classList.toggle('active');
+        this.classList.toggle('active');
+        // Dynamic viewport centering
+  if (window.innerWidth <= 768) {
+    const navWidth = mainNav.offsetWidth;
+    const viewportCenter = window.innerWidth / 2;
+    mainNav.style.left = `${viewportCenter - (navWidth/2)}px`;
+  }
+    });
+
+    // Close mobile menu when clicking on links with delay for smooth transition
+    document.querySelectorAll('#mainNav a').forEach(link => {
+        link.addEventListener('click', function() {
+            if (mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+                
+                // Small delay to allow menu to close before scrolling
+                setTimeout(() => {
+                    // Trigger scroll after menu closes
+                    const targetId = this.getAttribute('href');
+                    if (targetId.startsWith('#')) {
+                        const targetSection = document.querySelector(targetId);
+                        if (targetSection) {
+                            const navHeight = 200; // Fixed height for mobile
                             const targetRect = targetSection.getBoundingClientRect();
-                            const targetPosition = window.pageYOffset + targetRect.top - navOffset;
+                            const targetPosition = window.pageYOffset + targetRect.top - navHeight;
                             
                             window.scrollTo({
                                 top: Math.max(0, targetPosition),
                                 behavior: 'smooth'
                             });
-                        }, isMobile ? 150 : 0);
+                        }
+                    }
+                }, 300);
+            }
+        });
+    });
+}
+
+
+            // Enhanced smooth scrolling for anchor links
+             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+               anchor.addEventListener('click', function(e) {
+               e.preventDefault();
+        
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+            // Get the actual navigation container
+            const navContainer = document.querySelector('.nav-container');
+            
+            // Calculate dynamic navigation height more accurately
+            let navHeight = 0;
+            if (navContainer) {
+                const navRect = navContainer.getBoundingClientRect();
+                navHeight = navRect.height;
+                
+                // Add extra offset for the top positioning (2rem = 32px typically)
+                const navTopOffset = window.innerWidth > 768 ? 32 : 0;
+                navHeight += navTopOffset;
+            }
+            
+            // Get target position accounting for wrapper divs
+            const targetRect = targetSection.getBoundingClientRect();
+            const targetPosition = window.pageYOffset + targetRect.top - navHeight - 40;
+            
+            // Use requestAnimationFrame for smoother scrolling
+            window.scrollTo({
+                top: Math.max(0, targetPosition),
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-on-scroll');
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
                     }
                 });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.holo-card, .research-item, .publication, .course, .student-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
             });
-        
-            // Prevent menu movement on touch devices
-            let startY = 0;
-            document.addEventListener('touchstart', function(e) {
-                startY = e.touches[0].clientY;
-            }, { passive: true });
+
+            // Parallax effect for background patterns
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.3;
+                
+                document.body.style.backgroundPosition = `0 ${rate}px`;
+            });
+
+            // Portal Button functionality
+            const portalButton = document.getElementById('portal-button');
+            const portalModal = document.getElementById('portal-modal');
             
-            document.addEventListener('touchmove', function(e) {
-                if (navContainer && navContainer.classList.contains('active') && window.innerWidth <= 768) {
-                    const currentY = e.touches[0].clientY;
-                    const deltaY = Math.abs(currentY - startY);
+            if (portalButton && portalModal) {
+                portalButton.addEventListener('click', function() {
+                    portalModal.classList.add('active');
                     
-                    // Prevent background scrolling when menu is open
-                    if (deltaY > 5) {
-                        e.preventDefault();
+                    // Portal opening animation
+                    this.style.transform = 'scale(1.2) rotate(180deg)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 500);
+                });
+                
+                // Close modal when clicking outside
+                portalModal.addEventListener('click', function(e) {
+                    if (e.target === portalModal) {
+                        portalModal.classList.remove('active');
                     }
+                });
+            }
+
+            // Inception Loading Sequence
+            setTimeout(() => {
+                const loadingSequence = document.getElementById('loading-sequence');
+                if (loadingSequence) {
+                    loadingSequence.classList.add('hidden');
+                    setTimeout(() => {
+                        loadingSequence.remove();
+                    }, 1000);
                 }
-            }, { passive: false });
-        
-            // Escape key to close menu
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && navContainer && navContainer.classList.contains('active')) {
-                    navContainer.classList.remove('active');
-                    mobileMenuToggle.classList.remove('active');
-                    body.classList.remove('menu-open');
-                }
-            });
-        
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768 && navContainer && navContainer.classList.contains('active')) {
-                    navContainer.classList.remove('active');
-                    mobileMenuToggle.classList.remove('active');
-                    body.classList.remove('menu-open');
-                }
-            });
+            }, 3000);
+
+            // Quantum Entanglement Between Pages
+            let entanglementActive = false;
+
+            // Check if coming from the other universe
+            if (document.referrer.includes('rock-universe.html')) {
+                entanglementActive = true;
+                document.body.classList.add('quantum-entangled');
+                
+                // Add entanglement indicator
+                const indicator = document.createElement('div');
+                indicator.className = 'entanglement-indicator';
+                indicator.textContent = 'QUANTUM ENTANGLEMENT ACTIVE';
+                indicator.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-family: var(--font-mono);
+                    font-size: 1.5rem;
+                    color: var(--accent-cyan);
+                    letter-spacing: 3px;
+                    text-align: center;
+                    z-index: 10000;
+                    animation: entanglePulse 2s ease-out;
+                `;
+                document.body.appendChild(indicator);
+                
+                setTimeout(() => {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => indicator.remove(), 1000);
+                }, 3000);
+            }
+
+            console.log("RESEARCH_STATION initialized successfully");
+            console.log("All systems operational");
         });
-</script>           
+    </script>
 </body>
 </html>
