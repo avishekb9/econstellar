@@ -105,7 +105,7 @@
             }
         }
         
-        /* Time Dilation Streams - Nolan Style */
+        /* Time Dilation Streams */
         .time-streams {
             position: fixed;
             top: 0;
@@ -143,7 +143,7 @@
             100% { transform: translateX(0); }
         }
         
-        /* Header - Mission Control */
+        /* Header */
         header {
             background: linear-gradient(135deg, var(--primary-white) 0%, var(--secondary-white) 100%);
             min-height: 100vh;
@@ -154,7 +154,7 @@
             position: relative;
             text-align: center;
             overflow: hidden;
-            padding-top: 100px; /* Space for fixed navigation */
+            padding-top: 100px;
         }
         
         header::before {
@@ -170,7 +170,7 @@
             opacity: 0.1;
         }
         
-        /* Navigation - Professional Floating Command Bar */
+        /* Navigation */
         .nav-container {
             position: fixed;
             top: 2rem;
@@ -198,7 +198,6 @@
             border-color: var(--accent-cyan);
         }
 
-        /* DRADIS Radar Effect */
         .nav-container::after {
             content: '';
             position: absolute;
@@ -314,12 +313,11 @@
             left: 100%;
         }
         
-        /* Separator dots between nav items - Fixed */
         nav ul li:not(:last-child) {
             margin-right: 0.5rem;
         }
         
-        /* Hero Content - Space Station Interface */
+        /* Hero Content */
         .hero-content {
             z-index: 2;
             max-width: 900px;
@@ -373,7 +371,7 @@
         
         h1 {
             font-family: var(--font-primary);
-            font-size: 2rem; /* Reduced to half */
+            font-size: 2rem;
             margin-bottom: 1rem;
             font-weight: 300;
             color: var(--text-dark);
@@ -450,7 +448,7 @@
             background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
         }
         
-        /* Holographic Cards - Keep Square */
+        /* Holographic Cards */
         .holo-card {
             background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(20px);
@@ -488,7 +486,7 @@
             text-align: justify;
         }
         
-        /* Section Layouts */
+        /* Sections */
         section {
             padding: 6rem 2rem;
             max-width: 1200px;
@@ -568,7 +566,7 @@
             letter-spacing: -0.5px;
         }
         
-        /* Research Grid - Keep Square */
+        /* Research Grid */
         .research-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -609,7 +607,6 @@
             border-color: var(--accent-cyan);
         }
 
-        /* Status Indicator */
         .research-item::after {
             content: 'ACTIVE';
             position: absolute;
@@ -685,7 +682,7 @@
             box-shadow: 0 8px 25px var(--shadow-medium);
         }
         
-        /* Publications - Holographic Data Streams */
+        /* Publications */
         .publications-list {
             margin-top: 4rem;
         }
@@ -723,7 +720,6 @@
             box-shadow: 0 40px 80px var(--shadow-medium);
         }
 
-        /* Waveform Signature */
         .publication::after {
             content: '';
             position: absolute;
@@ -808,7 +804,7 @@
             text-align: justify;
         }
         
-        /* Teaching - Mission Modules */
+        /* Teaching */
         .teaching-subsection {
             margin-bottom: 5rem;
         }
@@ -867,18 +863,6 @@
             border-color: var(--border-gray);
         }
         
-        .course-institution {
-            padding: 0.6rem 1.5rem;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            display: inline-block;
-            margin-bottom: 1.5rem;
-            font-family: var(--font-mono);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
         .course-institution.current {
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
             color: var(--primary-white);
@@ -907,7 +891,7 @@
             text-align: justify;
         }
         
-        /* Students Section - Research Pods */
+        /* Students Section */
         .students-section {
             margin-top: 4rem;
         }
@@ -985,7 +969,7 @@
             text-align: justify;
         }
         
-        /* Contact Section - Command Interface */
+        /* Contact Section */
         .contact-info {
             text-align: center;
             margin-top: 4rem;
@@ -1039,7 +1023,7 @@
             text-shadow: 0 0 10px var(--glow-cyan);
         }
         
-        /* Academic Profiles - Control Panel */
+        /* Academic Profiles */
         .academic-profiles {
             margin-top: 5rem;
             text-align: center;
@@ -1186,7 +1170,7 @@
         }
 
         .portal-dialog {
-            background: linear-gradient(135deg, var(--deep-black, #1a1a1a), var(--charcoal, #2a2a2a));
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
             border: 2px solid var(--accent-orange);
             border-radius: 20px;
             padding: 3rem;
@@ -1208,7 +1192,7 @@
         }
 
         .portal-dialog h3 {
-            font-family: var(--font-tech);
+            font-family: var(--font-mono);
             font-size: 2rem;
             color: var(--accent-orange);
             margin-bottom: 2rem;
@@ -1260,7 +1244,6 @@
         .portal-no:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(255, 107, 53, 0.5);
-            /* Optionally, you can use the same hover as .portal-yes */
         }
 
         /* Inception Loading Sequence */
@@ -1345,173 +1328,163 @@
         
         /* Mobile Menu */
         .mobile-menu-toggle {
-            display: block !important;
+            display: none;
             background: none;
             border: none;
             cursor: pointer;
-            position: absolute;
-            left: 82%; /* Move hamburger icon left */
-            right: auto;
-            top: 1rem;
-            z-index: 1001;
-            transform: translateX(-50%); /* Center relative to new position */
-        }
-        
-        .hamburger {
-            width: 25px;
-            height: 3px;
-            background: var(--accent-blue);
-            margin: 5px 0;
-            transition: 0.3s;
-            border-radius: 2px;
-        }
-        @media (max-width: 768px) {
-        /* Mobile menu container - CENTERED */
-        .nav-container {
-            position: fixed;
-            top: 0;
-            left: 50% !important;
-            right: auto !important;
-            transform: translateX(-50%) !important;
-            width: 280px;
-            max-width: 85vw;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(12px);
-            border-radius: 0 0 16px 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            z-index: 1000;
-            padding: 1.5rem 0;
-            display: none;
-            margin: 0;
-            border: 1px solid rgba(74, 144, 226, 0.1);
-        }
-    
-        .nav-container.active {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            /* Maintain centering when active */
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-        }
-        
-        /* Mobile hamburger button */
-        .mobile-menu-toggle {
-            display: flex !important;
             position: fixed;
             right: 1.5rem;
             top: 1.5rem;
             z-index: 1001;
-            background: none;
-            border: none;
-            cursor: pointer;
             flex-direction: column;
             width: 30px;
             height: 24px;
             justify-content: space-between;
         }
         
-        /* Navigation menu styling */
-        nav {
+        .hamburger {
             width: 100%;
-            display: flex;
-            justify-content: center;
+            height: 3px;
+            background: var(--accent-blue);
+            transition: 0.3s;
+            border-radius: 2px;
         }
+
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex !important;
+            }
+            
+            .nav-container {
+                position: fixed;
+                top: 0;
+                left: 50% !important;
+                right: auto !important;
+                transform: translateX(-50%) !important;
+                width: 280px;
+                max-width: 85vw;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(12px);
+                border-radius: 0 0 16px 16px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+                z-index: 1000;
+                padding: 1.5rem 0;
+                display: none;
+                margin: 0;
+                border: 1px solid rgba(0, 102, 204, 0.1);
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
         
-        nav ul {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            padding: 0;
-            margin: 0;
-            gap: 0.75rem;
-            list-style: none;
+            .nav-container.active {
+                display: flex !important;
+            }
+            
+            .logo {
+                margin-bottom: 1rem;
+            }
+            
+            nav {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+            
+            nav ul {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+                gap: 0.75rem;
+                list-style: none;
+            }
+            
+            nav ul li {
+                width: 90%;
+                text-align: center;
+            }
+            
+            nav ul li a {
+                display: block;
+                padding: 12px 20px;
+                text-align: center;
+                width: 100%;
+                box-sizing: border-box;
+                font-size: 0.95rem;
+                font-weight: 500;
+                border-radius: 10px;
+                background: rgba(0, 102, 204, 0.08);
+                text-decoration: none;
+                color: #333;
+                border: 1px solid transparent;
+                transition: all 0.2s ease;
+            }
+            
+            nav ul li a:hover {
+                background: rgba(0, 102, 204, 0.15);
+                border-color: rgba(0, 102, 204, 0.3);
+            }
+            
+            header {
+                padding-top: 8rem;
+                min-height: 100vh;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .title {
+                font-size: 1.1rem;
+            }
+            
+            section {
+                padding: 4rem 1rem;
+            }
+            
+            .section-alt {
+                padding: 4rem 0;
+            }
+            
+            .research-grid,
+            .teaching-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .profile-buttons {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .profile-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .profile-photo {
+                width: 140px;
+                height: 140px;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .intro-text {
+                font-size: 1rem;
+                padding: 2rem;
+            }
+            
+            .holo-card {
+                padding: 2rem;
+            }
         }
-        
-        nav ul li {
-            width: 90%;
-            text-align: center;
-        }
-        
-        nav ul li a {
-            display: block;
-            padding: 12px 20px;
-            text-align: center;
-            width: 100%;
-            box-sizing: border-box;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: 10px;
-            background: rgba(74, 144, 226, 0.08);
-            text-decoration: none;
-            color: #333;
-            border: 1px solid transparent;
-            transition: all 0.2s ease;
-        }
-        
-        nav ul li a:hover {
-            background: rgba(74, 144, 226, 0.15);
-            border-color: rgba(74, 144, 226, 0.3);
-        }
-        
-        /* Rest of your existing mobile styles */
-        header {
-            padding-top: 8rem;
-            min-height: 100vh;
-        }
-        
-        h1 {
-            font-size: 1.8rem;
-        }
-        
-        .title {
-            font-size: 1.1rem;
-        }
-        
-        section {
-            padding: 4rem 1rem;
-        }
-        
-        .section-alt {
-            padding: 4rem 0;
-        }
-        
-        .research-grid,
-        .teaching-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
-        
-        .profile-buttons {
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .profile-btn {
-            width: 100%;
-            max-width: 280px;
-            justify-content: center;
-        }
-        
-        .profile-photo {
-            width: 140px;
-            height: 140px;
-        }
-        
-        h2 {
-            font-size: 2rem;
-        }
-        
-        .intro-text {
-            font-size: 1rem;
-            padding: 2rem;
-        }
-        
-        .holo-card {
-            padding: 2rem;
-        }
-    }
 
         @media (max-width: 480px) {
             h1 {
@@ -1534,6 +1507,45 @@
             
             h2 {
                 font-size: 1.8rem;
+            }
+        }
+        
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section[id] {
+            scroll-margin-top: 140px;
+        }
+
+        section[id]::before {
+            content: '';
+            display: block;
+            height: 140px;
+            margin-top: -140px;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+            section[id]::before {
+                height: 180px;
+                margin-top: -180px;
+            }
+        }
+
+        .section-alt section[id] {
+            scroll-margin-top: 160px;
+        }
+
+        @media (max-width: 768px) {
+            section[id] {
+                scroll-margin-top: 180px;
+            }
+            
+            .section-alt section[id] {
+                scroll-margin-top: 200px;
             }
         }
         
@@ -1570,47 +1582,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-teal));
         }
-html {
-    scroll-behavior: smooth;
-}
-
-section[id] {
-    scroll-margin-top: 140px; /* Increased from 90px */
-}
-
-/* Fallback anchor positioning */
-section[id]::before {
-    content: '';
-    display: block;
-    height: 140px;
-    margin-top: -140px;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-@media (max-width: 768px) {
-    section[id]::before {
-        height: 180px;
-        margin-top: -180px;
-    }
-}
-
-
-/* Additional specific targeting for nested sections */
-.section-alt section[id] {
-    scroll-margin-top: 160px;
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-    section[id] {
-        scroll-margin-top: 180px;
-    }
-    
-    .section-alt section[id] {
-        scroll-margin-top: 200px;
-    }
-}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -1644,25 +1615,26 @@ section[id]::before {
     </div>
 
     <header>
-    <div class="nav-container">
-        <div class="logo">RESEARCH_STATION</div>
-        <button class="mobile-menu-toggle" aria-label="Toggle menu">
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-        <div class="hamburger"></div>
-     </button>
-        <nav aria-label="Main navigation">
-        <ul id="mainNav">
-       <li><a href="#about">ABOUT</a></li>
-       <li><a href="#research">RESEARCH</a></li>
-       <li><a href="#publications">PUBLICATIONS</a></li>
-       <li><a href="#teaching">TEACHING</a></li>
-       <li><a href="#students">STUDENTS</a></li>
-       <li><a href="#contact">CONTACT</a></li>
-       <li><a href="rock-universe.html">EXTRAS</a></li>
-    </ul>
-  </nav>
-</div>
+        <div class="nav-container" id="nav-container">
+            <div class="logo">RESEARCH_STATION</div>
+            <nav aria-label="Main navigation">
+                <ul id="mainNav">
+                    <li><a href="#about">ABOUT</a></li>
+                    <li><a href="#research">RESEARCH</a></li>
+                    <li><a href="#publications">PUBLICATIONS</a></li>
+                    <li><a href="#teaching">TEACHING</a></li>
+                    <li><a href="#students">STUDENTS</a></li>
+                    <li><a href="#contact">CONTACT</a></li>
+                    <li><a href="rock-universe.html">EXTRAS</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+            <div class="hamburger"></div>
+        </button>
         
         <div class="hero-content">
             <div class="profile-photo">
@@ -1683,7 +1655,7 @@ section[id]::before {
             
             <p>Before joining the IIT Bhubaneswar in late 2022, he spent time at IMT Hyderabad's research facility and completed specialized training at Oxford's macroeconomic summer academy. Think of it as Jedi training, but for understanding why markets do what they do when nobody expects them to.</p>
             
-            <p>His research universe navigates how shocks propagate through interconnected macroeconomic and financial systems like ripples in the space-time continuum. Current missions include mapping network architectures of digital and traditional assets, tracking network-dependent market efficiency, understanding how economic contagion spreads faster than the Kessel Run, and how information flows through economic systems—because even the Death Star needed good communication protocols. In the end, every economic system is just a vast network—and understanding its topology is the key to predicting when the next disturbance in the Force will strike. </p>
+            <p>His research universe navigates how shocks propagate through interconnected macroeconomic and financial systems like ripples in the space-time continuum. Current missions include mapping network architectures of digital and traditional assets, tracking network-dependent market efficiency, understanding how economic contagion spreads faster than the Kessel Run, and how information flows through economic systems—because even the Death Star needed good communication protocols. In the end, every economic system is just a vast network—and understanding its topology is the key to predicting when the next disturbance in the Force will strike.</p>
         </div>
     </section>
 
@@ -1740,20 +1712,6 @@ section[id]::before {
     <section id="publications">
         <h2 data-section="PUBLICATIONS">Research Output Database</h2>
         <div class="publications-list">
-            <div class="publication">
-                <div class="pub-title">Long-memory in the high frequency cryptocurrency markets using fractal connectivity analysis: The impact of COVID-19</div>
-                <div class="pub-authors">Assaf, A., Mokni, K., Yousaf, I., Bhandari, A.</div>
-                <div class="pub-venue">Research in International Business and Finance, Vol. 64, 2023 <span class="publisher">ELSEVIER</span></div>
-                <div class="pub-abstract">Advanced fractal connectivity analysis reveals unprecedented insights into long-memory properties within high-frequency cryptocurrency markets, demonstrating significant structural changes during the COVID-19 pandemic period.</div>
-            </div>
-            
-            <div class="publication">
-                <div class="pub-title">Multivariate Long Memory Structure in the Cryptocurrency Markets: The Impact of COVID-19</div>
-                <div class="pub-authors">Assaf, A., Bhandari, A., Charif, H., Demir, E.</div>
-                <div class="pub-venue">International Review of Financial Analysis, Vol. 82, 2022 <span class="publisher">ELSEVIER</span></div>
-                <div class="pub-abstract">Comprehensive investigation of multivariate long memory structures reveals how pandemic-induced market volatility fundamentally altered cryptocurrency interdependence networks and temporal dependencies.</div>
-            </div>
-            
             <div class="publication">
                 <div class="pub-title">Long Memory and Correlation Structures of Select Stock Returns Using Novel Wavelet and Fractal Connectivity Networks</div>
                 <div class="pub-authors">Bhandari, A., Assaf, A., Paramanik, R.N.</div>
@@ -1952,9 +1910,22 @@ section[id]::before {
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Inception Loading Sequence - Auto hide after 3 seconds
+            setTimeout(() => {
+                const loadingSequence = document.getElementById('loading-sequence');
+                if (loadingSequence) {
+                    loadingSequence.classList.add('hidden');
+                    setTimeout(() => {
+                        loadingSequence.remove();
+                    }, 1000);
+                }
+            }, 3000);
+
             // Create floating particles
             function createParticles() {
                 const particlesContainer = document.getElementById('particles');
+                if (!particlesContainer) return;
+                
                 const particleCount = 15;
                 
                 for (let i = 0; i < particleCount; i++) {
@@ -1980,89 +1951,87 @@ section[id]::before {
             createParticles();
             setInterval(createParticles, 25000);
 
-            // Enhanced mobile menu functionality
-const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-const mainNav = document.getElementById('mainNav');
+            // Mobile menu functionality
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navContainer = document.getElementById('nav-container');
 
-  if (mobileMenuToggle && mainNav) {
-      mobileMenuToggle.addEventListener('click', function() {
-        mainNav.classList.toggle('active');
-        this.classList.toggle('active');
-        // Dynamic viewport centering
-  if (window.innerWidth <= 768) {
-    const navWidth = mainNav.offsetWidth;
-    const viewportCenter = window.innerWidth / 2;
-    mainNav.style.left = `${viewportCenter - (navWidth/2)}px`;
-  }
-    });
+            if (mobileMenuToggle && navContainer) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    this.classList.toggle('active');
+                    navContainer.classList.toggle('active');
+                    
+                    if (navContainer.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
 
-    // Close mobile menu when clicking on links with delay for smooth transition
-    document.querySelectorAll('#mainNav a').forEach(link => {
-        link.addEventListener('click', function() {
-            if (mainNav.classList.contains('active')) {
-                mainNav.classList.remove('active');
-                mobileMenuToggle.classList.remove('active');
-                
-                // Small delay to allow menu to close before scrolling
-                setTimeout(() => {
-                    // Trigger scroll after menu closes
-                    const targetId = this.getAttribute('href');
-                    if (targetId.startsWith('#')) {
-                        const targetSection = document.querySelector(targetId);
-                        if (targetSection) {
-                            const navHeight = 200; // Fixed height for mobile
-                            const targetRect = targetSection.getBoundingClientRect();
-                            const targetPosition = window.pageYOffset + targetRect.top - navHeight;
-                            
-                            window.scrollTo({
-                                top: Math.max(0, targetPosition),
-                                behavior: 'smooth'
-                            });
+                // Close mobile menu when clicking on links
+                document.querySelectorAll('#mainNav a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (window.innerWidth <= 768 && navContainer.classList.contains('active')) {
+                        if (!navContainer.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
                         }
                     }
-                }, 300);
-            }
-        });
-    });
-}
+                });
 
+                // Handle resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768 && navContainer.classList.contains('active')) {
+                        navContainer.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
 
             // Enhanced smooth scrolling for anchor links
-             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-               anchor.addEventListener('click', function(e) {
-               e.preventDefault();
-        
-                const targetId = this.getAttribute('href');
-                const targetSection = document.querySelector(targetId);
-        
-        if (targetSection) {
-            // Get the actual navigation container
-            const navContainer = document.querySelector('.nav-container');
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
             
-            // Calculate dynamic navigation height more accurately
-            let navHeight = 0;
-            if (navContainer) {
-                const navRect = navContainer.getBoundingClientRect();
-                navHeight = navRect.height;
-                
-                // Add extra offset for the top positioning (2rem = 32px typically)
-                const navTopOffset = window.innerWidth > 768 ? 32 : 0;
-                navHeight += navTopOffset;
-            }
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
             
-            // Get target position accounting for wrapper divs
-            const targetRect = targetSection.getBoundingClientRect();
-            const targetPosition = window.pageYOffset + targetRect.top - navHeight - 40;
-            
-            // Use requestAnimationFrame for smoother scrolling
-            window.scrollTo({
-                top: Math.max(0, targetPosition),
-                behavior: 'smooth'
+                    if (targetSection) {
+                        const navContainer = document.querySelector('.nav-container');
+                        let navHeight = 0;
+                        
+                        if (navContainer) {
+                            const navRect = navContainer.getBoundingClientRect();
+                            navHeight = navRect.height;
+                            
+                            const navTopOffset = window.innerWidth > 768 ? 32 : 0;
+                            navHeight += navTopOffset;
+                        }
+                        
+                        const targetRect = targetSection.getBoundingClientRect();
+                        const targetPosition = window.pageYOffset + targetRect.top - navHeight - 40;
+                        
+                        window.scrollTo({
+                            top: Math.max(0, targetPosition),
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
-        }
-    });
-});
-
 
             // Intersection Observer for animations
             const observerOptions = {
@@ -2104,7 +2073,6 @@ const mainNav = document.getElementById('mainNav');
                 portalButton.addEventListener('click', function() {
                     portalModal.classList.add('active');
                     
-                    // Portal opening animation
                     this.style.transform = 'scale(1.2) rotate(180deg)';
                     setTimeout(() => {
                         this.style.transform = '';
@@ -2119,32 +2087,16 @@ const mainNav = document.getElementById('mainNav');
                 });
             }
 
-            // Inception Loading Sequence
-            setTimeout(() => {
-                const loadingSequence = document.getElementById('loading-sequence');
-                if (loadingSequence) {
-                    loadingSequence.classList.add('hidden');
-                    setTimeout(() => {
-                        loadingSequence.remove();
-                    }, 1000);
-                }
-            }, 3000);
-
             // Quantum Entanglement Between Pages
-            let entanglementActive = false;
-
-            // Check if coming from the other universe
             if (document.referrer.includes('rock-universe.html')) {
-                entanglementActive = true;
                 document.body.classList.add('quantum-entangled');
                 
-                // Add entanglement indicator
                 const indicator = document.createElement('div');
                 indicator.className = 'entanglement-indicator';
                 indicator.textContent = 'QUANTUM ENTANGLEMENT ACTIVE';
                 indicator.style.cssText = `
                     position: fixed;
-                    top: ${window.innerWidth <= 768 ? '5rem' : '6rem'};  /* Mobile-aware */
+                    top: ${window.innerWidth <= 768 ? '5rem' : '6rem'};
                     left: 50%;
                     transform: translate(-50%);
                     font-family: var(--font-mono);
@@ -2154,10 +2106,10 @@ const mainNav = document.getElementById('mainNav');
                     text-align: center;
                     z-index: 10000;
                     animation: entanglePulse 1s ease-out;
-                    background: rgba(0, 0, 0, 0.8);  /* ← ADDED BACKGROUND FOR VISIBILITY */
-                    padding: 0.75rem 1.5rem;         /* ← ADDED PADDING */
-                    border-radius: 8px;              /* ← ADDED ROUNDED CORNERS */
-                    backdrop-filter: blur(5px);      /* ← ADDED BLUR EFFECT */
+                    background: rgba(0, 0, 0, 0.8);
+                    padding: 0.75rem 1.5rem;
+                    border-radius: 8px;
+                    backdrop-filter: blur(5px);
                 `;
                 document.body.appendChild(indicator);
                 
@@ -2170,96 +2122,32 @@ const mainNav = document.getElementById('mainNav');
             console.log("RESEARCH_STATION initialized successfully");
             console.log("All systems operational");
         });
-                    // MOBILE NAVIGATION FIX - ADD THIS TO EXISTING SCRIPT
-            document.addEventListener('DOMContentLoaded', function() {
-                // Only run on mobile devices
-                function isMobile() {
-                    return window.innerWidth <= 768;
-                }
-                
-                // Mobile menu elements
-                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-            const navContainer = document.querySelector('.nav-container');
-            
-            console.log('Toggle button found:', !!mobileMenuToggle); // Debug
-            console.log('Nav container found:', !!navContainer); // Debug
-            
-            if (mobileMenuToggle && navContainer) {
-                mobileMenuToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    console.log('Mobile menu clicked'); // Debug log
-                    
-                    // Toggle classes
-                    this.classList.toggle('active');
-                    navContainer.classList.toggle('active');
-                    
-                    // Force display with inline styles
-                    if (navContainer.classList.contains('active')) {
-                        navContainer.style.display = 'block';
-                        navContainer.style.visibility = 'visible';
-                        navContainer.style.opacity = '1';
-                        document.body.style.overflow = 'hidden';
-                    } else {
-                        navContainer.style.display = 'none';
-                        navContainer.style.visibility = 'hidden';
-                        navContainer.style.opacity = '0';
-                        document.body.style.overflow = '';
-                    }
-                });
-                
-                // Click outside to close
-                document.addEventListener('click', function(event) {
-                    if (window.innerWidth <= 768 && navContainer.classList.contains('active')) {
-                        if (!navContainer.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
-                            navContainer.classList.remove('active');
-                            mobileMenuToggle.classList.remove('active');
-                            navContainer.style.display = 'none';
-                            document.body.style.overflow = '';
-                        }
-                    }
-                });
-            } else {
-                console.error('Mobile navigation elements not found!');
-            }
-                    
-                    // Click outside to close (mobile only)
-                    document.addEventListener('click', function(event) {
-                        if (isMobile() && navContainer.classList.contains('active')) {
-                            const isClickInsideNav = navContainer.contains(event.target);
-                            const isClickOnToggle = mobileMenuToggle.contains(event.target);
-                            
-                            if (!isClickInsideNav && !isClickOnToggle) {
-                                navContainer.classList.remove('active');
-                                mobileMenuToggle.classList.remove('active');
-                                document.body.style.overflow = '';
-                            }
-                        }
-                    });
-                    
-                    // Close menu when clicking nav links (mobile only)
-                    const mobileNavLinks = document.querySelectorAll('nav ul li a[href^="#"]');
-                    mobileNavLinks.forEach(link => {
-                        link.addEventListener('click', function(e) {
-                            if (isMobile()) {
-                                navContainer.classList.remove('active');
-                                mobileMenuToggle.classList.remove('active');
-                                document.body.style.overflow = '';
-                            }
-                        });
-                    });
-                    
-                    // Handle resize
-                    window.addEventListener('resize', function() {
-                        if (!isMobile() && navContainer.classList.contains('active')) {
-                            navContainer.classList.remove('active');
-                            mobileMenuToggle.classList.remove('active');
-                            document.body.style.overflow = '';
-                        }
-                    });
-                }
-            });
     </script>
 </body>
-</html>
+</html>="pub-title">Long-memory in the high frequency cryptocurrency markets using fractal connectivity analysis: The impact of COVID-19</div>
+                <div class="pub-authors">Assaf, A., Mokni, K., Yousaf, I., Bhandari, A.</div>
+                <div class="pub-venue">Research in International Business and Finance, Vol. 64, 2023 <span class="publisher">ELSEVIER</span></div>
+                <div class="pub-abstract">Advanced fractal connectivity analysis reveals unprecedented insights into long-memory properties within high-frequency cryptocurrency markets, demonstrating significant structural changes during the COVID-19 pandemic period.</div>
+            </div>
+            
+            <div class="publication">
+                <div class="pub-title">Multivariate Long Memory Structure in the Cryptocurrency Markets: The Impact of COVID-19</div>
+                <div class="pub-authors">Assaf, A., Bhandari, A., Charif, H., Demir, E.</div>
+                <div class="pub-venue">International Review of Financial Analysis, Vol. 82, 2022 <span class="publisher">ELSEVIER</span></div>
+                <div class="pub-abstract">Comprehensive investigation of multivariate long memory structures reveals how pandemic-induced market volatility fundamentally altered cryptocurrency interdependence networks and temporal dependencies.</div>
+            </div>
+            
+            <div class="publication">
+                <div classinstitution {
+            padding: 0.6rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .course-
