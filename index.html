@@ -2144,9 +2144,9 @@ const mainNav = document.getElementById('mainNav');
                 indicator.textContent = 'QUANTUM ENTANGLEMENT ACTIVE';
                 indicator.style.cssText = `
                     position: fixed;
-                    top: 2rem;
+                    top: ${window.innerWidth <= 768 ? '5rem' : '6rem'};  /* Mobile-aware */
                     left: 50%;
-                    transform: translate(-50%, -50%);
+                    transform: translate(-50%);
                     font-family: var(--font-mono);
                     font-size: 1.5rem;
                     color: var(--accent-cyan);
@@ -2154,6 +2154,10 @@ const mainNav = document.getElementById('mainNav');
                     text-align: center;
                     z-index: 10000;
                     animation: entanglePulse 1s ease-out;
+                    background: rgba(0, 0, 0, 0.8);  /* ← ADDED BACKGROUND FOR VISIBILITY */
+                    padding: 0.75rem 1.5rem;         /* ← ADDED PADDING */
+                    border-radius: 8px;              /* ← ADDED ROUNDED CORNERS */
+                    backdrop-filter: blur(5px);      /* ← ADDED BLUR EFFECT */
                 `;
                 document.body.appendChild(indicator);
                 
