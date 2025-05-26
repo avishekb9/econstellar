@@ -2179,28 +2179,50 @@ const mainNav = document.getElementById('mainNav');
                 
                 // Mobile menu elements
                 const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-                const navContainer = document.querySelector('.nav-container');
-                
-                // Only initialize if elements exist and on mobile
-                if (mobileMenuToggle && navContainer) {
+            const navContainer = document.querySelector('.nav-container');
+            
+            console.log('Toggle button found:', !!mobileMenuToggle); // Debug
+            console.log('Nav container found:', !!navContainer); // Debug
+            
+            if (mobileMenuToggle && navContainer) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-                    // Mobile menu toggle
-                    mobileMenuToggle.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        if (isMobile()) {
-                            this.classList.toggle('active');
-                            navContainer.classList.toggle('active');
-                            
-                            // Prevent body scroll
-                            if (navContainer.classList.contains('active')) {
-                                document.body.style.overflow = 'hidden';
-                            } else {
-                                document.body.style.overflow = '';
-                            }
+                    console.log('Mobile menu clicked'); // Debug log
+                    
+                    // Toggle classes
+                    this.classList.toggle('active');
+                    navContainer.classList.toggle('active');
+                    
+                    // Force display with inline styles
+                    if (navContainer.classList.contains('active')) {
+                        navContainer.style.display = 'block';
+                        navContainer.style.visibility = 'visible';
+                        navContainer.style.opacity = '1';
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        navContainer.style.display = 'none';
+                        navContainer.style.visibility = 'hidden';
+                        navContainer.style.opacity = '0';
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Click outside to close
+                document.addEventListener('click', function(event) {
+                    if (window.innerWidth <= 768 && navContainer.classList.contains('active')) {
+                        if (!navContainer.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            navContainer.style.display = 'none';
+                            document.body.style.overflow = '';
                         }
-                    });
+                    }
+                });
+            } else {
+                console.error('Mobile navigation elements not found!');
+            }
                     
                     // Click outside to close (mobile only)
                     document.addEventListener('click', function(event) {
