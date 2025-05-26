@@ -1373,15 +1373,18 @@
                 justify-content: center;
                 align-items: center;
          /* Full-width containment */
-                width: 100vw;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                text-align: center;
+                padding: 0;
+                margin: 0 auto;
                 top: 0;
                 left: 15px; /* Initial right shift */
                 right: 0;
-                margin: 0 auto;
                 transform: translateX(12%); /* Fine-tune positioning */
                 border-radius: 0;
-                padding: 1rem;
-                flex-direction: column;
             }
             
             nav {
@@ -1394,21 +1397,25 @@
             nav ul {
                 width: 100%;
                 padding-left: 0;
-                margin: 0 auto;
+                display: flex;
                 flex-direction: column;
+                align-items: center;
+                width: 100%;
+                padding-left: 0;
+                text-align: center;
+                margin: 0 auto;
                 gap: 1rem;
                 text-align: center;
-                display: none;
             }
             nav ul li {
-                width: 100%;
-                max-width: 280px;
+                flex: none;
+                width: auto;
+                text-align: center;
             }
             nav ul li a {
-                max-width: 92vw; /* Constrain width to viewport */
-                padding-right: 8px;
-                white-space: nowrap; /* Prevent text wrapping */
-                overflow: visible;
+                padding: 12px 24px;
+                text-align: center;
+                min-width: 120px;
             }
             nav ul.active {
                 display: flex;
