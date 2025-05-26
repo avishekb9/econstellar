@@ -1349,64 +1349,47 @@
             background: none;
             border: none;
             cursor: pointer;
-            position: fixed;
-            right: 1.5rem;
-            top: 1.5rem;
+            position: absolute;
+            left: 82%; /* Move hamburger icon left */
+            right: auto;
+            top: 1rem;
             z-index: 1001;
-            width: 30px;
-            height: 30px;
-            flex-direction: column;
-    j       ustify-content: space-around;
+            transform: translateX(-50%); /* Center relative to new position */
         }
         
         .hamburger {
             width: 25px;
             height: 3px;
             background: var(--accent-blue);
+            margin: 5px 0;
             transition: 0.3s;
             border-radius: 2px;
-            transform-origin: center;
-        }
-        .mobile-menu-toggle.active .hamburger:nth-child(1) {
-        transform: rotate(45deg) translate(6px, 6px);
-        }
-
-        .mobile-menu-toggle.active .hamburger:nth-child(2) {
-        opacity: 0;
-        }
-
-        .mobile-menu-toggle.active .hamburger:nth-child(3) {
-        transform: rotate(-45deg) translate(6px, -6px);
         }
         
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-container {
                 position: fixed;
+                position: fixed;
                 top: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 260px;
-                max-width: 85vw;
-                background: rgba(255, 255, 255, 0.96);
-                backdrop-filter: blur(12px);
-                border-radius: 0 0 16px 16px;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-                z-index: 1000;
+                left: 0;
+                right: 0;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                border-radius: 0;
                 padding: 1rem 0;
-                display: none;
-                opacity: 0;
-                transition: none;
-                pointer-events: none;
+                z-index: 1000;
             }
-            .nav-container.active {
-                display: block;
-                opacity: 1;
-                pointer-events: auto;
-             }
             
             nav {
                 width: 100%;
+                display: flex;
+                justify-content: center;
                 margin: 0;
                 padding: 0;
             }
@@ -1416,9 +1399,11 @@
                 flex-direction: column;
                 align-items: center;
                 width: 100%;
+                max-width: 300px;
                 padding: 0;
                 margin: 0;
-                gap: 0.5rem;
+                gap: 1rem;
+                text-align: center;
                 list-style: none;
             }
             nav ul li {
@@ -1427,81 +1412,82 @@
             }
             nav ul li a {
                 display: block;
-                padding: 10px 16px;
+                padding: 15px 20px;
                 text-align: center;
                 width: 100%;
                 box-sizing: border-box;
-                font-size: 0.9rem;
-                border-radius: 8px;
-                transition: background-color 0.2s ease;
                 text-decoration: none;
-                color: var(--text-color);
                 white-space: nowrap;
             }
-            nav ul li a:hover {
-            background-color: rgba(74, 144, 226, 0.1);
-            transform: none;
-        }
-            .mobile-menu-toggle {
+            nav ul.active {
                 display: flex;
-                }
-                
-                header {
-                    padding-top: 8rem;
-                    min-height: 100vh;
-                }
-                
-                h1 {
-                    font-size: 1.8rem;
-                }
-                
-                .title {
-                    font-size: 1.1rem;
-                }
-                
-                section {
-                    padding: 4rem 1rem;
-                }
-                
-                .section-alt {
-                    padding: 4rem 0;
-                }
-                
-                .research-grid,
-                .teaching-grid {
-                    grid-template-columns: 1fr;
-                    gap: 2rem;
-                }
-                
-                .profile-buttons {
-                    flex-direction: column;
-                    gap: 1.5rem;
-                }
-                
-                .profile-btn {
-                    width: 100%;
-                    max-width: 280px;
-                    justify-content: center;
-                }
-                
-                .profile-photo {
-                    width: 140px;
-                    height: 140px;
-                }
-                
-                h2 {
-                    font-size: 2rem;
-                }
-                
-                .intro-text {
-                    font-size: 1rem;
-                    padding: 2rem;
-                }
-                
-                .holo-card {
-                    padding: 2rem;
-                }
             }
+            
+            .mobile-menu-toggle {
+                display: block;
+                position: absolute;
+                right: 1rem;
+                top: 1rem;
+                z-index: 1001;
+            }
+            
+            header {
+                padding-top: 8rem;
+                min-height: 100vh;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .title {
+                font-size: 1.1rem;
+            }
+            
+            section {
+                padding: 4rem 1rem;
+            }
+            
+            .section-alt {
+                padding: 4rem 0;
+            }
+            
+            .research-grid,
+            .teaching-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .profile-buttons {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .profile-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+            
+            .profile-photo {
+                width: 140px;
+                height: 140px;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .intro-text {
+                font-size: 1rem;
+                padding: 2rem;
+            }
+            
+            .holo-card {
+                padding: 2rem;
+            }
+        }
+        
         @media (max-width: 480px) {
             h1 {
                 font-size: 1.6rem;
@@ -1559,77 +1545,47 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(45deg, var(--accent-cyan), var(--accent-teal));
         }
-    html {
-        scroll-behavior: smooth;
+html {
+    scroll-behavior: smooth;
+}
+
+section[id] {
+    scroll-margin-top: 140px; /* Increased from 90px */
+}
+
+/* Fallback anchor positioning */
+section[id]::before {
+    content: '';
+    display: block;
+    height: 140px;
+    margin-top: -140px;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+@media (max-width: 768px) {
+    section[id]::before {
+        height: 180px;
+        margin-top: -180px;
     }
-    
+}
+
+
+/* Additional specific targeting for nested sections */
+.section-alt section[id] {
+    scroll-margin-top: 160px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
     section[id] {
-        scroll-margin-top: 120px; /* Increased from 90px */
+        scroll-margin-top: 180px;
     }
-
-        /* Fallback anchor positioning */
-        section[id]::before {
-            content: '';
-            display: block;
-            height: 140px;
-            margin-top: -140px;
-            visibility: hidden;
-            pointer-events: none;
-        }
     
-        @media (max-width: 768px) {
-        section[id] {
-            scroll-margin-top: 100px;
-        }
+    .section-alt section[id] {
+        scroll-margin-top: 200px;
     }
-        /* Prevent body scroll when mobile menu is open */
-        body.menu-open {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-        }
-    }
-                /* Profile section heading adjustments - Add this anywhere in your CSS */
-        [data-section="PROFILE"]::before,
-        h2[data-section="PROFILE"]::before {
-            content: attr(data-section);
-            font-size: 1.2rem !important;
-            position: absolute;
-            top: -45px;
-            left: 0;
-            letter-spacing: 3px;
-            opacity: 0.9;
-            font-weight: 300;
-            color: var(--accent-blue);
-        }
-        
-        h2[data-section="PROFILE"] {
-            font-size: 2.4rem !important;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-        
-        /* Alternative selector if data-section doesn't exist */
-        #about h2,
-        section[id="about"] h2 {
-            font-size: 2.4rem !important;
-            margin-bottom: 3rem;
-        }
-        
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            [data-section="PROFILE"]::before,
-            h2[data-section="PROFILE"]::before {
-                font-size: 1rem !important;
-                top: -35px;
-            }
-            
-            h2[data-section="PROFILE"],
-            #about h2 {
-                font-size: 2rem !important;
-            }
-        }
-
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -1968,87 +1924,68 @@
             </div>
         </div>
     </div>
-        <script>
-            // Enhanced smooth scrolling for anchor links
-            document.addEventListener('DOMContentLoaded', function() {
-                // Mobile menu functionality
-                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-                const navContainer = document.querySelector('.nav-container');
-                const body = document.body;
 
-                if (mobileMenuToggle && navContainer) {
-                    mobileMenuToggle.addEventListener('click', function(e) {
-                        e.stopPropagation();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create floating particles
+            function createParticles() {
+                const particlesContainer = document.getElementById('particles');
+                const particleCount = 15;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = Math.random() * 100 + '%';
+                        particle.style.animationDelay = Math.random() * 20 + 's';
+                        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                        particlesContainer.appendChild(particle);
                         
-                        // Toggle active states
-                        this.classList.toggle('active');
-                        navContainer.classList.toggle('active');
-                        
-                        // Prevent body scroll when menu is open
-                        if (navContainer.classList.contains('active')) {
-                            body.style.overflow = 'hidden';
-                        } else {
-                            body.style.overflow = '';
-                        }
-                    });
+                        // Remove particle after animation
+                        setTimeout(() => {
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                            }
+                        }, 25000);
+                    }, i * 1000);
                 }
+            }
             
-                // Click outside to close menu
-                document.addEventListener('click', function(event) {
-                    if (navContainer && mobileMenuToggle) {
-                        const isClickInsideNav = navContainer.contains(event.target);
-                        const isClickOnToggle = mobileMenuToggle.contains(event.target);
-                        
-                        if (navContainer.classList.contains('active') && !isClickInsideNav && !isClickOnToggle) {
-                            navContainer.classList.remove('active');
-                            mobileMenuToggle.classList.remove('active');
-                            body.style.overflow = '';
-                        }
-                    }
-                });
-            
-                // Close menu when clicking on navigation links
-                const navLinks = document.querySelectorAll('nav ul li a[href^="#"]');
-                navLinks.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        // Close mobile menu
-                        if (navContainer && mobileMenuToggle) {
-                            navContainer.classList.remove('active');
-                            mobileMenuToggle.classList.remove('active');
-                            body.style.overflow = '';
-                        }
-                        
-                        // Handle smooth scrolling
-                        e.preventDefault();
-                        
-                        const targetId = this.getAttribute('href');
+            // Start particle system
+            createParticles();
+            setInterval(createParticles, 25000);
+
+            // Enhanced mobile menu functionality
+const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+const mainNav = document.getElementById('mainNav');
+
+  if (mobileMenuToggle && mainNav) {
+      mobileMenuToggle.addEventListener('click', function() {
+        mainNav.classList.toggle('active');
+        this.classList.toggle('active');
+        // Dynamic viewport centering
+  if (window.innerWidth <= 768) {
+    const navWidth = mainNav.offsetWidth;
+    const viewportCenter = window.innerWidth / 2;
+    mainNav.style.left = `${viewportCenter - (navWidth/2)}px`;
+  }
+    });
+
+    // Close mobile menu when clicking on links with delay for smooth transition
+    document.querySelectorAll('#mainNav a').forEach(link => {
+        link.addEventListener('click', function() {
+            if (mainNav.classList.contains('active')) {
+                mainNav.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+                
+                // Small delay to allow menu to close before scrolling
+                setTimeout(() => {
+                    // Trigger scroll after menu closes
+                    const targetId = this.getAttribute('href');
+                    if (targetId.startsWith('#')) {
                         const targetSection = document.querySelector(targetId);
-                        
                         if (targetSection) {
-                            setTimeout(() => {
-                                const navHeight = window.innerWidth <= 768 ? 100 : 120;
-                                const targetRect = targetSection.getBoundingClientRect();
-                                const targetPosition = window.pageYOffset + targetRect.top - navHeight;
-                                
-                                window.scrollTo({
-                                    top: Math.max(0, targetPosition),
-                                    behavior: 'smooth'
-                                });
-                            }, 100);
-                        }
-                    });
-                });
-            
-                // Enhanced smooth scrolling for all anchor links
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        
-                        const targetId = this.getAttribute('href');
-                        const targetSection = document.querySelector(targetId);
-                        
-                        if (targetSection) {
-                            const navHeight = window.innerWidth <= 768 ? 100 : 120;
+                            const navHeight = 200; // Fixed height for mobile
                             const targetRect = targetSection.getBoundingClientRect();
                             const targetPosition = window.pageYOffset + targetRect.top - navHeight;
                             
@@ -2057,31 +1994,152 @@
                                 behavior: 'smooth'
                             });
                         }
-                    });
-                });
-            
-                // Prevent menu movement on mobile
-                if (window.innerWidth <= 768) {
-                    let startY;
-                    
-                    document.addEventListener('touchstart', function(e) {
-                        startY = e.touches[0].clientY;
-                    });
-                    
-                    document.addEventListener('touchmove', function(e) {
-                        if (navContainer && navContainer.classList.contains('active')) {
-                            const currentY = e.touches[0].clientY;
-                            const deltaY = currentY - startY;
-                            
-                            // Prevent scrolling if menu is open
-                            if (Math.abs(deltaY) > 10) {
-                                e.preventDefault();
-                            }
-                        }
-                    }, { passive: false });
-                }
-            });
-</script>
+                    }
+                }, 300);
+            }
+        });
+    });
+}
 
+
+            // Enhanced smooth scrolling for anchor links
+             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+               anchor.addEventListener('click', function(e) {
+               e.preventDefault();
+        
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+        
+        if (targetSection) {
+            // Get the actual navigation container
+            const navContainer = document.querySelector('.nav-container');
+            
+            // Calculate dynamic navigation height more accurately
+            let navHeight = 0;
+            if (navContainer) {
+                const navRect = navContainer.getBoundingClientRect();
+                navHeight = navRect.height;
+                
+                // Add extra offset for the top positioning (2rem = 32px typically)
+                const navTopOffset = window.innerWidth > 768 ? 32 : 0;
+                navHeight += navTopOffset;
+            }
+            
+            // Get target position accounting for wrapper divs
+            const targetRect = targetSection.getBoundingClientRect();
+            const targetPosition = window.pageYOffset + targetRect.top - navHeight - 40;
+            
+            // Use requestAnimationFrame for smoother scrolling
+            window.scrollTo({
+                top: Math.max(0, targetPosition),
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-on-scroll');
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animation
+            document.querySelectorAll('.holo-card, .research-item, .publication, .course, .student-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(el);
+            });
+
+            // Parallax effect for background patterns
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.3;
+                
+                document.body.style.backgroundPosition = `0 ${rate}px`;
+            });
+
+            // Portal Button functionality
+            const portalButton = document.getElementById('portal-button');
+            const portalModal = document.getElementById('portal-modal');
+            
+            if (portalButton && portalModal) {
+                portalButton.addEventListener('click', function() {
+                    portalModal.classList.add('active');
+                    
+                    // Portal opening animation
+                    this.style.transform = 'scale(1.2) rotate(180deg)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 500);
+                });
+                
+                // Close modal when clicking outside
+                portalModal.addEventListener('click', function(e) {
+                    if (e.target === portalModal) {
+                        portalModal.classList.remove('active');
+                    }
+                });
+            }
+
+            // Inception Loading Sequence
+            setTimeout(() => {
+                const loadingSequence = document.getElementById('loading-sequence');
+                if (loadingSequence) {
+                    loadingSequence.classList.add('hidden');
+                    setTimeout(() => {
+                        loadingSequence.remove();
+                    }, 1000);
+                }
+            }, 3000);
+
+            // Quantum Entanglement Between Pages
+            let entanglementActive = false;
+
+            // Check if coming from the other universe
+            if (document.referrer.includes('rock-universe.html')) {
+                entanglementActive = true;
+                document.body.classList.add('quantum-entangled');
+                
+                // Add entanglement indicator
+                const indicator = document.createElement('div');
+                indicator.className = 'entanglement-indicator';
+                indicator.textContent = 'QUANTUM ENTANGLEMENT ACTIVE';
+                indicator.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    font-family: var(--font-mono);
+                    font-size: 1.5rem;
+                    color: var(--accent-cyan);
+                    letter-spacing: 3px;
+                    text-align: center;
+                    z-index: 10000;
+                    animation: entanglePulse 2s ease-out;
+                `;
+                document.body.appendChild(indicator);
+                
+                setTimeout(() => {
+                    indicator.style.opacity = '0';
+                    setTimeout(() => indicator.remove(), 1000);
+                }, 3000);
+            }
+
+            console.log("RESEARCH_STATION initialized successfully");
+            console.log("All systems operational");
+        });
+    </script>
 </body>
 </html>
