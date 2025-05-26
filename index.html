@@ -1368,125 +1368,128 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
-            .nav-container {
-                position: fixed;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                background: rgba(255, 255, 255, 0.98);
-                backdrop-filter: blur(10px);
-                border-radius: 0;
-                padding: 1rem 0;
-                z-index: 1000;
-            }
-            
-            nav {
-                width: 100%;
-                display: flex;
-                justify-content: center;
-                margin: 0;
-                padding: 0;
-            }
-            
-            nav ul {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                max-width: 300px;
-                padding: 0;
-                margin: 0;
-                gap: 1rem;
-                text-align: center;
-                list-style: none;
-            }
-            nav ul li {
-                width: 100%;
-                text-align: center;
-            }
-            nav ul li a {
-                display: block;
-                padding: 15px 20px;
-                text-align: center;
-                width: 100%;
-                box-sizing: border-box;
-                text-decoration: none;
-                white-space: nowrap;
-            }
-            nav ul.active {
-                display: flex;
-            }
-            
-            .mobile-menu-toggle {
-                display: block;
-                position: absolute;
-                right: 1rem;
-                top: 1rem;
-                z-index: 1001;
-            }
-            
-            header {
-                padding-top: 8rem;
-                min-height: 100vh;
-            }
-            
-            h1 {
-                font-size: 1.8rem;
-            }
-            
-            .title {
-                font-size: 1.1rem;
-            }
-            
-            section {
-                padding: 4rem 1rem;
-            }
-            
-            .section-alt {
-                padding: 4rem 0;
-            }
-            
-            .research-grid,
-            .teaching-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .profile-buttons {
-                flex-direction: column;
-                gap: 1.5rem;
-            }
-            
-            .profile-btn {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
-            }
-            
-            .profile-photo {
-                width: 140px;
-                height: 140px;
-            }
-            
-            h2 {
-                font-size: 2rem;
-            }
-            
-            .intro-text {
-                font-size: 1rem;
-                padding: 2rem;
-            }
-            
-            .holo-card {
-                padding: 2rem;
-            }
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            max-width: 90vw;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(15px);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            z-index: 1000;
+            padding: 1rem 0;
+            display: none;
         }
+        
+        .nav-container.active {
+            display: block;
+        }
+        
+        .mobile-menu-toggle {
+            display: flex;
+            position: fixed;
+            right: 1.5rem;
+            top: 1.5rem;
+            z-index: 1001;
+            background: none;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            width: 30px;
+            height: 24px;
+            justify-content: space-between;
+        }
+        
+        nav ul {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            gap: 0.75rem;
+            list-style: none;
+        }
+        
+        nav ul li {
+            width: 85%;
+            text-align: center;
+        }
+        
+        nav ul li a {
+            display: block;
+            padding: 12px 20px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            border-radius: 10px;
+            background: rgba(74, 144, 226, 0.05);
+            text-decoration: none;
+            color: #333;
+        }
+        
+        /* Keep existing mobile styles below */
+        header {
+            padding-top: 8rem;
+            min-height: 100vh;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+        }
+        
+        .title {
+            font-size: 1.1rem;
+        }
+        
+        section {
+            padding: 4rem 1rem;
+        }
+        
+        .section-alt {
+            padding: 4rem 0;
+        }
+        
+        .research-grid,
+        .teaching-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .profile-buttons {
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .profile-btn {
+            width: 100%;
+            max-width: 280px;
+            justify-content: center;
+        }
+        
+        .profile-photo {
+            width: 140px;
+            height: 140px;
+        }
+        
+        h2 {
+            font-size: 2rem;
+        }
+        
+        .intro-text {
+            font-size: 1rem;
+            padding: 2rem;
+        }
+        
+        .holo-card {
+            padding: 2rem;
+        }
+    }
+
         
         @media (max-width: 480px) {
             h1 {
@@ -2141,6 +2144,74 @@ const mainNav = document.getElementById('mainNav');
             console.log("RESEARCH_STATION initialized successfully");
             console.log("All systems operational");
         });
+                    // MOBILE NAVIGATION FIX - ADD THIS TO EXISTING SCRIPT
+            document.addEventListener('DOMContentLoaded', function() {
+                // Only run on mobile devices
+                function isMobile() {
+                    return window.innerWidth <= 768;
+                }
+                
+                // Mobile menu elements
+                const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+                const navContainer = document.querySelector('.nav-container');
+                
+                // Only initialize if elements exist and on mobile
+                if (mobileMenuToggle && navContainer) {
+                    
+                    // Mobile menu toggle
+                    mobileMenuToggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (isMobile()) {
+                            this.classList.toggle('active');
+                            navContainer.classList.toggle('active');
+                            
+                            // Prevent body scroll
+                            if (navContainer.classList.contains('active')) {
+                                document.body.style.overflow = 'hidden';
+                            } else {
+                                document.body.style.overflow = '';
+                            }
+                        }
+                    });
+                    
+                    // Click outside to close (mobile only)
+                    document.addEventListener('click', function(event) {
+                        if (isMobile() && navContainer.classList.contains('active')) {
+                            const isClickInsideNav = navContainer.contains(event.target);
+                            const isClickOnToggle = mobileMenuToggle.contains(event.target);
+                            
+                            if (!isClickInsideNav && !isClickOnToggle) {
+                                navContainer.classList.remove('active');
+                                mobileMenuToggle.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
+                        }
+                    });
+                    
+                    // Close menu when clicking nav links (mobile only)
+                    const mobileNavLinks = document.querySelectorAll('nav ul li a[href^="#"]');
+                    mobileNavLinks.forEach(link => {
+                        link.addEventListener('click', function(e) {
+                            if (isMobile()) {
+                                navContainer.classList.remove('active');
+                                mobileMenuToggle.classList.remove('active');
+                                document.body.style.overflow = '';
+                            }
+                        });
+                    });
+                    
+                    // Handle resize
+                    window.addEventListener('resize', function() {
+                        if (!isMobile() && navContainer.classList.contains('active')) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                }
+            });
     </script>
 </body>
 </html>
