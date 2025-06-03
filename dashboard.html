@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economic Networks Dashboard - ECONSTELLAR</title>
+    <style>
+        /* Import fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+        
+        /* Dashboard Variables */
+        :root {
+            --dash-bg: #000000;
+            --dash-primary: #00d4ff;
+            --dash-secondary: #ff6b35;
+            --dash-tertiary: #8a2be2;
+            --dash-success: #39ff14;
+            --dash-warning: #ffaa00;
+            --dash-danger: #ff0040;
+            --dash-grid: rgba(0, 212, 255, 0.1);
+            --dash-text: #ffffff;
+            --dash-text-dim: #888888;
+            --dash-panel: rgba(10, 10, 10, 0.8);
+            --dash-border: rgba(0, 212, 255, 0.3);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--dash-bg);
+            color: var(--dash-text);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+        }
+        
+        /* Dashboard Container */
+        .dashboard-container {
+            padding: 2rem;
+            min-height: 100vh;
+            position: relative;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 107, 53, 0.1) 0%, transparent 40%),
+                linear-gradient(0deg, transparent 24%, var(--dash-grid) 25%, var(--dash-grid) 26%, transparent 27%, transparent 74%, var(--dash-grid) 75%, var(--dash-grid) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, var(--dash-grid) 25%, var(--dash-grid) 26%, transparent 27%, transparent 74%, var(--dash-grid) 75%, var(--dash-grid) 76%, transparent 77%, transparent);
+            background-size: 100px 100px, 100px 100px, 50px 50px, 50px 50px;
+        }
+        
+        /* Dashboard Header */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .dashboard-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(45deg, var(--dash-primary), var(--dash-secondary), var(--dash-tertiary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--dash-primary)); }
+            50% { filter: drop-shadow(0 0 30px var(--dash-secondary)); }
+        }
+        
+        .dashboard-subtitle {
+            color: var(--dash-text-dim);
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 2rem;
+            background: var(--dash-panel);
+            border: 1px solid var(--dash-border);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        .status-indicator.active {
+            background: var(--dash-success);
+            box-shadow: 0 0 10px var(--dash-success);
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        /* Panel Styles */
+        .panel {
+            background: var(--dash-panel);
+            border: 1px solid var(--dash-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--dash-primary), var(--dash-secondary), var(--dash-tertiary));
+            animation: scan-line 3s linear infinite;
+        }
+        
+        @keyframes scan-line {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .panel:hover {
+            border-color: var(--dash-primary);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .panel-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dash-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .panel-status {
+            font-size: 0.8rem;
+            color: var(--dash-success);
+            animation: flash 2s ease-in-out infinite;
+        }
+        
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Network Visualization */
+        .network-viz {
+            height: 300px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .network-node {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--dash-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--dash-primary);
+            animation: float-node 6s ease-in-out infinite;
+        }
+        
+        .network-node.secondary {
+            background: var(--dash-secondary);
+            box-shadow: 0 0 20px var(--dash-secondary);
+            width: 15px;
+            height: 15px;
+        }
+        
+        .network-node.tertiary {
+            background: var(--dash-tertiary);
+            box-shadow: 0 0 20px var(--dash-tertiary);
+            width: 10px;
+            height: 10px;
+        }
+        
+        @keyframes float-node {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+        
+        .network-line {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dash-primary), transparent);
+            transform-origin: left center;
+            opacity: 0.5;
+            animation: pulse-line 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-line {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* Market Metrics */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .metric-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--dash-primary);
+            transform: scale(1.05);
+        }
+        
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dash-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--dash-text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric-change {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .metric-change.positive {
+            color: var(--dash-success);
+        }
+        
+        .metric-change.negative {
+            color: var(--dash-danger);
+        }
+        
+        /* Heatmap */
+        .heatmap-container {
+            height: 250px;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 2px;
+            margin-top: 1rem;
+        }
+        
+        .heatmap-cell {
+            background: var(--dash-primary);
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .heatmap-cell::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .heatmap-cell:hover::after {
+            opacity: 1;
+        }
+        
+        /* Data Stream */
+        .data-stream {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.05) 100%);
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .stream-particle {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, var(--dash-primary), transparent);
+            animation: stream-fall 2s linear infinite;
+        }
+        
+        @keyframes stream-fall {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(220px);
+                opacity: 0;
+            }
+        }
+        
+        /* Contagion Wave */
+        .contagion-viz {
+            height: 300px;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at center, rgba(255, 107, 53, 0.05) 0%, transparent 70%);
+            border-radius: 10px;
+        }
+        
+        .contagion-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--dash-danger);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: contagion-spread 4s ease-out infinite;
+        }
+        
+        @keyframes contagion-spread {
+            0% {
+                width: 20px;
+                height: 20px;
+                opacity: 1;
+            }
+            100% {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
+        
+        /* Terminal Style Log */
+        .terminal-log {
+            background: #000;
+            border: 1px solid var(--dash-success);
+            border-radius: 5px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            height: 150px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .log-entry {
+            color: var(--dash-success);
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: type-in 0.5s ease-out forwards;
+        }
+        
+        @keyframes type-in {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .log-timestamp {
+            color: var(--dash-text-dim);
+            margin-right: 1rem;
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--dash-panel);
+            border: 1px solid var(--dash-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .control-title {
+            font-size: 1rem;
+            color: var(--dash-primary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .control-button {
+            display: block;
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--dash-primary), var(--dash-tertiary));
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .control-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-panel {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+            }
+            
+            .dashboard-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">ECONSTELLAR NETWORK COMMAND</h1>
+            <p class="dashboard-subtitle">REAL-TIME ECONOMIC CONSTELLATION MONITORING</p>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-indicator active"></span>
+                <span>SYSTEM: ONLINE</span>
+            </div>
+            <div class="status-item">
+                <span>NODES: 1,247 ACTIVE</span>
+            </div>
+            <div class="status-item">
+                <span>LAST SYNC: 00:00:03</span>
+            </div>
+            <div class="status-item">
+                <span>THREAT LEVEL: MODERATE</span>
+            </div>
+        </div>
+        
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Network Topology Panel -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Network Topology</h3>
+                    <span class="panel-status">● LIVE</span>
+                </div>
+                <div class="network-viz" id="network-viz">
+                    <!-- Network nodes will be dynamically added -->
+                </div>
+            </div>
+            
+            <!-- Market Efficiency Metrics -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Market Efficiency Index</h3>
+                    <span class="panel-status">● UPDATING</span>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">0.847</div>
+                        <div class="metric-label">Efficiency</div>
+                        <div class="metric-change positive">▲ 2.3%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0.623</div>
+                        <div class="metric-label">Correlation</div>
+                        <div class="metric-change negative">▼ 1.1%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0.912</div>
+                        <div class="metric-label">Stability</div>
+                        <div class="metric-change positive">▲ 0.8%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contagion Monitor -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Contagion Propagation</h3>
+                    <span class="panel-status">● MONITORING</span>
+                </div>
+                <div class="contagion-viz" id="contagion-viz">
+                    <!-- Contagion waves will be animated here -->
+                </div>
+            </div>
+            
+            <!-- Information Flow Heatmap -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Information Flow Matrix</h3>
+                    <span class="panel-status">● ANALYZING</span>
+                </div>
+                <div class="heatmap-container" id="heatmap">
+                    <!-- Heatmap cells will be generated -->
+                </div>
+            </div>
+            
+            <!-- Data Stream Visualization -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Data Stream Monitor</h3>
+                    <span class="panel-status">● STREAMING</span>
+                </div>
+                <div class="data-stream" id="data-stream">
+                    <!-- Stream particles will be animated -->
+                </div>
+            </div>
+            
+            <!-- System Log -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">System Terminal</h3>
+                    <span class="panel-status">● RECORDING</span>
+                </div>
+                <div class="terminal-log" id="terminal-log">
+                    <!-- Log entries will appear here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <h4 class="control-title">Network Controls</h4>
+            <button class="control-button" onclick="initializeNetwork()">Initialize Network</button>
+            <button class="control-button" onclick="startContagion()">Simulate Contagion</button>
+            <button class="control-button" onclick="updateMetrics()">Update Metrics</button>
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Network Visualization
+        function createNetworkNodes() {
+            const networkViz = document.getElementById('network-viz');
+            networkViz.innerHTML = '';
+            
+            // Create central node
+            const centralNode = document.createElement('div');
+            centralNode.className = 'network-node';
+            centralNode.style.left = '50%';
+            centralNode.style.top = '50%';
+            centralNode.style.transform = 'translate(-50%, -50%)';
+            networkViz.appendChild(centralNode);
+            
+            // Create surrounding nodes
+            const nodeCount = 8;
+            const radius = 100;
+            
+            for (let i = 0; i < nodeCount; i++) {
+                const angle = (i / nodeCount) * 2 * Math.PI;
+                const x = 50 + radius * Math.cos(angle) / 3;
+                const y = 50 + radius * Math.sin(angle) / 3;
+                
+                const node = document.createElement('div');
+                node.className = i % 2 === 0 ? 'network-node secondary' : 'network-node tertiary';
+                node.style.left = x + '%';
+                node.style.top = y + '%';
+                node.style.animationDelay = (i * 0.2) + 's';
+                networkViz.appendChild(node);
+                
+                // Create connection lines
+                const line = document.createElement('div');
+                line.className = 'network-line';
+                const lineLength = radius;
+                const lineAngle = angle * 180 / Math.PI;
+                
+                line.style.width = lineLength + 'px';
+                line.style.left = '50%';
+                line.style.top = '50%';
+                line.style.transform = `translate(-50%, -50%) rotate(${lineAngle}deg)`;
+                line.style.animationDelay = (i * 0.1) + 's';
+                networkViz.appendChild(line);
+            }
+        }
+        
+        // Create Heatmap
+        function createHeatmap() {
+            const heatmap = document.getElementById('heatmap');
+            heatmap.innerHTML = '';
+            
+            for (let i = 0; i < 50; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'heatmap-cell';
+                const intensity = Math.random();
+                cell.style.opacity = intensity;
+                cell.style.animationDelay = (i * 0.02) + 's';
+                heatmap.appendChild(cell);
+            }
+        }
+        
+        // Create Data Stream
+        function createDataStream() {
+            const stream = document.getElementById('data-stream');
+            
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.className = 'stream-particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (1 + Math.random() * 2) + 's';
+                stream.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 3000);
+            }, 100);
+        }
+        
+        // Create Contagion Waves
+        function createContagionWave() {
+            const contagionViz = document.getElementById('contagion-viz');
+            
+            setInterval(() => {
+                const wave = document.createElement('div');
+                wave.className = 'contagion-wave';
+                wave.style.left = (20 + Math.random() * 60) + '%';
+                wave.style.top = (20 + Math.random() * 60) + '%';
+                contagionViz.appendChild(wave);
+                
+                setTimeout(() => wave.remove(), 4000);
+            }, 2000);
+        }
+        
+        // Terminal Log
+        function addLogEntry(message) {
+            const log = document.getElementById('terminal-log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            const timestamp = new Date().toLocaleTimeString();
+            entry.innerHTML = `<span class="log-timestamp">[${timestamp}]</span>${message}`;
+            
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            
+            // Keep only last 10 entries
+            if (log.children.length > 10) {
+                log.removeChild(log.firstChild);
+            }
+        }
+        
+        // Control Functions
+        function initializeNetwork() {
+            createNetworkNodes();
+            addLogEntry('Network topology initialized');
+        }
+        
+        function startContagion() {
+            addLogEntry('Contagion simulation started');
+        }
+        
+        function updateMetrics() {
+            // Update metric values with random changes
+            document.querySelectorAll('.metric-value').forEach(metric => {
+                const currentValue = parseFloat(metric.textContent);
+                const change = (Math.random() - 0.5) * 0.1;
+                const newValue = Math.max(0, Math.min(1, currentValue + change));
+                metric.textContent = newValue.toFixed(3);
+            });
+            addLogEntry('Market metrics updated');
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            createNetworkNodes();
+            createHeatmap();
+            createDataStream();
+            createContagionWave();
+            
+            // Initial log entries
+            addLogEntry('ECONSTELLAR Network Command initialized');
+            addLogEntry('Connecting to global market nodes...');
+            addLogEntry('Synchronizing economic data streams...');
+            addLogEntry('System ready for analysis');
+            
+            // Auto-update metrics
+            setInterval(updateMetrics, 5000);
+            
+            // Randomly update heatmap
+            setInterval(createHeatmap, 3000);
+        });
+    </script>
+</body>
+</html>
