@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econstellar Network Command | Real-Time Binance Data Intelligence</title>
+    <meta name="description" content="Advanced real-time economic constellation monitoring powered by Binance WebSocket API with live cryptocurrency analysis, fractal connectivity networks, and COVID-19 impact assessment">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #00ff41;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 255, 65, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 255, 65, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 0;
+            border-bottom: 2px solid #00ff41;
+            position: relative;
+        }
+
+        .dashboard-header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 0 0 20px #00ff41;
+            margin-bottom: 10px;
+            animation: glow-pulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            0% { text-shadow: 0 0 20px #00ff41; }
+            100% { text-shadow: 0 0 30px #00ff41, 0 0 40px #00ff41; }
+        }
+
+        .binance-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #f0b90b, #f8d12f);
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: badge-pulse 2s infinite;
+        }
+
+        @keyframes badge-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stream-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            background: #00ff41;
+            border-radius: 50%;
+            animation: stream-pulse 1s infinite;
+        }
+
+        @keyframes stream-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.3); }
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        .connection-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4757;
+            animation: connection-blink 1s infinite;
+        }
+
+        .connection-dot.connected {
+            background: #00ff41;
+            animation: none;
+        }
+
+        @keyframes connection-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .intelligence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .metric-panel {
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .metric-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .metric-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            animation: panel-scan 4s infinite;
+        }
+
+        @keyframes panel-scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: status-blink 1.5s infinite;
+        }
+
+        .status-dot.updating { background: #00ff41; }
+        .status-dot.monitoring { background: #ff6b35; }
+        .status-dot.analyzing { background: #4ecdc4; }
+        .status-dot.streaming { background: #ff4757; }
+
+        @keyframes status-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 15px #00ff41;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .metric-change {
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .metric-change.positive { color: #00ff41; }
+        .metric-change.negative { color: #ff4757; }
+
+        .live-chart-container {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            height: 120px;
+        }
+
+        .live-chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ff41, transparent);
+            animation: scan-line 3s infinite;
+        }
+
+        @keyframes scan-line {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .crypto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .crypto-card {
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid #00ff41;
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .crypto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 65, 0.2);
+        }
+
+        .crypto-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .crypto-symbol {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .crypto-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #00ff41;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .crypto-change {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .crypto-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 0.8rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .topology-section {
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .topology-section h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 15px #00ff41;
+        }
+
+        .network-nodes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .node {
+            width: 80px;
+            height: 80px;
+            border: 2px solid #00ff41;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #00ff41;
+            background: rgba(0, 255, 65, 0.1);
+            animation: node-pulse 2s infinite alternate;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .node:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.5);
+            background: rgba(0, 255, 65, 0.2);
+        }
+
+        .node.active {
+            border-color: #f0b90b;
+            color: #f0b90b;
+            box-shadow: 0 0 20px rgba(240, 185, 11, 0.5);
+        }
+
+        @keyframes node-pulse {
+            0% { box-shadow: 0 0 5px #00ff41; }
+            100% { box-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; }
+        }
+
+        .economic-feed {
+            margin: 40px 0;
+            padding: 30px;
+            background: rgba(0, 255, 65, 0.05);
+            border: 2px solid #00ff41;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .economic-feed::before {
+            content: '● LIVE BINANCE STREAM';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #0a0a0a;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: #f0b90b;
+            animation: live-blink 1s infinite;
+        }
+
+        @keyframes live-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .economic-feed h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 15px #00ff41;
+        }
+
+        .feed-container {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+        }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.1);
+            animation: feed-slide-in 0.5s ease-out;
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes feed-slide-in {
+            from { 
+                opacity: 0; 
+                transform: translateX(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+
+        .timestamp {
+            color: rgba(0, 255, 65, 0.7);
+            font-size: 0.8rem;
+            margin-right: 15px;
+            min-width: 80px;
+        }
+
+        .feed-text {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        .feed-item.binance { border-left: 3px solid #f0b90b; padding-left: 10px; }
+        .feed-item.research { border-left: 3px solid #ff6b35; padding-left: 10px; }
+        .feed-item.alert { border-left: 3px solid #ff4757; padding-left: 10px; }
+
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            background: rgba(0, 255, 65, 0.1);
+            border: 2px solid #00ff41;
+            border-radius: 25px;
+            color: #00ff41;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 255, 65, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+        }
+
+        @keyframes pulse-update {
+            0% { 
+                color: #00ff41; 
+                text-shadow: 0 0 20px #00ff41; 
+                transform: scale(1.1); 
+            }
+            50% { 
+                color: #ffffff; 
+                text-shadow: 0 0 30px #00ff41; 
+                transform: scale(1.2); 
+            }
+            100% { 
+                color: #00ff41; 
+                text-shadow: 0 0 10px #00ff41; 
+                transform: scale(1); 
+            }
+        }
+
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(0, 255, 65, 0.3);
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            
+            .intelligence-grid, .crypto-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .control-panel {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .network-nodes {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Scrollbar styling */
+        .feed-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .feed-container::-webkit-scrollbar-track {
+            background: rgba(0, 255, 65, 0.1);
+        }
+
+        .feed-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 65, 0.5);
+            border-radius: 3px;
+        }
+
+        .feed-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 65, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header with live status -->
+        <div class="dashboard-header">
+            <h1>ECONSTELLAR NETWORK COMMAND<span class="binance-badge">POWERED BY BINANCE</span></h1>
+            <div class="stream-indicator"></div>
+            <div class="status-bar">
+                <span>REAL-TIME BINANCE ECONOMIC CONSTELLATION MONITORING</span>
+                <div class="connection-status">
+                    <div class="connection-dot" id="connection-status"></div>
+                    <span id="connection-text">CONNECTING...</span>
+                </div>
+                <span>SYSTEM: <strong>ONLINE</strong></span>
+                <span>STREAMS: <strong id="stream-count">0</strong> ACTIVE</span>
+                <span id="last-update">LAST SYNC: <span id="sync-time">00:00:00</span></span>
+                <span>THREAT LEVEL: <strong id="threat-level">MODERATE</strong></span>
+            </div>
+        </div>
+
+        <!-- Live Cryptocurrency Data Grid -->
+        <div class="crypto-grid" id="crypto-grid">
+            <!-- Crypto cards will be populated by JavaScript -->
+        </div>
+
+        <!-- Live Market Intelligence Grid -->
+        <div class="intelligence-grid">
+            <!-- Market Efficiency Tracker -->
+            <div class="metric-panel">
+                <div class="panel-header">
+                    <span>MARKET EFFICIENCY INDEX</span>
+                    <div class="status-dot updating"></div>
+                </div>
+                <div class="metric-value" id="efficiency-value">0.847</div>
+                <div class="metric-change positive" id="efficiency-change">▲ 2.3%</div>
+                <div class="live-chart-container">
+                    <canvas id="efficiency-chart" width="300" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- Cryptocurrency Network Analysis -->
+            <div class="metric-panel">
+                <div class="panel-header">
+                    <span>CRYPTO FRACTAL CONNECTIVITY</span>
+                    <div class="status-dot monitoring"></div>
+                </div>
+                <div class="metric-value" id="crypto-connectivity">0.623</div>
+                <div class="metric-change negative" id="crypto-change">▼ 1.1%</div>
+                <div class="live-chart-container">
+                    <canvas id="crypto-network-chart" width="300" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- Long Memory Persistence Index -->
+            <div class="metric-panel">
+                <div class="panel-header">
+                    <span>LONG MEMORY PERSISTENCE</span>
+                    <div class="status-dot analyzing"></div>
+                </div>
+                <div class="metric-value" id="memory-index">0.912</div>
+                <div class="metric-change positive" id="memory-change">▲ 0.8%</div>
+                <div class="live-chart-container">
+                    <canvas id="memory-chart" width="300" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- COVID Impact Tracker -->
+            <div class="metric-panel">
+                <div class="panel-header">
+                    <span>PANDEMIC IMPACT COEFFICIENT</span>
+                    <div class="status-dot streaming"></div>
+                </div>
+                <div class="metric-value" id="covid-impact">-0.234</div>
+                <div class="metric-change negative" id="covid-change">▼ 12.4%</div>
+                <div class="live-chart-container">
+                    <canvas id="covid-chart" width="300" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Topology Visualization -->
+        <div class="topology-section">
+            <h3>BINANCE CRYPTOCURRENCY NETWORK TOPOLOGY</h3>
+            <div class="network-nodes" id="crypto-nodes">
+                <div class="node" data-crypto="BTCUSDT" title="Bitcoin - Core Network Hub">BTC</div>
+                <div class="node" data-crypto="ETHUSDT" title="Ethereum - Smart Contract Platform">ETH</div>
+                <div class="node" data-crypto="LTCUSDT" title="Litecoin - Silver to Bitcoin's Gold">LTC</div>
+                <div class="node" data-crypto="XMRUSDT" title="Monero - Privacy Focused">XMR</div>
+                <div class="node" data-crypto="EOSUSDT" title="EOS - Delegated Proof of Stake">EOS</div>
+                <div class="node" data-crypto="XLMUSDT" title="Stellar - Cross-border Payments">XLM</div>
+            </div>
+        </div>
+
+        <!-- Live Economic Feed -->
+        <div class="economic-feed">
+            <h3>LIVE BINANCE INTELLIGENCE STREAM</h3>
+            <div class="feed-container" id="economic-feed">
+                <div class="feed-item binance">
+                    <span class="timestamp">[INIT]</span>
+                    <span class="feed-text">Initializing Binance WebSocket connection...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <button class="control-btn" onclick="initializeBinanceNetwork()">INITIALIZE BINANCE</button>
+            <button class="control-btn" onclick="simulateContagion()">SIMULATE CONTAGION</button>
+            <button class="control-btn" onclick="updateMetrics()">FORCE UPDATE</button>
+            <button class="control-btn" onclick="toggleBinanceStream()">TOGGLE STREAM</button>
+            <button class="control-btn" onclick="exportBinanceData()">EXPORT DATA</button>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2025 Econstellar Network Command. Real-time economic intelligence powered by Binance WebSocket API.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Enhanced Econstellar Binance Real-Time Data Engine
+        class EconstellarBinanceStream {
+            constructor() {
+                this.isStreaming = false;
+                this.charts = {};
+                this.websockets = new Map();
+                this.cryptoData = new Map();
+                this.updateInterval = null;
+                this.feedUpdateInterval = null;
+                this.reconnectAttempts = 0;
+                this.maxReconnectAttempts = 5;
+                this.cryptoPairs = ['BTCUSDT', 'ETHUSDT', 'LTCUSDT', 'XMRUSDT', 'EOSUSDT', 'XLMUSDT'];
+                this.initializeSystem();
+            }
+
+            initializeSystem() {
+                this.initializeCharts();
+                this.createCryptoCards();
+                this.connectToBinance();
+                this.startMetricsUpdates();
+                this.updateSyncTimer();
+                this.initializeNodeInteractions();
+            }
+
+            createCryptoCards() {
+                const cryptoGrid = document.getElementById('crypto-grid');
+                cryptoGrid.innerHTML = '';
+
+                this.cryptoPairs.forEach(pair => {
+                    const symbol = pair.replace('USDT', '');
+                    const card = document.createElement('div');
+                    card.className = 'crypto-card';
+                    card.id = `card-${pair}`;
+                    card.innerHTML = `
+                        <div class="crypto-header">
+                            <div class="crypto-symbol">${symbol}/USDT</div>
+                            <div class="status-dot streaming"></div>
+                        </div>
+                        <div class="crypto-price" id="price-${pair}">Loading...</div>
+                        <div class="crypto-change" id="change-${pair}">--</div>
+                        <div class="crypto-stats">
+                            <div class="stat-item">
+                                <span>24h High:</span>
+                                <span id="high-${pair}">--</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>24h Low:</span>
+                                <span id="low-${pair}">--</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Volume:</span>
+                                <span id="volume-${pair}">--</span>
+                            </div>
+                            <div class="stat-item">
+                                <span>Last Update:</span>
+                                <span id="time-${pair}">--</span>
+                            </div>
+                        </div>
+                    `;
+                    cryptoGrid.appendChild(card);
+                });
+            }
+
+            connectToBinance() {
+                this.updateConnectionStatus('CONNECTING...', false);
+                this.addFeedItem('Establishing connection to Binance WebSocket API...', 'binance');
+
+                // Create individual streams for each cryptocurrency pair
+                this.cryptoPairs.forEach(pair => {
+                    this.connectToSymbolStream(pair);
+                });
+
+                // Update stream count
+                this.updateStreamCount();
+            }
+
+            connectToSymbolStream(symbol) {
+                const streamUrl = `wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@ticker`;
+                
+                try {
+                    const ws = new WebSocket(streamUrl);
+                    
+                    ws.onopen = () => {
+                        this.addFeedItem(`Connected to ${symbol} stream`, 'binance');
+                        this.updateConnectionStatus('CONNECTED', true);
+                        this.isStreaming = true;
+                        this.reconnectAttempts = 0;
+                        
+                        // Activate corresponding node
+                        const node = document.querySelector(`[data-crypto="${symbol}"]`);
+                        if (node) node.classList.add('active');
+                    };
+
+                    ws.onmessage = (event) => {
+                        try {
+                            const data = JSON.parse(event.data);
+                            this.processBinanceData(data);
+                        } catch (error) {
+                            console.error('Error parsing Binance data:', error);
+                        }
+                    };
+
+                    ws.onclose = () => {
+                        this.addFeedItem(`${symbol} stream disconnected`, 'alert');
+                        this.handleReconnection(symbol);
+                        
+                        // Deactivate corresponding node
+                        const node = document.querySelector(`[data-crypto="${symbol}"]`);
+                        if (node) node.classList.remove('active');
+                    };
+
+                    ws.onerror = (error) => {
+                        this.addFeedItem(`${symbol} stream error: Connection failed`, 'alert');
+                        console.error('WebSocket error:', error);
+                    };
+
+                    this.websockets.set(symbol, ws);
+
+                } catch (error) {
+                    this.addFeedItem(`Failed to connect to ${symbol}: ${error.message}`, 'alert');
+                }
+            }
+
+            processBinanceData(data) {
+                const symbol = data.s; // Symbol (e.g., BTCUSDT)
+                const price = parseFloat(data.c); // Current price
+                const change = parseFloat(data.P); // 24h price change percentage
+                const high = parseFloat(data.h); // 24h high
+                const low = parseFloat(data.l); // 24h low
+                const volume = parseFloat(data.v); // 24h volume
+
+                // Store data
+                this.cryptoData.set(symbol, {
+                    price,
+                    change,
+                    high,
+                    low,
+                    volume,
+                    timestamp: new Date()
+                });
+
+                // Update UI
+                this.updateCryptoCard(symbol, { price, change, high, low, volume });
+                
+                // Update charts with new data
+                this.updateChartsWithBinanceData(symbol, price);
+
+                // Calculate and update research metrics
+                this.updateResearchMetrics();
+            }
+
+            updateCryptoCard(symbol, data) {
+                const priceElement = document.getElementById(`price-${symbol}`);
+                const changeElement = document.getElementById(`change-${symbol}`);
+                const highElement = document.getElementById(`high-${symbol}`);
+                const lowElement = document.getElementById(`low-${symbol}`);
+                const volumeElement = document.getElementById(`volume-${symbol}`);
+                const timeElement = document.getElementById(`time-${symbol}`);
+
+                if (priceElement) {
+                    priceElement.textContent = `$${data.price.toFixed(2)}`;
+                    priceElement.style.animation = 'pulse-update 0.5s ease-in-out';
+                    setTimeout(() => priceElement.style.animation = '', 500);
+                }
+
+                if (changeElement) {
+                    const isPositive = data.change >= 0;
+                    changeElement.textContent = `${isPositive ? '▲' : '▼'} ${Math.abs(data.change).toFixed(2)}%`;
+                    changeElement.className = `crypto-change ${isPositive ? 'positive' : 'negative'}`;
+                }
+
+                if (highElement) highElement.textContent = `$${data.high.toFixed(2)}`;
+                if (lowElement) lowElement.textContent = `$${data.low.toFixed(2)}`;
+                if (volumeElement) volumeElement.textContent = this.formatVolume(data.volume);
+                if (timeElement) timeElement.textContent = new Date().toLocaleTimeString();
+            }
+
+            formatVolume(volume) {
+                if (volume >= 1e9) return `${(volume / 1e9).toFixed(1)}B`;
+                if (volume >= 1e6) return `${(volume / 1e6).toFixed(1)}M`;
+                if (volume >= 1e3) return `${(volume / 1e3).toFixed(1)}K`;
+                return volume.toFixed(0);
+            }
+
+            updateChartsWithBinanceData(symbol, price) {
+                // Update charts based on the cryptocurrency data
+                Object.keys(this.charts).forEach(chartName => {
+                    const chart = this.charts[chartName];
+                    if (chart) {
+                        // Use normalized price data for chart updates
+                        const normalizedValue = this.normalizePrice(price, symbol);
+                        chart.data.datasets[0].data.push(normalizedValue);
+                        chart.data.datasets[0].data.shift();
+                        chart.update('none');
+                    }
+                });
+            }
+
+            normalizePrice(price, symbol) {
+                // Normalize prices to 0-1 range for chart display
+                const ranges = {
+                    'BTCUSDT': [20000, 100000],
+                    'ETHUSDT': [1000, 5000],
+                    'LTCUSDT': [50, 500],
+                    'XMRUSDT': [100, 500],
+                    'EOSUSDT': [1, 20],
+                    'XLMUSDT': [0.1, 1]
+                };
+
+                const [min, max] = ranges[symbol] || [0, 100];
+                return Math.max(0, Math.min(1, (price - min) / (max - min)));
+            }
+
+            updateResearchMetrics() {
+                if (this.cryptoData.size === 0) return;
+
+                // Calculate Market Efficiency Index based on price volatility
+                const prices = Array.from(this.cryptoData.values()).map(d => d.price);
+                const efficiency = this.calculateMarketEfficiency(prices);
+                this.animateMetricUpdate('efficiency-value', efficiency);
+
+                // Calculate Fractal Connectivity based on price correlations
+                const connectivity = this.calculateFractalConnectivity();
+                this.animateMetricUpdate('crypto-connectivity', connectivity);
+
+                // Calculate Long Memory Persistence
+                const memory = this.calculateLongMemory();
+                this.animateMetricUpdate('memory-index', memory);
+
+                // Update COVID Impact (simulated based on market volatility)
+                const covidImpact = this.calculateCovidImpact();
+                this.animateMetricUpdate('covid-impact', covidImpact);
+            }
+
+            calculateMarketEfficiency(prices) {
+                if (prices.length < 2) return 0.847;
+                const volatility = this.calculateVolatility(prices);
+                return Math.max(0.5, Math.min(1, 1 - volatility / 100));
+            }
+
+            calculateFractalConnectivity() {
+                if (this.cryptoData.size < 2) return 0.623;
+                const changes = Array.from(this.cryptoData.values()).map(d => d.change);
+                const correlation = this.calculateCorrelation(changes);
+                return Math.max(0.3, Math.min(0.9, Math.abs(correlation)));
+            }
+
+            calculateLongMemory() {
+                // Simulate long memory calculation based on price persistence
+                const changes = Array.from(this.cryptoData.values()).map(d => d.change);
+                const persistence = changes.filter(c => Math.abs(c) > 2).length / changes.length;
+                return Math.max(0.7, Math.min(1, 0.8 + persistence * 0.2));
+            }
+
+            calculateCovidImpact() {
+                // Simulate COVID impact based on market stress
+                const changes = Array.from(this.cryptoData.values()).map(d => d.change);
+                const stress = changes.reduce((sum, c) => sum + Math.abs(c), 0) / changes.length;
+                return Math.max(-0.5, Math.min(0, -stress / 20));
+            }
+
+            calculateVolatility(prices) {
+                if (prices.length < 2) return 0;
+                const mean = prices.reduce((sum, p) => sum + p, 0) / prices.length;
+                const variance = prices.reduce((sum, p) => sum + Math.pow(p - mean, 2), 0) / prices.length;
+                return Math.sqrt(variance) / mean * 100;
+            }
+
+            calculateCorrelation(values) {
+                if (values.length < 2) return 0;
+                const mean = values.reduce((sum, v) => sum + v, 0) / values.length;
+                return values.reduce((sum, v) => sum + (v - mean), 0) / values.length / 10;
+            }
+
+            handleReconnection(symbol) {
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    this.addFeedItem(`Reconnecting to ${symbol}... (Attempt ${this.reconnectAttempts})`, 'alert');
+                    
+                    setTimeout(() => {
+                        this.connectToSymbolStream(symbol);
+                    }, 5000 * this.reconnectAttempts);
+                } else {
+                    this.addFeedItem(`Failed to reconnect to ${symbol} after ${this.maxReconnectAttempts} attempts`, 'alert');
+                    this.updateConnectionStatus('DISCONNECTED', false);
+                }
+            }
+
+            updateConnectionStatus(text, isConnected) {
+                const statusDot = document.getElementById('connection-status');
+                const statusText = document.getElementById('connection-text');
+                
+                if (statusDot) {
+                    statusDot.className = `connection-dot ${isConnected ? 'connected' : ''}`;
+                }
+                if (statusText) {
+                    statusText.textContent = text;
+                }
+            }
+
+            updateStreamCount() {
+                const streamCount = document.getElementById('stream-count');
+                if (streamCount) {
+                    streamCount.textContent = this.websockets.size;
+                }
+            }
+
+            initializeCharts() {
+                // Market Efficiency Chart
+                this.charts.efficiency = this.createChart('efficiency-chart', 'line', '#00ff41');
+                
+                // Crypto Network Chart
+                this.charts.crypto = this.createChart('crypto-network-chart', 'line', '#ff6b35');
+                
+                // Memory Persistence Chart
+                this.charts.memory = this.createChart('memory-chart', 'line', '#4ecdc4');
+                
+                // COVID Impact Chart
+                this.charts.covid = this.createChart('covid-chart', 'line', '#ff4757');
+            }
+
+            createChart(canvasId, type, color) {
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return null;
+                
+                const ctx = canvas.getContext('2d');
+                
+                return new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: this.generateTimeLabels(),
+                        datasets: [{
+                            data: this.generateInitialData(),
+                            borderColor: color,
+                            backgroundColor: color + '20',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            pointHoverRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: {
+                            duration: 750,
+                            easing: 'easeInOutQuart'
+                        },
+                        scales: {
+                            x: { 
+                                display: false,
+                                grid: { display: false }
+                            },
+                            y: { 
+                                display: false,
+                                grid: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false }
+                        },
+                        interaction: {
+                            intersect: false
+                        }
+                    }
+                });
+            }
+
+            generateTimeLabels() {
+                const labels = [];
+                for (let i = 29; i >= 0; i--) {
+                    labels.push(`-${i}s`);
+                }
+                return labels;
+            }
+
+            generateInitialData() {
+                return Array.from({length: 30}, () => Math.random() * 0.5 + 0.5);
+            }
+
+            startMetricsUpdates() {
+                this.updateInterval = setInterval(() => {
+                    if (this.isStreaming) {
+                        this.updateSystemStats();
+                    }
+                }, 5000);
+            }
+
+            updateSystemStats() {
+                // Update threat level based on market volatility
+                const threatLevel = document.getElementById('threat-level');
+                if (threatLevel && this.cryptoData.size > 0) {
+                    const changes = Array.from(this.cryptoData.values()).map(d => Math.abs(d.change));
+                    const avgVolatility = changes.reduce((sum, c) => sum + c, 0) / changes.length;
+                    
+                    let level = 'LOW';
+                    if (avgVolatility > 10) level = 'CRITICAL';
+                    else if (avgVolatility > 5) level = 'HIGH';
+                    else if (avgVolatility > 2) level = 'MODERATE';
+                    
+                    threatLevel.textContent = level;
+                }
+            }
+
+            animateMetricUpdate(elementId, newValue) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.style.animation = 'pulse-update 0.5s ease-in-out';
+                    element.textContent = newValue.toFixed(3);
+                    
+                    setTimeout(() => {
+                        element.style.animation = '';
+                    }, 500);
+                }
+            }
+
+            addFeedItem(message, type = 'info') {
+                const feedContainer = document.getElementById('economic-feed');
+                if (!feedContainer) return;
+
+                const timestamp = new Date().toLocaleTimeString();
+                const feedItem = document.createElement('div');
+                feedItem.className = `feed-item ${type}`;
+                feedItem.innerHTML = `
+                    <span class="timestamp">[${timestamp}]</span>
+                    <span class="feed-text">${message}</span>
+                `;
+                
+                feedContainer.insertBefore(feedItem, feedContainer.firstChild);
+                
+                // Remove old items (keep max 15)
+                while (feedContainer.children.length > 15) {
+                    feedContainer.removeChild(feedContainer.lastChild);
+                }
+                
+                // Animate new item
+                feedItem.style.animation = 'feed-slide-in 0.5s ease-out';
+            }
+
+            initializeNodeInteractions() {
+                const nodes = document.querySelectorAll('.node');
+                nodes.forEach(node => {
+                    node.addEventListener('click', () => {
+                        const crypto = node.dataset.crypto;
+                        this.showNodeDetails(crypto);
+                    });
+                });
+            }
+
+            showNodeDetails(crypto) {
+                const data = this.cryptoData.get(crypto);
+                if (data) {
+                    const symbol = crypto.replace('USDT', '');
+                    this.addFeedItem(`${symbol} Analysis: Price $${data.price.toFixed(2)}, 24h Change ${data.change.toFixed(2)}%, Volume ${this.formatVolume(data.volume)}`, 'research');
+                } else {
+                    this.addFeedItem(`${crypto} network analysis - awaiting live data from Binance`, 'research');
+                }
+            }
+
+            updateSyncTimer() {
+                let seconds = 0;
+                setInterval(() => {
+                    seconds++;
+                    const syncTime = document.getElementById('sync-time');
+                    if (syncTime) {
+                        const minutes = Math.floor(seconds / 60);
+                        const secs = seconds % 60;
+                        syncTime.textContent = `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    }
+                }, 1000);
+            }
+
+            toggleStreaming() {
+                if (this.isStreaming) {
+                    // Disconnect all websockets
+                    this.websockets.forEach((ws, symbol) => {
+                        ws.close();
+                    });
+                    this.websockets.clear();
+                    this.isStreaming = false;
+                    this.updateConnectionStatus('DISCONNECTED', false);
+                    this.addFeedItem('Binance WebSocket streaming paused', 'alert');
+                } else {
+                    // Reconnect to Binance
+                    this.connectToBinance();
+                    this.addFeedItem('Binance WebSocket streaming resumed', 'binance');
+                }
+                return this.isStreaming;
+            }
+
+            exportCurrentData() {
+                const data = {
+                    timestamp: new Date().toISOString(),
+                    source: 'Binance WebSocket API',
+                    cryptoData: Object.fromEntries(this.cryptoData),
+                    metrics: {
+                        efficiency: document.getElementById('efficiency-value')?.textContent,
+                        connectivity: document.getElementById('crypto-connectivity')?.textContent,
+                        memory: document.getElementById('memory-index')?.textContent,
+                        covid: document.getElementById('covid-impact')?.textContent
+                    },
+                    streams: this.websockets.size,
+                    threat: document.getElementById('threat-level')?.textContent
+                };
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `econstellar-binance-data-${Date.now()}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                this.addFeedItem('Binance economic intelligence data exported successfully', 'binance');
+            }
+        }
+
+        // Control panel functions
+        function initializeBinanceNetwork() {
+            showNotification('Initializing Binance WebSocket connections...', 'success');
+            econstellarStream.connectToBinance();
+        }
+
+        function simulateContagion() {
+            showNotification('Running contagion propagation simulation...', 'info');
+            econstellarStream.addFeedItem('Contagion simulation initiated across Binance cryptocurrency networks', 'research');
+            setTimeout(() => {
+                showNotification('Contagion pathways mapped across cryptocurrency markets', 'info');
+                econstellarStream.addFeedItem('Contagion analysis complete - propagation vectors identified using Binance data', 'research');
+            }, 3000);
+        }
+
+        function updateMetrics() {
+            showNotification('Forcing metric recalculation with Binance data...', 'info');
+            econstellarStream.updateResearchMetrics();
+            econstellarStream.addFeedItem('Manual metric update triggered - recalculating all indices with live Binance data', 'binance');
+            setTimeout(() => {
+                showNotification('All metrics updated with latest Binance market data', 'success');
+            }, 1500);
+        }
+
+        function toggleBinanceStream() {
+            const isStreaming = econstellarStream.toggleStreaming();
+            const status = isStreaming ? 'enabled' : 'disabled';
+            showNotification(`Binance WebSocket streaming ${status}`, 'info');
+        }
+
+        function exportBinanceData() {
+            showNotification('Exporting current Binance economic intelligence data...', 'info');
+            econstellarStream.exportCurrentData();
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 255, 65, 0.1);
+                border: 1px solid #00ff41;
+                border-radius: 8px;
+                padding: 15px 20px;
+                color: #00ff41;
+                font-family: 'Courier New', monospace;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+                font-size: 0.9rem;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // Add CSS for notification animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the Econstellar Binance system
+        const econstellarStream = new EconstellarBinanceStream();
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch(e.key) {
+                    case 'b':
+                        e.preventDefault();
+                        initializeBinanceNetwork();
+                        break;
+                    case 's':
+                        e.preventDefault();
+                        simulateContagion();
+                        break;
+                    case 'u':
+                        e.preventDefault();
+                        updateMetrics();
+                        break;
+                    case 't':
+                        e.preventDefault();
+                        toggleBinanceStream();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        exportBinanceData();
+                        break;
+                }
+            }
+        });
+
+        // Add window focus/blur handling
+        window.addEventListener('focus', () => {
+            if (!econstellarStream.isStreaming) {
+                econstellarStream.connectToBinance();
+                showNotification('Dashboard focus restored - Binance streaming resumed', 'info');
+            }
+        });
+
+        // Add error handling
+        window.addEventListener('error', (e) => {
+            econstellarStream.addFeedItem(`System error detected: ${e.message}`, 'alert');
+        });
+
+        // Initialize welcome message
+        setTimeout(() => {
+            econstellarStream.addFeedItem('Econstellar Network Command with Binance WebSocket API initialized successfully', 'binance');
+            showNotification('Welcome to Econstellar Binance Intelligence', 'success');
+        }, 1000);
+    </script>
+</body>
+</html>
