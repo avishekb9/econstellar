@@ -604,6 +604,8 @@
             <button class="control-button" onclick="updateMetrics()">Update Metrics</button>
             <button class="control-button" onclick="window.open('realstream.html', '_blank')">Launch Real Stream</button>
             <button class="control-button" onclick="window.open('bbdashboard.html', '_blank')">Equity Dashboard</button>
+            <button class="control-button" onclick="launchWQTE()">WQTE Analysis</button>
+            
         </div>
     </div>
     
@@ -754,6 +756,46 @@
             
             // Randomly update heatmap
             setInterval(createHeatmap, 3000);
+        });
+            // NEW FUNCTION: WaveQTE Analysis Launch
+        function launchWQTE() {
+            // Check if WaveQTE window is already open
+            if (window.wqteWindow && !window.wqteWindow.closed) {
+                window.wqteWindow.focus();
+                addLogEntry('WaveQTE Analysis dashboard focused');
+                return;
+            }
+            
+            // Launch WaveQTE dashboard in new tab
+            window.wqteWindow = window.open(
+                'https://avishekb9.shinyapps.io/waveqte-dashboard/',
+                'waveqte_dashboard',
+                'width=1400,height=900,scrollbars=yes,resizable=yes,toolbar=yes,menubar=no'
+            );
+            
+            // Check if window opened successfully
+            if (window.wqteWindow) {
+                addLogEntry('WaveQTE Analysis dashboard launched successfully');
+                
+                // Monitor window status
+                const checkWindow = setInterval(() => {
+                    if (window.wqteWindow.closed) {
+                        addLogEntry('WaveQTE Analysis dashboard closed');
+                        clearInterval(checkWindow);
+                    }
+                }, 1000);
+            } else {
+                addLogEntry('ERROR: Failed to launch WaveQTE Analysis dashboard');
+                alert('Please allow popups for this site to launch WaveQTE Analysis');
+            }
+        }
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... your existing initialization code ...
+            
+            // Add initial log entry for WaveQTE
+            addLogEntry('WaveQTE Analysis module loaded');
         });
     </script>
 </body>
