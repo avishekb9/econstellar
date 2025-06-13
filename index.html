@@ -316,6 +316,113 @@
         nav ul li:not(:last-child) {
             margin-right: 0.5rem;
         }
+        /* Dropdown Styles */
+          .dropdown {
+              position: relative;
+          }
+        
+          .dropdown-toggle {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+          }
+        
+          .dropdown-arrow {
+              font-size: 0.7em;
+              transition: transform 0.3s ease;
+          }
+        
+          .dropdown:hover .dropdown-arrow {
+              transform: rotate(180deg);
+          }
+        
+          .dropdown-menu {
+              position: absolute;
+              top: 100%;
+              left: 0;
+              background: rgba(255, 255, 255, 0.95);
+              backdrop-filter: blur(20px);
+              border: 1px solid var(--border-gray);
+              border-radius: 15px;
+              min-width: 180px;
+              opacity: 0;
+              visibility: hidden;
+              transform: translateY(-10px);
+              transition: all 0.3s ease;
+              z-index: 1000;
+              box-shadow: 0 8px 32px var(--shadow-light);
+          }
+        
+          .dropdown:hover .dropdown-menu {
+              opacity: 1;
+              visibility: visible;
+              transform: translateY(0);
+          }
+        
+          .dropdown-menu li {
+              list-style: none;
+              margin: 0;
+          }
+        
+          .dropdown-menu li:first-child a {
+              border-radius: 15px 15px 0 0;
+          }
+        
+          .dropdown-menu li:last-child a {
+              border-radius: 0 0 15px 15px;
+          }
+        
+          .dropdown-menu a {
+              display: block;
+              padding: 0.8rem 1.2rem;
+              color: var(--text-medium);
+              text-decoration: none;
+              font-family: var(--font-mono);
+              font-size: 0.8rem;
+              font-weight: 500;
+              letter-spacing: 0.5px;
+              text-transform: uppercase;
+              transition: all 0.3s ease;
+              border: none;
+              border-radius: 0;
+              background: transparent;
+          }
+        
+          .dropdown-menu a:hover {
+              background: var(--light-gray);
+              color: var(--accent-blue);
+              transform: translateX(4px);
+              border-left: 3px solid var(--accent-cyan);
+          }
+        
+          /* Mobile Responsive */
+          @media (max-width: 768px) {
+              .dropdown-menu {
+                  position: static;
+                  opacity: 1;
+                  visibility: visible;
+                  transform: none;
+                  background: transparent;
+                  border: none;
+                  box-shadow: none;
+                  backdrop-filter: none;
+                  margin-top: 0.5rem;
+                  padding-left: 1rem;
+              }
+        
+              .dropdown-arrow {
+                  display: none;
+              }
+        
+              .dropdown-menu a {
+                  padding: 0.6rem 1rem;
+                  font-size: 0.75rem;
+                  border-left: 2px solid var(--accent-cyan);
+                  margin-bottom: 4px;
+                  border-radius: 0;
+              }
+          }
+
         
         /* Hero Content */
         .hero-content {
@@ -1615,21 +1722,35 @@
     </div>
 
     <header>
-        <div class="nav-container" id="nav-container">
-            <div class="logo">RESEARCH_STATION</div>
-            <nav aria-label="Main navigation">
-                <ul id="mainNav">
-                    <li><a href="#about">ABOUT</a></li>
-                    <li><a href="#research">RESEARCH</a></li>
-                    <li><a href="#network-dashboard">NETWORKS</a></li> 
-                    <li><a href="#publications">PUBLICATIONS</a></li>
-                    <li><a href="#teaching">TEACHING</a></li>
-                    <li><a href="#students">STUDENTS</a></li>
-                    <li><a href="#contact">CONTACT</a></li>
-                    <li><a href="rock-universe.html">EXTRAS</a></li>
-                </ul>
-            </nav>
-        </div>
+    <div class="nav-container" id="nav-container">
+        <div class="logo">RESEARCH_STATION</div>
+        <nav aria-label="Main navigation">
+          <ul id="mainNav">
+            <li><a href="#about">ABOUT</a></li>
+            <li><a href="#research">RESEARCH</a></li>
+            <li><a href="#network-dashboard">NETWORKS</a></li>
+            <li><a href="#publications">PUBLICATIONS</a></li>
+            <li><a href="#teaching">TEACHING</a></li>
+            <li><a href="#students">STUDENTS</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle">PACKAGES <span 
+      class="dropdown-arrow">▼</span></a>
+              <ul class="dropdown-menu">
+                <li><a href="https://avishekb9.github.io/WaveQTE/index.html" 
+      target="_blank">WaveQTE</a></li>
+                <li><a 
+      href="https://avishekb9.github.io/ManyIVsNets/index.html" 
+      target="_blank">ManyIVsNets</a></li>
+                <li><a href="https://avishekb9.github.io/didTEnets/" 
+      target="_blank">didTEnets</a></li>
+              </ul>
+            </li>
+            <li><a href="#contact">CONTACT</a></li>
+            <li><a href="rock-universe.html">EXTRAS</a></li>
+          </ul>
+        </nav>
+      </div>
+
         
         <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
             <div class="hamburger"></div>
