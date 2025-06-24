@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Avishek Bhandari - Research Station</title>
+    <!-- Include enhanced navigation CSS -->
+    <link rel="stylesheet" href="assets/cosmic-nav.css">
+    
     <style>
         /* Interstellar Research Station - Clean Sci-Fi Minimalism */
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
@@ -1721,35 +1724,59 @@
         <div class="time-stream"></div>
     </div>
 
+    <!-- Enhanced Navigation -->
+    <nav class="cosmic-nav-enhanced">
+        <div class="cosmic-nav-container">
+            <a href="#about" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">About</span>
+            </a>
+            
+            <a href="#research" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Research</span>
+            </a>
+            
+            <a href="dashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Command Center</span>
+            </a>
+            
+            <a href="bbdashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">OpenBB Arena</span>
+            </a>
+            
+            <a href="mission-control.html" class="cosmic-nav-link mcp-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Mission Control</span>
+            </a>
+            
+            <a href="rock-universe.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Rock Universe</span>
+            </a>
+            
+            <div class="cosmic-nav-dropdown">
+                <a href="#" class="cosmic-nav-link">
+                    <span class="cosmic-nav-icon"></span>
+                    <span class="cosmic-nav-text">The Albums</span>
+                </a>
+                <div class="cosmic-dropdown-menu">
+                    <a href="https://avishekb9.github.io/WaveQTE/index.html" target="_blank">WaveQTE</a>
+                    <a href="https://avishekb9.github.io/ManyIVsNets/index.html" target="_blank">ManyIVsNets</a>
+                    <a href="https://avishekb9.github.io/didTEnets/" target="_blank">didTEnets</a>
+                </div>
+            </div>
+            
+            <a href="#contact" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Contact</span>
+            </a>
+        </div>
+    </nav>
+
     <header>
-    <div class="nav-container" id="nav-container">
-        <div class="logo">RESEARCH_STATION</div>
-        <nav aria-label="Main navigation">
-          <ul id="mainNav">
-            <li><a href="#about">ABOUT</a></li>
-            <li><a href="#research">RESEARCH</a></li>
-            <li><a href="#network-dashboard">NETWORKS</a></li>
-            <li><a href="#publications">PUBLICATIONS</a></li>
-            <li><a href="#teaching">TEACHING</a></li>
-            <li><a href="#students">STUDENTS</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle">PACKAGES <span 
-      class="dropdown-arrow">▼</span></a>
-              <ul class="dropdown-menu">
-                <li><a href="https://avishekb9.github.io/WaveQTE/index.html" 
-      target="_blank">WaveQTE</a></li>
-                <li><a 
-      href="https://avishekb9.github.io/ManyIVsNets/index.html" 
-      target="_blank">ManyIVsNets</a></li>
-                <li><a href="https://avishekb9.github.io/didTEnets/" 
-      target="_blank">didTEnets</a></li>
-              </ul>
-            </li>
-            <li><a href="#contact">CONTACT</a></li>
-            <li><a href="rock-universe.html">EXTRAS</a></li>
-          </ul>
-        </nav>
-      </div>
 
         
         <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
@@ -2040,7 +2067,7 @@
 
     <!-- Portal Button -->
     <button id="portal-button" class="portal-button" title="Access Parallel Universe">
-        <span>🎸</span>
+        🎸
     </button>
 
     <!-- Portal Modal -->
@@ -2049,7 +2076,7 @@
             <h3>DIMENSIONAL GATEWAY</h3>
             <p>Do you want some Blues Rock Energy?</p>
             <div class="portal-buttons">
-                <button class="portal-btn portal-yes" onclick="window.location.href='rock-universe.html'">YES</button>
+                <button class="portal-btn portal-yes" onclick="initiateRockWarpSequence()">YES</button>
                 <button class="portal-btn portal-no" onclick="document.getElementById('portal-modal').classList.remove('active')">NO</button>
             </div>
         </div>
@@ -2266,7 +2293,597 @@
             }
             console.log("RESEARCH_STATION initialized successfully");
             console.log("All systems operational");
+            
+            // Initialize cosmic events after 30 seconds
+            setTimeout(() => {
+                startCosmicEvents();
+            }, 30000);
         });
+        
+        // Cosmic Events System
+        function startCosmicEvents() {
+            const cosmicEvents = [
+                {
+                    title: "MISSION CONTROL ACTIVE",
+                    message: "The new Mission Control Center is online! Experience real-time release management and cosmic event monitoring.",
+                    action: "Enter Mission Control",
+                    callback: () => window.open('mission-control.html', '_blank')
+                },
+                {
+                    title: "ROCK UNIVERSE DETECTED",
+                    message: "Guitar frequencies are aligning with economic patterns! Perfect conditions for exploring the musical-mathematical universe.",
+                    action: "Enter Rock Universe",
+                    callback: () => window.open('rock-universe.html', '_blank')
+                },
+                {
+                    title: "LIVE DATA STREAMS",
+                    message: "OpenBB financial data streams are flowing optimally! Real-time market analysis is ready for exploration.",
+                    action: "View Dashboard",
+                    callback: () => window.open('bbdashboard.html', '_blank')
+                }
+            ];
+            
+            // Show random cosmic event every 60 seconds
+            setInterval(() => {
+                if (!document.querySelector('.cosmic-popup-overlay.active')) {
+                    showCosmicEvent(cosmicEvents[Math.floor(Math.random() * cosmicEvents.length)]);
+                }
+            }, 60000);
+        }
+        
+        function showCosmicEvent(event) {
+            // Create popup overlay
+            const popup = document.createElement('div');
+            popup.className = 'cosmic-popup-overlay active';
+            popup.innerHTML = `
+                <div class="cosmic-popup">
+                    <button class="popup-close" onclick="this.closest('.cosmic-popup-overlay').remove()">&times;</button>
+                    <div class="popup-content">
+                        <h2>${event.title}</h2>
+                        <p>${event.message}</p>
+                        <div class="popup-actions">
+                            <button class="cosmic-btn primary" onclick="${event.callback.toString().replace('function () { return ', '').replace('; }', '')}; this.closest('.cosmic-popup-overlay').remove()">
+                                ${event.action}
+                            </button>
+                            <button class="cosmic-btn" onclick="this.closest('.cosmic-popup-overlay').remove()">
+                                Later
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                .cosmic-popup-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.9);
+                    backdrop-filter: blur(10px);
+                    z-index: 10000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.4s ease;
+                }
+                .cosmic-popup-overlay.active {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                .cosmic-popup {
+                    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                    border: 3px solid #00ff88;
+                    border-radius: 25px;
+                    padding: 3rem;
+                    max-width: 500px;
+                    width: 90%;
+                    position: relative;
+                    transform: scale(0.7) rotateY(90deg);
+                    transition: all 0.6s ease;
+                    box-shadow: 0 25px 80px rgba(0,255,136,0.5);
+                }
+                .cosmic-popup-overlay.active .cosmic-popup {
+                    transform: scale(1) rotateY(0deg);
+                }
+                .popup-close {
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    background: none;
+                    border: none;
+                    color: #ff6b6b;
+                    font-size: 1.8rem;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                }
+                .popup-close:hover {
+                    color: #fff;
+                    transform: rotate(90deg);
+                }
+                .popup-content h2 {
+                    color: #00ff88;
+                    text-align: center;
+                    margin-bottom: 1rem;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 1.3rem;
+                }
+                .popup-content p {
+                    color: #ccc;
+                    line-height: 1.6;
+                    margin-bottom: 2rem;
+                    text-align: center;
+                }
+                .popup-actions {
+                    display: flex;
+                    gap: 1rem;
+                    justify-content: center;
+                }
+                .cosmic-btn {
+                    padding: 0.8rem 1.5rem;
+                    border: 1px solid #00ff88;
+                    background: transparent;
+                    color: #00ff88;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+                .cosmic-btn:hover {
+                    background: #00ff88;
+                    color: #000;
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 20px rgba(0,255,136,0.5);
+                }
+                .cosmic-btn.primary {
+                    background: #00ff88;
+                    color: #000;
+                }
+                .cosmic-btn.primary:hover {
+                    background: #88ddff;
+                    border-color: #88ddff;
+                    box-shadow: 0 5px 20px rgba(136,221,255,0.5);
+                }
+                </style>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            // Auto-close after 10 seconds
+            setTimeout(() => {
+                if (popup.parentNode) {
+                    popup.remove();
+                }
+            }, 10000);
+        }
+        
+        // Random release launcher
+        function launchRandomRelease() {
+            const releases = [
+                'mission-control.html',
+                'dashboard.html', 
+                'bbdashboard.html',
+                'rock-universe.html'
+            ];
+            const randomRelease = releases[Math.floor(Math.random() * releases.length)];
+            window.open(randomRelease, '_blank');
+        }
+
+        // Epic Rock Universe Warp Transition
+        function initiateRockWarpSequence() {
+            // Close the modal first
+            document.getElementById('portal-modal').classList.remove('active');
+            
+            // Create the epic warp overlay
+            const warpOverlay = document.createElement('div');
+            warpOverlay.id = 'rock-warp-overlay';
+            warpOverlay.innerHTML = `
+                <div class="warp-container">
+                    <!-- Psychedelic Background -->
+                    <div class="psychedelic-bg"></div>
+                    
+                    <!-- Spaceship Commander -->
+                    <div class="commander-cockpit">
+                        <div class="commander-figure">
+                            <div class="commander-head">🧑‍🚀</div>
+                            <div class="commander-body">
+                                <div class="commander-arms">
+                                    <div class="arm left-arm">🎸</div>
+                                    <div class="arm right-arm">🤘</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cockpit-dashboard">
+                            <div class="dashboard-lights"></div>
+                            <div class="warp-core">⚡</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Warp Speed Lines -->
+                    <div class="warp-lines"></div>
+                    
+                    <!-- Status Text -->
+                    <div class="warp-status">
+                        <div class="status-line" style="animation-delay: 0.5s">ENGAGING WARP DRIVE...</div>
+                        <div class="status-line" style="animation-delay: 1.5s">TUNING COSMIC FREQUENCIES...</div>
+                        <div class="status-line" style="animation-delay: 2.5s">BLUES ROCK HARMONICS DETECTED!</div>
+                        <div class="status-line" style="animation-delay: 3.5s">ENTERING ROCK UNIVERSE... 🎸</div>
+                    </div>
+                    
+                    <!-- Sound Waves -->
+                    <div class="sound-waves">
+                        <div class="wave wave-1"></div>
+                        <div class="wave wave-2"></div>
+                        <div class="wave wave-3"></div>
+                    </div>
+                </div>
+                
+                <style>
+                #rock-warp-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: #000;
+                    z-index: 999999;
+                    overflow: hidden;
+                }
+
+                .warp-container {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    flex-direction: column;
+                }
+
+                .psychedelic-bg {
+                    position: absolute;
+                    width: 200%;
+                    height: 200%;
+                    background: 
+                        radial-gradient(circle at 30% 20%, #00d4ff 0%, transparent 50%),
+                        radial-gradient(circle at 70% 80%, #0066cc 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, #00bcd4 0%, transparent 50%),
+                        radial-gradient(circle at 80% 30%, #ff6b35 0%, transparent 50%);
+                    animation: discoSpin 4s linear infinite;
+                    opacity: 0.8;
+                }
+
+                @keyframes discoSpin {
+                    0% { 
+                        transform: rotate(0deg) scale(1);
+                        filter: hue-rotate(0deg) brightness(1);
+                    }
+                    25% { 
+                        transform: rotate(90deg) scale(1.1);
+                        filter: hue-rotate(90deg) brightness(1.2);
+                    }
+                    50% { 
+                        transform: rotate(180deg) scale(1.3);
+                        filter: hue-rotate(180deg) brightness(1.4);
+                    }
+                    75% { 
+                        transform: rotate(270deg) scale(1.1);
+                        filter: hue-rotate(270deg) brightness(1.2);
+                    }
+                    100% { 
+                        transform: rotate(360deg) scale(1);
+                        filter: hue-rotate(360deg) brightness(1);
+                    }
+                }
+
+                .commander-cockpit {
+                    position: relative;
+                    z-index: 10;
+                    animation: commanderRock 2s ease-in-out infinite;
+                }
+
+                .commander-figure {
+                    font-size: 4rem;
+                    text-align: center;
+                    margin-bottom: 2rem;
+                }
+
+                .commander-head {
+                    animation: headBang 0.5s ease-in-out infinite alternate;
+                    margin-bottom: 1rem;
+                }
+
+                .commander-body {
+                    position: relative;
+                }
+
+                .commander-arms {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 200px;
+                    margin: 0 auto;
+                }
+
+                .arm {
+                    font-size: 3rem;
+                    animation: armRock 0.8s ease-in-out infinite;
+                }
+
+                .left-arm {
+                    animation-delay: 0.2s;
+                }
+
+                .right-arm {
+                    animation-delay: 0.4s;
+                }
+
+                @keyframes commanderRock {
+                    0%, 100% { transform: translateY(0) rotate(-2deg); }
+                    50% { transform: translateY(-10px) rotate(2deg); }
+                }
+
+                @keyframes headBang {
+                    0% { transform: translateY(0) rotate(-5deg); }
+                    100% { transform: translateY(-8px) rotate(5deg); }
+                }
+
+                @keyframes armRock {
+                    0%, 100% { transform: rotate(-15deg) scale(1); }
+                    50% { transform: rotate(15deg) scale(1.1); }
+                }
+
+                .cockpit-dashboard {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 2rem;
+                    margin-top: 2rem;
+                }
+
+                .dashboard-lights {
+                    width: 120px;
+                    height: 25px;
+                    background: linear-gradient(90deg, 
+                        #00d4ff 0%, #00d4ff 25%,
+                        #0066cc 25%, #0066cc 50%,
+                        #00bcd4 50%, #00bcd4 75%,
+                        #ff6b35 75%, #ff6b35 100%);
+                    border-radius: 15px;
+                    animation: discoLights 0.4s ease-in-out infinite;
+                    box-shadow: 
+                        0 0 20px rgba(0, 212, 255, 0.6),
+                        inset 0 0 10px rgba(255, 255, 255, 0.2);
+                }
+
+                .warp-core {
+                    font-size: 3rem;
+                    animation: warpCorePulse 0.5s ease-in-out infinite;
+                    color: #00d4ff;
+                    text-shadow: 
+                        0 0 10px #00d4ff,
+                        0 0 20px #00d4ff,
+                        0 0 30px #00d4ff;
+                    filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.8));
+                }
+
+                @keyframes discoLights {
+                    0% { 
+                        opacity: 1;
+                        box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+                        transform: scale(1);
+                    }
+                    25% { 
+                        opacity: 0.8;
+                        box-shadow: 0 0 30px rgba(0, 102, 204, 0.8);
+                        transform: scale(1.05);
+                    }
+                    50% { 
+                        opacity: 1;
+                        box-shadow: 0 0 25px rgba(0, 188, 212, 0.7);
+                        transform: scale(1);
+                    }
+                    75% { 
+                        opacity: 0.9;
+                        box-shadow: 0 0 35px rgba(255, 107, 53, 0.6);
+                        transform: scale(1.03);
+                    }
+                    100% { 
+                        opacity: 1;
+                        box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+                        transform: scale(1);
+                    }
+                }
+
+                @keyframes warpCorePulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.3); }
+                }
+
+                .warp-lines {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    background-image: 
+                        linear-gradient(90deg, transparent 0%, #00d4ff 50%, transparent 100%),
+                        linear-gradient(45deg, transparent 0%, #0066cc 50%, transparent 100%),
+                        linear-gradient(-45deg, transparent 0%, #00bcd4 50%, transparent 100%),
+                        linear-gradient(135deg, transparent 0%, #ff6b35 50%, transparent 100%);
+                    background-size: 400px 3px, 300px 3px, 350px 3px, 280px 3px;
+                    animation: discoWarpSpeed 0.8s linear infinite;
+                    opacity: 0.9;
+                    filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.6));
+                }
+
+                @keyframes discoWarpSpeed {
+                    0% { 
+                        background-position: -400px 20%, -300px 40%, -350px 60%, -280px 80%;
+                        transform: scale(1);
+                        filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.6)) hue-rotate(0deg);
+                    }
+                    25% {
+                        transform: scale(1.05);
+                        filter: drop-shadow(0 0 8px rgba(0, 102, 204, 0.8)) hue-rotate(90deg);
+                    }
+                    50% {
+                        transform: scale(1.1);
+                        filter: drop-shadow(0 0 10px rgba(0, 188, 212, 0.7)) hue-rotate(180deg);
+                    }
+                    75% {
+                        transform: scale(1.05);
+                        filter: drop-shadow(0 0 8px rgba(255, 107, 53, 0.6)) hue-rotate(270deg);
+                    }
+                    100% { 
+                        background-position: 100vw 20%, 100vw 40%, 100vw 60%, 100vw 80%;
+                        transform: scale(1);
+                        filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.6)) hue-rotate(360deg);
+                    }
+                }
+
+                .warp-status {
+                    position: absolute;
+                    bottom: 20%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    text-align: center;
+                    z-index: 20;
+                }
+
+                .status-line {
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 1.5rem;
+                    color: #00d4ff;
+                    text-shadow: 
+                        0 0 5px #00d4ff,
+                        0 0 10px #00d4ff,
+                        0 0 15px #00d4ff;
+                    margin-bottom: 1rem;
+                    opacity: 0;
+                    animation: statusAppear 0.8s ease-out forwards;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    border: 1px solid rgba(0, 212, 255, 0.3);
+                    background: rgba(0, 212, 255, 0.1);
+                    padding: 0.5rem 1rem;
+                    border-radius: 8px;
+                    backdrop-filter: blur(10px);
+                }
+
+                @keyframes statusAppear {
+                    0% {
+                        opacity: 0;
+                        transform: translateY(20px);
+                    }
+                    100% {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                .sound-waves {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    pointer-events: none;
+                }
+
+                .wave {
+                    position: absolute;
+                    border: 2px solid;
+                    border-radius: 50%;
+                    animation: soundWave 2s ease-out infinite;
+                }
+
+                .wave-1 {
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-color: #00d4ff;
+                    animation-delay: 0s;
+                    box-shadow: 0 0 10px #00d4ff;
+                }
+
+                .wave-2 {
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-color: #0066cc;
+                    animation-delay: 0.7s;
+                    box-shadow: 0 0 10px #0066cc;
+                }
+
+                .wave-3 {
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-color: #00bcd4;
+                    animation-delay: 1.4s;
+                    box-shadow: 0 0 10px #00bcd4;
+                }
+
+                @keyframes soundWave {
+                    0% {
+                        width: 0;
+                        height: 0;
+                        opacity: 1;
+                    }
+                    100% {
+                        width: 800px;
+                        height: 800px;
+                        opacity: 0;
+                    }
+                }
+
+                /* Final warp out effect */
+                .warp-finale {
+                    animation: warpFinale 1s ease-in forwards;
+                }
+
+                @keyframes warpFinale {
+                    0% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: scale(0.1);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: scale(10);
+                        opacity: 0;
+                    }
+                }
+                </style>
+            `;
+            
+            document.body.appendChild(warpOverlay);
+            
+            // Start the sequence
+            setTimeout(() => {
+                warpOverlay.classList.add('warp-finale');
+            }, 4500);
+            
+            // Navigate to Rock Universe after the show
+            setTimeout(() => {
+                window.location.href = 'rock-universe.html';
+            }, 5500);
+        }
     </script>
+
+    <!-- Quick Access Bar -->
+    <div class="cosmic-quick-access">
+        <div class="cosmic-quick-content">
+            <span class="cosmic-quick-title">Quick Galaxy Access:</span>
+            <a href="mission-control.html" class="cosmic-quick-btn">Mission Control</a>
+            <a href="dashboard.html" class="cosmic-quick-btn">Network Command</a>
+            <a href="rock-universe.html" class="cosmic-quick-btn">Rock Universe</a>
+            <button class="cosmic-quick-btn" onclick="launchRandomRelease()">Random</button>
+        </div>
+    </div>
 </body>
 </html>
