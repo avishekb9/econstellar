@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Global Intelligence Monitor - EconStellar</title>
+    <!-- Include enhanced navigation CSS -->
+    <link rel="stylesheet" href="assets/cosmic-nav.css">
+    
+    <style>
+        /* Global Intelligence Monitor Styles */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Orbitron:wght@400;500;600;700;900&display=swap');
+        
+        :root {
+            --intel-bg: #000000;
+            --intel-primary: #00d4ff;
+            --intel-secondary: #ff6b35;
+            --intel-tertiary: #8a2be2;
+            --intel-success: #39ff14;
+            --intel-warning: #ffaa00;
+            --intel-danger: #ff0040;
+            --intel-panel: rgba(0,212,255,0.1);
+            --intel-border: rgba(0,212,255,0.3);
+            --intel-glow: rgba(0,212,255,0.5);
+            --intel-text: #ffffff;
+            --intel-text-dim: #888888;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--intel-bg);
+            color: var(--intel-text);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Cosmic Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 30%, rgba(0,212,255,0.1) 0%, transparent 40%),
+                radial-gradient(ellipse at 80% 70%, rgba(255,107,53,0.1) 0%, transparent 40%),
+                linear-gradient(0deg, transparent 24%, rgba(0,212,255,0.02) 25%, rgba(0,212,255,0.02) 26%, transparent 27%),
+                linear-gradient(90deg, transparent 24%, rgba(255,107,53,0.02) 25%, rgba(255,107,53,0.02) 26%, transparent 27%);
+            background-size: 100px 100px, 150px 150px, 50px 50px, 50px 50px;
+            z-index: -1;
+            animation: cosmic-drift 20s linear infinite;
+        }
+        
+        @keyframes cosmic-drift {
+            0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 100px 100px, -150px -150px, 50px 50px, -50px -50px; }
+        }
+        
+        /* Main Container */
+        .intel-main {
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        /* Header */
+        .intel-header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            position: relative;
+        }
+        
+        .intel-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(45deg, var(--intel-primary), var(--intel-secondary), var(--intel-tertiary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        .intel-subtitle {
+            color: var(--intel-text-dim);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--intel-primary)); }
+            50% { filter: drop-shadow(0 0 30px var(--intel-secondary)); }
+        }
+        
+        /* Status Bar */
+        .intel-status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem auto;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            background: var(--intel-panel);
+            border: 1px solid var(--intel-border);
+            border-radius: 15px;
+            backdrop-filter: blur(20px);
+        }
+        
+        .intel-status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+        }
+        
+        .status-indicator.online { background: var(--intel-success); }
+        .status-indicator.warning { background: var(--intel-warning); }
+        .status-indicator.critical { background: var(--intel-danger); }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Main Grid */
+        .intel-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Panel Styles */
+        .intel-panel {
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--intel-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .intel-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--intel-primary), var(--intel-secondary));
+            animation: scan-line 3s linear infinite;
+        }
+        
+        @keyframes scan-line {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .panel-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            color: var(--intel-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .panel-status {
+            font-size: 0.8rem;
+            color: var(--intel-success);
+            animation: flash 2s ease-in-out infinite;
+        }
+        
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* News Headlines */
+        .news-container {
+            max-height: 600px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--intel-primary) transparent;
+        }
+        
+        .news-item {
+            background: rgba(0,212,255,0.05);
+            border: 1px solid rgba(0,212,255,0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .news-item:hover {
+            background: rgba(0,212,255,0.1);
+            border-color: var(--intel-primary);
+            transform: translateY(-2px);
+        }
+        
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .news-category {
+            background: var(--intel-primary);
+            color: #000;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .news-sentiment {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .sentiment-positive { background: var(--intel-success); color: #000; }
+        .sentiment-negative { background: var(--intel-danger); color: #fff; }
+        .sentiment-neutral { background: var(--intel-warning); color: #000; }
+        
+        .news-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        
+        .news-impact {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0,212,255,0.2);
+        }
+        
+        .impact-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .impact-high { color: var(--intel-danger); }
+        .impact-medium { color: var(--intel-warning); }
+        .impact-low { color: var(--intel-success); }
+        
+        /* Market Impact Visualization */
+        .impact-viz {
+            height: 400px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(0,212,255,0.05) 0%, transparent 70%);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .contagion-network {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .network-node {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--intel-primary);
+            box-shadow: 0 0 15px var(--intel-primary);
+            animation: pulse-node 3s ease-in-out infinite;
+        }
+        
+        .node-major {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .node-minor {
+            width: 12px;
+            height: 12px;
+        }
+        
+        @keyframes pulse-node {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        
+        .network-connection {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--intel-primary), transparent);
+            transform-origin: left center;
+            opacity: 0.6;
+            animation: pulse-line 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-line {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* ML Model Output */
+        .ml-output {
+            background: rgba(0,0,0,0.9);
+            border: 1px solid var(--intel-success);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 2rem;
+        }
+        
+        .ml-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,212,255,0.1);
+        }
+        
+        .metric-label {
+            color: var(--intel-text-dim);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        /* Control Panel */
+        .intel-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .intel-btn {
+            background: linear-gradient(135deg, var(--intel-primary), var(--intel-secondary));
+            border: none;
+            border-radius: 12px;
+            color: #000;
+            padding: 1rem 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .intel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px var(--intel-glow);
+        }
+        
+        /* Terminal Style Log */
+        .intel-terminal {
+            background: #000;
+            border: 1px solid var(--intel-primary);
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        
+        .terminal-line {
+            color: var(--intel-primary);
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: type-in 0.5s ease-out forwards;
+        }
+        
+        @keyframes type-in {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .timestamp {
+            color: var(--intel-text-dim);
+            margin-right: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .intel-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .intel-status-bar {
+                flex-wrap: wrap;
+                gap: 1rem;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .intel-header {
+                padding: 2rem 1rem 1.5rem;
+            }
+            
+            .intel-title {
+                font-size: 2.5rem;
+            }
+            
+            .intel-subtitle {
+                font-size: 1rem;
+            }
+            
+            .intel-grid {
+                padding: 0 1rem;
+            }
+            
+            .intel-panel {
+                padding: 1.5rem;
+            }
+            
+            .panel-title {
+                font-size: 1.2rem;
+            }
+            
+            .news-item {
+                padding: 1rem;
+            }
+            
+            .impact-viz {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .intel-title {
+                font-size: 2rem;
+            }
+            
+            .intel-panel {
+                padding: 1rem;
+            }
+            
+            .news-header {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .impact-viz {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Enhanced Navigation -->
+    <nav class="cosmic-nav-enhanced">
+        <div class="cosmic-nav-container">
+            <a href="index.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Main Portal</span>
+            </a>
+            
+            <a href="dashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Command Center</span>
+            </a>
+            
+            <a href="bbdashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">OpenBB Arena</span>
+            </a>
+            
+            <a href="mission-control.html" class="cosmic-nav-link mcp-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Mission Control</span>
+            </a>
+            
+            <a href="global-intelligence.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Global Intel</span>
+            </a>
+            
+            <a href="https://avishekb9.github.io/AgentsMCP/" class="cosmic-nav-link mcp-nav-link" target="_blank">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">AI Agents</span>
+            </a>
+            
+            <a href="rock-universe.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Rock Universe</span>
+            </a>
+            
+            <div class="cosmic-nav-dropdown">
+                <a href="#" class="cosmic-nav-link">
+                    <span class="cosmic-nav-icon"></span>
+                    <span class="cosmic-nav-text">The Albums</span>
+                </a>
+                <div class="cosmic-dropdown-menu">
+                    <a href="https://avishekb9.github.io/WaveQTE/index.html" target="_blank">WaveQTE</a>
+                    <a href="https://avishekb9.github.io/ManyIVsNets/index.html" target="_blank">ManyIVsNets</a>
+                    <a href="https://avishekb9.github.io/didTEnets/" target="_blank">didTEnets</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="intel-main">
+        <!-- Header -->
+        <header class="intel-header">
+            <h1 class="intel-title">Global Intelligence Monitor</h1>
+            <p class="intel-subtitle">Real-time News Analysis & Market Impact Prediction</p>
+        </header>
+
+        <!-- Status Bar -->
+        <div class="intel-status-bar">
+            <div class="intel-status-item">
+                <span class="status-indicator online"></span>
+                <span>NEWS FEEDS: ACTIVE</span>
+            </div>
+            <div class="intel-status-item">
+                <span>ML MODELS: <span id="modelStatus">PROCESSING</span></span>
+            </div>
+            <div class="intel-status-item">
+                <span>SENTIMENT ENGINE: <span id="sentimentStatus">ONLINE</span></span>
+            </div>
+            <div class="intel-status-item">
+                <span class="status-indicator warning"></span>
+                <span>RISK LEVEL: <span id="riskLevel">MODERATE</span></span>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="intel-grid">
+            <!-- Left Panel: News Headlines -->
+            <div class="intel-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Global Headlines</h2>
+                    <span class="panel-status">● LIVE</span>
+                </div>
+                
+                <div class="news-container" id="newsContainer">
+                    <!-- Dynamic news content will be loaded here -->
+                </div>
+                
+                <div class="intel-controls">
+                    <button class="intel-btn" onclick="refreshNews()">Refresh Feed</button>
+                    <button class="intel-btn" onclick="analyzeImpact()">Analyze Impact</button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Market Impact & ML Analysis -->
+            <div class="intel-panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">Market Impact Analysis</h2>
+                    <span class="panel-status">● COMPUTING</span>
+                </div>
+                
+                <div class="impact-viz" id="impactVisualization">
+                    <div class="contagion-network" id="contagionNetwork">
+                        <!-- Dynamic network visualization -->
+                    </div>
+                </div>
+                
+                <div class="ml-output" id="mlOutput">
+                    <div class="ml-metric">
+                        <span class="metric-label">Market Volatility Risk</span>
+                        <span class="metric-value impact-medium" id="volatilityRisk">64.7%</span>
+                    </div>
+                    <div class="ml-metric">
+                        <span class="metric-label">Contagion Probability</span>
+                        <span class="metric-value impact-high" id="contagionProb">78.3%</span>
+                    </div>
+                    <div class="ml-metric">
+                        <span class="metric-label">Sentiment Score</span>
+                        <span class="metric-value impact-low" id="sentimentScore">-0.42</span>
+                    </div>
+                    <div class="ml-metric">
+                        <span class="metric-label">Market Reaction Time</span>
+                        <span class="metric-value" id="reactionTime">2.4 hrs</span>
+                    </div>
+                </div>
+                
+                <div class="intel-terminal" id="intelTerminal">
+                    <!-- Live analysis logs -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global Intelligence Monitor System
+        class GlobalIntelligenceMonitor {
+            constructor() {
+                this.newsData = [];
+                this.mlModels = {
+                    sentimentAnalyzer: true,
+                    contagionPredictor: true,
+                    volatilityForecaster: true
+                };
+                this.isAnalyzing = false;
+            }
+
+            async initialize() {
+                this.log("Global Intelligence Monitor initializing...");
+                await this.loadNewsData();
+                this.createNetworkVisualization();
+                this.startRealTimeUpdates();
+                this.log("All systems operational - monitoring global events");
+            }
+
+            async loadNewsData() {
+                // Simulated news data with categories and sentiment
+                this.newsData = [
+                    {
+                        id: 1,
+                        title: "Federal Reserve Signals Potential Rate Cuts Amid Economic Uncertainty",
+                        category: "FINANCE",
+                        sentiment: "negative",
+                        impact: "high",
+                        score: -0.7,
+                        marketImpact: 85,
+                        source: "Reuters",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 2,
+                        title: "China-US Trade Negotiations Resume with Positive Outlook",
+                        category: "GEOPOLITICS",
+                        sentiment: "positive",
+                        impact: "medium",
+                        score: 0.6,
+                        marketImpact: 72,
+                        source: "Bloomberg",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 3,
+                        title: "European Parliament Passes New Financial Regulation Framework",
+                        category: "POLITICS",
+                        sentiment: "neutral",
+                        impact: "medium",
+                        score: 0.1,
+                        marketImpact: 58,
+                        source: "Financial Times",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 4,
+                        title: "Oil Prices Surge on Middle East Tensions",
+                        category: "GEOPOLITICS",
+                        sentiment: "negative",
+                        impact: "high",
+                        score: -0.8,
+                        marketImpact: 91,
+                        source: "Wall Street Journal",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 5,
+                        title: "Tech Giants Report Strong Q4 Earnings Despite Market Concerns",
+                        category: "FINANCE",
+                        sentiment: "positive",
+                        impact: "medium",
+                        score: 0.5,
+                        marketImpact: 67,
+                        source: "CNBC",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 6,
+                        title: "Central Bank Digital Currency Trials Begin in Major Economies",
+                        category: "FINANCE",
+                        sentiment: "neutral",
+                        impact: "high",
+                        score: 0.2,
+                        marketImpact: 79,
+                        source: "Financial Times",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 7,
+                        title: "Climate Change Policies Impact Global Supply Chain Restructuring",
+                        category: "POLITICS",
+                        sentiment: "negative",
+                        impact: "medium",
+                        score: -0.4,
+                        marketImpact: 63,
+                        source: "Reuters",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 8,
+                        title: "Emerging Markets Show Resilience Amid Global Economic Headwinds",
+                        category: "FINANCE",
+                        sentiment: "positive",
+                        impact: "low",
+                        score: 0.3,
+                        marketImpact: 45,
+                        source: "Bloomberg",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 9,
+                        title: "International Sanctions Affect Global Financial Networks",
+                        category: "GEOPOLITICS",
+                        sentiment: "negative",
+                        impact: "high",
+                        score: -0.9,
+                        marketImpact: 88,
+                        source: "Associated Press",
+                        timestamp: new Date()
+                    },
+                    {
+                        id: 10,
+                        title: "AI and Machine Learning Transform Financial Risk Assessment",
+                        category: "FINANCE",
+                        sentiment: "positive",
+                        impact: "medium",
+                        score: 0.7,
+                        marketImpact: 71,
+                        source: "MIT Technology Review",
+                        timestamp: new Date()
+                    }
+                ];
+
+                this.renderNews();
+                this.updateMLMetrics();
+            }
+
+            renderNews() {
+                const container = document.getElementById('newsContainer');
+                container.innerHTML = '';
+
+                this.newsData.forEach(news => {
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'news-item';
+                    newsItem.innerHTML = `
+                        <div class="news-header">
+                            <span class="news-category">${news.category}</span>
+                            <span class="news-sentiment sentiment-${news.sentiment}">${news.sentiment.toUpperCase()}</span>
+                        </div>
+                        <div class="news-title">${news.title}</div>
+                        <div class="news-impact">
+                            <span class="impact-score impact-${news.impact}">Impact: ${news.impact.toUpperCase()}</span>
+                            <span class="metric-value">Score: ${news.marketImpact}%</span>
+                        </div>
+                    `;
+                    container.appendChild(newsItem);
+                });
+
+                this.log(`Loaded ${this.newsData.length} global headlines`);
+            }
+
+            createNetworkVisualization() {
+                const network = document.getElementById('contagionNetwork');
+                network.innerHTML = '';
+
+                // Create major market nodes
+                const majorMarkets = [
+                    { name: 'NYSE', x: 30, y: 30 },
+                    { name: 'LSE', x: 70, y: 25 },
+                    { name: 'TSE', x: 85, y: 60 },
+                    { name: 'SSE', x: 60, y: 75 },
+                    { name: 'BSE', x: 25, y: 70 }
+                ];
+
+                majorMarkets.forEach((market, index) => {
+                    const node = document.createElement('div');
+                    node.className = 'network-node node-major';
+                    node.style.left = market.x + '%';
+                    node.style.top = market.y + '%';
+                    node.style.animationDelay = (index * 0.3) + 's';
+                    node.title = market.name;
+                    network.appendChild(node);
+                });
+
+                // Create connections
+                for (let i = 0; i < majorMarkets.length - 1; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'network-connection';
+                    
+                    const startX = majorMarkets[i].x;
+                    const startY = majorMarkets[i].y;
+                    const endX = majorMarkets[i + 1].x;
+                    const endY = majorMarkets[i + 1].y;
+                    
+                    const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                    const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                    
+                    line.style.width = length + '%';
+                    line.style.left = startX + '%';
+                    line.style.top = startY + '%';
+                    line.style.transform = `rotate(${angle}deg)`;
+                    line.style.animationDelay = (i * 0.5) + 's';
+                    
+                    network.appendChild(line);
+                }
+
+                this.log("Contagion network visualization initialized");
+            }
+
+            updateMLMetrics() {
+                // Calculate aggregate metrics from news sentiment
+                const avgSentiment = this.newsData.reduce((sum, news) => sum + news.score, 0) / this.newsData.length;
+                const avgImpact = this.newsData.reduce((sum, news) => sum + news.marketImpact, 0) / this.newsData.length;
+                
+                const negativeNews = this.newsData.filter(news => news.sentiment === 'negative').length;
+                const contagionRisk = (negativeNews / this.newsData.length) * 100;
+                
+                // Update UI
+                document.getElementById('volatilityRisk').textContent = avgImpact.toFixed(1) + '%';
+                document.getElementById('contagionProb').textContent = contagionRisk.toFixed(1) + '%';
+                document.getElementById('sentimentScore').textContent = avgSentiment.toFixed(2);
+                document.getElementById('reactionTime').textContent = (2 + Math.random() * 3).toFixed(1) + ' hrs';
+
+                // Update risk level
+                const riskLevel = avgSentiment < -0.3 ? 'HIGH' : avgSentiment > 0.3 ? 'LOW' : 'MODERATE';
+                document.getElementById('riskLevel').textContent = riskLevel;
+
+                this.log(`ML models updated - Avg sentiment: ${avgSentiment.toFixed(2)}, Risk: ${riskLevel}`);
+            }
+
+            startRealTimeUpdates() {
+                setInterval(() => {
+                    // Simulate real-time metric updates
+                    this.updateMLMetrics();
+                    
+                    // Random system status updates
+                    if (Math.random() < 0.3) {
+                        const messages = [
+                            "Processing new geopolitical intelligence...",
+                            "Sentiment analysis engine calibrated",
+                            "Contagion model coefficients updated",
+                            "Cross-market correlation analysis complete",
+                            "Neural network prediction models optimized"
+                        ];
+                        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                        this.log(randomMessage);
+                    }
+                }, 5000);
+            }
+
+            log(message) {
+                const terminal = document.getElementById('intelTerminal');
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                
+                const timestamp = new Date().toLocaleTimeString();
+                line.innerHTML = `<span class="timestamp">[${timestamp}]</span>${message}`;
+                
+                terminal.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                // Keep only last 20 lines
+                const lines = terminal.querySelectorAll('.terminal-line');
+                if (lines.length > 20) {
+                    lines[0].remove();
+                }
+            }
+
+            refreshNews() {
+                this.log("Refreshing global news feeds...");
+                
+                // Simulate new data with random variations
+                this.newsData.forEach(news => {
+                    news.marketImpact += (Math.random() - 0.5) * 10;
+                    news.marketImpact = Math.max(0, Math.min(100, news.marketImpact));
+                    news.timestamp = new Date();
+                });
+                
+                this.renderNews();
+                this.updateMLMetrics();
+                this.log("News feed updated with latest intelligence");
+            }
+
+            analyzeImpact() {
+                if (this.isAnalyzing) return;
+                
+                this.isAnalyzing = true;
+                this.log("Initiating deep market impact analysis...");
+                
+                // Simulate analysis process
+                const analysisSteps = [
+                    "Loading sentiment analysis models...",
+                    "Processing natural language patterns...",
+                    "Calculating cross-market correlations...",
+                    "Running contagion simulation models...",
+                    "Generating risk assessment matrices...",
+                    "Analysis complete - results updated"
+                ];
+                
+                analysisSteps.forEach((step, index) => {
+                    setTimeout(() => {
+                        this.log(step);
+                        if (index === analysisSteps.length - 1) {
+                            this.isAnalyzing = false;
+                            this.updateMLMetrics();
+                        }
+                    }, (index + 1) * 1000);
+                });
+            }
+        }
+
+        // Global functions for button interactions
+        function refreshNews() {
+            if (window.globalIntel) {
+                window.globalIntel.refreshNews();
+            }
+        }
+
+        function analyzeImpact() {
+            if (window.globalIntel) {
+                window.globalIntel.analyzeImpact();
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.globalIntel = new GlobalIntelligenceMonitor();
+            window.globalIntel.initialize();
+        });
+
+        console.log("Global Intelligence Monitor System loaded");
+        console.log("Real-time news analysis and ML-driven market prediction active");
+    </script>
+
+    <!-- Quick Access Bar -->
+    <div class="cosmic-quick-access">
+        <div class="cosmic-quick-content">
+            <span class="cosmic-quick-title">Quick Galaxy Access:</span>
+            <a href="mission-control.html" class="cosmic-quick-btn">Mission Control</a>
+            <a href="dashboard.html" class="cosmic-quick-btn">Network Command</a>
+            <a href="rock-universe.html" class="cosmic-quick-btn">Rock Universe</a>
+            <button class="cosmic-quick-btn" onclick="refreshNews()">Refresh Intel</button>
+        </div>
+    </div>
+</body>
+</html>

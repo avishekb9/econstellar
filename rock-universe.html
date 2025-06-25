@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Rock Universe - Avishek Bhandari</title>
+    <!-- Include enhanced navigation CSS -->
+    <link rel="stylesheet" href="assets/cosmic-nav.css">
     <style>
         /* Rock Universe - Cyberpunk Meets Classic Rock */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
@@ -112,7 +114,7 @@
         /* Navigation - Holographic Interface */
         .nav-container {
             position: fixed;
-            top: 2rem;
+            top: 6rem;
             left: 50%;
             transform: translateX(-50%);
             padding: 1rem 2rem;
@@ -120,7 +122,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 50px;
-            z-index: 1000;
+            z-index: 999;
             transition: all 0.3s ease;
             box-shadow: 
                 0 8px 32px rgba(255, 69, 0, 0.2),
@@ -798,6 +800,9 @@
                 padding: 0.8rem 1rem;
                 width: calc(100% - 2rem);
                 max-width: none;
+                top: 4rem;
+                left: 1rem;
+                transform: none;
             }
             
             .nav-links {
@@ -853,6 +858,54 @@
         <div class="spotlight"></div>
     </div>
 
+    <!-- Enhanced Navigation -->
+    <nav class="cosmic-nav-enhanced">
+        <div class="cosmic-nav-container">
+            <a href="index.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Main Portal</span>
+            </a>
+            
+            <a href="dashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Command Center</span>
+            </a>
+            
+            <a href="bbdashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">OpenBB Arena</span>
+            </a>
+            
+            <a href="mission-control.html" class="cosmic-nav-link mcp-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Mission Control</span>
+            </a>
+            
+            <a href="https://avishekb9.github.io/AgentsMCP/" class="cosmic-nav-link mcp-nav-link" target="_blank">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">AI Agents</span>
+            </a>
+            
+            <a href="rock-universe.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Rock Universe</span>
+            </a>
+            
+            <div class="cosmic-nav-dropdown">
+                <a href="#" class="cosmic-nav-link">
+                    <span class="cosmic-nav-icon"></span>
+                    <span class="cosmic-nav-text">The Albums</span>
+                </a>
+                <div class="cosmic-dropdown-menu">
+                    <a href="https://avishekb9.github.io/WaveQTE/index.html" target="_blank">WaveQTE</a>
+                    <a href="https://avishekb9.github.io/ManyIVsNets/index.html" target="_blank">ManyIVsNets</a>
+                    <a href="https://avishekb9.github.io/didTEnets/" target="_blank">didTEnets</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Rock Universe Specific Navigation -->
     <nav class="nav-container">
         <div class="nav-links">
             <a href="index.html" class="back-button">← REALITY</a>
@@ -1117,7 +1170,7 @@
                 observer.observe(el);
             });
             
-            console.log("🎸 ROCK UNIVERSE INITIALIZED 🎸");
+            console.log("ROCK UNIVERSE INITIALIZED");
             console.log("Amplifiers: WARMED UP");
             console.log("Strings: TUNED");
             console.log("Distortion: ENGAGED");
