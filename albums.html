@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EconStellar Albums - Research Collection</title>
+    <!-- Include enhanced navigation CSS -->
+    <link rel="stylesheet" href="assets/cosmic-nav.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;900&display=swap');
+        
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #fafafa;
+            --accent-blue: #0066cc;
+            --accent-cyan: #00bcd4;
+            --accent-teal: #009688;
+            --accent-orange: #ff6b35;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a4a4a;
+            --text-dim: #6a6a6a;
+            --border-color: #e0e0e0;
+            --hover-border: #d0d0d0;
+            --card-bg: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --shadow-hover: rgba(0, 0, 0, 0.15);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+        
+        .header-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .nav-btn:hover {
+            border-color: var(--hover-border);
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn.primary {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        
+        .nav-btn.primary:hover {
+            background: #0052a3;
+            border-color: #0052a3;
+        }
+        
+        /* Albums Grid */
+        .albums-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+        
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .album-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .album-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent-blue);
+            border-radius: 12px 12px 0 0;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        
+        .album-card:nth-child(2)::before {
+            background: var(--accent-cyan);
+        }
+        
+        .album-card:nth-child(3)::before {
+            background: var(--accent-teal);
+        }
+        
+        .album-card:nth-child(4)::before {
+            background: var(--accent-orange);
+        }
+        
+        .album-card:nth-child(5)::before {
+            background: var(--accent-teal);
+        }
+        
+        .album-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--hover-border);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .album-card:hover::before {
+            opacity: 1;
+        }
+        
+        .album-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .album-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
+        }
+        
+        .album-type {
+            background: var(--secondary-bg);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: 'Space Grotesk', sans-serif;
+            border: 1px solid var(--border-color);
+        }
+        
+        .album-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        
+        .album-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .album-status {
+            color: var(--accent-teal);
+            font-weight: 500;
+        }
+        
+        .album-tech {
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .album-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .album-btn {
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            flex: 1;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .album-btn:hover {
+            border-color: var(--hover-border);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .album-btn.primary {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        
+        .album-btn.primary:hover {
+            background: #0052a3;
+            border-color: #0052a3;
+        }
+        
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+            
+            .header-subtitle {
+                font-size: 1rem;
+            }
+            
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .albums-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .album-card {
+                padding: 1.5rem;
+            }
+            
+            .album-title {
+                font-size: 1.2rem;
+            }
+            
+            .album-actions {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 2rem 1rem 1rem;
+            }
+            
+            .header-title {
+                font-size: 2rem;
+            }
+            
+            .albums-container {
+                padding: 0 1rem 2rem;
+            }
+            
+            .album-card {
+                padding: 1rem;
+            }
+            
+            .album-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+    </button>
+    
+    <!-- Enhanced Navigation -->
+    <nav class="cosmic-nav-enhanced" id="nav-container">
+        <div class="cosmic-nav-container">
+            <a href="index.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-text">Main Portal</span>
+            </a>
+            <a href="mission-control.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-text">Mission Control</span>
+            </a>
+            <a href="dashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-text">Dashboard</span>
+            </a>
+            <a href="rock-universe.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-text">Rock Universe</span>
+            </a>
+            <a href="albums.html" class="cosmic-nav-link active">
+                <span class="cosmic-nav-text">The Albums</span>
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">The Albums</h1>
+        <p class="header-subtitle">Research Collection & Economic Analysis Packages</p>
+    </header>
+    
+    <!-- Albums Container -->
+    <div class="albums-container">
+        <div class="albums-grid">
+            <!-- WaveQTE Album -->
+            <div class="album-card" onclick="window.open('https://avishekb9.github.io/WaveQTE/index.html', '_blank')">
+                <div class="album-header">
+                    <h3 class="album-title">WaveQTE</h3>
+                    <span class="album-type">R Package</span>
+                </div>
+                <div class="album-meta">
+                    <span class="album-status">● OPERATIONAL</span>
+                    <span class="album-tech">R • Wavelets • Time Series</span>
+                </div>
+                <p class="album-description">
+                    Wavelet-based Quantile Transfer Entropy analysis for financial contagion detection. 
+                    Advanced econometric modeling using continuous wavelet transforms to identify 
+                    directional dependencies between financial markets during crisis periods.
+                </p>
+                <div class="album-actions">
+                    <a href="https://avishekb9.github.io/WaveQTE/index.html" class="album-btn primary" target="_blank">Explore Package</a>
+                    <a href="https://avishekb9.shinyapps.io/waveqte-dashboard/" class="album-btn" target="_blank">Live Dashboard</a>
+                </div>
+            </div>
+            
+            <!-- ManyIVsNets Album -->
+            <div class="album-card" onclick="window.open('https://avishekb9.github.io/ManyIVsNets/index.html', '_blank')">
+                <div class="album-header">
+                    <h3 class="album-title">ManyIVsNets</h3>
+                    <span class="album-type">R Package</span>
+                </div>
+                <div class="album-meta">
+                    <span class="album-status">● OPERATIONAL</span>
+                    <span class="album-tech">R • Networks • Instrumental Variables</span>
+                </div>
+                <p class="album-description">
+                    Environmental economics meets network analysis with instrumental variables. 
+                    Sophisticated econometric tools for analyzing complex environmental-economic 
+                    relationships through network structures and causal inference methods.
+                </p>
+                <div class="album-actions">
+                    <a href="https://avishekb9.github.io/ManyIVsNets/index.html" class="album-btn primary" target="_blank">Explore Package</a>
+                    <a href="https://github.com/avishekb9/ManyIVsNets" class="album-btn" target="_blank">Source Code</a>
+                </div>
+            </div>
+            
+            <!-- didTEnets Album -->
+            <div class="album-card" onclick="window.open('https://avishekb9.github.io/didTEnets/', '_blank')">
+                <div class="album-header">
+                    <h3 class="album-title">didTEnets</h3>
+                    <span class="album-type">R Package</span>
+                </div>
+                <div class="album-meta">
+                    <span class="album-status">● OPERATIONAL</span>
+                    <span class="album-tech">R • Transfer Entropy • Policy Analysis</span>
+                </div>
+                <p class="album-description">
+                    Transfer entropy-based policy evaluation using difference-in-differences methodology. 
+                    Cutting-edge approach to policy impact assessment combining information theory 
+                    with causal inference for robust policy evaluation frameworks.
+                </p>
+                <div class="album-actions">
+                    <a href="https://avishekb9.github.io/didTEnets/" class="album-btn primary" target="_blank">Explore Package</a>
+                    <a href="https://github.com/avishekb9/didTEnets" class="album-btn" target="_blank">Source Code</a>
+                </div>
+            </div>
+            
+            <!-- MCPFM Album -->
+            <div class="album-card" onclick="window.open('https://avishekb9.github.io/MCPFM/', '_blank')">
+                <div class="album-header">
+                    <h3 class="album-title">MCPFM</h3>
+                    <span class="album-type">R Package</span>
+                </div>
+                <div class="album-meta">
+                    <span class="album-status">● OPERATIONAL</span>
+                    <span class="album-tech">R • Policy Modeling • Risk Assessment</span>
+                </div>
+                <p class="album-description">
+                    Multi-Component Policy Failure Modeling for advanced econometric analysis. 
+                    Comprehensive framework for policy evaluation and risk assessment using 
+                    sophisticated statistical modeling techniques and failure analysis methods.
+                </p>
+                <div class="album-actions">
+                    <a href="https://avishekb9.github.io/MCPFM/" class="album-btn primary" target="_blank">Explore Package</a>
+                    <a href="https://github.com/avishekb9/MCPFM" class="album-btn" target="_blank">Source Code</a>
+                </div>
+            </div>
+            
+            <!-- AgentsMCP Album -->
+            <div class="album-card" onclick="window.open('https://avishekb9.github.io/AgentsMCP/', '_blank')">
+                <div class="album-header">
+                    <h3 class="album-title">AgentsMCP</h3>
+                    <span class="album-type">R Package</span>
+                </div>
+                <div class="album-meta">
+                    <span class="album-status">● OPERATIONAL</span>
+                    <span class="album-tech">R • AI Agents • Neural Networks • MCP</span>
+                </div>
+                <p class="album-description">
+                    Advanced agent-based economic modeling with heterogeneous AI agents and neural decision-making. 
+                    Features 6 distinct agent types with MCP communication protocols, delivering 65% better performance 
+                    than DSGE models and supporting 1000+ agents with superior market prediction accuracy.
+                </p>
+                <div class="album-actions">
+                    <a href="https://avishekb9.github.io/AgentsMCP/" class="album-btn primary" target="_blank">Explore Package</a>
+                    <a href="https://github.com/avishekb9/AgentsMCP" class="album-btn" target="_blank">Source Code</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Simple interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add subtle hover effects to cards
+            document.querySelectorAll('.album-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Mobile menu functionality
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navContainer = document.getElementById('nav-container');
+            if (mobileMenuToggle && navContainer) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    this.classList.toggle('active');
+                    navContainer.classList.toggle('active');
+                    
+                    if (navContainer.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Close mobile menu when clicking on links
+                document.querySelectorAll('.cosmic-nav-link').forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (window.innerWidth <= 768 && navContainer.classList.contains('active')) {
+                        if (!navContainer.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+                
+                // Handle resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768 && navContainer.classList.contains('active')) {
+                        navContainer.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        });
+        
+        console.log('EconStellar Albums Portal Initialized');
+    </script>
+</body>
+</html>

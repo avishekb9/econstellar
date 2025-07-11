@@ -623,8 +623,15 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+    </button>
+    
     <!-- Enhanced Navigation -->
-    <nav class="cosmic-nav-enhanced">
+    <nav class="cosmic-nav-enhanced" id="nav-container">
         <div class="cosmic-nav-container">
             <a href="index.html" class="cosmic-nav-link">
                 <span class="cosmic-nav-icon"></span>
@@ -926,6 +933,56 @@
         
         // Initialize on load
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navContainer = document.getElementById('nav-container');
+            if (mobileMenuToggle && navContainer) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    this.classList.toggle('active');
+                    navContainer.classList.toggle('active');
+                    
+                    if (navContainer.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Close mobile menu when clicking on links
+                document.querySelectorAll('.cosmic-nav-link').forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (window.innerWidth <= 768 && navContainer.classList.contains('active')) {
+                        if (!navContainer.contains(event.target) && !mobileMenuToggle.contains(event.target)) {
+                            navContainer.classList.remove('active');
+                            mobileMenuToggle.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
+                    }
+                });
+                
+                // Handle resize
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768 && navContainer.classList.contains('active')) {
+                        navContainer.classList.remove('active');
+                        mobileMenuToggle.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+            
             createNetworkNodes();
             createHeatmap();
             createDataStream();

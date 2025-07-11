@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Econstellar Network Command | Advanced Economic Intelligence</title>
+    <!-- Include enhanced navigation CSS -->
+    <link rel="stylesheet" href="assets/cosmic-nav.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/force-graph"></script>
     <style>
@@ -370,6 +372,53 @@
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+        <div class="hamburger"></div>
+    </button>
+    
+    <!-- Enhanced Navigation -->
+    <nav class="cosmic-nav-enhanced" id="nav-container">
+        <div class="cosmic-nav-container">
+            <a href="index.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Home</span>
+            </a>
+            
+            <a href="dashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Dashboard</span>
+            </a>
+            
+            <a href="global-intelligence.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Global Intel</span>
+            </a>
+            
+            <a href="mission-control.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Mission Control</span>
+            </a>
+            
+            <a href="bbdashboard.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">OpenBB Dashboard</span>
+            </a>
+            
+            <a href="rock-universe.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">Rock Universe</span>
+            </a>
+            
+            <a href="albums.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">The Albums</span>
+            </a>
+        </div>
+    </nav>
+
     <div class="container">
         <header class="header">
             <h1 class="title">ECONSTELLAR NETWORK COMMAND<span class="openbb-badge">OPENBB POWERED</span></h1>
@@ -1280,6 +1329,45 @@
 
         // Initialize dashboard when DOM is ready
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navContainer = document.getElementById('nav-container');
+            
+            if (mobileMenuToggle && navContainer) {
+                mobileMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    this.classList.toggle('active');
+                    navContainer.classList.toggle('active');
+                    
+                    if (navContainer.classList.contains('active')) {
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!navContainer.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                        mobileMenuToggle.classList.remove('active');
+                        navContainer.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+                
+                // Close menu when clicking on nav links
+                const navLinks = navContainer.querySelectorAll('.cosmic-nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenuToggle.classList.remove('active');
+                        navContainer.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+            
             setTimeout(() => {
                 try {
                     dashboard = new EconstellarNetworkDashboard();

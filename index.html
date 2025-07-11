@@ -1757,17 +1757,10 @@
                 <span class="cosmic-nav-text">Rock Universe</span>
             </a>
             
-            <div class="cosmic-nav-dropdown">
-                <a href="#" class="cosmic-nav-link">
-                    <span class="cosmic-nav-icon"></span>
-                    <span class="cosmic-nav-text">The Albums</span>
-                </a>
-                <div class="cosmic-dropdown-menu">
-                    <a href="https://avishekb9.github.io/WaveQTE/index.html" target="_blank">WaveQTE</a>
-                    <a href="https://avishekb9.github.io/ManyIVsNets/index.html" target="_blank">ManyIVsNets</a>
-                    <a href="https://avishekb9.github.io/didTEnets/" target="_blank">didTEnets</a>
-                </div>
-            </div>
+            <a href="albums.html" class="cosmic-nav-link">
+                <span class="cosmic-nav-icon"></span>
+                <span class="cosmic-nav-text">The Albums</span>
+            </a>
             
             <a href="#contact" class="cosmic-nav-link">
                 <span class="cosmic-nav-icon"></span>
@@ -2127,7 +2120,7 @@
 
             // Mobile menu functionality
             const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-            const navContainer = document.getElementById('nav-container');
+            const navContainer = document.querySelector('.cosmic-nav-enhanced');
 
             if (mobileMenuToggle && navContainer) {
                 mobileMenuToggle.addEventListener('click', function(e) {
@@ -2145,7 +2138,7 @@
                 });
 
                 // Close mobile menu when clicking on links
-                document.querySelectorAll('#mainNav a').forEach(link => {
+                document.querySelectorAll('.cosmic-nav-link').forEach(link => {
                     link.addEventListener('click', function() {
                         if (window.innerWidth <= 768) {
                             navContainer.classList.remove('active');
@@ -2174,6 +2167,35 @@
                         document.body.style.overflow = '';
                     }
                 });
+                
+                // Dropdown functionality for all screen sizes
+                const dropdownLinks = document.querySelectorAll('.cosmic-nav-dropdown > .cosmic-nav-link');
+                dropdownLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const dropdown = this.parentElement;
+                        
+                        // Close other dropdowns
+                        document.querySelectorAll('.cosmic-nav-dropdown').forEach(otherDropdown => {
+                            if (otherDropdown !== dropdown) {
+                                otherDropdown.classList.remove('active');
+                            }
+                        });
+                        
+                        // Toggle current dropdown
+                        dropdown.classList.toggle('active');
+                    });
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    const dropdowns = document.querySelectorAll('.cosmic-nav-dropdown');
+                    dropdowns.forEach(dropdown => {
+                        if (!dropdown.contains(event.target)) {
+                            dropdown.classList.remove('active');
+                        }
+                    });
+                });
             }
 
             // Enhanced smooth scrolling for anchor links
@@ -2182,6 +2204,7 @@
                     e.preventDefault();
             
                     const targetId = this.getAttribute('href');
+                    if (targetId === '#' || targetId === '') return;
                     const targetSection = document.querySelector(targetId);
             
                     if (targetSection) {
@@ -2492,12 +2515,17 @@
         function launchRandomRelease() {
             const releases = [
                 'mission-control.html',
+                'https://avishekb9.github.io/MCPFM/',
                 'dashboard.html', 
                 'bbdashboard.html',
                 'rock-universe.html'
             ];
             const randomRelease = releases[Math.floor(Math.random() * releases.length)];
-            window.open(randomRelease, '_blank');
+            if (randomRelease.startsWith('http')) {
+                window.open(randomRelease, '_blank');
+            } else {
+                window.open(randomRelease, '_blank');
+            }
         }
 
         // Epic Rock Universe Warp Transition
@@ -2898,6 +2926,7 @@
                 window.location.href = 'rock-universe.html';
             }, 5500);
         }
+        
     </script>
 
     <!-- Quick Access Bar -->
@@ -2905,6 +2934,7 @@
         <div class="cosmic-quick-content">
             <span class="cosmic-quick-title">Quick Galaxy Access:</span>
             <a href="mission-control.html" class="cosmic-quick-btn">Mission Control</a>
+            <a href="https://avishekb9.github.io/MCPFM/" class="cosmic-quick-btn" target="_blank">MCPFM</a>
             <a href="dashboard.html" class="cosmic-quick-btn">Network Command</a>
             <a href="https://avishekb9.github.io/AgentsMCP/" class="cosmic-quick-btn" target="_blank">AI Agents</a>
             <a href="rock-universe.html" class="cosmic-quick-btn">Rock Universe</a>
