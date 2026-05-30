@@ -209,8 +209,8 @@
     <nav class="cosmic-nav-enhanced" id="nav-container">
         <div class="cosmic-nav-container">
             <a href="index.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Main Portal</span></a>
-            <a href="research-programs.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Research Programs</span></a>
             <a href="research-engine.html" class="cosmic-nav-link mcp-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Research Engine</span></a>
+            <a href="https://neuricx-intel-672903689767.asia-south1.run.app/combined.html" target="_blank" rel="noopener" class="cosmic-nav-link mcp-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">News × Social BI</span></a>
             <a href="dashboard.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Command Center</span></a>
             <a href="mission-control.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Mission Control</span></a>
             <a href="rock-universe.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Rock Universe</span></a>
@@ -302,9 +302,14 @@
                 : 'https://neuricx-intel-672903689767.asia-south1.run.app');
 
         function renderLiveIntelShell() {
+            const base = NEURICX_BASE;
             return section('§8', 'Live Intelligence — NEURICX',
                 `<div class="li-status" id="li-status">connecting to NEURICX engine…</div>
-                 <div id="li-body"></div>`);
+                 <div id="li-body"></div>
+                 <div class="li-links" style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap">
+                   <a class="fw-links" href="${base}/" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.8rem;color:var(--cyan);border:1px solid var(--border);padding:.35rem .8rem;border-radius:6px;text-decoration:none">Open NEURICX dashboard ↗</a>
+                   <a href="${base}/combined.html" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.8rem;color:var(--green);border:1px solid var(--border-hot);padding:.35rem .8rem;border-radius:6px;text-decoration:none">News × Social BI view ↗</a>
+                 </div>`);
         }
 
         async function populateLiveIntel() {
