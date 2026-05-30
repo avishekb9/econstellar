@@ -293,9 +293,13 @@
             populateLiveIntel();
         }
 
-        // NEURICX endpoint: ?neuricx=<url> override, else localhost dev default.
+        // NEURICX endpoint: ?neuricx=<url> override; localhost when viewed on a
+        // local dev server; else the public Cloud Run deployment (CORS-open) so
+        // the live section works from static GitHub Pages too.
         const NEURICX_BASE = new URLSearchParams(location.search).get('neuricx')
-            || 'http://127.0.0.1:3100';
+            || (location.hostname === '127.0.0.1' || location.hostname === 'localhost'
+                ? 'http://127.0.0.1:3100'
+                : 'https://neuricx-intel-672903689767.asia-south1.run.app');
 
         function renderLiveIntelShell() {
             return section('§8', 'Live Intelligence — NEURICX',
