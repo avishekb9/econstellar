@@ -1,0 +1,1001 @@
+{
+  "engine_version": "0.2.0",
+  "generated_at_utc": "2026-05-30T11:45:27.393Z",
+  "substrate": {
+    "primitives": [
+      "long_memory",
+      "multi_scale_wavelet",
+      "transfer_entropy",
+      "iaaft_surrogates",
+      "community_detection",
+      "network_formation",
+      "structural_channel_attribution",
+      "roc_validation"
+    ],
+    "libraries": {
+      "long_memory": [
+        "namh-pkg::run_dfa",
+        "commodityFC::dfa",
+        "contagionchannels::hurst",
+        "Knight2017 LiftLRD"
+      ],
+      "multi_scale_wavelet": [
+        "waveslim::modwt (Daubechies LA8)"
+      ],
+      "transfer_entropy": [
+        "infotheo (binned)",
+        "RANN::nn2 + namh-pkg::ksg_cond_mi (KSG k-NN)",
+        "Koenker quantreg (quantile-conditioned TE)"
+      ],
+      "iaaft_surrogates": [
+        "custom IAAFT (Schreiber-Schmitz 2000)",
+        "block bootstrap (base R)"
+      ],
+      "community_detection": [
+        "igraph::cluster_leiden",
+        "igraph::cluster_walktrap",
+        "igraph::cluster_louvain",
+        "igraph::cluster_fast_greedy (CNM)"
+      ],
+      "network_formation": [
+        "analytical (CARA Nash + CRRA Bellman, MCPFM)"
+      ],
+      "structural_channel_attribution": [
+        "AER::ivreg",
+        "hdm::rlassoIV",
+        "lpirfs (LP)",
+        "Rigobon 2003 heteroskedasticity-ID",
+        "sensemakr (Cinelli-Hazlett 2020)"
+      ],
+      "roc_validation": [
+        "pROC::roc",
+        "pROC::roc.test (DeLong)"
+      ]
+    }
+  },
+  "frameworks": [
+    {
+      "id": "commodity",
+      "title": "Community Networks of Commodity Markets",
+      "question": "Do 23 commodity futures (energy / metals / agri / softs / livestock) exhibit the same long-memory + multi-scale wavelet + quantile-TE network signatures observed in G20 equity markets?",
+      "status": "working_paper",
+      "manuscript": "papers/commodity/manuscript.pdf",
+      "manuscript_source": "papers/commodity/manuscript.tex",
+      "arxiv_doi": null,
+      "iref_revision_candidate": true,
+      "iref_id": "IREF-D-26-02932",
+      "iref_note": "P2-6 squad memo flagged uncertainty: this paper MIGHT be the IREF-D-26-02932 base manuscript, OR the IREF revision belongs to a different paper. PI to confirm.",
+      "cran_packages": [
+        "commodityFC"
+      ],
+      "cran_packages_misplaced": [
+        "WaveQTE-master",
+        "stockContagion",
+        "ManyIVsNets"
+      ],
+      "cran_packages_misplaced_note": "Per P2-6 squad inventory: 3 of the 4 R-packages currently in commodity/ belong to other papers — WaveQTE-master = waveqte sibling, stockContagion = stock-contagion sister paper, ManyIVsNets = Environmental Phillips Curve paper. Phase-1 cleanup: git mv these out of commodity/ once their proper homes are confirmed.",
+      "engine_instantiation": [
+        "long_memory",
+        "multi_scale_wavelet",
+        "transfer_entropy",
+        "community_detection"
+      ],
+      "engine_implementation_notes": {
+        "long_memory": "Qu-2011 + Sibbertsen-2018 tests + DFA rolling 260-day window stepped 24 days (but manuscript §3.1 describes Knight-2017 LiftLRD instead — METHODS<->CODE DRIFT, P2-6 §3 finding)",
+        "multi_scale_wavelet": "Achard-Gannaz-2016 MWW for fractal connectivity (Daubechies-8, scales 2-8)",
+        "transfer_entropy": "MODWT(LA8, J=4) + quantile TE at tau in {0.05, 0.50, 0.95}",
+        "iaaft_surrogates": "NONE — no surrogate-based significance for QTE edges (P2-6 §7 recommendation)",
+        "community_detection": "Clauset-Newman-Moore (CNM)",
+        "te_units": "nats (natural-log via quantile residuals)",
+        "gfc_dating": "1 Aug 2007 (Brunnermeier-style) — DIFFERS from NAMH/MCPFM 2008Q3 (cross-paper consistency marker #5)"
+      },
+      "headline_metrics": [
+        {
+          "label": "Commodity futures panel",
+          "key": "panel_size",
+          "value": 23,
+          "unit": "instruments",
+          "source_file": "papers/commodity/manuscript.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "4 Energy + 4 Precious metals + 1 Industrial (Copper) + 14 Agri/Soft/Livestock",
+          "source": "curated"
+        },
+        {
+          "label": "Daily observations (longest history)",
+          "key": "obs_max",
+          "value": 8727,
+          "unit": "trading days",
+          "source_file": "papers/commodity/manuscript.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "1991-2025; 3 metals start 2020-2021 (N=1127-1315)",
+          "source": "curated"
+        },
+        {
+          "label": "Crisis windows analysed",
+          "key": "crisis_windows",
+          "value": 8,
+          "unit": "count",
+          "source_file": "papers/commodity/manuscript.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Pre-Crisis 2005-07 / Subprime 2007Q3-2009Q4 / Sovereign Debt / Stock Crash 2015-16 / Pre-COVID / COVID / Russia-Ukraine / Recovery 2024-25",
+          "source": "curated"
+        },
+        {
+          "label": "Hurst rolling window",
+          "key": "hurst_window",
+          "value": 260,
+          "unit": "trading days",
+          "source_file": "papers/commodity/code/dfa_estimation.R",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "260-day rolling stepped 24 days; cf. NAMH 252-day stepped daily",
+          "source": "curated"
+        }
+      ],
+      "outputs": {
+        "results_dir": "papers/commodity/output_R/",
+        "primary_csvs": [
+          "fc_matrix_Pre-Crisis.csv",
+          "fc_matrix_Subprime_Crisis.csv",
+          "fc_matrix_Sovereign_Debt_Crisis.csv",
+          "fc_matrix_Stock_Crash_2015-16.csv",
+          "fc_matrix_Pre-COVID-19.csv",
+          "fc_matrix_COVID-19.csv",
+          "fc_matrix_Russia-Ukraine_War.csv",
+          "fc_matrix_Post-Crisis_Recovery.csv"
+        ],
+        "primary_rds": [],
+        "figures_dir": "papers/commodity/output_R/",
+        "secondary_results_dir": "papers/commodity/stockContagion/output/",
+        "code_root": "papers/commodity/",
+        "data_file": "papers/commodity/data/commodity_panel.csv"
+      },
+      "last_run_utc": null,
+      "wall_time_hours": null,
+      "provenance": {
+        "code_commit": null,
+        "data_file": null,
+        "config_file": "papers/commodity/analysis.py + fc_analysis.py",
+        "rng_seed": null
+      },
+      "open_issues": [
+        "Author byline EMPTY (manuscript.tex:45 \\author{}) — fill before any submission",
+        "Methods<->code drift on Hurst estimator (LiftLRD claimed in §3.1 vs DFA in code) — resolve before submission",
+        "No surrogate-based significance for QTE edges — add via parboot or shuffle test",
+        "commodityFC R-pkg has placeholder author 'Ecolex Research'; missing man/tests/vignettes/NEWS.md — fix CRAN hygiene before any CRAN push",
+        "IREF revision identity unclear — confirm whether THIS paper is IREF-D-26-02932 or whether IREF base is a different paper",
+        "Stuck on IV identification (per CLAUDE.md §6) — but commodity paper has NO IV section; the IV work lives in stockContagion/ sister paper. CLAUDE.md note needs clarification."
+      ],
+      "cross_paper_relationships": [
+        {
+          "to": "namh",
+          "relation": "shares Hurst + multi-scale-wavelet substrate; differs in TE estimator (quantile vs KSG) and community detection (CNM vs Leiden) and asset class (commodities vs equities)"
+        },
+        {
+          "to": "waveqte",
+          "relation": "WaveQTE-master R-package historically lives under commodity/ — should move out"
+        },
+        {
+          "to": "contagion-channels",
+          "relation": "shares MODWT + quantile-TE substrate; differs in absent Stage-2 channel attribution"
+        }
+      ]
+    },
+    {
+      "id": "contagion-channels",
+      "title": "Contagion Channel Identification (paper3 / WQTE structural)",
+      "question": "What proportion of cross-border equity contagion is attributable to Trade / Financial / Geopolitical / Behavioural / Monetary-Policy channels across 18 G20 markets, 2006-2026?",
+      "status": "arxiv_preprint",
+      "manuscript": "papers/contagion-channels/manuscripts/paper3_v2/main_final.pdf",
+      "manuscript_source": "papers/contagion-channels/manuscripts/paper3_v2/main.tex",
+      "arxiv_doi": "10.48550/arXiv.2604.26546",
+      "arxiv_title": "What Drives Contagion? Identifying and Attributing Cross-Border Transmission Mechanisms",
+      "arxiv_submitted_utc": "2026-04-29T00:00:00Z",
+      "arxiv_verified_utc": "2026-05-30T00:00:00Z",
+      "cran_packages": [
+        "contagionchannels"
+      ],
+      "engine_instantiation": [
+        "long_memory",
+        "multi_scale_wavelet",
+        "transfer_entropy",
+        "iaaft_surrogates",
+        "community_detection",
+        "structural_channel_attribution"
+      ],
+      "engine_implementation_notes": {
+        "multi_scale_wavelet": "MODWT LA8 (Daubechies-8), 6 scales",
+        "transfer_entropy": "Wavelet-Quantile Transfer Entropy (WQTE) — quantile-conditioned TE via Koenker quantile-regression predictive gain",
+        "iaaft_surrogates": "B=1000 shuffled surrogates for QTE; B=300 bootstrap CIs; B=2000 placebo (per v2_run.R:17)",
+        "community_detection": "Walktrap on symmetrised adjacency",
+        "structural_channel_attribution": "Stage 2 = IV/2SLS (channel-specific external instruments per Stock-Watson 2018) + LASSO (Belloni-Chernozhukov-Hansen 2014) + LP (Jorda 2005) + Rigobon 2003 heteroskedasticity-ID + Cinelli-Hazlett 2020 sensitivity bounds",
+        "te_units": "nats (R log() default)",
+        "absolute_thresholding": "Pre-Crisis Q75 anchor; subsequent windows compared against this constant — fixes the v1 percentile-thresholding artifact (Pre-Crisis density 25.16% is now mechanically fixed only at the anchor window)"
+      },
+      "headline_metrics": [
+        {
+          "label": "Trade-channel share (GFC)",
+          "key": "trade_share_gfc",
+          "value": 0.279,
+          "unit": "proportion",
+          "source_file": "papers/contagion-channels/manuscripts/paper3_v2/results/period_attribution_shares.csv",
+          "source_line": null,
+          "ci": [
+            0.261,
+            0.298
+          ],
+          "p_value": null,
+          "note": "v1 reported behavioural-29% dominance; v2 re-architected trade composite reveals trade-27.9% dominance",
+          "source": "live",
+          "live_source_file": "papers/contagion-channels/manuscripts/paper3_v2/results/period_attribution_shares.csv (GFC/Trade)"
+        },
+        {
+          "label": "Behavioural-channel share collapse Pre-Crisis",
+          "key": "behavioural_decline_precrisis",
+          "value": "41% -> 13.8%",
+          "unit": "proportion (v1 vs v2)",
+          "source_file": "papers/contagion-channels/manuscripts/paper3_v2/main.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "De-confounded behavioural composite removes shared VIX-derivatives with financial channel",
+          "source": "curated"
+        },
+        {
+          "label": "Monetary-policy dominant in post-GFC episodes",
+          "key": "monetary_post_gfc_share",
+          "value": "CSC 25.3 / Russia-Ukraine 27.6 / Mid-East-Tariffs 31.8",
+          "unit": "%",
+          "source_file": "papers/contagion-channels/manuscripts/paper3_v2/main.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Once first-differenced policy-rate is used (Romer-Romer narrative shock proxies)",
+          "source": "curated"
+        },
+        {
+          "label": "Sample (G20 equity panel)",
+          "key": "sample_obs",
+          "value": 5036,
+          "unit": "trading days",
+          "source_file": "papers/contagion-channels/manuscripts/paper3_v2/main.tex",
+          "source_line": 67,
+          "ci": null,
+          "p_value": null,
+          "note": "18 markets × Jan-12-2006 to Mar-18-2026",
+          "source": "curated"
+        },
+        {
+          "label": "Crisis sub-periods analysed",
+          "key": "crisis_windows",
+          "value": 8,
+          "unit": "count",
+          "source_file": "papers/contagion-channels/manuscripts/paper3_v2/R/data.R",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Pre-Crisis / GFC / ESDC / Chinese-Stock-Crash / Pre-COVID / COVID / Russia-Ukraine / Mid-East-Tariffs",
+          "source": "curated"
+        }
+      ],
+      "outputs": {
+        "results_dir": "papers/contagion-channels/manuscripts/paper3_v2/results/",
+        "primary_csvs": [
+          "stage1_summary.csv",
+          "period_attribution_shares.csv",
+          "diagnostics_summary.csv",
+          "top_contagion_links.csv"
+        ],
+        "primary_rds": [
+          "stage1_qte.rds",
+          "stage2_attribution.rds",
+          "stage2_diagnostics.rds",
+          "walktrap_communities.rds",
+          "bootstrap_CIs.rds",
+          "placebo.rds"
+        ],
+        "figures_dir": "papers/contagion-channels/manuscripts/paper3_v2/figures/",
+        "code_root": "papers/contagion-channels/manuscripts/paper3_v2/R/",
+        "data_file": "papers/contagion-channels/data/G20.xlsx",
+        "channel_proxies": "papers/contagion-channels/data/channel_proxies.xlsx"
+      },
+      "last_run_utc": null,
+      "wall_time_hours": null,
+      "provenance": {
+        "code_commit": null,
+        "data_file": "papers/contagion-channels/data/G20.xlsx (18 markets) + channel_proxies.xlsx (Trade / Financial / Geopolitical / Behavioural / Monetary)",
+        "config_file": "papers/contagion-channels/manuscripts/paper3_v2/R/data.R",
+        "rng_seed": null
+      },
+      "r_packages_used": [
+        "contagionchannels (CRAN v0.1.3)",
+        "waveslim",
+        "quantreg",
+        "igraph",
+        "hdm",
+        "AER",
+        "sensemakr"
+      ],
+      "cross_paper_relationships": [
+        {
+          "to": "waveqte",
+          "relation": "earlier-sibling activation-scoring paper; shares Stage 1 (MODWT + WQTE) verbatim; differs in Stage 2 (this paper has structural IV; waveqte has activation scoring)"
+        },
+        {
+          "to": "namh",
+          "relation": "shares Hurst + Leiden lineage"
+        },
+        {
+          "to": "mcpfm",
+          "relation": "shares MODWT + TE substrate; different TE estimator (quantile vs binned)"
+        }
+      ]
+    },
+    {
+      "id": "mcpfm",
+      "title": "Multi-Channel Path Following Model (MCPFM)",
+      "question": "Can a protocol-based agent-communication game yield a tractable systemic-risk index?",
+      "status": "working_paper",
+      "manuscripts": {
+        "static_theory": "papers/mcpfm/manuscripts/MCPFM_Theory_Paper.pdf",
+        "dynamic_theory_companion": "papers/mcpfm/manuscripts/mcp_theory.pdf",
+        "validation_covid_us": "papers/mcpfm/manuscripts/MCPFM_Validation_Paper.pdf",
+        "trade_war_india": "papers/mcpfm/manuscripts/MCPFM_Trade_Wars_FINAL.pdf"
+      },
+      "arxiv_doi": "10.48550/arXiv.2507.08065",
+      "arxiv_note": "v1 superseded; v2 corresponds to the FINAL + Validation pair",
+      "cran_packages": [],
+      "engine_instantiation": [
+        "multi_scale_wavelet",
+        "transfer_entropy",
+        "iaaft_surrogates",
+        "community_detection",
+        "network_formation",
+        "roc_validation"
+      ],
+      "engine_implementation_notes": {
+        "multi_scale_wavelet": "MODWT (waveslim, Daubechies LA8), J=4 scales",
+        "transfer_entropy": "BINNED via R infotheo package, 10 bins/coord, lag=1",
+        "iaaft_surrogates": "Block bootstrap B=200 (NOT IAAFT); see Trade_Wars_FINAL §3",
+        "community_detection": "Walktrap",
+        "network_formation": "Static one-shot CARA Nash in Theory_Paper; CRRA dynamic Bellman + trust-update in mcp_theory.pdf (companion)",
+        "te_units": "nats (natural-log basis); reported via infotheo default; declared in FINAL §3 as of 2026-05-29 patch"
+      },
+      "headline_metrics": [
+        {
+          "label": "SRI AUC (COVID-19 US)",
+          "key": "sri_auc_covid_us",
+          "value": 0.915,
+          "unit": "dimensionless",
+          "source_file": "papers/mcpfm/manuscripts/MCPFM_Validation_Paper.tex",
+          "source_line": 296,
+          "ci": null,
+          "p_value": null,
+          "note": "1-day early warning vs US VIX 0.947 (3.4% gap)",
+          "source": "curated"
+        },
+        {
+          "label": "SRI AUC (India trade-war)",
+          "key": "sri_auc_india_trade",
+          "value": 0.581,
+          "unit": "dimensionless",
+          "source_file": "papers/mcpfm/manuscripts/MCPFM_Trade_Wars_FINAL.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": 0.03,
+          "note": "vs India VIX 0.531, DeLong test — modest but significant",
+          "source": "live",
+          "live_source_file": "papers/mcpfm/code/results/tables/table2_validation.csv (AUC/SRI)"
+        },
+        {
+          "label": "Sample (India trade-war, evaluable)",
+          "key": "sample_india_evaluable",
+          "value": 1915,
+          "unit": "trading days",
+          "source_file": "papers/mcpfm/manuscripts/MCPFM_Trade_Wars_FINAL.tex",
+          "source_line": 215,
+          "ci": null,
+          "p_value": null,
+          "note": "1935 raw - 20 burn-in for 21-day SRI rolling window",
+          "source": "curated"
+        },
+        {
+          "label": "TE decay (HFT 2-4d to long 32-64d)",
+          "key": "te_decay_covid",
+          "value": "0.1252 -> 0.0492",
+          "unit": "nats",
+          "source_file": "papers/mcpfm/manuscripts/MCPFM_Validation_Paper.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Monotone 61% decline — validates multi-scale economic foundations",
+          "source": "curated"
+        },
+        {
+          "label": "Network density (75th-pct threshold)",
+          "key": "network_density",
+          "value": 0.256,
+          "unit": "dimensionless",
+          "source_file": "papers/mcpfm/manuscripts/MCPFM_Validation_Paper.tex",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Mechanically fixed by threshold rule; not a finding (artifact disclosed)",
+          "source": "curated"
+        }
+      ],
+      "outputs": {
+        "results_dir": "papers/mcpfm/code/results/",
+        "primary_csvs": [
+          "tables/descriptive_statistics.csv",
+          "validation_summary_trade_war.csv"
+        ],
+        "primary_rds": [
+          "FINAL_SRI_REAL_TPU.rds",
+          "validation_results.rds",
+          "validation_results_trade_war.rds",
+          "sri_test_dynamic.rds",
+          "sri_test_sector.rds",
+          "sri_test_tpu.rds"
+        ],
+        "figures_dir": "papers/mcpfm/code/results/figures/",
+        "networks_dir": "papers/mcpfm/code/results/networks/",
+        "code_root": "papers/mcpfm/code/",
+        "shiny_dashboard": "papers/mcpfm/dashboard/package/"
+      },
+      "last_run_utc": "2025-10-29T00:00:00Z",
+      "wall_time_hours": 13.96,
+      "compute_machine": "Dell Precision 7920 Tower — Xeon Gold 5218R, 20 cores, 251GB RAM",
+      "provenance": {
+        "code_commit": null,
+        "data_file": "Yahoo Finance via quantmod (10 US equities Jan-2010 -> Oct-2024 + 10 IN equities Jan-2016 -> Oct-2024)",
+        "config_file": "papers/mcpfm/code/RUN_COMPLETE_ANALYSIS.R",
+        "rng_seed": null
+      },
+      "audit_trail": [
+        "papers/mcpfm/notes/CRITICAL_ISSUES_ANALYSIS.md (2025-10-28) — flagged Asia-Pacific draft",
+        "papers/mcpfm/manuscripts-archive/00_DO_NOT_CITE_ASIA_PACIFIC.md (2026-05-29) — archived 17+ contradicted claims",
+        "docs/AHRC_PROPOSAL_AUDIT_TRAIL_INTERNAL.md (2026-05-29) — public-vs-internal §6 disposition"
+      ],
+      "cross_paper_relationships": [
+        {
+          "to": "namh",
+          "relation": "shares MODWT substrate; binned TE here vs KSG TE in NAMH"
+        },
+        {
+          "to": "contagion-channels",
+          "relation": "shares MODWT + multi-scale-TE substrate; contagion-channels uses quantile-conditioned TE + Stage-2 structural channel attribution"
+        }
+      ]
+    },
+    {
+      "id": "namh",
+      "title": "Network Adaptive Market Hypothesis",
+      "question": "Does network-mediated adaptive efficiency explain Hurst-exponent crisis dynamics across G20 equity + commodity panels?",
+      "status": "working_paper",
+      "manuscript": "papers/namh/manuscripts/NAMH_Revised.pdf",
+      "manuscript_secondary": "papers/namh/manuscripts/NAMH_Theoretical_Foundations.pdf",
+      "arxiv_doi": null,
+      "cran_packages": [
+        "namh"
+      ],
+      "engine_instantiation": [
+        "long_memory",
+        "multi_scale_wavelet",
+        "transfer_entropy",
+        "iaaft_surrogates",
+        "community_detection",
+        "roc_validation"
+      ],
+      "engine_implementation_notes": {
+        "long_memory": "DFA via namh-pkg::run_dfa with rolling 252-day window",
+        "transfer_entropy": "KSG k-NN (k=4) via RANN::nn2 in namh-pkg::ksg_cond_mi",
+        "iaaft_surrogates": "B=200 IAAFT (Schreiber & Schmitz 2000); MC SE on empirical p ~ 0.015",
+        "community_detection": "Leiden",
+        "te_units": "bits (canonical, declared in NAMH_Theoretical_Foundations §entropy)"
+      },
+      "headline_metrics": [
+        {
+          "label": "Spectral radius peak (ρ̂)",
+          "key": "rho_hat_peak",
+          "value": 0.1261,
+          "unit": "dimensionless",
+          "source_file": "papers/namh/output/diagnostics/05_spectral_radius.csv",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Max rho_post in the canonical magnitude_30 gate — well below 1, confirms Hawkins-Simon contractivity of the gated HWTE operator (live-computed)",
+          "source": "live",
+          "live_source_file": "papers/namh/output/diagnostics/05_spectral_radius.csv (mode=magnitude_30, max rho_post)"
+        },
+        {
+          "label": "Diagnostic windows estimated",
+          "key": "windows_estimated",
+          "value": 20,
+          "unit": "count",
+          "source_file": "papers/namh/output/diagnostics/05_spectral_radius.csv",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "20 macro-windows spanning 2001–2025 in the magnitude_30 diagnostic panel (24 markets × 20 windows = 480 Hurst rows); live-computed",
+          "source": "live",
+          "live_source_file": "papers/namh/output/diagnostics/05_spectral_radius.csv (distinct magnitude_30 windows)"
+        },
+        {
+          "label": "Hurst median (24 markets × 20 windows)",
+          "key": "hurst_median",
+          "value": 0.4766,
+          "unit": "dimensionless",
+          "source_file": "papers/namh/output/diagnostics/01_hurst_panel.csv",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Median DFA Hurst across the panel — just below 0.5, indicating mild mean-reversion on average (live-computed)",
+          "source": "live",
+          "live_source_file": "papers/namh/output/diagnostics/01_hurst_panel.csv (median H, n=480)"
+        }
+      ],
+      "outputs": {
+        "results_dir": "papers/namh/output/",
+        "diagnostics_dir": "papers/namh/output/diagnostics/",
+        "primary_csvs": [
+          "diagnostics/01_hurst_panel.csv",
+          "diagnostics/02_efficiency_E.csv",
+          "diagnostics/03_te_summary.csv",
+          "diagnostics/04_fdr_retention.csv",
+          "diagnostics/05_spectral_radius.csv",
+          "diagnostics/eigenvector_top3_per_window.csv",
+          "diagnostics/E_star_magnitude30.csv",
+          "diagnostics/gate_hub_contrast.csv",
+          "diagnostics/gating_comparison.csv",
+          "diagnostics/hurst_triangulation.csv",
+          "diagnostics/lambda_cv.csv",
+          "diagnostics/lambda_sweep.csv",
+          "diagnostics/neumann_partials.csv",
+          "diagnostics/omega_kernel_hub.csv",
+          "diagnostics/per_asset_rho_contrib.csv"
+        ],
+        "primary_rds": [
+          "namh_v2_results_w252_2026-05-13.rds",
+          "namh_v2_reanalysis_gating.rds"
+        ],
+        "figures_dir": null,
+        "code_root": "papers/namh/code/namh-pkg/"
+      },
+      "last_run_utc": "2026-05-13T00:00:00Z",
+      "wall_time_hours": 13.96,
+      "compute_machine": "Dell Precision 7920 Tower — Xeon Gold 5218R, 20 cores, 251GB RAM",
+      "provenance": {
+        "code_commit": null,
+        "data_file": "papers/namh/code/namh-pkg/data/g20_24_panel.rda",
+        "config_file": "papers/namh/code/namh-pkg/inst/config/run_w252.yaml",
+        "rng_seed": null
+      },
+      "cross_paper_relationships": [
+        {
+          "to": "mcpfm",
+          "relation": "shares MODWT substrate; different TE estimator (KSG vs binned); different question"
+        },
+        {
+          "to": "contagion-channels",
+          "relation": "shares Hurst + Leiden substrate; contagion-channels adds Stage-2 channel attribution"
+        }
+      ]
+    },
+    {
+      "id": "waveqte",
+      "title": "Wavelet-Quantile Transfer Entropy (activation-scoring earlier sibling)",
+      "question": "Earlier-sibling approach to the same contagion-channel question, using hand-crafted activation-scoring formulas in place of structural IV identification.",
+      "status": "working_paper",
+      "manuscript": "papers/waveqte/contagion_manuscript.pdf",
+      "manuscript_source": null,
+      "manuscript_size_pages": 30,
+      "manuscript_anonymised": true,
+      "manuscript_creation_utc": "2026-02-19T00:00:00Z",
+      "arxiv_doi": null,
+      "arxiv_note": "NOT arXiv:2604.26546 — that's the paper3_v2 sibling. The waveqte PDF is currently working-paper-only; see PI for IREF-revision status (paper might be the IREF-D-26-02932 base manuscript).",
+      "cran_packages": [],
+      "engine_instantiation": [
+        "long_memory",
+        "multi_scale_wavelet",
+        "transfer_entropy",
+        "community_detection"
+      ],
+      "engine_implementation_notes": {
+        "long_memory": "GPH d_hat + Qu 2011 test (NOT Hurst-via-DFA)",
+        "multi_scale_wavelet": "MODWT (same as paper3)",
+        "transfer_entropy": "QTE via Koenker quantile-regression predictive gain (same as paper3 Stage 1)",
+        "iaaft_surrogates": "NOT reported (limitation §6.3 of the working paper); R-package bootstrap_qte() defaults B=1000",
+        "community_detection": "Walktrap on symmetrised adjacency",
+        "te_units": "log_2 (Eq.2) vs natural log (Eq.5) — internal inconsistency, flagged for polish",
+        "stage_2_method": "Hand-crafted activation-scoring formulas (Eqs 9-13) with calibrated constants — NOT structural IV. CTE validation (Eq 15-16) deferred to future work per §6.3 p.26."
+      },
+      "headline_metrics": [
+        {
+          "label": "Sample (G20 equity)",
+          "key": "sample_obs",
+          "value": 5275,
+          "unit": "trading days",
+          "source_file": "papers/waveqte/contagion_manuscript.pdf",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "18 markets × Jan-5-2004 to Jun-28-2024",
+          "source": "curated"
+        },
+        {
+          "label": "Crisis sub-periods analysed",
+          "key": "crisis_windows",
+          "value": 7,
+          "unit": "count",
+          "source_file": "papers/waveqte/contagion_manuscript.pdf",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Pre-Crisis / GFC / EuroDebt / ChineseCrash / Pre-COVID / COVID / Russia-Ukraine — ONE LESS than paper3 (no Mid-East-Tariffs window)",
+          "source": "curated"
+        },
+        {
+          "label": "Pre-Crisis dominant channel",
+          "key": "precrisis_dominant_channel",
+          "value": "Monetary Policy (52.9%)",
+          "unit": "%",
+          "source_file": "papers/waveqte/contagion_manuscript.pdf",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Hand-crafted activation-scoring result; differs from paper3's structural-IV Pre-Crisis result",
+          "source": "curated"
+        },
+        {
+          "label": "Trade share (GFC)",
+          "key": "trade_share_gfc",
+          "value": 0.039,
+          "unit": "proportion",
+          "source_file": "papers/waveqte/contagion_manuscript.pdf",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Activation-scoring approach yields Trade-GFC = 3.9% vs paper3's structural-IV Trade-GFC = 27.9%; structural reframing reverses the qualitative conclusion",
+          "source": "curated"
+        },
+        {
+          "label": "Network density (clustered 22.2-25.2%)",
+          "key": "network_density_range",
+          "value": "0.222-0.252",
+          "unit": "proportion",
+          "source_file": "papers/waveqte/contagion_manuscript.pdf",
+          "source_line": null,
+          "ci": null,
+          "p_value": null,
+          "note": "Artifact of 75th-percentile threshold; paper3 v2 fixes via absolute thresholding",
+          "source": "curated"
+        }
+      ],
+      "outputs": {
+        "results_dir": null,
+        "primary_csvs": [],
+        "primary_rds": [],
+        "figures_dir": null,
+        "code_root": "papers/commodity/WaveQTE-master/",
+        "note": "No live output dir tracked here — the active codebase is the older WaveQTE-master under commodity/. paper3 superseded the workflow."
+      },
+      "last_run_utc": null,
+      "wall_time_hours": null,
+      "provenance": {
+        "code_commit": null,
+        "data_file": null,
+        "config_file": null,
+        "rng_seed": null
+      },
+      "cross_paper_relationships": [
+        {
+          "to": "contagion-channels",
+          "relation": "Direct successor — paper3 is the structural-IV upgrade addressing waveqte Limitation 1 (activation-scoring -> IV identification). Same Stage 1 verbatim."
+        },
+        {
+          "to": "commodity",
+          "relation": "WaveQTE-master codebase under commodity/ is the historical home"
+        }
+      ],
+      "disposition_notes": "P2-5 squad memo (2026-05-29) flagged title/byline confusion: PI's spec abstract conflated waveqte with paper3. Two separate papers, share Stage 1, different Stage 2. arXiv:2604.26546 IS paper3 (verified 2026-05-30), NOT waveqte. Recommendation: rename waveqte PDF to disambiguate, or formally retire it once paper3 published."
+    }
+  ],
+  "consistency_markers": [
+    {
+      "marker": "window_length",
+      "per_framework": {
+        "namh": 252,
+        "mcpfm": 21,
+        "contagion-channels": "full-period",
+        "waveqte": "full-period",
+        "commodity": 260
+      },
+      "status": "intentionally_divergent",
+      "note": "Different scientific questions warrant different window choices (rolling vs full-period; daily vs trading-day rolling)"
+    },
+    {
+      "marker": "ksg_k_nn",
+      "per_framework": {
+        "namh": 4,
+        "mcpfm": null,
+        "contagion-channels": null,
+        "waveqte": null,
+        "commodity": null
+      },
+      "status": "consistent",
+      "note": "Only NAMH uses KSG; others use binned or quantile-conditioned TE"
+    },
+    {
+      "marker": "iaaft_b_surrogates",
+      "per_framework": {
+        "namh": 200,
+        "mcpfm": 200,
+        "contagion-channels": 1000,
+        "waveqte": null,
+        "commodity": null
+      },
+      "status": "intentionally_divergent",
+      "note": "MCPFM uses block-bootstrap not IAAFT; B differs by paper; commodity has none (flagged as open issue)"
+    },
+    {
+      "marker": "te_units",
+      "per_framework": {
+        "namh": "bits",
+        "mcpfm": "nats",
+        "contagion-channels": "nats",
+        "waveqte": "log_2 / nats (internal inconsistency)",
+        "commodity": "nats"
+      },
+      "status": "intentionally_divergent",
+      "note": "NAMH declares bits canonical (2026-05-29 patch); MCPFM+contagion+commodity use nats; waveqte has internal inconsistency Eq.2 vs Eq.5"
+    },
+    {
+      "marker": "gfc_dating",
+      "per_framework": {
+        "namh": "2008Q3-2009Q1 acute / 2007Q3-2009Q2 full",
+        "mcpfm": "n/a (paper uses COVID + Trade-War windows)",
+        "contagion-channels": "2007-08-01 Brunnermeier-style",
+        "waveqte": "2007-08",
+        "commodity": "2007Q3"
+      },
+      "status": "intentionally_divergent",
+      "note": "Footnoted in NAMH_Revised.tex (2026-05-29 patch); papers using long-history panels use Brunnermeier-style early start"
+    },
+    {
+      "marker": "te_estimator",
+      "per_framework": {
+        "namh": "KSG k-NN exact",
+        "mcpfm": "infotheo binned",
+        "contagion-channels": "Koenker quantile-conditioned",
+        "waveqte": "Koenker quantile-conditioned",
+        "commodity": "Koenker quantile-conditioned"
+      },
+      "status": "intentionally_divergent",
+      "note": "Each estimator answers a different question; KSG = exact MI estimation, binned = block-bootstrap friendly, quantile = tail-aware"
+    },
+    {
+      "marker": "hurst_symbol",
+      "per_framework": {
+        "namh": "phi (varphi aliased to phi 2026-05-29)",
+        "mcpfm": "n/a",
+        "contagion-channels": "n/a",
+        "waveqte": "n/a",
+        "commodity": "H (DFA scaling exponent)"
+      },
+      "status": "consistent",
+      "note": "Foundations preamble adds \\let\\varphi\\phi to unify the monograph"
+    },
+    {
+      "marker": "acemoglu_cite_key",
+      "per_framework": {
+        "namh": "bib:aots2015 (unified 2026-05-29)",
+        "mcpfm": "n/a",
+        "contagion-channels": "Acemoglu-Ozdaglar-Tahbaz-Salehi-2015 inline",
+        "waveqte": "not cited",
+        "commodity": "not cited"
+      },
+      "status": "consistent",
+      "note": "NAMH had aot2015/aots2015 split across Parts; unified to aots2015 in 2026-05-29 Phase-0 patch 0.6"
+    },
+    {
+      "marker": "community_detection",
+      "per_framework": {
+        "namh": "Leiden",
+        "mcpfm": "Walktrap",
+        "contagion-channels": "Walktrap",
+        "waveqte": "Walktrap",
+        "commodity": "CNM"
+      },
+      "status": "intentionally_divergent",
+      "note": "Algorithm choice tied to network properties — Leiden for dense KSG-TE networks, Walktrap for sparse quantile-TE, CNM for commodity baskets"
+    },
+    {
+      "marker": "crisis_window_count",
+      "per_framework": {
+        "namh": 5,
+        "mcpfm": 1,
+        "contagion-channels": 8,
+        "waveqte": 7,
+        "commodity": 8
+      },
+      "status": "intentionally_divergent",
+      "note": "MCPFM Validation = COVID only; Trade-Wars = trade-war days only; others span longer history"
+    },
+    {
+      "marker": "sri_auc_reporting",
+      "per_framework": {
+        "namh": "n/a (no SRI)",
+        "mcpfm": "0.915 COVID/US + 0.581 India/trade (dual-validation per 2026-05-29 D0 fix)",
+        "contagion-channels": "n/a",
+        "waveqte": "n/a",
+        "commodity": "n/a"
+      },
+      "status": "consistent",
+      "note": "AHRC proposal §6 now cites both honest numbers (2026-05-29 D0 fix); previous 0.924 from disavowed Asia-Pacific draft"
+    },
+    {
+      "marker": "r_package_provenance",
+      "per_framework": {
+        "namh": "namh local tarball",
+        "mcpfm": "no R-pkg (Shiny dashboard only)",
+        "contagion-channels": "contagionchannels CRAN v0.1.3 (2026-05-08)",
+        "waveqte": "WaveQTE-master under commodity/",
+        "commodity": "commodityFC local (hygiene issues open)"
+      },
+      "status": "needs_PI_decision",
+      "note": "Misplaced R-packages under commodity/ need git mv; commodityFC needs author + man + tests before CRAN"
+    }
+  ],
+  "publication_pipeline": [
+    {
+      "framework": "namh",
+      "stage": "working_paper",
+      "target_venue": "JFE/RFS",
+      "submission_eta": null,
+      "current_round": null,
+      "external_deadline": null
+    },
+    {
+      "framework": "mcpfm",
+      "stage": "arxiv_preprint",
+      "target_venue": "JFinEcon",
+      "submission_eta": "2026-Q3",
+      "current_round": null,
+      "external_deadline": null,
+      "note": "arXiv 2507.08065 v1 superseded; v2 = FINAL + Validation pair"
+    },
+    {
+      "framework": "contagion-channels",
+      "stage": "arxiv_preprint",
+      "target_venue": "JFinEcon / J Econometrics",
+      "submission_eta": "2026-Q3",
+      "current_round": null,
+      "external_deadline": null,
+      "note": "arXiv 2604.26546 verified 2026-05-30"
+    },
+    {
+      "framework": "waveqte",
+      "stage": "working_paper",
+      "target_venue": "TBD",
+      "submission_eta": null,
+      "current_round": null,
+      "external_deadline": null,
+      "note": "May or may not be IREF-D-26-02932 base; PI to confirm"
+    },
+    {
+      "framework": "commodity",
+      "stage": "working_paper",
+      "target_venue": "JFM / IREF",
+      "submission_eta": null,
+      "current_round": null,
+      "external_deadline": null,
+      "note": "Possibly the IREF-D-26-02932 base — PI to confirm"
+    }
+  ],
+  "compute_economics": {
+    "credit_cap_inr": 450000,
+    "credit_used_inr": 0,
+    "credit_remaining_inr": 450000,
+    "credit_expiry_date": "2027-04-30",
+    "projected_runway_days": null,
+    "hours_used_by_framework": {
+      "namh": 13.96,
+      "mcpfm": 13.96,
+      "contagion-channels": 0,
+      "waveqte": 0,
+      "commodity": 0
+    },
+    "burn_rate_inr_per_month": null,
+    "last_billing_sync_utc": null,
+    "note": "Phase 3 stub. Phase 4 will wire `gcloud billing accounts list` + budget alerts."
+  },
+  "r_packages": [
+    {
+      "name": "contagionchannels",
+      "version": "0.1.3",
+      "cran_published": "2026-05-08",
+      "url": "https://cran.r-project.org/web/packages/contagionchannels/",
+      "github_url": "https://github.com/avishekb9/contagionchannels",
+      "download_count_30d": null,
+      "used_by_frameworks": [
+        "contagion-channels"
+      ]
+    },
+    {
+      "name": "ManyIVsNets",
+      "version": "0.1.1",
+      "cran_published": "2025-06-23",
+      "url": "https://cran.r-project.org/web/packages/ManyIVsNets/",
+      "github_url": null,
+      "download_count_30d": null,
+      "used_by_frameworks": [
+        "commodity (sister Environmental Phillips Curve)"
+      ]
+    },
+    {
+      "name": "namh",
+      "version": "local_only",
+      "cran_published": null,
+      "url": null,
+      "github_url": null,
+      "download_count_30d": null,
+      "used_by_frameworks": [
+        "namh"
+      ],
+      "note": "Local tarball at papers/namh/code/"
+    },
+    {
+      "name": "commodityFC",
+      "version": "local_only",
+      "cran_published": null,
+      "url": null,
+      "github_url": null,
+      "download_count_30d": null,
+      "used_by_frameworks": [
+        "commodity"
+      ],
+      "note": "Hygiene fixes needed before any CRAN push (author placeholder, no man/tests)"
+    },
+    {
+      "name": "WaveQTE-master",
+      "version": "local_only",
+      "cran_published": null,
+      "url": null,
+      "github_url": null,
+      "download_count_30d": null,
+      "used_by_frameworks": [
+        "waveqte"
+      ]
+    },
+    {
+      "name": "stockContagion",
+      "version": "local_only",
+      "cran_published": null,
+      "url": null,
+      "github_url": null,
+      "download_count_30d": null,
+      "used_by_frameworks": [
+        "sister stock-contagion paper (not yet a portfolio framework)"
+      ]
+    }
+  ],
+  "health": {
+    "all_papers_compile": true,
+    "last_compile_sweep_utc": "2026-05-29T22:00:00Z",
+    "consistency_marker_drift": 0,
+    "open_pi_decisions": 1,
+    "live_metrics": 5,
+    "total_metrics": 22,
+    "aggregator_warnings": [
+      "live read failed for mcpfm:sample_india_evaluable — column 'metric' not found (kept curated value)"
+    ]
+  }
+}
