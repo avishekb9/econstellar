@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Research Engine — AI in Finance & Economics · SHSSM IIT Bhubaneswar</title>
+    <link rel="stylesheet" href="assets/cosmic-nav.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Orbitron:wght@500;700;900&display=swap');
+
+        :root {
+            --bg:           #000000;
+            --bg-soft:      #050507;
+            --bg-panel:     rgba(8, 10, 14, 0.82);
+            --border:       rgba(0, 212, 255, 0.18);
+            --border-hot:   rgba(0, 255, 136, 0.35);
+            --rule:         rgba(255, 255, 255, 0.05);
+
+            --text:         #ffffff;
+            --text-mid:     #c9d1d9;
+            --text-dim:     #6b7280;
+
+            --cyan:         #00d4ff;
+            --green:        #00ff88;
+            --amber:        #ffaa00;
+            --red:          #ff0040;
+            --violet:       #8a2be2;
+
+            --font-sans:    'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono:    'JetBrains Mono', 'SF Mono', Monaco, monospace;
+            --font-display: 'Orbitron', 'Space Grotesk', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 15%, rgba(0,212,255,0.06) 0%, transparent 45%),
+                radial-gradient(circle at 80% 85%, rgba(0,255,136,0.05) 0%, transparent 45%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* hero */
+        .hero { padding: 5rem 0 3rem; text-align: center; }
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(120deg, var(--cyan), var(--green));
+            -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+        .hero .tagline {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 1.2rem 0;
+        }
+        .hero p.lede {
+            max-width: 720px; margin: 0 auto;
+            color: var(--text-mid); font-size: 1.1rem;
+        }
+        .hero .stamp {
+            margin-top: 1.5rem; font-family: var(--font-mono);
+            font-size: 0.8rem; color: var(--text-dim);
+        }
+        .hero .stamp button {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--cyan); font-family: var(--font-mono);
+            font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 6px;
+            cursor: pointer; margin-left: 0.5rem; transition: all .2s;
+        }
+        .hero .stamp button:hover { background: rgba(0,212,255,0.1); }
+
+        /* section scaffolding */
+        section { padding: 2.5rem 0; border-top: 1px solid var(--rule); }
+        .sec-label {
+            font-family: var(--font-mono); font-size: 0.8rem;
+            color: var(--text-dim); text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 0.4rem;
+        }
+        .sec-title {
+            font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        /* substrate grid */
+        .grid { display: grid; gap: 1rem; }
+        .substrate-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+        .prim-card {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.1rem 1.2rem;
+            transition: transform .2s, border-color .2s;
+        }
+        .prim-card:hover { transform: translateY(-3px); border-color: var(--cyan); }
+        .prim-card h3 {
+            font-family: var(--font-mono); font-size: 0.85rem;
+            color: var(--green); text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 0.6rem;
+        }
+        .prim-card .libs { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+        /* framework cards */
+        .fw-card {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-left: 3px solid var(--cyan);
+            border-radius: 10px; padding: 1.5rem 1.6rem; margin-bottom: 1.2rem;
+        }
+        .fw-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.8rem; margin-bottom: 0.3rem; }
+        .fw-id { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+        .fw-badge {
+            font-family: var(--font-mono); font-size: 0.68rem; padding: 0.18rem 0.6rem;
+            border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
+            border: 1px solid var(--border); color: var(--text-dim);
+        }
+        .fw-badge.live { color: var(--green); border-color: var(--border-hot); }
+        .fw-title { color: var(--text-mid); font-size: 1rem; margin-bottom: 0.6rem; }
+        .fw-q { color: var(--text-dim); font-size: 0.92rem; font-style: italic; margin-bottom: 1rem; }
+        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 0.7rem; margin-bottom: 1rem; }
+        .metric { background: rgba(0,212,255,0.04); border-radius: 8px; padding: 0.7rem 0.9rem; }
+        .metric .v { font-family: var(--font-mono); font-size: 1.15rem; font-weight: 600; color: var(--cyan); }
+        .metric .l { font-size: 0.76rem; color: var(--text-dim); margin-top: 0.2rem; }
+        .live-tag { display: inline-block; margin-left: 0.45rem; font-size: 0.58rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.5px; color: var(--green); border: 1px solid var(--border-hot); border-radius: 4px; padding: 0 0.32rem; vertical-align: middle; }
+        .fw-sub { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.8rem; }
+        .fw-sub b { color: var(--green); font-weight: 500; }
+        .fw-links a {
+            display: inline-block; font-family: var(--font-mono); font-size: 0.78rem;
+            color: var(--cyan); text-decoration: none; border: 1px solid var(--border);
+            padding: 0.25rem 0.7rem; border-radius: 6px; margin: 0 0.4rem 0.4rem 0; transition: all .2s;
+        }
+        .fw-links a:hover { background: rgba(0,212,255,0.1); }
+
+        /* evaluator strip */
+        .eval-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 1rem; }
+        .eval {
+            background: var(--bg-panel); border: 1px solid var(--border-hot);
+            border-radius: 10px; padding: 1.3rem 1rem; text-align: center;
+        }
+        .eval .big { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--green); }
+        .eval .cap { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.4rem; }
+
+        /* consistency matrix */
+        .matrix-wrap { overflow-x: auto; }
+        table.matrix { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-family: var(--font-mono); }
+        table.matrix th, table.matrix td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+        table.matrix th { color: var(--text-dim); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 1px; }
+        table.matrix td.marker { color: var(--text-mid); }
+        table.matrix td.val { color: var(--text-dim); }
+        .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.4rem; }
+        .dot.consistent { background: var(--green); }
+        .dot.divergent  { background: var(--cyan); }
+        .dot.needs      { background: var(--amber); }
+        .dot.drift      { background: var(--red); }
+        .legend { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-dim); margin-top: 0.8rem; }
+
+        /* compute economics */
+        .ce-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 0.9rem; }
+        .ce-row .k { color: var(--text-dim); }
+        .ce-row .v { color: var(--green); }
+        .bar-row { display: grid; grid-template-columns: 120px 1fr 70px; align-items: center; gap: 0.7rem; margin: 0.4rem 0; font-family: var(--font-mono); font-size: 0.8rem; }
+        .bar-row .name { color: var(--text-mid); }
+        .bar-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; }
+        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--green)); }
+        .bar-row .h { color: var(--text-dim); text-align: right; }
+
+        /* rpkg + pipeline */
+        .pill-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+        .pill {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.6rem 0.9rem; font-family: var(--font-mono); font-size: 0.8rem;
+        }
+        .pill a { color: var(--cyan); text-decoration: none; }
+        .pill .ver { color: var(--green); }
+        .pill .dim { color: var(--text-dim); }
+
+        footer {
+            border-top: 1px solid var(--rule); padding: 2.5rem 0 4rem;
+            font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-dim);
+        }
+        footer a { color: var(--cyan); text-decoration: none; }
+        footer .row { margin: 0.3rem 0; }
+
+        .err { color: var(--red); font-family: var(--font-mono); text-align: center; padding: 2rem; }
+    </style>
+</head>
+<body>
+    <!-- Shared cosmic nav (inlined per econstellar convention) -->
+    <nav class="cosmic-nav-enhanced" id="nav-container">
+        <div class="cosmic-nav-container">
+            <a href="index.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Main Portal</span></a>
+            <a href="research-programs.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Research Programs</span></a>
+            <a href="research-engine.html" class="cosmic-nav-link mcp-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Research Engine</span></a>
+            <a href="dashboard.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Command Center</span></a>
+            <a href="mission-control.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Mission Control</span></a>
+            <a href="rock-universe.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Rock Universe</span></a>
+            <a href="albums.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">The Albums</span></a>
+        </div>
+    </nav>
+
+    <div class="wrap">
+        <!-- HERO -->
+        <header class="hero">
+            <h1>THE RESEARCH ENGINE</h1>
+            <div class="tagline">AI in Finance &amp; Economics · SHSSM · IIT Bhubaneswar</div>
+            <p class="lede">A unified long-memory + multi-scale-wavelet + information-theoretic + network-formation substrate. Five frameworks. One engine. Open by design.</p>
+            <div class="stamp">
+                snapshot <span id="engine-version">…</span> · generated <span id="snapshot-ts">…</span>
+                <button id="refresh-btn">refresh ↻</button>
+            </div>
+        </header>
+
+        <div id="content"><!-- populated by JS --></div>
+
+        <footer>
+            <div class="row"><b style="color:var(--text-mid)">PI:</b> Dr. Avishek Bhandari · School of Humanities, Social Sciences &amp; Management · IIT Bhubaneswar</div>
+            <div class="row"><b style="color:var(--text-mid)">email:</b> <a href="mailto:avishekb@iitbbs.ac.in">avishekb@iitbbs.ac.in</a> · <b style="color:var(--text-mid)">repo:</b> <a href="https://github.com/avishekb9" target="_blank">github.com/avishekb9</a></div>
+            <div class="row" id="footer-stamp"></div>
+        </footer>
+    </div>
+
+    <script type="module">
+        const DISPLAY_ORDER = ['namh', 'mcpfm', 'contagion-channels', 'waveqte', 'commodity'];
+        const STATUS_LABEL = {
+            concept: 'Concept', working_paper: 'Working Paper', arxiv_preprint: 'arXiv Preprint',
+            under_review: 'Under Review', in_revision: 'In Revision', accepted: 'Accepted', published: 'Published'
+        };
+        const DOT = { consistent: 'consistent', intentionally_divergent: 'divergent', needs_PI_decision: 'needs', drift: 'drift' };
+
+        const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+        const inr = n => '₹' + Number(n).toLocaleString('en-IN');
+
+        async function main() {
+            let snap;
+            try {
+                snap = await fetch('./assets/research-engine.json', { cache: 'no-store' }).then(r => {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.json();
+                });
+            } catch (e) {
+                document.getElementById('content').innerHTML =
+                    `<div class="err">Could not load engine snapshot: ${esc(e.message)}<br>Run <code>node papers/research-engine/aggregator/aggregate.mjs</code> to regenerate.</div>`;
+                return;
+            }
+
+            // version gate (fail loud on major mismatch — DATA_CONTRACT §9)
+            if (String(snap.engine_version).split('.')[0] !== '0') {
+                document.getElementById('content').innerHTML =
+                    `<div class="err">Snapshot version ${esc(snap.engine_version)} is incompatible with this page (expects v0.x).</div>`;
+                return;
+            }
+
+            document.getElementById('engine-version').textContent = 'v' + snap.engine_version;
+            document.getElementById('snapshot-ts').textContent = snap.generated_at_utc;
+            document.getElementById('footer-stamp').textContent =
+                `engine snapshot v${snap.engine_version} · ${snap.generated_at_utc}`;
+
+            const fw = [...snap.frameworks].sort(
+                (a, b) => DISPLAY_ORDER.indexOf(a.id) - DISPLAY_ORDER.indexOf(b.id)
+            );
+
+            document.getElementById('content').innerHTML = [
+                renderSubstrate(snap.substrate),
+                renderFrameworks(fw),
+                renderEvaluators(snap, fw),
+                renderMatrix(snap.consistency_markers, fw),
+                renderCompute(snap.compute_economics, fw),
+                renderPackagesAndPipeline(snap),
+                renderLiveIntelShell()
+            ].join('');
+            // NEURICX live-intel is a separate running engine (localhost:3100 or
+            // Cloud Run); populate async + degrade gracefully if unreachable.
+            populateLiveIntel();
+        }
+
+        // NEURICX endpoint: ?neuricx=<url> override, else localhost dev default.
+        const NEURICX_BASE = new URLSearchParams(location.search).get('neuricx')
+            || 'http://127.0.0.1:3100';
+
+        function renderLiveIntelShell() {
+            return section('§8', 'Live Intelligence — NEURICX',
+                `<div class="li-status" id="li-status">connecting to NEURICX engine…</div>
+                 <div id="li-body"></div>`);
+        }
+
+        async function populateLiveIntel() {
+            const statusEl = document.getElementById('li-status');
+            const bodyEl = document.getElementById('li-body');
+            if (!statusEl || !bodyEl) return;
+            try {
+                const ctrl = new AbortController();
+                const t = setTimeout(() => ctrl.abort(), 6000);
+                const d = await fetch(`${NEURICX_BASE}/api/neuricx/intel?q=${encodeURIComponent('(economy OR financial OR trade OR tariff OR inflation OR central bank)')}&n=12&days=3`, { signal: ctrl.signal }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+                clearTimeout(t);
+                const staleBadge = d.stale ? ' · <span class="off">STALE (last good pull)</span>' : '';
+                statusEl.innerHTML = `<span class="on">● live</span> · ${d.article_count} articles · ${esc(d.sources.news)} → ${esc(d.sources.classifier)}${staleBadge} · ${esc(d.generated_at_utc)}`;
+                const chans = Object.entries(d.summary.by_channel)
+                    .map(([k, v]) => `<div class="li-chan"><div class="n">${v.count}</div><div class="l">${esc(k)}</div></div>`).join('');
+                const stressPct = Math.round((d.summary.stress_index || 0) * 100);
+                const feed = d.articles.slice(0, 8).map(a =>
+                    `<div class="li-art"><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc((a.title || '(untitled)'))}</a>` +
+                    `<span class="tag">${esc(a.channel)} · ${esc(a.location || 'Global')} · ${a.relevance != null ? a.relevance.toFixed(2) : '–'}</span></div>`).join('');
+                bodyEl.innerHTML =
+                    `<div class="li-chans">${chans}<div class="li-chan"><div class="n">${stressPct}%</div><div class="l">risk-off stress index</div></div></div>` +
+                    `<div class="li-feed">${feed}</div>`;
+            } catch (e) {
+                statusEl.innerHTML = `<span class="off">● engine offline</span> — the live news engine is a separate running service.`;
+                bodyEl.innerHTML =
+                    `<div class="li-offline">NEURICX live-intel is not reachable from this page (it runs as a Node service on <code>:3100</code> locally, or a Cloud Run deployment). ` +
+                    `Start it with <code>node ivy-fineco/neuricx/server/neuricx-server.mjs</code>, or pass <code>?neuricx=&lt;url&gt;</code> to point at a deployment. ` +
+                    `Source: <a href="https://github.com/avishekb9/NEURICX/tree/main/live-intel" target="_blank">github.com/avishekb9/NEURICX</a>.</div>`;
+            }
+        }
+
+        function renderSubstrate(sub) {
+            const cards = sub.primitives.map(p => {
+                const libs = (sub.libraries[p] || []).join(' · ');
+                return `<div class="prim-card">
+                    <h3>${esc(p.replace(/_/g, ' '))}</h3>
+                    <div class="libs">${esc(libs) || '—'}</div>
+                </div>`;
+            }).join('');
+            return section('§1', 'Substrate Primitives',
+                `<div class="grid substrate-grid">${cards}</div>`);
+        }
+
+        function renderFrameworks(fw) {
+            const cards = fw.map(f => {
+                const live = (f.status === 'arxiv_preprint' || f.status === 'published' || f.status === 'accepted');
+                const metrics = (f.headline_metrics || []).slice(0, 4).map(m => {
+                    const unit = m.unit && m.unit !== 'dimensionless' && m.unit !== 'qualitative' ? ' ' + esc(m.unit) : '';
+                    const liveTag = m.source === 'live' ? `<span class="live-tag" title="computed live from ${esc(m.live_source_file || 'source file')}">live</span>` : '';
+                    return `<div class="metric"><div class="v">${esc(m.value)}${unit}${liveTag}</div><div class="l">${esc(m.label)}</div></div>`;
+                }).join('');
+                const subtrate = (f.engine_instantiation || []).map(p => p.replace(/_/g, '-')).join(' + ');
+                const links = buildLinks(f);
+                return `<div class="fw-card">
+                    <div class="fw-head">
+                        <span class="fw-id">${esc(f.id.toUpperCase())}</span>
+                        <span class="fw-badge ${live ? 'live' : ''}">${esc(STATUS_LABEL[f.status] || f.status)}</span>
+                    </div>
+                    <div class="fw-title">${esc(f.title)}</div>
+                    <div class="fw-q">${esc(f.question)}</div>
+                    <div class="metrics">${metrics}</div>
+                    <div class="fw-sub">Substrate: <b>${esc(subtrate)}</b></div>
+                    <div class="fw-links">${links}</div>
+                </div>`;
+            }).join('');
+            return section('§2', `Frameworks (${fw.length})`, cards);
+        }
+
+        function buildLinks(f) {
+            const out = [];
+            const m = f.manuscript || (f.manuscripts && Object.values(f.manuscripts)[0]);
+            if (m) out.push(`<a href="#" title="${esc(m)}">PDF</a>`);
+            if (f.arxiv_doi) out.push(`<a href="https://doi.org/${esc(f.arxiv_doi)}" target="_blank">arXiv ↗</a>`);
+            (f.cran_packages || []).forEach(p => out.push(`<a href="https://cran.r-project.org/package=${esc(p)}" target="_blank">CRAN: ${esc(p)} ↗</a>`));
+            return out.join('');
+        }
+
+        function renderEvaluators(snap, fw) {
+            const cran = snap.r_packages.filter(p => p.cran_published).length;
+            const arxiv = fw.filter(f => f.arxiv_doi).length;
+            const hours = Object.values(snap.compute_economics.hours_used_by_framework).reduce((a, b) => a + b, 0);
+            const cards = [
+                [fw.length, 'papers in flight'],
+                [cran, 'CRAN packages live'],
+                [arxiv, 'arXiv preprints'],
+                [inr(snap.compute_economics.credit_remaining_inr), 'credit runway'],
+                [hours.toFixed(0) + ' h', 'engine hours used']
+            ].map(([b, c]) => `<div class="eval"><div class="big">${esc(b)}</div><div class="cap">${esc(c)}</div></div>`).join('');
+            const health = snap.health.all_papers_compile ? 'all papers compile ✓' : 'compile issues ⚠';
+            const liveCount = snap.health.live_metrics != null
+                ? ` · ${snap.health.live_metrics}/${snap.health.total_metrics} headline metrics computed live from source files`
+                : '';
+            return section('§3', 'Live Evaluators',
+                `<div class="eval-strip">${cards}</div>
+                 <div class="legend" style="margin-top:1rem">Last engine sync: ${esc(snap.generated_at_utc)} · ${esc(health)}${esc(liveCount)}</div>`);
+        }
+
+        function renderMatrix(markers, fw) {
+            const ids = fw.map(f => f.id);
+            const head = `<tr><th>Marker</th>${ids.map(i => `<th>${esc(i)}</th>`).join('')}<th></th></tr>`;
+            const rows = markers.map(mk => {
+                const cells = ids.map(i => {
+                    const v = mk.per_framework[i];
+                    return `<td class="val">${v === null || v === undefined ? '—' : esc(v)}</td>`;
+                }).join('');
+                const dotClass = DOT[mk.status] || 'divergent';
+                return `<tr><td class="marker">${esc(mk.marker.replace(/_/g, ' '))}</td>${cells}<td><span class="dot ${dotClass}" title="${esc(mk.status)}"></span></td></tr>`;
+            }).join('');
+            return section('§4', `Cross-Paper Consistency (${markers.length} markers × ${fw.length} papers)`,
+                `<div class="matrix-wrap"><table class="matrix"><thead>${head}</thead><tbody>${rows}</tbody></table></div>
+                 <div class="legend"><span class="dot consistent"></span>consistent &nbsp; <span class="dot divergent"></span>intentionally divergent &nbsp; <span class="dot needs"></span>needs PI decision &nbsp; <span class="dot drift"></span>drift</div>`);
+        }
+
+        function renderCompute(ce, fw) {
+            const rows = [
+                ['Credit cap', inr(ce.credit_cap_inr)],
+                ['Credit used', inr(ce.credit_used_inr) + (ce.credit_used_inr === 0 ? '  (stub — Phase 4 wires live)' : '')],
+                ['Credit remaining', inr(ce.credit_remaining_inr)],
+                ['Expiry', esc(ce.credit_expiry_date)]
+            ].map(([k, v]) => `<div class="ce-row"><span class="k">${esc(k)}</span><span class="v">${v}</span></div>`).join('');
+            const maxH = Math.max(1, ...Object.values(ce.hours_used_by_framework));
+            const bars = DISPLAY_ORDER.filter(id => id in ce.hours_used_by_framework).map(id => {
+                const h = ce.hours_used_by_framework[id];
+                return `<div class="bar-row"><span class="name">${esc(id)}</span><div class="bar-track"><div class="bar-fill" style="width:${(h / maxH * 100).toFixed(0)}%"></div></div><span class="h">${h.toFixed(2)} h</span></div>`;
+            }).join('');
+            return section('§5', 'Compute Economics',
+                `${rows}<div style="margin-top:1.2rem">${bars}</div>
+                 <div class="legend" style="margin-top:0.8rem">Last billing sync: ${esc(ce.last_billing_sync_utc || 'not yet wired (Phase 4)')}</div>`);
+        }
+
+        function renderPackagesAndPipeline(snap) {
+            const pkgs = snap.r_packages.map(p => {
+                const link = p.url ? `<a href="${esc(p.url)}" target="_blank">${esc(p.name)}</a>` : esc(p.name);
+                const pub = p.cran_published ? ` <span class="dim">· CRAN ${esc(p.cran_published)}</span>` : ' <span class="dim">· local</span>';
+                return `<div class="pill">${link} <span class="ver">${esc(p.version)}</span>${pub}</div>`;
+            }).join('');
+            const pipe = snap.publication_pipeline.map(s => {
+                const venue = s.target_venue ? ` → ${esc(s.target_venue)}` : '';
+                return `<div class="pill">${esc(s.framework)} <span class="dim">${esc(s.stage)}${venue}</span></div>`;
+            }).join('');
+            return section('§6', 'R Packages & Publication Pipeline',
+                `<div class="sec-label" style="margin-bottom:0.6rem">R Packages</div><div class="pill-row" style="margin-bottom:1.5rem">${pkgs}</div>
+                 <div class="sec-label" style="margin-bottom:0.6rem">Publication Pipeline</div><div class="pill-row">${pipe}</div>`);
+        }
+
+        function section(label, title, body) {
+            return `<section><div class="sec-label">${esc(label)}</div><h2 class="sec-title">${esc(title)}</h2>${body}</section>`;
+        }
+
+        document.getElementById('refresh-btn').addEventListener('click', () => location.reload());
+        main();
+    </script>
+</body>
+</html>
