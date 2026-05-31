@@ -462,5 +462,55 @@
         document.getElementById('refresh-btn').addEventListener('click', () => location.reload());
         main();
     </script>
+
+    <!-- ============================================================
+         SHSSM Econometrics Analyst — Dialogflow Messenger widget
+         Agent : fd984817-4292-4bc2-af78-f4551bf8ecbc (Dialogflow CX, global)
+         Project: hopeful-flash-485308-v3
+         Backend: Cloud Run compute engine (run_analysis tool) + Gemini 2.5 Flash
+         Enable the "Dialogflow Messenger" integration with UNAUTHENTICATED
+         access (and an avishekb9.github.io domain allowlist) in the CX console
+         so anonymous visitors can send messages.
+         ============================================================ -->
+    <link rel="stylesheet"
+          href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+    <df-messenger
+        location="global"
+        project-id="hopeful-flash-485308-v3"
+        agent-id="fd984817-4292-4bc2-af78-f4551bf8ecbc"
+        language-code="en"
+        max-query-length="-1">
+      <df-messenger-chat-bubble chat-title="SHSSM Econometrics Analyst"></df-messenger-chat-bubble>
+    </df-messenger>
+    <style>
+      df-messenger {
+        z-index: 900;
+        position: fixed;
+        bottom: 18px;
+        right: 18px;
+        --df-messenger-font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+        --df-messenger-font-color: #c9d1d9;
+        --df-messenger-chat-background: #050507;
+        --df-messenger-message-user-background: #0c1622;
+        --df-messenger-message-bot-background: #0a0f14;
+        --df-messenger-message-border-radius: 6px;
+        --df-messenger-titlebar-background: #000000;
+        --df-messenger-titlebar-font-color: #00d4ff;
+        --df-messenger-titlebar-border-bottom: 1px solid rgba(0,212,255,0.25);
+        --df-messenger-input-background: #0a0f14;
+        --df-messenger-input-font-color: #ffffff;
+        --df-messenger-input-placeholder-font-color: #6b7280;
+        --df-messenger-send-icon-color: #00ff88;
+        --df-messenger-focus-color: #00d4ff;
+        --df-messenger-chat-bubble-background: #00d4ff;
+        --df-messenger-chat-bubble-icon-color: #000000;
+        --df-messenger-chat-bubble-size: 56px;
+        --df-messenger-chat-border-radius: 10px;
+        --df-messenger-chat-window-height: 560px;
+        --df-messenger-chat-window-width: 400px;
+        --df-messenger-titlebar-title-font-weight: 600;
+      }
+    </style>
 </body>
 </html>
