@@ -1,208 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Research Engine — AI in Finance & Economics · SHSSM IIT Bhubaneswar</title>
-    <link rel="stylesheet" href="assets/cosmic-nav.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&family=Orbitron:wght@500;700;900&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Engine — SHSSM IIT Bhubaneswar · AI in Finance & Economics</title>
+<link rel="stylesheet" href="assets/cosmic-nav.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15); --hot:rgba(0,255,136,.32); --rule:rgba(255,255,255,.06);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --disp:'Orbitron',sans-serif;
+  --clip:polygon(0 10px,10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);line-height:1.5;font-size:14px}
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:radial-gradient(circle at 16% 10%,rgba(0,212,255,.06)0,transparent 42%),radial-gradient(circle at 84% 90%,rgba(0,255,136,.05)0,transparent 42%)}
+a{color:var(--cyan);text-decoration:none}
+.wrap{max-width:1320px;margin:0 auto;padding:0 1.2rem}
+.mono{font-family:var(--mono)}
 
-        :root {
-            --bg:           #000000;
-            --bg-soft:      #050507;
-            --bg-panel:     rgba(8, 10, 14, 0.82);
-            --border:       rgba(0, 212, 255, 0.18);
-            --border-hot:   rgba(0, 255, 136, 0.35);
-            --rule:         rgba(255, 255, 255, 0.05);
+/* header */
+header.hero{padding:2rem 0 1rem;text-align:center}
+header.hero h1{font-family:var(--disp);font-size:clamp(1.7rem,4vw,2.7rem);font-weight:900;letter-spacing:2px;
+  background:linear-gradient(120deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+header.hero .sub{font-family:var(--mono);font-size:.78rem;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin:.7rem 0 .4rem}
+.badge{display:inline-block;font-family:var(--mono);font-size:.7rem;color:var(--green);border:1px solid var(--hot);
+  border-radius:6px;padding:.25rem .7rem;margin:.3rem .2rem}
+.enginelinks{margin:.5rem 0;font-family:var(--mono);font-size:.76rem}
+.enginelinks a{margin:0 .5rem}
 
-            --text:         #ffffff;
-            --text-mid:     #c9d1d9;
-            --text-dim:     #6b7280;
+/* workbench grid */
+.bench{display:grid;grid-template-columns:300px 1fr;gap:1rem;margin:1.2rem 0}
+@media(max-width:900px){.bench{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.1rem 1.15rem}
+.panel h2{font-size:1.05rem;font-weight:600;margin-bottom:.2rem}
+.panel .lbl{font-family:var(--mono);font-size:.7rem;color:var(--dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem}
+.col-right{display:flex;flex-direction:column;gap:1rem;min-width:0}
 
-            --cyan:         #00d4ff;
-            --green:        #00ff88;
-            --amber:        #ffaa00;
-            --red:          #ff0040;
-            --violet:       #8a2be2;
+/* left rail controls */
+.field{margin-bottom:.85rem}
+.field label{display:block;font-family:var(--mono);font-size:.72rem;color:var(--mid);margin-bottom:.3rem}
+select,input[type=text],input[type=number]{width:100%;font-family:var(--mono);font-size:.82rem;background:var(--surface2);
+  color:var(--text);border:1px solid var(--border);border-radius:7px;padding:.45rem .6rem}
+.serieslist{max-height:160px;overflow:auto;border:1px solid var(--border);border-radius:7px;padding:.4rem .5rem;background:var(--surface2)}
+.serieslist label{display:flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.78rem;color:var(--mid);padding:.15rem 0;cursor:pointer}
+.serieslist input{width:auto}
+.runbtn{width:100%;font-family:var(--mono);font-size:.85rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;
+  cursor:pointer;background:rgba(0,255,136,.12);color:var(--green);border:1px solid var(--hot);clip-path:var(--clip);
+  padding:.65rem 1rem;margin-top:.4rem;transition:.18s}
+.runbtn:hover{background:rgba(0,255,136,.22)}
+.runbtn:disabled{opacity:.5;cursor:wait}
+.cachebadge{display:inline-block;font-family:var(--mono);font-size:.68rem;color:var(--amber);margin-left:.5rem}
+.mdesc{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.5rem;line-height:1.45}
 
-            --font-sans:    'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --font-mono:    'JetBrains Mono', 'SF Mono', Monaco, monospace;
-            --font-display: 'Orbitron', 'Space Grotesk', sans-serif;
-        }
+/* results */
+.kpirow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.7rem;margin-bottom:.9rem}
+.kpi{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:.85rem .8rem;text-align:center}
+.kpi .v{font-family:var(--mono);font-size:1.45rem;font-weight:600;color:var(--cyan)}
+.kpi .v.g{color:var(--green)} .kpi .v.r{color:var(--red)} .kpi .v.a{color:var(--amber)}
+.kpi .c{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-top:.3rem;text-transform:uppercase;letter-spacing:.5px}
+.verdict{font-family:var(--mono);font-size:.82rem;padding:.5rem .8rem;border-radius:7px;margin:.5rem 0}
+.verdict.g{background:rgba(0,255,136,.1);border:1px solid var(--hot);color:var(--green)}
+.verdict.r{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:var(--red)}
+.verdict.n{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);color:var(--amber)}
+table.rt{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.78rem;margin:.5rem 0}
+table.rt th,table.rt td{text-align:left;padding:.35rem .5rem;border-bottom:1px solid var(--rule);color:var(--mid)}
+table.rt th{color:var(--dim);text-transform:uppercase;font-size:.68rem;letter-spacing:.5px}
+table.rt td.num{color:var(--cyan);text-align:right}
+.bars{margin:.4rem 0}
+.barrow{display:grid;grid-template-columns:60px 1fr 56px;align-items:center;gap:.5rem;margin:.3rem 0;font-family:var(--mono);font-size:.74rem}
+.barrow .track{height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden}
+.barrow .fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.fillbar{height:12px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden;margin:.4rem 0}
+.fillbar .f{height:100%}
+svg.chart{width:100%;height:auto;display:block;overflow:visible;margin:.4rem 0}
+svg.chart text{font-family:var(--mono);font-size:9px;fill:var(--dim)}
+.axis{stroke:rgba(255,255,255,.12);stroke-width:1}
+.interp{font-family:var(--mono);font-size:.76rem;color:var(--mid);margin-top:.5rem;line-height:1.5}
+.subnote{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-top:.4rem}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+/* chat */
+.chatlog{height:280px;overflow:auto;display:flex;flex-direction:column;gap:.55rem;padding:.3rem;margin-bottom:.7rem}
+.bub{max-width:88%;padding:.55rem .8rem;border-radius:9px;font-size:.84rem;line-height:1.5}
+.bub.u{align-self:flex-end;background:var(--surface2);border:1px solid var(--border);color:var(--text)}
+.bub.a{align-self:flex-start;background:rgba(0,212,255,.06);border:1px solid var(--border);color:var(--mid)}
+.bub.a code{font-family:var(--mono);color:var(--green)}
+.bub.a strong{color:var(--cyan)}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.6rem}
+.chip{font-family:var(--mono);font-size:.7rem;color:var(--cyan);border:1px solid var(--border);border-radius:14px;
+  padding:.25rem .65rem;cursor:pointer;transition:.15s;background:var(--surface2)}
+.chip:hover{background:rgba(0,212,255,.12)}
+.chatin{display:flex;gap:.5rem}
+.chatin input{flex:1}
+.chatin button{font-family:var(--mono);font-size:.78rem;color:var(--green);background:rgba(0,255,136,.12);
+  border:1px solid var(--hot);border-radius:7px;padding:.45rem .9rem;cursor:pointer}
+.clearbtn{font-family:var(--mono);font-size:.68rem;color:var(--dim);background:none;border:none;cursor:pointer;float:right}
 
-        body {
-            font-family: var(--font-sans);
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            font-size: 16px;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+/* framework strip */
+.fwstrip{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.8rem;margin-top:.6rem}
+.fwcard{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:9px;
+  padding:.85rem .9rem;cursor:pointer;transition:.18s}
+.fwcard:hover{border-left-color:var(--green);background:rgba(0,212,255,.05)}
+.fwcard h3{font-family:var(--mono);font-size:.82rem;color:var(--green);margin-bottom:.25rem}
+.fwcard p{font-size:.74rem;color:var(--dim);line-height:1.4}
+.fwcard .fwlink{font-family:var(--mono);font-size:.68rem;color:var(--cyan);margin-top:.4rem;display:inline-block}
+.fwcard.soon{opacity:.6;cursor:default}
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                radial-gradient(circle at 20% 15%, rgba(0,212,255,0.06) 0%, transparent 45%),
-                radial-gradient(circle at 80% 85%, rgba(0,255,136,0.05) 0%, transparent 45%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .wrap { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-
-        /* hero */
-        .hero { padding: 5rem 0 3rem; text-align: center; }
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
-            font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(120deg, var(--cyan), var(--green));
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.1;
-        }
-        .hero .tagline {
-            font-family: var(--font-mono);
-            font-size: 0.95rem;
-            color: var(--cyan);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin: 1.2rem 0;
-        }
-        .hero p.lede {
-            max-width: 720px; margin: 0 auto;
-            color: var(--text-mid); font-size: 1.1rem;
-        }
-        .hero .stamp {
-            margin-top: 1.5rem; font-family: var(--font-mono);
-            font-size: 0.8rem; color: var(--text-dim);
-        }
-        .hero .stamp button {
-            background: transparent; border: 1px solid var(--border);
-            color: var(--cyan); font-family: var(--font-mono);
-            font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 6px;
-            cursor: pointer; margin-left: 0.5rem; transition: all .2s;
-        }
-        .hero .stamp button:hover { background: rgba(0,212,255,0.1); }
-
-        /* section scaffolding */
-        section { padding: 2.5rem 0; border-top: 1px solid var(--rule); }
-        .sec-label {
-            font-family: var(--font-mono); font-size: 0.8rem;
-            color: var(--text-dim); text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 0.4rem;
-        }
-        .sec-title {
-            font-size: 1.6rem; font-weight: 600; margin-bottom: 1.5rem;
-            color: var(--text);
-        }
-
-        /* substrate grid */
-        .grid { display: grid; gap: 1rem; }
-        .substrate-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
-        .prim-card {
-            background: var(--bg-panel); border: 1px solid var(--border);
-            border-radius: 10px; padding: 1.1rem 1.2rem;
-            transition: transform .2s, border-color .2s;
-        }
-        .prim-card:hover { transform: translateY(-3px); border-color: var(--cyan); }
-        .prim-card h3 {
-            font-family: var(--font-mono); font-size: 0.85rem;
-            color: var(--green); text-transform: uppercase; letter-spacing: 1px;
-            margin-bottom: 0.6rem;
-        }
-        .prim-card .libs { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
-
-        /* framework cards */
-        .fw-card {
-            background: var(--bg-panel); border: 1px solid var(--border);
-            border-left: 3px solid var(--cyan);
-            border-radius: 10px; padding: 1.5rem 1.6rem; margin-bottom: 1.2rem;
-        }
-        .fw-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.8rem; margin-bottom: 0.3rem; }
-        .fw-id { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; color: var(--text); letter-spacing: 1px; }
-        .fw-badge {
-            font-family: var(--font-mono); font-size: 0.68rem; padding: 0.18rem 0.6rem;
-            border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;
-            border: 1px solid var(--border); color: var(--text-dim);
-        }
-        .fw-badge.live { color: var(--green); border-color: var(--border-hot); }
-        .fw-title { color: var(--text-mid); font-size: 1rem; margin-bottom: 0.6rem; }
-        .fw-q { color: var(--text-dim); font-size: 0.92rem; font-style: italic; margin-bottom: 1rem; }
-        .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 0.7rem; margin-bottom: 1rem; }
-        .metric { background: rgba(0,212,255,0.04); border-radius: 8px; padding: 0.7rem 0.9rem; }
-        .metric .v { font-family: var(--font-mono); font-size: 1.15rem; font-weight: 600; color: var(--cyan); }
-        .metric .l { font-size: 0.76rem; color: var(--text-dim); margin-top: 0.2rem; }
-        .live-tag { display: inline-block; margin-left: 0.45rem; font-size: 0.58rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.5px; color: var(--green); border: 1px solid var(--border-hot); border-radius: 4px; padding: 0 0.32rem; vertical-align: middle; }
-        .fw-sub { font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim); margin-bottom: 0.8rem; }
-        .fw-sub b { color: var(--green); font-weight: 500; }
-        .fw-links a {
-            display: inline-block; font-family: var(--font-mono); font-size: 0.78rem;
-            color: var(--cyan); text-decoration: none; border: 1px solid var(--border);
-            padding: 0.25rem 0.7rem; border-radius: 6px; margin: 0 0.4rem 0.4rem 0; transition: all .2s;
-        }
-        .fw-links a:hover { background: rgba(0,212,255,0.1); }
-
-        /* evaluator strip */
-        .eval-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px,1fr)); gap: 1rem; }
-        .eval {
-            background: var(--bg-panel); border: 1px solid var(--border-hot);
-            border-radius: 10px; padding: 1.3rem 1rem; text-align: center;
-        }
-        .eval .big { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--green); }
-        .eval .cap { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.4rem; }
-
-        /* consistency matrix */
-        .matrix-wrap { overflow-x: auto; }
-        table.matrix { width: 100%; border-collapse: collapse; font-size: 0.8rem; font-family: var(--font-mono); }
-        table.matrix th, table.matrix td { padding: 0.5rem 0.7rem; text-align: left; border-bottom: 1px solid var(--rule); white-space: nowrap; }
-        table.matrix th { color: var(--text-dim); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 1px; }
-        table.matrix td.marker { color: var(--text-mid); }
-        table.matrix td.val { color: var(--text-dim); }
-        .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 0.4rem; }
-        .dot.consistent { background: var(--green); }
-        .dot.divergent  { background: var(--cyan); }
-        .dot.needs      { background: var(--amber); }
-        .dot.drift      { background: var(--red); }
-        .legend { font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-dim); margin-top: 0.8rem; }
-
-        /* compute economics */
-        .ce-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--rule); font-family: var(--font-mono); font-size: 0.9rem; }
-        .ce-row .k { color: var(--text-dim); }
-        .ce-row .v { color: var(--green); }
-        .bar-row { display: grid; grid-template-columns: 120px 1fr 70px; align-items: center; gap: 0.7rem; margin: 0.4rem 0; font-family: var(--font-mono); font-size: 0.8rem; }
-        .bar-row .name { color: var(--text-mid); }
-        .bar-track { height: 10px; background: rgba(255,255,255,0.05); border-radius: 5px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--green)); }
-        .bar-row .h { color: var(--text-dim); text-align: right; }
-
-        /* rpkg + pipeline */
-        .pill-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
-        .pill {
-            background: var(--bg-panel); border: 1px solid var(--border);
-            border-radius: 8px; padding: 0.6rem 0.9rem; font-family: var(--font-mono); font-size: 0.8rem;
-        }
-        .pill a { color: var(--cyan); text-decoration: none; }
-        .pill .ver { color: var(--green); }
-        .pill .dim { color: var(--text-dim); }
-
-        footer {
-            border-top: 1px solid var(--rule); padding: 2.5rem 0 4rem;
-            font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-dim);
-        }
-        footer a { color: var(--cyan); text-decoration: none; }
-        footer .row { margin: 0.3rem 0; }
-
-        .err { color: var(--red); font-family: var(--font-mono); text-align: center; padding: 2rem; }
-    </style>
+/* neuricx strip */
+.nxlist{display:flex;flex-direction:column;gap:.5rem;margin-top:.5rem}
+.nxart{display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:center;background:var(--surface2);
+  border:1px solid var(--border);border-radius:8px;padding:.55rem .8rem}
+.nxart a{color:var(--text);font-size:.82rem} .nxart a:hover{color:var(--cyan)}
+.nxchip{font-family:var(--mono);font-size:.64rem;text-transform:uppercase;padding:.1rem .45rem;border-radius:5px;border:1px solid var(--border);color:var(--mid)}
+.nxhead{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.stresspill{font-family:var(--mono);font-size:.74rem;padding:.2rem .7rem;border-radius:6px}
+.msg{text-align:center;color:var(--dim);font-family:var(--mono);padding:1.4rem;font-size:.82rem}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:s .7s linear infinite;vertical-align:middle;margin-right:.5rem}
+@keyframes s{to{transform:rotate(360deg)}}
+.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:.6rem .9rem;font-family:var(--mono);font-size:.76rem;color:var(--amber)}
+footer{border-top:1px solid var(--rule);padding:1.6rem 0 2.4rem;font-family:var(--mono);font-size:.76rem;color:var(--dim);text-align:center;margin-top:1rem}
+</style>
 </head>
 <body>
     <!-- Shared cosmic nav (inlined per econstellar convention) -->
@@ -218,299 +139,317 @@
         </div>
     </nav>
 
-    <div class="wrap">
-        <!-- HERO -->
-        <header class="hero">
-            <h1>THE RESEARCH ENGINE</h1>
-            <div class="tagline">AI in Finance &amp; Economics · SHSSM · IIT Bhubaneswar</div>
-            <p class="lede">A unified long-memory + multi-scale-wavelet + information-theoretic + network-formation substrate. Five frameworks. One engine. Open by design.</p>
-            <div class="stamp">
-                snapshot <span id="engine-version">…</span> · generated <span id="snapshot-ts">…</span>
-                <button id="refresh-btn">refresh ↻</button>
-            </div>
-        </header>
+<div class="wrap">
+  <header class="hero">
+    <h1>THE RESEARCH ENGINE</h1>
+    <div class="sub">AI in Finance &amp; Economics · SHSSM IIT Bhubaneswar</div>
+    <div>
+      <span class="badge">8-primitive substrate</span>
+      <span class="badge">5 frameworks</span>
+      <span class="badge" id="catbadge">live compute engine</span>
+    </div>
+    <div class="enginelinks">
+      <a href="https://shssm-compute-b7ui3oxaqq-el.a.run.app" target="_blank" rel="noopener">Compute API ↗</a> ·
+      <a href="https://neuricx-intel-672903689767.asia-south1.run.app" target="_blank" rel="noopener">NEURICX ↗</a> ·
+      <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">Source ↗</a>
+    </div>
+  </header>
 
-        <div id="content"><!-- populated by JS --></div>
-
-        <footer>
-            <div class="row"><b style="color:var(--text-mid)">PI:</b> Dr. Avishek Bhandari · School of Humanities, Social Sciences &amp; Management · IIT Bhubaneswar</div>
-            <div class="row"><b style="color:var(--text-mid)">email:</b> <a href="mailto:avishekb@iitbbs.ac.in">avishekb@iitbbs.ac.in</a> · <b style="color:var(--text-mid)">repo:</b> <a href="https://github.com/avishekb9" target="_blank">github.com/avishekb9</a></div>
-            <div class="row" id="footer-stamp"></div>
-        </footer>
+  <!-- Workbench: left rail + results/chat -->
+  <div class="bench">
+    <div class="panel" id="rail">
+      <div class="lbl">Workbench</div>
+      <h2>Run an analysis</h2>
+      <div class="field">
+        <label for="method">Method</label>
+        <select id="method"></select>
+      </div>
+      <div class="field" id="series-field">
+        <label id="series-label">Series</label>
+        <div class="serieslist" id="series"></div>
+      </div>
+      <div class="field" id="symbol-field" style="display:none">
+        <label for="symbol">Live symbol (Yahoo/FRED)</label>
+        <input id="symbol" type="text" value="^GSPC" placeholder="^GSPC, ^FTSE, SP500…"/>
+      </div>
+      <div id="dynparams"></div>
+      <button class="runbtn" id="run">▶ Run</button>
+      <div class="mdesc" id="mdesc"></div>
     </div>
 
-    <script type="module">
-        const DISPLAY_ORDER = ['namh', 'mcpfm', 'contagion-channels', 'waveqte', 'commodity'];
-        const STATUS_LABEL = {
-            concept: 'Concept', working_paper: 'Working Paper', arxiv_preprint: 'arXiv Preprint',
-            under_review: 'Under Review', in_revision: 'In Revision', accepted: 'Accepted', published: 'Published'
-        };
-        const DOT = { consistent: 'consistent', intentionally_divergent: 'divergent', needs_PI_decision: 'needs', drift: 'drift' };
+    <div class="col-right">
+      <div class="panel" id="results-panel">
+        <div class="lbl">Results <span class="cachebadge" id="cache"></span></div>
+        <div id="results"><div class="msg">Pick a method and series, then Run — or click a framework card below.</div></div>
+      </div>
 
-        const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-        const inr = n => '₹' + Number(n).toLocaleString('en-IN');
+      <div class="panel" id="chat-panel">
+        <div class="lbl">Analyst Chat <button class="clearbtn" id="chatclear">clear</button></div>
+        <div class="chips" id="chips"></div>
+        <div class="chatlog" id="chatlog"><div class="msg">Ask the SHSSM Econometrics Analyst a question.</div></div>
+        <div class="chatin"><input id="chatq" type="text" placeholder="e.g. Is the UK equity market stationary?"/><button id="chatsend">Send</button></div>
+      </div>
+    </div>
+  </div>
 
-        async function main() {
-            let snap;
-            try {
-                snap = await fetch('./assets/research-engine.json', { cache: 'no-store' }).then(r => {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.json();
-                });
-            } catch (e) {
-                document.getElementById('content').innerHTML =
-                    `<div class="err">Could not load engine snapshot: ${esc(e.message)}<br>Run <code>node papers/research-engine/aggregator/aggregate.mjs</code> to regenerate.</div>`;
-                return;
-            }
+  <!-- Framework strip -->
+  <div class="panel">
+    <div class="lbl">Substrate ⊕ Frameworks</div>
+    <h2>Five frameworks, one methodological substrate</h2>
+    <div class="fwstrip" id="fwstrip"></div>
+  </div>
 
-            // version gate (fail loud on major mismatch — DATA_CONTRACT §9)
-            if (String(snap.engine_version).split('.')[0] !== '0') {
-                document.getElementById('content').innerHTML =
-                    `<div class="err">Snapshot version ${esc(snap.engine_version)} is incompatible with this page (expects v0.x).</div>`;
-                return;
-            }
+  <!-- NEURICX strip -->
+  <div class="panel" style="margin-top:1rem">
+    <div class="nxhead">
+      <div><div class="lbl" style="margin:0">Live Intelligence · NEURICX</div></div>
+      <span class="stresspill" id="nxstress">…</span>
+      <span class="subnote" id="nxstamp"></span>
+    </div>
+    <div class="nxlist" id="nxlist"><div class="msg"><span class="spin"></span>loading live economic news…</div></div>
+  </div>
 
-            document.getElementById('engine-version').textContent = 'v' + snap.engine_version;
-            document.getElementById('snapshot-ts').textContent = snap.generated_at_utc;
-            document.getElementById('footer-stamp').textContent =
-                `engine snapshot v${snap.engine_version} · ${snap.generated_at_utc}`;
+  <footer>
+    The Research Engine · SHSSM IIT Bhubaneswar · compute engine + NEURICX + Vertex AI analyst.
+    Built on a verified open-source econometrics stack.
+  </footer>
+</div>
 
-            const fw = [...snap.frameworks].sort(
-                (a, b) => DISPLAY_ORDER.indexOf(a.id) - DISPLAY_ORDER.indexOf(b.id)
-            );
+<!-- ============================================================
+     SHSSM Econometrics Analyst — Dialogflow Messenger widget (floating bubble)
+     ============================================================ -->
+<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+<df-messenger location="global" project-id="hopeful-flash-485308-v3" agent-id="fd984817-4292-4bc2-af78-f4551bf8ecbc" language-code="en" max-query-length="-1">
+  <df-messenger-chat-bubble chat-title="SHSSM Econometrics Analyst"></df-messenger-chat-bubble>
+</df-messenger>
+<style>
+  df-messenger{z-index:900;position:fixed;bottom:18px;right:18px;
+    --df-messenger-font-family:'JetBrains Mono','SF Mono',Monaco,monospace;--df-messenger-font-color:#c9d1d9;
+    --df-messenger-chat-background:#050507;--df-messenger-message-user-background:#0c1622;--df-messenger-message-bot-background:#0a0f14;
+    --df-messenger-titlebar-background:#000;--df-messenger-titlebar-font-color:#00d4ff;--df-messenger-send-icon-color:#00ff88;
+    --df-messenger-chat-bubble-background:#00d4ff;--df-messenger-chat-bubble-icon-color:#000;--df-messenger-chat-bubble-size:56px;
+    --df-messenger-chat-window-height:560px;--df-messenger-chat-window-width:400px;}
+</style>
 
-            document.getElementById('content').innerHTML = [
-                renderSubstrate(snap.substrate),
-                renderFrameworks(fw),
-                renderEvaluators(snap, fw),
-                renderMatrix(snap.consistency_markers, fw),
-                renderCompute(snap.compute_economics, fw),
-                renderPackagesAndPipeline(snap),
-                renderLiveIntelShell()
-            ].join('');
-            // NEURICX live-intel is a separate running engine (localhost:3100 or
-            // Cloud Run); populate async + degrade gracefully if unreachable.
-            populateLiveIntel();
-        }
+<script>
+const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const NX="https://neuricx-intel-672903689767.asia-south1.run.app";
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const $=id=>document.getElementById(id);
+const SVGNS="http://www.w3.org/2000/svg";
+const sv=(t,a)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+const fixed=(x,d=4)=>typeof x==="number"?x.toFixed(d):x;
 
-        // NEURICX endpoint: ?neuricx=<url> override; localhost when viewed on a
-        // local dev server; else the public Cloud Run deployment (CORS-open) so
-        // the live section works from static GitHub Pages too.
-        const NEURICX_BASE = new URLSearchParams(location.search).get('neuricx')
-            || (location.hostname === '127.0.0.1' || location.hostname === 'localhost'
-                ? 'http://127.0.0.1:3100'
-                : 'https://neuricx-intel-672903689767.asia-south1.run.app');
+let CATALOG=null, SERIES=[];
 
-        function renderLiveIntelShell() {
-            const base = NEURICX_BASE;
-            return section('§8', 'Live Intelligence — NEURICX',
-                `<div class="li-status" id="li-status">connecting to NEURICX engine…</div>
-                 <div id="li-body"></div>
-                 <div class="li-links" style="margin-top:1rem;display:flex;gap:.6rem;flex-wrap:wrap">
-                   <a class="fw-links" href="${base}/" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.8rem;color:var(--cyan);border:1px solid var(--border);padding:.35rem .8rem;border-radius:6px;text-decoration:none">Open NEURICX dashboard ↗</a>
-                   <a href="${base}/combined.html" target="_blank" rel="noopener" style="font-family:var(--font-mono);font-size:.8rem;color:var(--green);border:1px solid var(--border-hot);padding:.35rem .8rem;border-radius:6px;text-decoration:none">News × Social BI view ↗</a>
-                 </div>`);
-        }
+/* ───── catalog-driven left rail ───── */
+async function loadCatalog(){
+  const r=await fetch(CE+"/api/compute/catalog"); const d=await r.json();
+  CATALOG=d.methods; SERIES=(d.datasets&&d.datasets.g20&&d.datasets.g20.series)||[];
+  const msel=$("method"); msel.innerHTML="";
+  Object.entries(CATALOG).forEach(([k,m])=>{const o=document.createElement("option");o.value=k;o.textContent=m.label||k;msel.appendChild(o);});
+  const sl=$("series"); sl.innerHTML="";
+  SERIES.forEach(s=>{const id="s_"+s;sl.insertAdjacentHTML("beforeend",
+    `<label><input type="checkbox" value="${esc(s)}" id="${id}">${esc(s)}</label>`);});
+  $("catbadge").textContent=Object.keys(CATALOG).length+" methods live";
+  msel.addEventListener("change",onMethod); onMethod();
+}
+function selectedSeries(){return [...document.querySelectorAll('#series input:checked')].map(c=>c.value);}
+function setSeries(arr){document.querySelectorAll('#series input').forEach(c=>{c.checked=arr.includes(c.value);});}
+function onMethod(){
+  const k=$("method").value, m=CATALOG[k]; $("mdesc").textContent=m.desc||"";
+  const isLive=k==="live_unit_root";
+  $("symbol-field").style.display=isLive?"block":"none";
+  $("series-field").style.display=isLive?"none":"block";
+  const n=m.params&&m.params.series&&m.params.series.n;
+  $("series-label").textContent=Array.isArray(n)?`Series (${n[0]}–${n[1]})`:(n===1?"Series (1)":"Series");
+  // dynamic params
+  const dp=$("dynparams"); dp.innerHTML="";
+  const skip={series:1};
+  Object.entries(m.params||{}).forEach(([pk,pv])=>{
+    if(skip[pk]) return;
+    const ph = pk==="tau"?"0.05": pk==="irf_h"?"10": pk==="p"?"7":"";
+    dp.insertAdjacentHTML("beforeend",
+      `<div class="field"><label for="p_${pk}">${esc(pk)} <span style="color:var(--dim)">(${esc(pv.type)}${pv.optional?", optional":""})</span></label>
+       <input id="p_${pk}" type="${pv.type==='num'?'text':'number'}" placeholder="${ph}"/></div>`);
+  });
+}
+function gatherParams(){
+  const k=$("method").value, m=CATALOG[k], params={};
+  if(k==="live_unit_root"){ params.symbol=$("symbol").value.trim()||"^GSPC"; }
+  else { params.series=selectedSeries(); }
+  Object.keys(m.params||{}).forEach(pk=>{
+    if(pk==="series") return;
+    const el=$("p_"+pk); if(el&&el.value.trim()!==""){params[pk]=m.params[pk].type==="num"?parseFloat(el.value):parseInt(el.value,10);}
+  });
+  return {method:k,params};
+}
 
-        async function populateLiveIntel() {
-            const statusEl = document.getElementById('li-status');
-            const bodyEl = document.getElementById('li-body');
-            if (!statusEl || !bodyEl) return;
-            try {
-                const ctrl = new AbortController();
-                const t = setTimeout(() => ctrl.abort(), 6000);
-                const d = await fetch(`${NEURICX_BASE}/api/neuricx/intel?q=${encodeURIComponent('(economy OR financial OR trade OR tariff OR inflation OR central bank)')}&n=12&days=3`, { signal: ctrl.signal }).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
-                clearTimeout(t);
-                const staleBadge = d.stale ? ' · <span class="off">STALE (last good pull)</span>' : '';
-                statusEl.innerHTML = `<span class="on">● live</span> · ${d.article_count} articles · ${esc(d.sources.news)} → ${esc(d.sources.classifier)}${staleBadge} · ${esc(d.generated_at_utc)}`;
-                const chans = Object.entries(d.summary.by_channel)
-                    .map(([k, v]) => `<div class="li-chan"><div class="n">${v.count}</div><div class="l">${esc(k)}</div></div>`).join('');
-                const stressPct = Math.round((d.summary.stress_index || 0) * 100);
-                const feed = d.articles.slice(0, 8).map(a =>
-                    `<div class="li-art"><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc((a.title || '(untitled)'))}</a>` +
-                    `<span class="tag">${esc(a.channel)} · ${esc(a.location || 'Global')} · ${a.relevance != null ? a.relevance.toFixed(2) : '–'}</span></div>`).join('');
-                bodyEl.innerHTML =
-                    `<div class="li-chans">${chans}<div class="li-chan"><div class="n">${stressPct}%</div><div class="l">risk-off stress index</div></div></div>` +
-                    `<div class="li-feed">${feed}</div>`;
-            } catch (e) {
-                statusEl.innerHTML = `<span class="off">● engine offline</span> — the live news engine is a separate running service.`;
-                bodyEl.innerHTML =
-                    `<div class="li-offline">NEURICX live-intel is not reachable from this page (it runs as a Node service on <code>:3100</code> locally, or a Cloud Run deployment). ` +
-                    `Start it with <code>node ivy-fineco/neuricx/server/neuricx-server.mjs</code>, or pass <code>?neuricx=&lt;url&gt;</code> to point at a deployment. ` +
-                    `Source: <a href="https://github.com/avishekb9/NEURICX/tree/main/live-intel" target="_blank">github.com/avishekb9/NEURICX</a>.</div>`;
-            }
-        }
+/* ───── run + render ───── */
+async function run(){
+  const body=gatherParams(); const k=body.method, m=CATALOG[k];
+  // validate series count client-side
+  if(k!=="live_unit_root"){
+    const n=m.params.series.n, c=body.params.series.length;
+    if(Array.isArray(n)?(c<n[0]||c>n[1]):c!==n){ $("results").innerHTML=`<div class="warn">${m.label} needs ${Array.isArray(n)?n[0]+"–"+n[1]:n} series; you selected ${c}.</div>`; return; }
+  }
+  $("run").disabled=true; $("cache").textContent="";
+  $("results").innerHTML='<div class="msg"><span class="spin"></span>running '+esc(m.label)+' in sandbox…</div>';
+  try{
+    const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    const d=await r.json();
+    if(!d.ok){ $("results").innerHTML=`<div class="warn">${esc(d.error||"analysis failed")}</div>`; }
+    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; renderResult(k,d.result); }
+  }catch(e){ $("results").innerHTML=`<div class="warn">request failed: ${esc(e.message)}</div>`; }
+  $("run").disabled=false;
+}
+function kpi(v,c,cls){return `<div class="kpi"><div class="v ${cls||''}">${esc(v)}</div><div class="c">${esc(c)}</div></div>`;}
+function renderResult(k,r){
+  const el=$("results"); let h="";
+  if(k==="unit_root"){
+    const adf=r.adf, kp=r.kpss, stat=adf.reject_unit_root_5pct;
+    h+='<div class="kpirow">'+kpi(fixed(adf.statistic,2),"ADF stat",stat?'g':'r')+kpi(fixed(adf.crit['5pct'],2),"5% crit")+
+       kpi(fixed(kp.statistic,3),"KPSS stat")+kpi(fixed(kp.p_value,2),"KPSS p")+'</div>';
+    h+=`<div class="verdict ${stat&&kp.stationary_5pct?'g':'r'}">${esc(r.interpretation)} · series: ${esc(r.series)} (n=${r.n})</div>`;
+  }
+  else if(k==="garch"){
+    const co=r.coefficients;
+    h+='<div class="kpirow">'+kpi(fixed(co.a1,3),"α (ARCH)")+kpi(fixed(co.b1,3),"β (GARCH)")+
+       kpi(fixed(r.persistence,3),"persistence α+β",r.high_persistence?'a':'g')+'</div>';
+    const pct=Math.min(100,r.persistence*100);
+    h+=`<div class="fillbar"><div class="f" style="width:${pct}%;background:${r.persistence>0.97?'var(--red)':'linear-gradient(90deg,var(--cyan),var(--green))'}"></div></div>`;
+    h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="wavelet"){
+    h+='<div class="bars">';
+    (r.scales||[]).forEach(s=>{h+=`<div class="barrow"><span>${esc(s.scale)}</span><span class="track"><span class="fill" style="width:${Math.min(100,s.pct_of_total)}%"></span></span><span>${fixed(s.pct_of_total,1)}%</span></div>`;});
+    h+='</div>'; h+=`<div class="subnote">horizon: ${esc((r.scales||[]).map(s=>s.scale+' '+s.horizon).join(' · '))}</div>`;
+    h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="dfa_hurst"){
+    const H=r.hurst, cls=H>0.55?'g':H<0.45?'r':'a';
+    h+='<div class="kpirow">'+kpi(fixed(H,3),"Hurst H",cls)+kpi(r.n_boxes,"boxes")+kpi(r.n,"obs")+'</div>';
+    h+=`<div class="verdict ${cls==='g'?'g':cls==='r'?'r':'n'}">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="var_irf"){
+    h+='<div class="kpirow">'+kpi(r.lag_order,"VAR lag")+kpi(fixed(r.max_root,3),"max root",r.stable?'g':'r')+
+       kpi(r.stable?'stable':'unstable',"stability",r.stable?'g':'r')+'</div>';
+    h+=irfSVG(r.irf,r.irf_shock);
+    if(r.adj_r2){ h+='<table class="rt"><tr><th>equation</th><th>adj R²</th></tr>';
+      Object.entries(r.adj_r2).forEach(([s,v])=>{h+=`<tr><td>${esc(s)}</td><td class="num">${fixed(v,3)}</td></tr>`;}); h+='</table>'; }
+    h+=`<div class="subnote">orthogonal IRF · shock: ${esc(r.irf_shock)} · ${r.irf_horizon}-period horizon</div>`;
+  }
+  else if(k==="wqte"){
+    h+='<div class="kpirow">'+kpi(fixed(r.aggregate_qte,4),"aggregate QTE",'g')+kpi(esc(r.from+"→"+r.to),"direction")+kpi("τ="+r.tau,"tail quantile")+'</div>';
+    h+='<table class="rt"><tr><th>scale</th><th>QTE</th></tr>';
+    (r.per_scale||[]).forEach(s=>{h+=`<tr><td>${esc(s.scale)}</td><td class="num">${fixed(s.qte,4)}</td></tr>`;}); h+='</table>';
+    h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="live_unit_root"){
+    h+=`<div class="subnote">${esc(r.symbol)} · source ${esc(r.source)} · n=${r.n_obs} · ${fixed(r.price_first,1)} → ${fixed(r.price_last,1)}</div>`;
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem">';
+    [["PRICE LEVELS",r.levels],["LOG-RETURNS",r.returns]].forEach(([lab,b])=>{
+      if(!b) return; const st=b.verdict==="stationary";
+      h+=`<div><div class="lbl" style="margin:0 0 .4rem">${lab}</div>`+
+         `<div class="kpi"><div class="v ${st?'g':'r'}">${fixed(b.adf_stat,2)}</div><div class="c">ADF (5% ${fixed(b.adf_crit_5pct,2)})</div></div>`+
+         `<div class="verdict ${st?'g':'r'}" style="text-align:center">${esc(b.verdict)}</div></div>`;
+    });
+    h+='</div>'; h+=`<div class="interp">${esc(r.note||"")}</div>`;
+  }
+  else { h+='<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(JSON.stringify(r,null,2))+'</pre>'; }
+  el.innerHTML=h;
+}
+function irfSVG(irf,shock){
+  if(!Array.isArray(irf)||!irf.length) return "";
+  const W=560,H=200,pl=40,pr=12,pt=14,pb=22;
+  const series=irf.map(s=>({name:s.response,vals:s.values}));
+  const all=series.flatMap(s=>s.vals); const mx=Math.max(...all,0.001), mn=Math.min(...all,-0.001);
+  const n=series[0].vals.length;
+  const cols=["#00d4ff","#00ff88","#f59e0b","#ef4444","#8a2be2","#c0a0e0"];
+  const x=i=>pl+(W-pl-pr)*i/(n-1), y=v=>pt+(H-pt-pb)*(1-(v-mn)/(mx-mn));
+  let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">';
+  s+=`<line class="axis" x1="${pl}" y1="${y(0)}" x2="${W-pr}" y2="${y(0)}"/>`;
+  s+=`<line class="axis" x1="${pl}" y1="${pt}" x2="${pl}" y2="${H-pb}"/>`;
+  [mn,0,mx].forEach(v=>{s+=`<text x="${pl-4}" y="${y(v)+3}" text-anchor="end">${v.toFixed(3)}</text>`;});
+  for(let i=0;i<n;i+=2){s+=`<text x="${x(i)}" y="${H-pb+12}" text-anchor="middle">${i}</text>`;}
+  series.forEach((s2,si)=>{const pts=s2.vals.map((v,i)=>x(i)+","+y(v)).join(" ");
+    s+=`<polyline fill="none" stroke="${cols[si%cols.length]}" stroke-width="1.8" points="${pts}"/>`;});
+  s+='</svg><div class="subnote">';
+  series.forEach((s2,si)=>{s+=`<span style="color:${cols[si%cols.length]}">■</span> ${esc(s2.name)} &nbsp;`;}); s+='</div>';
+  return s;
+}
 
-        function renderSubstrate(sub) {
-            const cards = sub.primitives.map(p => {
-                const libs = (sub.libraries[p] || []).join(' · ');
-                return `<div class="prim-card">
-                    <h3>${esc(p.replace(/_/g, ' '))}</h3>
-                    <div class="libs">${esc(libs) || '—'}</div>
-                </div>`;
-            }).join('');
-            return section('§1', 'Substrate Primitives',
-                `<div class="grid substrate-grid">${cards}</div>`);
-        }
+/* ───── chat ───── */
+let CHATCTX=[];
+function md(t){return esc(t).replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/`(.+?)`/g,"<code>$1</code>").replace(/\n/g,"<br>");}
+function pushBub(role,text){const log=$("chatlog");if(log.querySelector(".msg"))log.innerHTML="";
+  const d=document.createElement("div");d.className="bub "+(role==="user"?"u":"a");d.innerHTML=role==="user"?esc(text):md(text);
+  log.appendChild(d);log.scrollTop=log.scrollHeight;return d;}
+async function chatSend(q){
+  q=(q||$("chatq").value).trim(); if(!q) return; $("chatq").value="";
+  pushBub("user",q); const wait=pushBub("ai",'<span class="spin"></span>analysing…');
+  try{
+    const r=await fetch(CE+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:q,context:CHATCTX.slice(-10)})});
+    const d=await r.json();
+    const reply=d.reply||("(no reply"+(d.error?": "+d.error:"")+")");
+    wait.innerHTML=md(reply);
+    CHATCTX.push({q,a:reply});
+  }catch(e){ wait.innerHTML='<span style="color:var(--amber)">chat unavailable: '+esc(e.message)+'</span>'; }
+  $("chatlog").scrollTop=$("chatlog").scrollHeight;
+}
+const CHIPS=["Is the UK equity market stationary?","GARCH volatility persistence for India","Tail spillover USA to India","Is the S&P 500 stationary? Use live data"];
+function buildChips(){$("chips").innerHTML="";CHIPS.forEach(c=>{const s=document.createElement("span");s.className="chip";s.textContent=c;s.onclick=()=>chatSend(c);$("chips").appendChild(s);});}
 
-        function renderFrameworks(fw) {
-            const cards = fw.map(f => {
-                const live = (f.status === 'arxiv_preprint' || f.status === 'published' || f.status === 'accepted');
-                const metrics = (f.headline_metrics || []).slice(0, 4).map(m => {
-                    const unit = m.unit && m.unit !== 'dimensionless' && m.unit !== 'qualitative' ? ' ' + esc(m.unit) : '';
-                    const liveTag = m.source === 'live' ? `<span class="live-tag" title="computed live from ${esc(m.live_source_file || 'source file')}">live</span>` : '';
-                    return `<div class="metric"><div class="v">${esc(m.value)}${unit}${liveTag}</div><div class="l">${esc(m.label)}</div></div>`;
-                }).join('');
-                const subtrate = (f.engine_instantiation || []).map(p => p.replace(/_/g, '-')).join(' + ');
-                const links = buildLinks(f);
-                return `<div class="fw-card">
-                    <div class="fw-head">
-                        <span class="fw-id">${esc(f.id.toUpperCase())}</span>
-                        <span class="fw-badge ${live ? 'live' : ''}">${esc(STATUS_LABEL[f.status] || f.status)}</span>
-                    </div>
-                    <div class="fw-title">${esc(f.title)}</div>
-                    <div class="fw-q">${esc(f.question)}</div>
-                    <div class="metrics">${metrics}</div>
-                    <div class="fw-sub">Substrate: <b>${esc(subtrate)}</b></div>
-                    <div class="fw-links">${links}</div>
-                </div>`;
-            }).join('');
-            return section('§2', `Frameworks (${fw.length})`, cards);
-        }
+/* ───── framework strip ───── */
+const FRAMEWORKS=[
+  {key:"MCPFM",q:"Protocol-based systemic-risk index",url:"https://arxiv.org/abs/2507.08065",ulabel:"arXiv:2507.08065",method:"var_irf",series:["India","USA","UK"]},
+  {key:"contagion-channels",q:"Cross-border contagion attribution",url:"https://arxiv.org/abs/2604.26546",ulabel:"arXiv:2604.26546",method:"wqte",series:["USA","India"]},
+  {key:"NAMH",q:"Network adaptive market hypothesis",url:null,ulabel:"working paper",method:"dfa_hurst",series:["India"]},
+  {key:"WaveQTE",q:"Wavelet-quantile transfer entropy",url:null,ulabel:"working paper",method:"wavelet",series:["India"]},
+  {key:"commodity",q:"Commodity-futures contagion",url:null,ulabel:"coming soon",method:null,series:[]},
+];
+function buildFrameworks(){
+  const el=$("fwstrip"); el.innerHTML="";
+  FRAMEWORKS.forEach(f=>{
+    const soon=!f.method;
+    const c=document.createElement("div"); c.className="fwcard"+(soon?" soon":"");
+    c.innerHTML=`<h3>${esc(f.key)}</h3><p>${esc(f.q)}</p>`+
+      (f.url?`<a class="fwlink" href="${f.url}" target="_blank" rel="noopener">${esc(f.ulabel)} ↗</a>`:`<span class="fwlink">${esc(f.ulabel)}</span>`);
+    if(!soon){ c.onclick=(e)=>{ if(e.target.tagName==="A")return;
+      $("method").value=f.method; onMethod();
+      if(f.method!=="live_unit_root"){ setSeries(f.series); }
+      document.querySelector(".bench").scrollIntoView({behavior:"smooth"}); run(); }; }
+    el.appendChild(c);
+  });
+}
 
-        function buildLinks(f) {
-            const out = [];
-            const m = f.manuscript || (f.manuscripts && Object.values(f.manuscripts)[0]);
-            if (m) out.push(`<a href="#" title="${esc(m)}">PDF</a>`);
-            if (f.arxiv_doi) out.push(`<a href="https://doi.org/${esc(f.arxiv_doi)}" target="_blank">arXiv ↗</a>`);
-            (f.cran_packages || []).forEach(p => out.push(`<a href="https://cran.r-project.org/package=${esc(p)}" target="_blank">CRAN: ${esc(p)} ↗</a>`));
-            return out.join('');
-        }
+/* ───── NEURICX strip ───── */
+async function loadNeuricx(){
+  try{
+    const r=await fetch(NX+"/api/neuricx/intel?n=5&days=1"); const d=await r.json();
+    const arts=(d.articles||[]).slice(0,5);
+    const s=(d.summary&&d.summary.stress_index)||0;
+    const sp=$("nxstress"); sp.textContent="stress "+s.toFixed(2);
+    sp.style.background=s>0.7?"rgba(239,68,68,.15)":s>0.4?"rgba(245,158,11,.12)":"rgba(0,255,136,.12)";
+    sp.style.color=s>0.7?"var(--red)":s>0.4?"var(--amber)":"var(--green)";
+    const gen=d.generated_at_utc?new Date(d.generated_at_utc):null;
+    const ageH=gen?(Date.now()-gen.getTime())/3.6e6:0;
+    $("nxstamp").textContent=(d.cached?"cached ":"")+(d.stale||ageH>1?"· stale >1h":"· fresh");
+    if(!arts.length){ $("nxlist").innerHTML='<div class="msg">'+esc((d.warnings&&d.warnings[0])||"no live headlines right now")+'</div>'; return; }
+    $("nxlist").innerHTML=arts.map(a=>`<div class="nxart"><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc((a.title||"").slice(0,110))}</a><span class="nxchip">${esc(a.channel)}</span></div>`).join("");
+  }catch(e){ $("nxlist").innerHTML='<div class="warn">NEURICX unavailable: '+esc(e.message)+'</div>'; $("nxstress").textContent=""; }
+}
 
-        function renderEvaluators(snap, fw) {
-            const cran = snap.r_packages.filter(p => p.cran_published).length;
-            const arxiv = fw.filter(f => f.arxiv_doi).length;
-            const hours = Object.values(snap.compute_economics.hours_used_by_framework).reduce((a, b) => a + b, 0);
-            const cards = [
-                [fw.length, 'papers in flight'],
-                [cran, 'CRAN packages live'],
-                [arxiv, 'arXiv preprints'],
-                [inr(snap.compute_economics.credit_remaining_inr), 'credit runway'],
-                [hours.toFixed(0) + ' h', 'engine hours used']
-            ].map(([b, c]) => `<div class="eval"><div class="big">${esc(b)}</div><div class="cap">${esc(c)}</div></div>`).join('');
-            const health = snap.health.all_papers_compile ? 'all papers compile ✓' : 'compile issues ⚠';
-            const liveCount = snap.health.live_metrics != null
-                ? ` · ${snap.health.live_metrics}/${snap.health.total_metrics} headline metrics computed live from source files`
-                : '';
-            return section('§3', 'Live Evaluators',
-                `<div class="eval-strip">${cards}</div>
-                 <div class="legend" style="margin-top:1rem">Last engine sync: ${esc(snap.generated_at_utc)} · ${esc(health)}${esc(liveCount)}</div>`);
-        }
-
-        function renderMatrix(markers, fw) {
-            const ids = fw.map(f => f.id);
-            const head = `<tr><th>Marker</th>${ids.map(i => `<th>${esc(i)}</th>`).join('')}<th></th></tr>`;
-            const rows = markers.map(mk => {
-                const cells = ids.map(i => {
-                    const v = mk.per_framework[i];
-                    return `<td class="val">${v === null || v === undefined ? '—' : esc(v)}</td>`;
-                }).join('');
-                const dotClass = DOT[mk.status] || 'divergent';
-                return `<tr><td class="marker">${esc(mk.marker.replace(/_/g, ' '))}</td>${cells}<td><span class="dot ${dotClass}" title="${esc(mk.status)}"></span></td></tr>`;
-            }).join('');
-            return section('§4', `Cross-Paper Consistency (${markers.length} markers × ${fw.length} papers)`,
-                `<div class="matrix-wrap"><table class="matrix"><thead>${head}</thead><tbody>${rows}</tbody></table></div>
-                 <div class="legend"><span class="dot consistent"></span>consistent &nbsp; <span class="dot divergent"></span>intentionally divergent &nbsp; <span class="dot needs"></span>needs PI decision &nbsp; <span class="dot drift"></span>drift</div>`);
-        }
-
-        function renderCompute(ce, fw) {
-            const rows = [
-                ['Credit cap', inr(ce.credit_cap_inr)],
-                ['Credit used', inr(ce.credit_used_inr) + (ce.credit_used_inr === 0 ? '  (stub — Phase 4 wires live)' : '')],
-                ['Credit remaining', inr(ce.credit_remaining_inr)],
-                ['Expiry', esc(ce.credit_expiry_date)]
-            ].map(([k, v]) => `<div class="ce-row"><span class="k">${esc(k)}</span><span class="v">${v}</span></div>`).join('');
-            const maxH = Math.max(1, ...Object.values(ce.hours_used_by_framework));
-            const bars = DISPLAY_ORDER.filter(id => id in ce.hours_used_by_framework).map(id => {
-                const h = ce.hours_used_by_framework[id];
-                return `<div class="bar-row"><span class="name">${esc(id)}</span><div class="bar-track"><div class="bar-fill" style="width:${(h / maxH * 100).toFixed(0)}%"></div></div><span class="h">${h.toFixed(2)} h</span></div>`;
-            }).join('');
-            return section('§5', 'Compute Economics',
-                `${rows}<div style="margin-top:1.2rem">${bars}</div>
-                 <div class="legend" style="margin-top:0.8rem">Last billing sync: ${esc(ce.last_billing_sync_utc || 'not yet wired (Phase 4)')}</div>`);
-        }
-
-        function renderPackagesAndPipeline(snap) {
-            const pkgs = snap.r_packages.map(p => {
-                const link = p.url ? `<a href="${esc(p.url)}" target="_blank">${esc(p.name)}</a>` : esc(p.name);
-                const pub = p.cran_published ? ` <span class="dim">· CRAN ${esc(p.cran_published)}</span>` : ' <span class="dim">· local</span>';
-                return `<div class="pill">${link} <span class="ver">${esc(p.version)}</span>${pub}</div>`;
-            }).join('');
-            const pipe = snap.publication_pipeline.map(s => {
-                const venue = s.target_venue ? ` → ${esc(s.target_venue)}` : '';
-                return `<div class="pill">${esc(s.framework)} <span class="dim">${esc(s.stage)}${venue}</span></div>`;
-            }).join('');
-            return section('§6', 'R Packages & Publication Pipeline',
-                `<div class="sec-label" style="margin-bottom:0.6rem">R Packages</div><div class="pill-row" style="margin-bottom:1.5rem">${pkgs}</div>
-                 <div class="sec-label" style="margin-bottom:0.6rem">Publication Pipeline</div><div class="pill-row">${pipe}</div>`);
-        }
-
-        function section(label, title, body) {
-            return `<section><div class="sec-label">${esc(label)}</div><h2 class="sec-title">${esc(title)}</h2>${body}</section>`;
-        }
-
-        document.getElementById('refresh-btn').addEventListener('click', () => location.reload());
-        main();
-    </script>
-
-    <!-- ============================================================
-         SHSSM Econometrics Analyst — Dialogflow Messenger widget
-         Agent : fd984817-4292-4bc2-af78-f4551bf8ecbc (Dialogflow CX, global)
-         Project: hopeful-flash-485308-v3
-         Backend: Cloud Run compute engine (run_analysis tool) + Gemini 2.5 Flash
-         Enable the "Dialogflow Messenger" integration with UNAUTHENTICATED
-         access (and an avishekb9.github.io domain allowlist) in the CX console
-         so anonymous visitors can send messages.
-         ============================================================ -->
-    <link rel="stylesheet"
-          href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-    <df-messenger
-        location="global"
-        project-id="hopeful-flash-485308-v3"
-        agent-id="fd984817-4292-4bc2-af78-f4551bf8ecbc"
-        language-code="en"
-        max-query-length="-1">
-      <df-messenger-chat-bubble chat-title="SHSSM Econometrics Analyst"></df-messenger-chat-bubble>
-    </df-messenger>
-    <style>
-      df-messenger {
-        z-index: 900;
-        position: fixed;
-        bottom: 18px;
-        right: 18px;
-        --df-messenger-font-family: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
-        --df-messenger-font-color: #c9d1d9;
-        --df-messenger-chat-background: #050507;
-        --df-messenger-message-user-background: #0c1622;
-        --df-messenger-message-bot-background: #0a0f14;
-        --df-messenger-message-border-radius: 6px;
-        --df-messenger-titlebar-background: #000000;
-        --df-messenger-titlebar-font-color: #00d4ff;
-        --df-messenger-titlebar-border-bottom: 1px solid rgba(0,212,255,0.25);
-        --df-messenger-input-background: #0a0f14;
-        --df-messenger-input-font-color: #ffffff;
-        --df-messenger-input-placeholder-font-color: #6b7280;
-        --df-messenger-send-icon-color: #00ff88;
-        --df-messenger-focus-color: #00d4ff;
-        --df-messenger-chat-bubble-background: #00d4ff;
-        --df-messenger-chat-bubble-icon-color: #000000;
-        --df-messenger-chat-bubble-size: 56px;
-        --df-messenger-chat-border-radius: 10px;
-        --df-messenger-chat-window-height: 560px;
-        --df-messenger-chat-window-width: 400px;
-        --df-messenger-titlebar-title-font-weight: 600;
-      }
-    </style>
+/* ───── boot ───── */
+$("run").addEventListener("click",run);
+$("chatsend").addEventListener("click",()=>chatSend());
+$("chatq").addEventListener("keydown",e=>{if(e.key==="Enter")chatSend();});
+$("chatclear").addEventListener("click",()=>{CHATCTX=[];$("chatlog").innerHTML='<div class="msg">Ask the SHSSM Econometrics Analyst a question.</div>';});
+buildChips(); buildFrameworks();
+loadCatalog().catch(e=>{$("results").innerHTML='<div class="warn">catalog load failed: '+esc(e.message)+'</div>';});
+loadNeuricx();
+</script>
 </body>
 </html>
