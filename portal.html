@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Econstellar — a live econometrics engine for financial markets · SHSSM IIT Bhubaneswar</title>
+<meta name="description" content="Ask hard questions about financial markets and watch a real econometrics engine answer them on live data, in seconds, in your browser. Open, live, reproducible. SHSSM, IIT Bhubaneswar.">
+<!-- Social preview (OG image added in T2.4) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Econstellar — econometrics you can run, see, and trust, live">
+<meta property="og:description" content="Watch a real research engine test, on today's market data, whether the stock market is predictable — and explain it in plain language. Open · live · reproducible.">
+<meta property="og:url" content="https://avishekb9.github.io/econstellar/portal.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Econstellar — a live econometrics engine">
+<meta name="twitter:description" content="A real research engine answers questions about financial markets on live data, in seconds.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15); --hot:rgba(0,255,136,.32); --rule:rgba(255,255,255,.06);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --disp:'Orbitron',sans-serif;
+  --clip:polygon(0 12px,12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 15% 8%,rgba(0,212,255,.07),transparent 40%),radial-gradient(circle at 85% 70%,rgba(0,255,136,.06),transparent 45%)}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;position:sticky;top:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:10}
+nav .brand{color:var(--green);font-weight:600;letter-spacing:.5px} nav .sp{flex:1} nav a{color:var(--dim)}
+/* hero */
+header{padding:3rem 0 1rem;text-align:center}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--disp);font-size:clamp(2rem,5vw,3.4rem);margin:.6rem 0 .5rem;line-height:1.04}
+.lede{font-size:1.12rem;color:var(--mid);max-width:62ch;margin:0 auto}
+.paths{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin:1.5rem 0 .5rem}
+.btn{font-family:var(--mono);font-size:.86rem;font-weight:600;padding:.7rem 1.2rem;border-radius:9px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);display:inline-flex;align-items:center;gap:.45rem}
+.btn.primary{color:#000;background:linear-gradient(90deg,var(--cyan),var(--green));border:none}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+/* demo */
+.demo{margin:1.6rem 0;background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.5rem}
+.demo h2{font-family:var(--disp);font-size:1.3rem;margin:0 0 .3rem;text-align:center}
+.demo .q{text-align:center;color:var(--mid);font-size:1rem;margin-bottom:1rem}
+.demo .runwrap{text-align:center;margin-bottom:1rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:640px){.cols{grid-template-columns:1fr}}
+.verdict-card{background:var(--surface2);border:1px solid var(--border);border-radius:11px;padding:1.1rem}
+.verdict-card .tag{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
+.verdict-card .big{font-family:var(--disp);font-size:1.15rem;margin:.35rem 0}
+.verdict-card.unpred .big{color:var(--amber)} .verdict-card.stable .big{color:var(--green)}
+.verdict-card .plain{font-size:.92rem;color:var(--mid)}
+.verdict-card .stat{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-top:.5rem}
+.ai{margin-top:1rem;padding:.9rem 1.1rem;border-left:3px solid var(--green);background:rgba(0,255,136,.05);border-radius:0 8px 8px 0;font-size:.95rem;color:var(--mid);min-height:1.2rem}
+.ai strong{color:var(--green)}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:s .7s linear infinite;vertical-align:middle;margin-right:.5rem}
+@keyframes s{to{transform:rotate(360deg)}}
+.dim{color:var(--dim)} .subnote{font-family:var(--mono);font-size:.72rem;color:var(--dim);text-align:center;margin-top:.7rem}
+.warn{color:var(--amber)}
+/* below the fold */
+section{margin:2.4rem 0}
+.sec-h{font-family:var(--disp);font-size:1.3rem;margin:0 0 .2rem} .sec-s{color:var(--dim);font-family:var(--mono);font-size:.76rem;margin-bottom:1rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.3rem}
+.repro{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.flow{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;font-family:var(--mono);font-size:.82rem;color:var(--mid)}
+.flow .node{border:1px solid var(--border);border-radius:8px;padding:.5rem .8rem;background:var(--surface2)} .flow .arr{color:var(--cyan)}
+.pubs{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.8rem}
+.pub{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem}
+.pub .t{font-weight:600;font-size:.96rem} .pub .m{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin:.25rem 0 .4rem}
+.foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2rem;padding:1.4rem 0 2.6rem;line-height:1.9}
+.foot a{color:var(--cyan)}
+</style>
+</head>
+<body>
+<nav class="wrap" style="max-width:none">
+  <span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+  <a href="research-engine.html">Workbench</a><a href="reproduce.html">Reproduce</a><a href="index.html">Research Station</a>
+</nav>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">SHSSM · IIT Bhubaneswar</div>
+    <h1>Econometrics you can<br>run, see, and trust — live</h1>
+    <p class="lede">Ask hard questions about financial markets and watch a real research engine
+      answer them on <strong>live data</strong>, in seconds, in your browser. Built to a
+      publication standard for researchers — and legible to anyone in thirty seconds.</p>
+    <div class="paths">
+      <a class="btn primary" href="research-engine.html">▶ Try it now</a>
+      <a class="btn" href="#research">Read the research</a>
+      <a class="btn" href="#about">About the lab</a>
+    </div>
+  </header>
+
+  <!-- ── 30-second live demo (T2.2) ── -->
+  <div class="demo">
+    <h2>Is the stock market predictable?</h2>
+    <div class="q">One click. The engine tests it on <strong>today's S&amp;P 500</strong> — live — and explains the answer.</div>
+    <div class="runwrap"><button class="btn primary" id="run" onclick="runDemo()">▶ Run it on live market data</button></div>
+    <div id="demo-out"><div class="subnote">No economics background needed — press the button.</div></div>
+  </div>
+
+  <!-- ── reproduce-the-paper teaser (links T1.3) ── -->
+  <section class="card repro">
+    <div style="max-width:62ch">
+      <div class="sec-h" style="font-size:1.15rem">Don't trust the numbers — regenerate them</div>
+      <div style="color:var(--mid);font-size:.96rem">We published a financial-contagion result. Watch the engine re-run it live on real data and match the published figure, scale by scale.</div>
+    </div>
+    <a class="btn primary" href="reproduce.html">▶ Reproduce the paper</a>
+  </section>
+
+  <!-- ── how it works ── -->
+  <section id="research">
+    <div class="sec-h">One substrate. Five frameworks. Seventeen live methods.</div>
+    <div class="sec-s">From methodological primitives to published research — every layer is live and inspectable.</div>
+    <div class="card">
+      <div class="flow">
+        <span class="node">8 method primitives</span><span class="arr">→</span>
+        <span class="node">5 research frameworks</span><span class="arr">→</span>
+        <span class="node">17 live engine methods</span><span class="arr">→</span>
+        <span class="node">published papers &amp; R packages</span>
+      </div>
+      <div style="color:var(--mid);font-size:.92rem;margin-top:.9rem">Long-memory, multi-scale wavelets, transfer entropy, surrogate inference, community detection,
+      network formation, channel attribution, and classifier validation — the shared toolkit behind every result,
+      runnable one method at a time in the <a href="research-engine.html">Workbench</a> and explained by an AI research analyst.</div>
+    </div>
+  </section>
+
+  <!-- ── publications ── -->
+  <section>
+    <div class="sec-h">Published research</div>
+    <div class="sec-s">Peer-reviewed preprints and open-source R packages — every engine result is citable.</div>
+    <div class="pubs">
+      <div class="pub"><div class="t">MCPFM</div><div class="m">arXiv:2507.08065</div>Multi-Channel Path Following Model — systemic-risk index. <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">arXiv ↗</a></div>
+      <div class="pub"><div class="t">Contagion Channels</div><div class="m">arXiv:2604.26546 · CRAN</div>Channel-level contagion identification. <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv ↗</a></div>
+      <div class="pub"><div class="t">Scale-Ordered Contagion</div><div class="m">working paper · GPL-3</div>SOCH theory + the <code style="color:var(--green)">sochcontagion</code> package. <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">code ↗</a> · <a href="https://avishekb9.r-universe.dev" target="_blank" rel="noopener">r-universe ↗</a></div>
+      <div class="pub"><div class="t">Open engine</div><div class="m">MIT · Cloud Run</div>The sandboxed compute engine itself. <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">source ↗</a></div>
+    </div>
+  </section>
+
+  <!-- ── about ── -->
+  <section id="about" class="card">
+    <div class="sec-h" style="font-size:1.15rem">About the lab</div>
+    <div style="color:var(--mid);font-size:.96rem">Econstellar is the research platform of the financial-econometrics group at the
+    <strong>School of Humanities, Social Sciences &amp; Management (SHSSM), IIT Bhubaneswar</strong> —
+    led by Dr.&nbsp;Avishek Bhandari with Ipsita Parida. We build research that is open, reproducible,
+    and runnable: every claim traces to a live computation on real data, and every result carries a permalink and a citation.</div>
+  </section>
+
+  <div class="foot wrap" style="max-width:none">
+    <strong style="color:var(--mid)">Real data · real engine · reproducible.</strong><br>
+    Live analyses run on the sandboxed compute engine (<a id="celink" href="#" target="_blank" rel="noopener">shssm-compute…run.app</a>) over public market data.
+    <a href="research-engine.html">Workbench (17 methods)</a> · <a href="reproduce.html">Reproduce the paper</a> ·
+    <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">GitHub</a> ·
+    SHSSM, IIT Bhubaneswar.
+  </div>
+</div>
+
+<script>
+const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const $=id=>document.getElementById(id);
+$("celink").href=CE; $("celink").textContent=CE.replace("https://","");
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CANNED="A stock index's price wanders like a random walk — today's level is just yesterday's plus an unpredictable shock, so the past can't tell you where it goes next (that's what “non-stationary” means). But the daily percentage changes cluster around a stable average with stable swings (“stationary”) — so while you can't predict the price, you can measure and manage the risk. That is exactly why finance models returns, not price levels.";
+
+async function runDemo(){
+  $("run").disabled=true;
+  $("demo-out").innerHTML='<div class="subnote"><span class="spin"></span>fetching today’s S&amp;P 500 and running the test on the live engine…</div>';
+  try{
+    const t0=Date.now();
+    const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({method:"live_unit_root",params:{symbol:"^GSPC",transform:"both"}})});
+    const d=await r.json();
+    if(!r.ok||!d.ok) throw new Error((d&&(d.message||d.error))||("engine busy (HTTP "+r.status+")"));
+    renderResult(d.result, Date.now()-t0, d.cached);
+    explainWithAI();
+  }catch(e){
+    $("demo-out").innerHTML=
+      '<div class="warn subnote" style="text-align:left">⚠ The live engine is busy right now ('+esc(e.message)+') — here is the established result.</div>'+
+      cardsHTML({symbol:"^GSPC",levels:{verdict:"non-stationary",adf_stat:null},returns:{verdict:"stationary",adf_stat:null},price_first:null,price_last:null,n_obs:null})+
+      '<div class="ai"><strong>What it means:</strong> '+esc(CANNED)+'</div>';
+  }finally{ $("run").disabled=false; }
+}
+function cardsHTML(res){
+  const L=res.levels||{}, R=res.returns||{};
+  const lvlStat=L.adf_stat!=null?('ADF '+L.adf_stat+' — fails to reject a unit root'):'';
+  const retStat=R.adf_stat!=null?('ADF '+R.adf_stat+' — rejects the unit root'):'';
+  const journey=(res.price_first!=null)?`<div class="subnote" style="text-align:left">S&amp;P 500 · ${res.n_obs} trading days · ${res.price_first} → ${res.price_last}</div>`:'';
+  return journey+`<div class="cols">
+    <div class="verdict-card unpred"><div class="tag">Price level</div><div class="big">Unpredictable — a random walk</div>
+      <div class="plain">Today's price is yesterday's plus an unpredictable shock. Its own past can't tell you where it's going next. <em>(${esc(L.verdict||'non-stationary')})</em></div>
+      <div class="stat">${esc(lvlStat)}</div></div>
+    <div class="verdict-card stable"><div class="tag">Daily returns</div><div class="big">Stable — you can model the risk</div>
+      <div class="plain">The day-to-day % changes hover around a steady average with steady swings — so risk is measurable even when price isn't predictable. <em>(${esc(R.verdict||'stationary')})</em></div>
+      <div class="stat">${esc(retStat)}</div></div>
+  </div>`;
+}
+function renderResult(res,ms,cached){
+  $("demo-out").innerHTML=cardsHTML(res)+
+    '<div class="ai" id="ai"><span class="spin"></span> the AI analyst is writing a plain-language explanation…</div>'+
+    `<div class="subnote">computed live on the engine in ${ms}ms${cached?' (cached &lt;5&nbsp;min)':''} · real S&amp;P 500 data · not a cached replay</div>`;
+}
+async function explainWithAI(){
+  const el=$("ai"); if(!el) return;
+  try{
+    const r=await fetch(CE+"/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:"In 2-3 plain, friendly sentences for someone with NO economics background: why is a stock index's PRICE LEVEL a 'random walk' (non-stationary) that you cannot predict, while its DAILY RETURNS are statistically stable (stationary) so you can model the risk? Be concrete; no jargon, no formulas."})});
+    const d=await r.json();
+    if(!r.ok||!d||!d.reply) throw new Error("at capacity");
+    el.innerHTML='<strong>AI analyst:</strong> '+esc(d.reply);
+  }catch(e){
+    el.innerHTML='<strong>What it means:</strong> '+esc(CANNED)+' <span class="dim">(AI analyst at capacity — standard explanation shown)</span>';
+  }
+}
+</script>
+</body>
+</html>
