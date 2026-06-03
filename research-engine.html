@@ -331,11 +331,51 @@ function renderProvenance(d){
   const p=d&&d.provenance; if(!p) return "";
   const raw=p.permalink||(location.href.split("#")[0]+(location.hash||""));
   const link=esc(raw);
+  const B="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer";
   return `<div style="margin-top:.9rem;padding:.6rem .8rem;border:1px solid var(--border);border-radius:8px;background:var(--surface2);font-family:var(--mono);font-size:.7rem;color:var(--dim);line-height:1.7">
     <div><span style="color:var(--green)">provenance</span> · ${esc(p.data_vintage||"")}</div>
     <div>engine ${esc(p.engine_version||"")} · rev ${esc(p.engine_revision||"")} · ${esc((p.timestamp||"").replace("T"," ").replace(/\..*/,"")+" UTC")}</div>
-    <div style="margin-top:.4rem"><a href="${link}" style="color:var(--cyan)">🔗 permalink</a> <button onclick="copyPerma('${raw.replace(/'/g,"\\'")}')" style="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">copy</button></div>
+    <div style="margin-top:.5rem"><a href="${link}" style="color:var(--cyan)">🔗 permalink</a>
+      <button onclick="copyPerma('${raw.replace(/'/g,"\\'")}')" style="${B}">copy</button>
+      <button onclick="exportCSV()" style="${B}">⬇ CSV</button>
+      <button onclick="exportJSON()" style="${B}">⬇ JSON</button>
+      <button onclick="showCite()" style="${B}">❝ Cite</button>
+    </div>
   </div>`;
+}
+/* ───── export + cite (T1.4) ───── */
+function downloadFile(name,content,mime){ const b=new Blob([content],{type:mime}); const u=URL.createObjectURL(b); const a=document.createElement("a"); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); }
+function stamp(){ return new Date().toISOString().slice(0,19).replace(/[:T]/g,"-"); }
+function exportJSON(){ if(!window.LAST)return; downloadFile(window.LAST.method+"_"+stamp()+".json", JSON.stringify({method:window.LAST.method,params:(window.LAST.body||{}).params,result:window.LAST.result,provenance:window.LAST.provenance},null,2),"application/json"); }
+function toCSV(L){
+  const r=L.result||{}, rows=[], q=v=>{const s=String(v==null?"":v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+  const tbl=arr=>{const cols=Object.keys(arr[0]);rows.push(cols.join(","));arr.forEach(o=>rows.push(cols.map(c=>q(o[c])).join(",")));};
+  if(Array.isArray(r.per_scale)&&r.per_scale.length) tbl(r.per_scale);
+  else if(Array.isArray(r.profile_forward)){ rows.push("scale,forward,reverse"); r.profile_forward.forEach((p,i)=>rows.push([p.scale,p.gain,((r.profile_reverse||[])[i]||{}).gain].map(q).join(","))); }
+  else if(Array.isArray(r.tci_series)&&r.tci_series.length) tbl(r.tci_series);
+  else if(Array.isArray(r.directional)&&r.directional.length) tbl(r.directional);
+  else { rows.push("key,value"); Object.entries(r).forEach(([k,v])=>{ if(v==null||typeof v!=="object") rows.push(q(k)+","+q(v)); }); }
+  return rows.join("\n");
+}
+function exportCSV(){ if(!window.LAST)return; downloadFile(window.LAST.method+"_"+stamp()+".csv", toCSV(window.LAST),"text/csv"); }
+function bibtexFor(L){
+  const p=L.provenance||{}, m=L.method, out=[];
+  out.push(`@misc{shssm_compute_engine,\n  author = {Bhandari, Avishek},\n  title  = {SHSSM Compute Engine: a sandboxed open econometrics workbench},\n  year   = {2026},\n  note   = {Engine ${p.engine_version||""}, revision ${p.engine_revision||""}; method ${m}},\n  howpublished = {\\url{https://github.com/avishekb9/compute-engine}}\n}`);
+  if(m==="soch_profile"){
+    out.push(`@unpublished{bhandari_parida_2026_soch,\n  author = {Bhandari, Avishek and Parida, Ipsita},\n  title  = {Scale-Ordered Contagion},\n  year   = {2026},\n  note   = {Working paper, IIT Bhubaneswar}\n}`);
+    out.push(`@Manual{sochcontagion,\n  author = {Bhandari, Avishek and Parida, Ipsita},\n  title  = {sochcontagion: Scale-Ordered Contagion},\n  year   = {2026},\n  note   = {R package version 0.1.0},\n  url    = {https://github.com/avishekb9/sochcontagion}\n}`);
+  }
+  if(["wqte","connectedness","spillover_rolling","network","granger"].includes(m)){
+    out.push(`@Manual{contagionchannels,\n  author = {Bhandari, Avishek},\n  title  = {contagionchannels: Contagion Channel Identification},\n  year   = {2026},\n  note   = {R package version 0.1.3}\n}`);
+  }
+  return out.join("\n\n");
+}
+function showCite(){ if(!window.LAST)return; const bib=bibtexFor(window.LAST);
+  let box=document.getElementById("citebox"); if(box) box.remove();
+  box=document.createElement("div"); box.id="citebox";
+  box.style.cssText="margin-top:.6rem;padding:.6rem .8rem;border:1px solid var(--hot);border-radius:8px;background:var(--surface2)";
+  box.innerHTML=`<div style="font-family:var(--mono);font-size:.7rem;color:var(--green);margin-bottom:.4rem">BibTeX <button onclick="copyPerma(document.getElementById('bibpre').textContent)" style="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">copy</button></div><pre id="bibpre" class="mono" style="white-space:pre-wrap;font-size:.7rem;color:var(--mid);margin:0">${esc(bib)}</pre>`;
+  document.getElementById("results").appendChild(box);
 }
 
 /* ───── run + render ───── */
@@ -352,7 +392,7 @@ async function run(){
     const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const d=await r.json();
     if(!d.ok){ $("results").innerHTML=`<div class="warn">${esc(d.error||"analysis failed")}</div>`; }
-    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
+    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; window.LAST={method:k,body,result:d.result,provenance:d.provenance}; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
   }catch(e){ $("results").innerHTML=`<div class="warn">request failed: ${esc(e.message)}</div>`; }
   $("run").disabled=false;
 }
@@ -467,6 +507,42 @@ function renderResult(k,r){
       h+=`<div class="barrow" style="grid-template-columns:120px 1fr 50px"><span>${esc(pr.pair)}</span><span class="track"><span class="fill" style="width:${pct}%"></span></span><span>${fixed(pr.mean_corr,2)}</span></div>`;});
     h+=`<div class="interp">${esc(r.interpretation)}</div>`;
   }
+  else if(k==="soch_profile"){
+    const F=r.profile_forward||[], Rv=r.profile_reverse||[];
+    const mx=Math.max(0.001,...F.map(p=>p.gain||0),...Rv.map(p=>p.gain||0));
+    h+='<div class="kpirow">'+kpi(fixed(r.aggregate_forward,4),esc(r.from+"→"+r.to)+" agg",'g')+kpi(r.peak_scale_forward,"peak (fwd)")+kpi(fixed(r.aggregate_reverse,4),esc(r.to+"→"+r.from)+" agg")+kpi(fixed(r.shape_symmetry_kl,3),"shape-sym KL")+'</div>';
+    h+=`<div class="lbl" style="margin:.4rem 0 .2rem">${esc(r.from)} → ${esc(r.to)} (forward)</div><div class="bars">`;
+    F.forEach(p=>{h+=`<div class="barrow"><span>${esc(p.scale)}</span><span class="track"><span class="fill" style="width:${Math.min(100,100*(p.gain||0)/mx)}%"></span></span><span>${fixed(p.gain,4)}</span></div>`;});
+    h+=`</div><div class="lbl" style="margin:.5rem 0 .2rem">${esc(r.to)} → ${esc(r.from)} (reverse)</div><div class="bars">`;
+    Rv.forEach(p=>{h+=`<div class="barrow"><span>${esc(p.scale)}</span><span class="track"><span class="fill" style="width:${Math.min(100,100*(p.gain||0)/mx)}%;background:linear-gradient(90deg,var(--green),var(--cyan))"></span></span><span>${fixed(p.gain,4)}</span></div>`;});
+    h+=`</div><div class="subnote">SOCH-A peak scale · SOCH-B shape symmetry · SOCH-C level (published sochcontagion)</div><div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="wavelet_coherence"){
+    const ps=r.per_scale||[];
+    h+='<div class="kpirow">'+kpi(fixed(r.aggregate_coherence,3),"mean coherence",'g')+kpi(r.peak_scale,"peak scale")+kpi(esc((r.series||[]).join(" / ")),"pair")+'</div><div class="bars">';
+    ps.forEach(p=>{const c=p.coherence||0;h+=`<div class="barrow"><span>${esc(p.scale)}</span><span class="track"><span class="fill" style="width:${Math.min(100,100*c)}%"></span></span><span>${fixed(c,3)}</span></div>`;});
+    h+='</div><div class="subnote">squared coherence ∈ [0,1] by MODWT scale (d1 ≈ 2–4d → coarse = long horizon)</div>';
+    h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="spillover_rolling"){
+    h+='<div class="kpirow">'+kpi(fixed(r.tci_mean,1)+"%","mean TCI",'g')+kpi(fixed(r.tci_max,1)+"%","max (stress)",'a')+kpi(fixed(r.tci_min,1)+"%","min")+kpi(fixed(r.tci_last,1)+"%","latest")+'</div>';
+    h+=tciSVG(r.tci_series||[]);
+    h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="quantile_var"){
+    const dir=r.directional||[];
+    const top=dir.slice().sort((a,b)=>(b.drives||0)-(a.drives||0))[0]||{};
+    h+='<div class="kpirow">'+kpi(fixed(r.tau,2),"quantile τ")+kpi(r.lag,"lag")+kpi(esc(top.market||"–"),"top tail driver",'g')+'</div>';
+    const mx=Math.max(0.001,...dir.map(d=>Math.abs(d.net||0)));
+    h+='<div class="lbl" style="margin:.3rem 0 .2rem">net tail influence (drives − driven_by)</div><div class="bars">';
+    dir.forEach(d=>{const pos=(d.net||0)>=0;h+=`<div class="barrow"><span>${esc(d.market)}</span><span class="track"><span class="fill" style="width:${Math.min(100,100*Math.abs(d.net||0)/mx)}%;background:${pos?'linear-gradient(90deg,var(--cyan),var(--green))':'var(--red)'}"></span></span><span style="color:${pos?'var(--green)':'var(--red)'}">${pos?'+':''}${fixed(d.net,3)}</span></div>`;});
+    h+='</div>';
+    const cm=r.coef_matrix_lag1||[];
+    if(cm.length){ h+='<table class="rt"><tr><th>i \\ j</th>'+cm.map(e=>`<th>${esc(e.equation)}</th>`).join('')+'</tr>';
+      cm.forEach(row=>{h+=`<tr><td>${esc(row.equation)}</td>`+(row.on||[]).map(c=>`<td class="num" style="color:${(c.coef||0)>=0?'var(--green)':'var(--red)'}">${fixed(c.coef,3)}</td>`).join('')+'</tr>';});
+      h+='</table><div class="subnote">A1[i,j] = market j\'s lag-1 effect on market i\'s τ-quantile</div>'; }
+    h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
   else { h+='<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(JSON.stringify(r,null,2))+'</pre>'; }
   el.innerHTML=h;
 }
@@ -512,6 +588,21 @@ function irfSVG(irf,shock){
     s+=`<polyline fill="none" stroke="${cols[si%cols.length]}" stroke-width="1.8" points="${pts}"/>`;});
   s+='</svg><div class="subnote">';
   series.forEach((s2,si)=>{s+=`<span style="color:${cols[si%cols.length]}">■</span> ${esc(s2.name)} &nbsp;`;}); s+='</div>';
+  return s;
+}
+function tciSVG(series){
+  const v=(series||[]).filter(p=>p&&isFinite(p.tci));
+  if(v.length<2) return '<div class="subnote">not enough windows to chart</div>';
+  const W=560,H=190,pl=34,prr=12,pt=12,pb=24;
+  const vals=v.map(p=>p.tci), mx=Math.max(...vals), mn=Math.min(...vals);
+  const x=i=>pl+(W-pl-prr)*i/(v.length-1), y=t=>pt+(H-pt-pb)*(1-(t-mn)/((mx-mn)||1));
+  const pts=v.map((p,i)=>x(i).toFixed(1)+","+y(p.tci).toFixed(1)).join(" ");
+  let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">';
+  [mn,(mn+mx)/2,mx].forEach(t=>{s+=`<line class="axis" x1="${pl}" y1="${y(t).toFixed(1)}" x2="${W-prr}" y2="${y(t).toFixed(1)}"/><text x="${pl-4}" y="${(y(t)+3).toFixed(1)}" text-anchor="end">${t.toFixed(0)}</text>`;});
+  [0,Math.floor(v.length/2),v.length-1].forEach(i=>{s+=`<text x="${x(i).toFixed(1)}" y="${H-pb+13}" text-anchor="middle">${esc((v[i].date||"").slice(0,7))}</text>`;});
+  s+=`<polyline fill="rgba(0,255,136,.09)" stroke="none" points="${pl},${(H-pb).toFixed(1)} ${pts} ${(W-prr)},${(H-pb).toFixed(1)}"/>`;
+  s+=`<polyline fill="none" stroke="var(--green)" stroke-width="1.8" points="${pts}"/>`;
+  s+='</svg><div class="subnote">rolling Diebold-Yilmaz total connectedness (%) — peaks mark systemic-stress episodes</div>';
   return s;
 }
 
