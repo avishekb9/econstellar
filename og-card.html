@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Econstellar OG card</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{--cyan:#00d4ff;--green:#00ff88;--dim:#8b95a3;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--disp:'Orbitron',sans-serif}
+html,body{margin:0;padding:0}
+.card{width:1200px;height:630px;background:#000;color:#fff;position:relative;overflow:hidden;font-family:var(--sans);
+  background-image:radial-gradient(circle at 12% 10%,rgba(0,212,255,.12),transparent 38%),radial-gradient(circle at 88% 82%,rgba(0,255,136,.11),transparent 42%);}
+.pad{position:absolute;inset:0;padding:56px 64px;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--disp);font-weight:900;font-size:30px;letter-spacing:1px;color:#fff}
+.brand .d{color:var(--green)}
+.pill{font-family:var(--mono);font-size:18px;color:var(--green);border:1px solid rgba(0,255,136,.4);border-radius:999px;padding:8px 18px}
+.mid{flex:1;display:flex;align-items:center;gap:48px;margin-top:8px}
+.left{flex:1.15}
+.h1{font-family:var(--disp);font-weight:900;font-size:58px;line-height:1.05;margin:0 0 18px}
+.h1 .g{background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:23px;line-height:1.45;color:#c9d1d9;max-width:30ch}
+.right{flex:.85;background:rgba(10,16,24,.85);border:1px solid rgba(0,212,255,.25);border-radius:18px;padding:26px 28px}
+.rt-lbl{font-family:var(--mono);font-size:16px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+.rt-title{font-family:var(--mono);font-size:20px;color:#fff;margin:4px 0 18px}
+.bar{display:grid;grid-template-columns:42px 1fr 84px;align-items:center;gap:12px;margin:9px 0;font-family:var(--mono);font-size:17px}
+.track{height:14px;background:rgba(255,255,255,.07);border-radius:7px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.match{margin-top:18px;font-family:var(--mono);font-size:19px;color:var(--green);text-align:center;border:1px solid rgba(0,255,136,.35);border-radius:10px;padding:10px}
+.bottom{font-family:var(--mono);font-size:19px;color:var(--dim);display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.08);padding-top:20px}
+.bottom .u{color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="pad">
+    <div class="top">
+      <div class="brand">◆ ECONSTE<span class="d">LLAR</span></div>
+      <div class="pill">17 live methods</div>
+    </div>
+    <div class="mid">
+      <div class="left">
+        <div class="h1">Published research,<br><span class="g">regenerated live.</span></div>
+        <div class="sub">An open econometrics engine for financial markets. Every result runs on real data in seconds — with a permalink and a citation.</div>
+      </div>
+      <div class="right">
+        <div class="rt-lbl">USA → India tail spillover</div>
+        <div class="rt-title">published vs regenerated live</div>
+        <div class="bar"><span>d1</span><span class="track"><span class="fill" style="width:26%"></span></span><span>0.0155</span></div>
+        <div class="bar"><span>d2</span><span class="track"><span class="fill" style="width:71%"></span></span><span>0.0425</span></div>
+        <div class="bar"><span>d3</span><span class="track"><span class="fill" style="width:82%"></span></span><span>0.0491</span></div>
+        <div class="bar"><span>d4</span><span class="track"><span class="fill" style="width:82%"></span></span><span>0.0494</span></div>
+        <div class="match">✓ live engine matches the paper · Δ 0.0000</div>
+      </div>
+    </div>
+    <div class="bottom"><span class="u">avishekb9.github.io/econstellar</span><span>SHSSM · IIT Bhubaneswar</span></div>
+  </div>
+</div>
+</body>
+</html>
