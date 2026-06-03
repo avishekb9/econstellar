@@ -1,0 +1,11 @@
+[
+  {"date":"2026-06-03","tag":"launch","title":"Public portal launched","body":"A shareable front door with a 30-second live demo — watch the engine test today's market data and explain it in plain language.","link":"index.html"},
+  {"date":"2026-06-03","tag":"feature","title":"Reproduce-the-paper, live","body":"A dedicated showcase regenerates a published financial-contagion result on real data and matches the paper, scale by scale.","link":"reproduce.html"},
+  {"date":"2026-06-03","tag":"feature","title":"Provenance, permalinks & citations","body":"Every result now carries a permalink that re-runs the exact analysis, plus one-click CSV / JSON export and a BibTeX citation.","link":"research-engine.html"},
+  {"date":"2026-06-03","tag":"method","title":"Engine reaches 17 methods","body":"Added the published SOCH scale profile, wavelet coherence, rolling Diebold-Yilmaz spillover, and quantile VAR.","link":"research-engine.html"},
+  {"date":"2026-06-03","tag":"package","title":"sochcontagion published","body":"The Scale-Ordered Contagion R package is public (v0.1.0, GPL-3) and installable from r-universe.","link":"https://github.com/avishekb9/sochcontagion"},
+  {"date":"2026-06-01","tag":"method","title":"Six econometric methods added (→ 13)","body":"VECM cointegration, Granger networks, panel unit roots, Diebold-Yilmaz connectedness, igraph networks, and DCC-GARCH correlations went live.","link":"research-engine.html"},
+  {"date":"2026-06-01","tag":"feature","title":"Deep-research assistant","body":"A post-doctoral-grade AI analyst that runs live analyses and grounds its answer in real, searched citations."},
+  {"date":"2026-04","tag":"paper","title":"Contagion Channels","body":"Channel-level contagion identification — preprint and R package.","link":"https://arxiv.org/abs/2604.26546"},
+  {"date":"2025-07","tag":"paper","title":"MCPFM","body":"Multi-Channel Path Following Model — a systemic-risk index.","link":"https://arxiv.org/abs/2507.08065"}
+]

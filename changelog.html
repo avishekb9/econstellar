@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's new — Econstellar</title>
+<meta name="description" content="New methods, papers, and features on the Econstellar research engine.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="What's new — Econstellar">
+<meta property="og:description" content="New methods, papers, and features on the live econometrics engine.">
+<meta property="og:url" content="https://avishekb9.github.io/econstellar/changelog.html">
+<meta property="og:image" content="https://avishekb9.github.io/econstellar/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://avishekb9.github.io/econstellar/og-image.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{--bg:#000;--surface:rgba(8,10,14,.92);--surface2:rgba(12,18,28,.92);--border:rgba(0,212,255,.15);--hot:rgba(0,255,136,.32);--rule:rgba(255,255,255,.06);--text:#fff;--mid:#c9d1d9;--dim:#6b7280;--cyan:#00d4ff;--green:#00ff88;--amber:#f59e0b;--violet:#a78bfa;--sans:'Space Grotesk',sans-serif;--mono:'JetBrains Mono',monospace;--disp:'Orbitron',sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;background-image:radial-gradient(circle at 16% 8%,rgba(0,212,255,.06),transparent 40%),radial-gradient(circle at 84% 80%,rgba(0,255,136,.05),transparent 45%)}
+a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;position:sticky;top:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:10}
+nav .brand{color:var(--green);font-weight:600}nav .sp{flex:1}nav a{color:var(--dim)}
+header{padding:2.6rem 0 1rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--disp);font-size:clamp(1.8rem,4vw,2.6rem);margin:.5rem 0 .3rem}
+.lede{color:var(--mid)}
+.feed{position:relative;margin:1.6rem 0 3rem;padding-left:26px;border-left:2px solid var(--border)}
+.item{position:relative;margin-bottom:1.7rem}
+.item::before{content:"";position:absolute;left:-33px;top:5px;width:11px;height:11px;border-radius:50%;background:var(--cyan);box-shadow:0 0 9px rgba(0,212,255,.6)}
+.item.launch::before{background:var(--green);box-shadow:0 0 9px var(--green)}
+.date{font-family:var(--mono);font-size:.72rem;color:var(--dim)}
+.tag{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;padding:.12rem .5rem;border-radius:999px;border:1px solid var(--border);margin-left:.5rem;color:var(--dim)}
+.tag.launch{color:var(--green);border-color:var(--hot)} .tag.method{color:var(--cyan)} .tag.feature{color:var(--amber)} .tag.paper,.tag.package{color:var(--violet);border-color:rgba(167,139,250,.4)}
+.item .t{font-family:var(--disp);font-size:1.05rem;margin:.3rem 0 .25rem}
+.item .b{color:var(--mid);font-size:.95rem}
+.item .b a{font-family:var(--mono);font-size:.82rem}
+.msg{color:var(--dim);font-family:var(--mono);font-size:.82rem}
+.foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);padding:1.3rem 0 2.4rem;line-height:1.8}
+</style>
+</head>
+<body>
+<nav class="wrap" style="max-width:none">
+  <span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+  <a href="index.html">Home</a><a href="research-engine.html">Workbench</a><a href="reproduce.html">Reproduce</a>
+</nav>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Changelog</div>
+    <h1>What's new</h1>
+    <p class="lede">New methods, papers, and features on the engine. The platform ships continuously — check back, or follow the milestones below.</p>
+  </header>
+  <div class="feed" id="feed"><div class="msg">Loading…</div></div>
+  <div class="foot wrap" style="max-width:none">Econstellar · SHSSM, IIT Bhubaneswar · <a href="index.html">home</a> · <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">source</a></div>
+</div>
+<script>
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=d=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(d)){ const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; const p=d.split("-"); return m[+p[1]-1]+" "+(+p[2])+", "+p[0]; } if(/^\d{4}-\d{2}$/.test(d)){ const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; const p=d.split("-"); return m[+p[1]-1]+" "+p[0]; } return d; };
+fetch("changelog.json").then(r=>r.json()).then(items=>{
+  const f=document.getElementById("feed");
+  if(!items.length){ f.innerHTML='<div class="msg">No entries yet.</div>'; return; }
+  f.innerHTML=items.map(it=>{
+    const tag=(it.tag||"update").toLowerCase();
+    const link=it.link?` <a href="${esc(it.link)}"${/^https?:/.test(it.link)?' target="_blank" rel="noopener"':''}>${/^https?:/.test(it.link)?'open ↗':'view →'}</a>`:"";
+    return `<div class="item ${tag}"><span class="date">${esc(fmt(it.date))}</span><span class="tag ${tag}">${esc(tag)}</span>
+      <div class="t">${esc(it.title)}</div><div class="b">${esc(it.body)}${link}</div></div>`;
+  }).join("");
+}).catch(e=>{ document.getElementById("feed").innerHTML='<div class="msg">Could not load the changelog right now. <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">See the repo ↗</a></div>'; });
+</script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Econstellar — embedded analysis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+:root{--bg:#06080c;--surface2:rgba(12,18,28,.9);--border:rgba(0,212,255,.18);--hot:rgba(0,255,136,.32);--text:#fff;--mid:#c9d1d9;--dim:#7c8794;--cyan:#00d4ff;--green:#00ff88;--amber:#f59e0b;--red:#ef4444;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);padding:14px;line-height:1.45}
+.w{border:1px solid var(--border);border-radius:12px;background:var(--surface2);padding:14px 16px;max-width:560px;margin:0 auto}
+.lbl{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.6px;color:var(--dim)}
+.title{font-family:var(--sans);font-weight:600;font-size:1rem;margin:.15rem 0 .7rem}
+.kpirow{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:.5rem;margin:.2rem 0 .6rem}
+.kpi{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:.55rem;text-align:center}
+.kpi .v{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--cyan)}.kpi .v.g{color:var(--green)}.kpi .v.a{color:var(--amber)}
+.kpi .c{font-family:var(--mono);font-size:.58rem;color:var(--dim);margin-top:.2rem;text-transform:uppercase}
+.barrow{display:grid;grid-template-columns:34px 1fr 60px;align-items:center;gap:.5rem;margin:.25rem 0;font-family:var(--mono);font-size:.72rem}
+.track{height:9px;background:rgba(255,255,255,.07);border-radius:5px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.vcols{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}@media(max-width:420px){.vcols{grid-template-columns:1fr}}
+.vc{border:1px solid var(--border);border-radius:9px;padding:.6rem}.vc .h{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;color:var(--dim)}.vc .big{font-weight:600;margin:.2rem 0;font-size:.92rem}.vc.a .big{color:var(--amber)}.vc.g .big{color:var(--green)}.vc .p{font-size:.8rem;color:var(--mid)}
+.interp{font-family:var(--mono);font-size:.74rem;color:var(--mid);margin-top:.6rem;line-height:1.5}
+.attrib{display:flex;justify-content:space-between;align-items:center;margin-top:.8rem;padding-top:.6rem;border-top:1px solid var(--border);font-family:var(--mono);font-size:.68rem;color:var(--dim)}
+.attrib a{color:var(--green);text-decoration:none}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:s .7s linear infinite;vertical-align:middle;margin-right:.4rem}@keyframes s{to{transform:rotate(360deg)}}
+.warn{color:var(--amber);font-family:var(--mono);font-size:.76rem}
+svg.chart{width:100%;height:auto;display:block}svg .axis{stroke:rgba(255,255,255,.1)}svg text{fill:var(--dim);font:10px var(--mono)}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="lbl" id="lbl">Econstellar · live analysis</div>
+  <div id="out"><div class="interp"><span class="spin"></span>running on the live engine…</div></div>
+  <div class="attrib"><span>powered by <a href="https://avishekb9.github.io/econstellar/" target="_blank" rel="noopener">Econstellar</a></span><a id="open" href="https://avishekb9.github.io/econstellar/research-engine.html" target="_blank" rel="noopener">▶ run it yourself ↗</a></div>
+</div>
+<script>
+const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fx=(x,d=4)=>typeof x==="number"?x.toFixed(d):esc(x);
+const kpi=(v,c,cls)=>`<div class="kpi"><div class="v ${cls||''}">${esc(v)}</div><div class="c">${esc(c)}</div></div>`;
+function parseHash(){ const h=decodeURIComponent((location.hash||location.search||"").replace(/^[#?]/,"")); const q={}; h.split("&").forEach(kv=>{const i=kv.indexOf("=");if(i>0)q[kv.slice(0,i)]=kv.slice(i+1);}); return q; }
+function bars(arr,key,lblFn){ return arr.map((p,i)=>{const v=p[key]||0,mx=Math.max(...arr.map(a=>a[key]||0),1e-6);return `<div class="barrow"><span>${esc(lblFn?lblFn(p,i):p.scale)}</span><span class="track"><span class="fill" style="width:${Math.min(100,100*v/mx)}%"></span></span><span>${fx(v)}</span></div>`;}).join(""); }
+function lineSVG(series){ const v=(series||[]).filter(p=>p&&isFinite(p.tci)); if(v.length<2)return""; const W=520,H=150,pl=30,pr=8,pt=8,pb=20,vals=v.map(p=>p.tci),mx=Math.max(...vals),mn=Math.min(...vals); const x=i=>pl+(W-pl-pr)*i/(v.length-1),y=t=>pt+(H-pt-pb)*(1-(t-mn)/((mx-mn)||1)); const pts=v.map((p,i)=>x(i).toFixed(1)+","+y(p.tci).toFixed(1)).join(" "); let s='<svg class="chart" viewBox="0 0 '+W+' '+H+'">'; [mn,mx].forEach(t=>{s+=`<line class="axis" x1="${pl}" y1="${y(t).toFixed(1)}" x2="${W-pr}" y2="${y(t).toFixed(1)}"/><text x="${pl-3}" y="${(y(t)+3).toFixed(1)}" text-anchor="end">${t.toFixed(0)}</text>`;}); s+=`<polyline fill="rgba(0,255,136,.08)" stroke="none" points="${pl},${H-pb} ${pts} ${W-pr},${H-pb}"/><polyline fill="none" stroke="var(--green)" stroke-width="1.6" points="${pts}"/></svg>`; return s; }
+function render(k,r){
+  let h="";
+  if(k==="live_unit_root"){ const L=r.levels||{},R=r.returns||{};
+    h+=`<div class="vcols"><div class="vc a"><div class="h">price level</div><div class="big">${esc(L.verdict||'non-stationary')}</div><div class="p">a random walk — not predictable</div></div><div class="vc g"><div class="h">daily returns</div><div class="big">${esc(R.verdict||'stationary')}</div><div class="p">stable — risk is modellable</div></div></div>`; }
+  else if(k==="soch_profile"){ h+='<div class="kpirow">'+kpi(fx(r.aggregate_forward),"agg "+esc(r.from)+"→"+esc(r.to),'g')+kpi(r.peak_scale_forward,"peak")+kpi(fx(r.shape_symmetry_kl,3),"shape KL")+'</div>'+bars(r.profile_forward||[],"gain"); }
+  else if(k==="wavelet_coherence"){ h+='<div class="kpirow">'+kpi(fx(r.aggregate_coherence,3),"mean coherence",'g')+kpi(r.peak_scale,"peak")+'</div>'+bars(r.per_scale||[],"coherence"); }
+  else if(k==="spillover_rolling"){ h+='<div class="kpirow">'+kpi(fx(r.tci_mean,1)+"%","mean TCI",'g')+kpi(fx(r.tci_max,1)+"%","max",'a')+kpi(fx(r.tci_last,1)+"%","latest")+'</div>'+lineSVG(r.tci_series); }
+  else if(k==="quantile_var"){ const d=r.directional||[],mx=Math.max(...d.map(x=>Math.abs(x.net||0)),1e-6); h+='<div class="kpirow">'+kpi(fx(r.tau,2),"τ")+kpi((d.slice().sort((a,b)=>(b.drives||0)-(a.drives||0))[0]||{}).market||"–","top driver",'g')+'</div>'+d.map(x=>`<div class="barrow"><span>${esc(x.market)}</span><span class="track"><span class="fill" style="width:${Math.min(100,100*Math.abs(x.net||0)/mx)}%;background:${(x.net||0)>=0?'linear-gradient(90deg,var(--cyan),var(--green))':'var(--red)'}"></span></span><span>${fx(x.net,3)}</span></div>`).join(""); }
+  else if(k==="unit_root"){ const a=r.adf||{}; h+='<div class="kpirow">'+kpi(fx(a.statistic,2),"ADF",a.reject_unit_root_5pct?'g':'a')+kpi(fx((a.crit||{})['5pct'],2),"5% crit")+'</div>'; }
+  else { const ks=Object.entries(r).filter(([,v])=>typeof v==="number").slice(0,4); if(ks.length) h+='<div class="kpirow">'+ks.map(([kk,v])=>kpi(fx(v,3),kk.replace(/_/g," "))).join("")+'</div>'; }
+  if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  return h;
+}
+(async()=>{
+  const q=parseHash(); const method=q.method;
+  if(!method){ $("out").innerHTML='<div class="warn">No analysis specified. Add e.g. <code>#method=soch_profile&series=USA,India</code></div>'; return; }
+  const params={}; if(q.series)params.series=q.series.split(","); if(q.symbol)params.symbol=q.symbol;
+  ["tau"].forEach(p=>{if(q[p]!=null)params[p]=parseFloat(q[p]);}); ["levels","lags","p","q","lag","K","H","window","step"].forEach(p=>{if(q[p]!=null)params[p]=parseInt(q[p],10);}); if(q.ecdet)params.ecdet=q.ecdet; if(q.source)params.source=q.source;
+  $("open").href="https://avishekb9.github.io/econstellar/research-engine.html#"+(location.hash||"").replace(/^#/,"");
+  try{
+    const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({method,params})});
+    const d=await r.json();
+    if(!r.ok||!d.ok) throw new Error((d&&(d.message||d.error))||("HTTP "+r.status));
+    $("lbl").textContent="Econstellar · "+method+(d.cached?" · cached":" · live");
+    $("out").innerHTML=render(method,d.result);
+  }catch(e){ $("out").innerHTML='<div class="warn">The live engine is busy right now ('+esc(e.message)+'). <a style="color:var(--green)" href="https://avishekb9.github.io/econstellar/research-engine.html" target="_blank" rel="noopener">Open the Workbench ↗</a></div>'; }
+})();
+</script>
+</body>
+</html>

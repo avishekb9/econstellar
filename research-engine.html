@@ -353,6 +353,7 @@ function renderProvenance(d){
       <button onclick="exportCSV()" style="${B}">⬇ CSV</button>
       <button onclick="exportJSON()" style="${B}">⬇ JSON</button>
       <button onclick="showCite()" style="${B}">❝ Cite</button>
+      <button onclick="showEmbed()" style="${B}">&lt;/&gt; Embed</button>
     </div>
   </div>`;
 }
@@ -388,6 +389,15 @@ function showCite(){ if(!window.LAST)return; const bib=bibtexFor(window.LAST);
   box=document.createElement("div"); box.id="citebox";
   box.style.cssText="margin-top:.6rem;padding:.6rem .8rem;border:1px solid var(--hot);border-radius:8px;background:var(--surface2)";
   box.innerHTML=`<div style="font-family:var(--mono);font-size:.7rem;color:var(--green);margin-bottom:.4rem">BibTeX <button onclick="copyPerma(document.getElementById('bibpre').textContent)" style="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">copy</button></div><pre id="bibpre" class="mono" style="white-space:pre-wrap;font-size:.7rem;color:var(--mid);margin:0">${esc(bib)}</pre>`;
+  document.getElementById("results").appendChild(box);
+}
+function showEmbed(){ if(!window.LAST)return;
+  const src="https://avishekb9.github.io/econstellar/embed.html"+hashFor(window.LAST.body);
+  const code='<iframe src="'+src+'" width="100%" height="340" style="border:0;border-radius:12px" loading="lazy" title="Econstellar live analysis"></iframe>';
+  let box=document.getElementById("embedbox"); if(box) box.remove();
+  box=document.createElement("div"); box.id="embedbox";
+  box.style.cssText="margin-top:.6rem;padding:.6rem .8rem;border:1px solid var(--hot);border-radius:8px;background:var(--surface2)";
+  box.innerHTML=`<div style="font-family:var(--mono);font-size:.7rem;color:var(--green);margin-bottom:.4rem">Embed this live analysis <button onclick="copyPerma(document.getElementById('embedpre').textContent)" style="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">copy</button> · <a href="${esc(src)}" target="_blank" rel="noopener" style="color:var(--cyan)">preview ↗</a></div><pre id="embedpre" class="mono" style="white-space:pre-wrap;font-size:.7rem;color:var(--mid);margin:0">${esc(code)}</pre>`;
   document.getElementById("results").appendChild(box);
 }
 
