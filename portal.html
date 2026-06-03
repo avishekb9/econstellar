@@ -77,6 +77,25 @@ section{margin:2.4rem 0}
 .pub .t{font-weight:600;font-size:.96rem} .pub .m{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin:.25rem 0 .4rem}
 .foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2rem;padding:1.4rem 0 2.6rem;line-height:1.9}
 .foot a{color:var(--cyan)}
+/* visual explainer (T2.3) */
+.explainer .stage{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
+.explainer .stage.in{opacity:1;transform:none}
+.stage-head{display:flex;align-items:baseline;gap:.7rem;margin-bottom:.7rem;flex-wrap:wrap}
+.stage-num{font-family:var(--disp);font-size:1.5rem;color:var(--cyan)}
+.stage-name{font-family:var(--disp);font-size:1.15rem}
+.stage-tag{font-family:var(--mono);font-size:.74rem;color:var(--dim)}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font-family:var(--mono);font-size:.8rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.5rem .7rem;color:var(--mid);transition:border-color .2s,color .2s}
+.chip:hover{border-color:var(--hot);color:#fff}
+.chip small{color:var(--dim);font-size:.84em;margin-left:.35rem}
+.chip.fw{font-family:var(--sans);font-weight:600;color:#fff;font-size:.92rem}
+.chip.hot{border-color:var(--hot);background:rgba(0,255,136,.08);color:var(--green)}
+.chips.small .chip{font-size:.74rem;padding:.38rem .58rem}
+.connector{height:44px;width:2px;margin:.5rem 0 .5rem 19px;background:linear-gradient(var(--cyan),var(--green));position:relative;opacity:.45}
+.connector .pulse{position:absolute;left:-3px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:flow 2.2s linear infinite}
+@keyframes flow{0%{top:-4px;opacity:0}12%{opacity:1}88%{opacity:1}100%{top:40px;opacity:0}}
+.stage-cta{margin-top:.9rem}
+@media(prefers-reduced-motion:reduce){.explainer .stage{opacity:1;transform:none;transition:none}.connector .pulse{animation:none;opacity:.6}}
 </style>
 </head>
 <body>
@@ -116,32 +135,51 @@ section{margin:2.4rem 0}
     <a class="btn primary" href="reproduce.html">▶ Reproduce the paper</a>
   </section>
 
-  <!-- ── how it works ── -->
-  <section id="research">
-    <div class="sec-h">One substrate. Five frameworks. Seventeen live methods.</div>
-    <div class="sec-s">From methodological primitives to published research — every layer is live and inspectable.</div>
-    <div class="card">
-      <div class="flow">
-        <span class="node">8 method primitives</span><span class="arr">→</span>
-        <span class="node">5 research frameworks</span><span class="arr">→</span>
-        <span class="node">17 live engine methods</span><span class="arr">→</span>
-        <span class="node">published papers &amp; R packages</span>
-      </div>
-      <div style="color:var(--mid);font-size:.92rem;margin-top:.9rem">Long-memory, multi-scale wavelets, transfer entropy, surrogate inference, community detection,
-      network formation, channel attribution, and classifier validation — the shared toolkit behind every result,
-      runnable one method at a time in the <a href="research-engine.html">Workbench</a> and explained by an AI research analyst.</div>
-    </div>
-  </section>
+  <!-- ── visual explainer (T2.3): substrate → frameworks → engine → research ── -->
+  <section id="research" class="explainer">
+    <div class="sec-h">From first principles to published research</div>
+    <div class="sec-s">One methodological substrate flows up through five frameworks into a live 17-method engine — and out as peer-reviewed papers and open-source packages. Scroll the pipeline; every layer is inspectable.</div>
 
-  <!-- ── publications ── -->
-  <section>
-    <div class="sec-h">Published research</div>
-    <div class="sec-s">Peer-reviewed preprints and open-source R packages — every engine result is citable.</div>
-    <div class="pubs">
-      <div class="pub"><div class="t">MCPFM</div><div class="m">arXiv:2507.08065</div>Multi-Channel Path Following Model — systemic-risk index. <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">arXiv ↗</a></div>
-      <div class="pub"><div class="t">Contagion Channels</div><div class="m">arXiv:2604.26546 · CRAN</div>Channel-level contagion identification. <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv ↗</a></div>
-      <div class="pub"><div class="t">Scale-Ordered Contagion</div><div class="m">working paper · GPL-3</div>SOCH theory + the <code style="color:var(--green)">sochcontagion</code> package. <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">code ↗</a> · <a href="https://avishekb9.r-universe.dev" target="_blank" rel="noopener">r-universe ↗</a></div>
-      <div class="pub"><div class="t">Open engine</div><div class="m">MIT · Cloud Run</div>The sandboxed compute engine itself. <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">source ↗</a></div>
+    <div class="stage" data-stage>
+      <div class="stage-head"><span class="stage-num">01</span><span class="stage-name">Substrate</span><span class="stage-tag">8 method primitives — the shared toolkit</span></div>
+      <div class="chips">
+        <span class="chip">Long-memory · DFA/GPH</span><span class="chip">MODWT wavelets</span><span class="chip">Transfer entropy</span><span class="chip">Surrogate inference</span>
+        <span class="chip">Community detection</span><span class="chip">Network formation</span><span class="chip">Structural attribution</span><span class="chip">ROC / DeLong validation</span>
+      </div>
+    </div>
+    <div class="connector"><span class="pulse"></span></div>
+
+    <div class="stage" data-stage>
+      <div class="stage-head"><span class="stage-num">02</span><span class="stage-name">Frameworks</span><span class="stage-tag">five research programs, one substrate</span></div>
+      <div class="chips">
+        <span class="chip fw">NAMH</span><span class="chip fw">MCPFM <small>arXiv:2507.08065</small></span><span class="chip fw">Contagion-Channels <small>arXiv:2604.26546</small></span>
+        <span class="chip fw">WaveQTE</span><span class="chip fw">Commodity</span><span class="chip fw hot">SOCH <small>fully productised →</small></span>
+      </div>
+    </div>
+    <div class="connector"><span class="pulse"></span></div>
+
+    <div class="stage" data-stage>
+      <div class="stage-head"><span class="stage-num">03</span><span class="stage-name">Live engine</span><span class="stage-tag">17 methods · run any of them now</span></div>
+      <div class="chips small">
+        <span class="chip">Unit root</span><span class="chip">VAR + IRF</span><span class="chip">DFA Hurst</span><span class="chip">GARCH</span><span class="chip">Wavelet variance</span>
+        <span class="chip">WQTE spillover</span><span class="chip hot">SOCH profile</span><span class="chip">VECM</span><span class="chip">Granger net</span><span class="chip">Panel unit root</span>
+        <span class="chip">Connectedness</span><span class="chip">Network</span><span class="chip">DCC correlation</span><span class="chip">Live stationarity</span><span class="chip">Wavelet coherence</span>
+        <span class="chip">Rolling spillover</span><span class="chip">Quantile VAR</span>
+      </div>
+      <div class="stage-cta"><a class="btn primary" href="research-engine.html">▶ Open the Workbench</a></div>
+    </div>
+    <div class="connector"><span class="pulse"></span></div>
+
+    <div class="stage" data-stage>
+      <div class="stage-head"><span class="stage-num">04</span><span class="stage-name">Published research</span><span class="stage-tag">papers · packages · every result citable</span></div>
+      <div class="chips">
+        <a class="chip" href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">MCPFM <small>arXiv:2507.08065 ↗</small></a>
+        <a class="chip" href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">Contagion Channels <small>arXiv ↗</small></a>
+        <a class="chip" href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">SOCH <small>sochcontagion ↗</small></a>
+        <a class="chip" href="https://avishekb9.r-universe.dev" target="_blank" rel="noopener">r-universe <small>install ↗</small></a>
+        <a class="chip" href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">Compute engine <small>MIT ↗</small></a>
+      </div>
+      <div class="stage-cta" style="color:var(--mid);font-size:.92rem;margin-top:.8rem">Every analysis carries a permalink and a one-click BibTeX citation — a number becomes a citable artifact.</div>
     </div>
   </section>
 
@@ -219,6 +257,16 @@ async function explainWithAI(){
     el.innerHTML='<strong>What it means:</strong> '+esc(CANNED)+' <span class="dim">(AI analyst at capacity — standard explanation shown)</span>';
   }
 }
+/* scroll-reveal the visual-explainer stages (T2.3) — robust, observer-free */
+(function(){
+  const stages=[...document.querySelectorAll('[data-stage]')];
+  const reveal=()=>{ const vh=innerHeight||document.documentElement.clientHeight;
+    stages.forEach(s=>{ const r=s.getBoundingClientRect(); if(r.top < vh*0.92 && r.bottom > 0) s.classList.add('in'); }); };
+  reveal();
+  addEventListener('scroll', reveal, {passive:true});
+  addEventListener('resize', reveal);
+  setTimeout(()=>stages.forEach(s=>s.classList.add('in')), 2500); // safety net: never leave content hidden
+})();
 </script>
 </body>
 </html>
