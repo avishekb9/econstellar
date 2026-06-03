@@ -158,6 +158,7 @@ code{font-family:var(--mono);color:var(--green)}
 
 <script>
 const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"reproduce"}));}catch(e){} /* aggregate beacon (T3.2) */
 document.getElementById('celink').href=CE; document.getElementById('celink').textContent=CE.replace('https://','');
 // Published USA->India values (Bhandari & Parida 2026; tau=0.05, J=4) — immutable.
 const PUB={profile:[0.01546,0.04254,0.04907,0.04936], agg:0.0391, peak:"d4"};
@@ -177,6 +178,7 @@ bars($('pubbars'),PUB.profile,true);
 MARKETS.forEach(m=>{["from","to"].forEach(s=>{const o=document.createElement('option');o.value=m;o.textContent=m;if((s==='from'&&m==='USA')||(s==='to'&&m==='India'))o.selected=true;$(s).appendChild(o);});});
 
 async function runLive(from,to,isHeadline){
+  if(isHeadline){try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"reproduce_run"}));}catch(e){}}
   $('run').disabled=true; $('runnote').textContent="";
   $('livebars').innerHTML='<div class="msg"><span class="spin"></span>running '+from+' → '+to+' on the live engine…</div>';
   $('livekpis').style.display='none'; if(isHeadline){$('match').innerHTML='';}

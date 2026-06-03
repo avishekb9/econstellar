@@ -58,6 +58,7 @@ h1{font-family:var(--disp);font-size:clamp(1.8rem,4vw,2.6rem);margin:.5rem 0 .3r
 <script>
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=d=>{ if(/^\d{4}-\d{2}-\d{2}$/.test(d)){ const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; const p=d.split("-"); return m[+p[1]-1]+" "+(+p[2])+", "+p[0]; } if(/^\d{4}-\d{2}$/.test(d)){ const m=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]; const p=d.split("-"); return m[+p[1]-1]+" "+p[0]; } return d; };
+try{navigator.sendBeacon("https://shssm-compute-b7ui3oxaqq-el.a.run.app/api/event",JSON.stringify({name:"changelog"}));}catch(e){} /* aggregate beacon (T3.2) */
 fetch("changelog.json").then(r=>r.json()).then(items=>{
   const f=document.getElementById("feed");
   if(!items.length){ f.innerHTML='<div class="msg">No entries yet.</div>'; return; }

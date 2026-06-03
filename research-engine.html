@@ -263,6 +263,7 @@ footer{border-top:1px solid var(--rule);padding:1.6rem 0 2.4rem;font-family:var(
 
 <script>
 const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"workbench"}));}catch(e){} /* aggregate beacon (T3.2) */
 const NX="https://neuricx-intel-672903689767.asia-south1.run.app";
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const $=id=>document.getElementById(id);

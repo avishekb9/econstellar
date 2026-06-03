@@ -203,6 +203,7 @@ section{margin:2.4rem 0}
 
 <script>
 const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"portal"}));}catch(e){} /* privacy-respecting aggregate beacon (T3.2) */
 const $=id=>document.getElementById(id);
 $("celink").href=CE; $("celink").textContent=CE.replace("https://","");
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -210,6 +211,7 @@ const CANNED="A stock index's price wanders like a random walk — today's level
 
 async function runDemo(){
   $("run").disabled=true;
+  try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"demo_run"}));}catch(e){}
   $("demo-out").innerHTML='<div class="subnote"><span class="spin"></span>fetching today’s S&amp;P 500 and running the test on the live engine…</div>';
   try{
     const t0=Date.now();

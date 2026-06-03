@@ -37,6 +37,7 @@ svg.chart{width:100%;height:auto;display:block}svg .axis{stroke:rgba(255,255,255
 </div>
 <script>
 const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"embed"}));}catch(e){} /* aggregate beacon (T3.2) */
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fx=(x,d=4)=>typeof x==="number"?x.toFixed(d):esc(x);
