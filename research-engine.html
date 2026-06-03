@@ -269,7 +269,7 @@ async function loadCatalog(){
   SERIES.forEach(s=>{const id="s_"+s;sl.insertAdjacentHTML("beforeend",
     `<label><input type="checkbox" value="${esc(s)}" id="${id}">${esc(s)}</label>`);});
   $("catbadge").textContent=Object.keys(CATALOG).length+" methods live";
-  msel.addEventListener("change",onMethod); onMethod();
+  msel.addEventListener("change",onMethod); onMethod(); applyHash();
 }
 function selectedSeries(){return [...document.querySelectorAll('#series input:checked')].map(c=>c.value);}
 function setSeries(arr){document.querySelectorAll('#series input').forEach(c=>{c.checked=arr.includes(c.value);});}
@@ -310,6 +310,34 @@ function gatherParams(){
   return {method:k,params};
 }
 
+/* ───── permalink + provenance (T1.2) ───── */
+function hashFor(body){
+  const parts=["method="+body.method];
+  Object.entries(body.params||{}).forEach(([k,v])=>{ if(k==="dataset"||v===""||v==null)return; parts.push(k+"="+(Array.isArray(v)?v.join(","):v)); });
+  return "#"+parts.join("&");
+}
+function applyHash(){
+  const h=decodeURIComponent((location.hash||"").replace(/^#/,"")); if(h.indexOf("method=")<0) return false;
+  const q={}; h.split("&").forEach(kv=>{const i=kv.indexOf("="); if(i>0)q[kv.slice(0,i)]=kv.slice(i+1);});
+  if(!q.method||!CATALOG||!CATALOG[q.method]) return false;
+  $("method").value=q.method; onMethod();
+  if(q.series) setSeries(q.series.split(","));
+  if(q.symbol&&$("symbol")) $("symbol").value=q.symbol;
+  Object.keys(q).forEach(k=>{ if(["method","series","symbol","dataset"].includes(k))return; const el=$("p_"+k); if(el) el.value=q[k]; });
+  run(); return true;
+}
+function copyPerma(t){ try{ navigator.clipboard.writeText(t); }catch(e){} }
+function renderProvenance(d){
+  const p=d&&d.provenance; if(!p) return "";
+  const raw=p.permalink||(location.href.split("#")[0]+(location.hash||""));
+  const link=esc(raw);
+  return `<div style="margin-top:.9rem;padding:.6rem .8rem;border:1px solid var(--border);border-radius:8px;background:var(--surface2);font-family:var(--mono);font-size:.7rem;color:var(--dim);line-height:1.7">
+    <div><span style="color:var(--green)">provenance</span> · ${esc(p.data_vintage||"")}</div>
+    <div>engine ${esc(p.engine_version||"")} · rev ${esc(p.engine_revision||"")} · ${esc((p.timestamp||"").replace("T"," ").replace(/\..*/,"")+" UTC")}</div>
+    <div style="margin-top:.4rem"><a href="${link}" style="color:var(--cyan)">🔗 permalink</a> <button onclick="copyPerma('${raw.replace(/'/g,"\\'")}')" style="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">copy</button></div>
+  </div>`;
+}
+
 /* ───── run + render ───── */
 async function run(){
   const body=gatherParams(); const k=body.method, m=CATALOG[k];
@@ -324,7 +352,7 @@ async function run(){
     const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const d=await r.json();
     if(!d.ok){ $("results").innerHTML=`<div class="warn">${esc(d.error||"analysis failed")}</div>`; }
-    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; renderResult(k,d.result); }
+    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
   }catch(e){ $("results").innerHTML=`<div class="warn">request failed: ${esc(e.message)}</div>`; }
   $("run").disabled=false;
 }
