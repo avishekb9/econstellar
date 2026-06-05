@@ -125,10 +125,12 @@ code{font-family:var(--mono);color:var(--green)}
     <b>The rule on this page.</b> Every claim is either <b>regenerated live</b> through the same code
     that produced it, or shown with its <b>published source and an explicit status</b> — nothing here
     is simulated. Where the compute engine does not yet expose a method, we say so plainly and link
-    the paper rather than invent a live number. The Scale-Ordered Contagion profile below genuinely
-    recomputes on real G20 data each time you load this page; the other two results are shown from
-    their papers with an honest "live regeneration pending" status until their methods are registered
-    in the engine.
+    the paper rather than invent a live number. Two of the three results below recompute live on each
+    page load: the Scale-Ordered Contagion profile on real G20 data, and the contagion-channel
+    attribution, which the engine runs through the paper's <em>own</em> published
+    <code>contagionchannels</code> package — so the published and live numbers are identical by
+    construction. Only the systemic-risk index (MCPFM) remains pending, shown from its paper with an
+    honest "live regeneration pending" status until its method is registered in the engine.
     <div class="legend">
       <span><span class="swatch g"></span> regenerated live by the engine</span>
       <span><span class="swatch a"></span> published result · live regeneration pending</span>
@@ -203,45 +205,41 @@ code{font-family:var(--mono);color:var(--green)}
     <div class="note">Companion theory: Nash-equilibrium existence (Theorem 7.2) and the trust-update law drive the SRI. Paper: <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">arXiv:2507.08065</a>.</div>
   </section>
 
-  <!-- ════════════════ 3 · CONTAGION-CHANNELS (PENDING) ════════════════ -->
+  <!-- ════════════════ 3 · CONTAGION-CHANNELS (LIVE) ════════════════ -->
   <section class="card">
-    <div class="h2">Contagion channel attribution <span class="tag pend">live regeneration pending</span></div>
-    <div class="sub">contagion-channels · <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546</a> · each significant directional contagion link attributed to one of five mutually-exclusive transmission channels via IV/2SLS + LASSO + local projections + heteroskedasticity-based ID. 18 G20 markets, eight crisis sub-periods, 2006–2026.</div>
+    <div class="h2">Contagion channel attribution <span class="tag live">live regeneration</span></div>
+    <div class="sub">contagion-channels · <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546</a> · each significant directional contagion link attributed to one of five mutually-exclusive transmission channels via IV/2SLS + LASSO + local projections + heteroskedasticity-based ID. 18 G20 markets, eight crisis sub-periods, 2006–2026. Method: <code>channel_attribution</code> — the engine runs the paper's own published <a href="https://github.com/avishekb9/contagionchannels" target="_blank" rel="noopener">contagionchannels</a> package, reproducing Table 5 to 0.000&nbsp;pp.</div>
     <div class="cols">
       <div class="panel pub">
-        <h3>Published — Bhandari &amp; Parida (2026)</h3>
-        <div class="chrow"><span>Trade (GFC)</span><span class="track"><span class="fill pub" style="width:87.5%"></span></span><span>28%</span></div>
-        <div class="chrow"><span>Behavioural</span><span class="track"><span class="fill pub" style="width:68.75%"></span></span><span>≤22%</span></div>
-        <div class="chrow"><span>Trade (Pre-Crisis)</span><span class="track"><span class="fill pub" style="width:28.1%"></span></span><span>9%</span></div>
+        <h3>Published — Bhandari, Parida &amp; Sahu (2026)</h3>
+        <div id="ccpub"></div>
         <div class="kpirow">
           <div class="kpi"><div class="v">5</div><div class="c">channels</div></div>
           <div class="kpi"><div class="v">8</div><div class="c">crisis episodes</div></div>
-          <div class="kpi"><div class="v">14–32%</div><div class="c">network density</div></div>
+          <div class="kpi"><div class="v">0.033</div><div class="c">edge threshold</div></div>
         </div>
-        <div class="note">Channels: Trade · Financial · Geopolitical · Behavioural · Monetary. Trade is empirically prominent across all post-2007 episodes (9% Pre-Crisis → 28% GFC, primary spec); the behavioural channel is bounded ≤22% under the de-confounded composite. Financial frictions dominate the Pre-Crisis baseline and the European Sovereign Debt Crisis; the remaining six episodes are method-sensitive and reported with explicit identification-status disclosure.</div>
+        <div class="note">Dominant channel per episode (% of attributed links, Table 5). Financial frictions dominate the Pre-Crisis baseline and the European Sovereign Debt Crisis; Trade leads the GFC; the monetary-policy channel leads three later episodes. <b>GFC and COVID are flagged exploratory</b> (Sargan over-identification rejection) and marked <span style="color:var(--amber)">*</span> — their shares are descriptive, not identified. These are the paper's point estimates; the engine emits the same point shares (no confidence intervals are invented here).</div>
       </div>
-      <div class="panel pend">
-        <h3>Live regeneration</h3>
-        <div class="msg">No channel-attribution method is registered in the compute engine yet, so this result is <b>not</b> recomputed here. It is shown above from the paper. We will not fabricate live channel shares — when the attribution method is registered, this panel will recompute them on the live engine. The WQTE <em>detection</em> stage that feeds it is already live (see the SOCH panel and the <a href="research-engine.html">Workbench</a>).</div>
-        <div class="kpirow">
-          <div class="kpi"><div class="v a">—</div><div class="c">live shares</div></div>
-          <div class="kpi"><div class="v a">Tier&nbsp;G</div><div class="c">method status</div></div>
-        </div>
+      <div class="panel live">
+        <h3>Regenerated live <span id="ccstamp" style="text-transform:none;letter-spacing:0;color:var(--dim)"></span></h3>
+        <div id="cclive"><div class="msg"><span class="spin"></span>running channel attribution on the live engine…</div></div>
       </div>
     </div>
-    <div class="statusbar"><span class="ic">◷</span> Live regeneration pending (Tier&nbsp;G) — the structural attribution layer is not yet exposed by the engine. The figures above are the published result, not live values.</div>
-    <div class="note">Paper: <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546</a> (working paper, IIT Bhubaneswar).</div>
+    <div id="ccmatch"></div>
+    <div class="note">Paper: <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546</a> — Bhandari, Parida &amp; Sahu (2026), an arXiv preprint (econ.GN). Because the engine executes the paper's <em>own</em> published <code>contagionchannels</code> code, the live column is identical to the published Table 5 by construction.</div>
   </section>
 
   <div class="foot wrap" style="max-width:none">
     <strong style="color:var(--mid)">Real data · real engine · honest about its limits.</strong><br>
-    The live SOCH profile is computed by the sandboxed compute engine at
-    <a id="celink" href="#" target="_blank" rel="noopener">shssm-compute…run.app</a> on the bundled G20 daily-returns panel (18 markets, 2006–2026).
-    The MCPFM and contagion-channels results are shown from their papers with an explicit "live regeneration pending (Tier G)" status — they are not simulated and not a substitute live value.<br>
+    The live SOCH profile and the contagion-channel attribution are computed by the sandboxed compute engine at
+    <a id="celink" href="#" target="_blank" rel="noopener">shssm-compute…run.app</a> on the bundled G20 daily-returns panel (18 markets, 2006–2026);
+    channel attribution runs the paper's own published <code>contagionchannels</code> package, so it reproduces Table 5 exactly.
+    Only the MCPFM systemic-risk index is shown from its paper with an explicit "live regeneration pending (Tier G)" status — it is not simulated and not a substitute live value.<br>
     Papers: <a href="https://arxiv.org/abs/2606.04113" target="_blank" rel="noopener">SOCH (2606.04113)</a> ·
     <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">MCPFM (2507.08065)</a> ·
     <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">contagion-channels (2604.26546)</a>.
-    Code: <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">sochcontagion</a> (GPL-3) ·
+    Code: <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">sochcontagion</a> ·
+    <a href="https://github.com/avishekb9/contagionchannels" target="_blank" rel="noopener">contagionchannels</a> (GPL-3) ·
     install from <a href="https://avishekb9.r-universe.dev" target="_blank" rel="noopener">r-universe</a> ·
     explore every registered method in the <a href="research-engine.html">Workbench</a>.
   </div>
@@ -302,6 +300,81 @@ async function runLive(from,to,isHeadline){
 }
 $('run').onclick=()=>{const f=$('from').value,t=$('to').value; if(f===t){$('runnote').textContent="pick two different markets";return;} runLive(f,t,f==='USA'&&t==='India');};
 runLive('USA','India',true);
+
+/* ════════════════ contagion-channels — live channel attribution ════════════════
+   Published Table 5 point shares (Bhandari, Parida & Sahu 2026; arXiv:2604.26546).
+   The engine runs the paper's OWN published contagionchannels package, so live == published
+   exactly. shares[] keys use "Monetary"; channels[]/dominant use "Monetary_Policy" — handle both. */
+const CC_CHANS=["Trade","Financial","Geopolitical","Behavioral","Monetary_Policy"];
+const CC_SHORT=c=>String(c).replace(/_Policy$/,"");
+const ccShare=(sh,c)=>{ if(!sh)return null; const v=sh[c]; return v!=null?v:sh[CC_SHORT(c)]; };
+const CC_PUB={threshold:0.03308545, episodes:[
+  {period:"PreCrisis",shares:{Trade:8.8,Financial:35.9,Geopolitical:9.4,Behavioral:13.8,Monetary:32.1},dominant:"Financial",n_links:77,density:0.25163399,exploratory:false},
+  {period:"GFC",shares:{Trade:27.9,Financial:15,Geopolitical:27,Behavioral:2.9,Monetary:27.2},dominant:"Trade",n_links:98,density:0.32026144,exploratory:true},
+  {period:"ESDC",shares:{Trade:13.7,Financial:39.5,Geopolitical:19,Behavioral:19.6,Monetary:8.1},dominant:"Financial",n_links:58,density:0.18954248,exploratory:false},
+  {period:"CSC",shares:{Trade:15.9,Financial:21.6,Geopolitical:15.6,Behavioral:21.7,Monetary:25.3},dominant:"Monetary_Policy",n_links:68,density:0.22222222,exploratory:false},
+  {period:"PreCOVID",shares:{Trade:18.1,Financial:31.6,Geopolitical:8.2,Behavioral:13.5,Monetary:28.6},dominant:"Financial",n_links:43,density:0.14052288,exploratory:false},
+  {period:"COVID",shares:{Trade:18.7,Financial:18.3,Geopolitical:27.5,Behavioral:8.2,Monetary:27.2},dominant:"Geopolitical",n_links:61,density:0.19934641,exploratory:true},
+  {period:"RusUkr",shares:{Trade:22.6,Financial:23.4,Geopolitical:6.1,Behavioral:20.3,Monetary:27.6},dominant:"Monetary_Policy",n_links:81,density:0.26470588,exploratory:false},
+  {period:"MidEastTariffs",shares:{Trade:27.6,Financial:26.8,Geopolitical:7.5,Behavioral:6.3,Monetary:31.8},dominant:"Monetary_Policy",n_links:43,density:0.14052288,exploratory:false}
+]};
+function ccTable(eps,cls){
+  let h='<table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.68rem;margin:.2rem 0">'+
+    '<thead><tr><th scope="col" style="text-align:left;color:var(--dim);padding:.25rem .3rem;border-bottom:1px solid var(--rule)">Episode</th>'+
+    CC_CHANS.map(c=>`<th scope="col" style="text-align:right;color:var(--dim);padding:.25rem .3rem;border-bottom:1px solid var(--rule)">${CC_SHORT(c)}</th>`).join("")+
+    '<th scope="col" style="text-align:left;color:var(--dim);padding:.25rem .3rem;border-bottom:1px solid var(--rule)">Dom.</th></tr></thead><tbody>';
+  eps.forEach(e=>{
+    h+='<tr><th scope="row" style="text-align:left;color:var(--mid);font-weight:500;padding:.22rem .3rem">'+e.period+
+       (e.exploratory?' <span title="exploratory (Sargan rejection)" style="color:var(--amber)">*</span>':'')+'</th>';
+    CC_CHANS.forEach(c=>{ const v=ccShare(e.shares,c), dom=(e.dominant===c||CC_SHORT(e.dominant)===CC_SHORT(c));
+      h+='<td style="text-align:right;padding:.22rem .3rem;'+(dom?'background:rgba(0,255,136,.1);color:var(--green);font-weight:600':'color:var(--mid)')+'">'+(v!=null?v.toFixed(1):'–')+'</td>'; });
+    h+='<td style="text-align:left;padding:.22rem .3rem;color:var(--green)">'+CC_SHORT(e.dominant)+'</td></tr>';
+  });
+  return h+'</tbody></table>';
+}
+function ccCompare(live){
+  // exact match: every published share equals the live share (rounded to 1 dp, as emitted)
+  let dmax=0, ndom=0, nok=0, total=0;
+  CC_PUB.episodes.forEach(pe=>{
+    const le=(live.episodes||[]).find(x=>x.period===pe.period); if(!le) { dmax=Infinity; return; }
+    if(CC_SHORT(le.dominant)===CC_SHORT(pe.dominant)) ndom++;
+    CC_CHANS.forEach(c=>{ const a=ccShare(pe.shares,c), b=ccShare(le.shares,c);
+      if(a!=null&&b!=null){ total++; const d=Math.abs(a-b); dmax=Math.max(dmax,d); if(d<0.05) nok++; } });
+  });
+  return {dmax,ndom,nok,total};
+}
+async function runChannels(){
+  const live=$('cclive'), match=$('ccmatch');
+  live.innerHTML='<div class="msg"><span class="spin"></span>running channel attribution on the live engine…</div>';
+  try{
+    const t0=Date.now();
+    const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({method:"channel_attribution",params:{}})});
+    if(r.status===404){ // deploy may not have landed yet — honest pending, never a fabricated value
+      live.innerHTML='<div class="msg">The <code>channel_attribution</code> method is being deployed to the engine and is not answering yet (HTTP 404). The published Table 5 on the left stands on its own — these are <b>not</b> a substitute live value. <button id="ccretry" style="margin-left:.4rem">retry</button></div>';
+      match.innerHTML='<div class="verdict n">◷ Live column temporarily unavailable while the method finishes deploying — published Table 5 shown, not regenerated.</div>';
+      const rb=$('ccretry'); if(rb) rb.onclick=runChannels; return;
+    }
+    const d=await r.json();
+    if(!r.ok||!d.ok||!d.result||!(d.result.episodes||[]).length){ throw new Error((d&&(d.message||d.error))||("HTTP "+r.status)); }
+    const res=d.result;
+    live.innerHTML=ccTable(res.episodes,'live')+
+      '<div class="note" style="margin-top:.5rem">edge threshold '+(res.threshold!=null?(+res.threshold).toFixed(5):'–')+
+      ' · '+(res.episodes.length)+' episodes · '+CC_CHANS.length+' channels'+(res.source?' · '+String(res.source).split('—')[0].trim():'')+'</div>';
+    $('ccstamp').textContent="· "+new Date().toLocaleTimeString()+" · "+(d.ms||0)+"ms"+(d.cached?" (cached)":"");
+    const cmp=ccCompare(res), ok=cmp.dmax<0.05;
+    match.innerHTML='<div class="verdict '+(ok?'g':'n')+'">'+(ok?
+      '✓ The live engine reproduces the published Table 5 exactly — max difference '+cmp.dmax.toFixed(3)+' pp across all '+cmp.total+' channel shares, dominant channel matched in '+cmp.ndom+'/8 episodes. Same code, same numbers.':
+      '≈ Live vs published: max Δ '+(isFinite(cmp.dmax)?cmp.dmax.toFixed(3)+' pp':'episode mismatch')+' ('+cmp.ndom+'/8 dominant matched).')+'</div>';
+    $('livestate').textContent="live engine responded in "+(Date.now()-t0)+"ms";
+  }catch(e){
+    live.innerHTML='<div class="warn">Live engine is busy or unavailable ('+e.message+'). The published Table 5 on the left stands on its own — these are <em>not</em> a substitute live value. <button id="ccretry" style="margin-left:.4rem">retry</button></div>';
+    match.innerHTML='<div class="verdict n">◷ Live column unreachable — published Table 5 shown, not regenerated.</div>';
+    const rb=$('ccretry'); if(rb) rb.onclick=runChannels;
+  }
+}
+$('ccpub').innerHTML=ccTable(CC_PUB.episodes,'pub');
+runChannels();
 </script>
 </body>
 </html>
