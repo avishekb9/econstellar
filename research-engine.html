@@ -558,6 +558,9 @@ function renderJob(d){
   // succeeded with a result → bespoke renderer if we have one, else generic
   if(d.method==="ksg_te") h+=renderKsgTe(d.result);
   else h+=renderJobGeneric(d.result);
+  // make Tier D exports work for permalinked jobs too (params come from the job record)
+  window.LAST={method:d.method,body:{method:d.method,params:d.params||(d.provenance&&d.provenance.params)||{}},result:d.result,provenance:d.provenance||{}};
+  h+=exportToolbarHTML(window.LAST);
   el.innerHTML=h;
 }
 
@@ -653,8 +656,61 @@ function toCSV(L){
   return rows.join("\n");
 }
 function exportCSV(){ if(!window.LAST)return; downloadFile(window.LAST.method+"_"+stamp()+".csv", toCSV(window.LAST),"text/csv"); }
+/* Tier D provenance helpers — resolve fields that may be absent (Tier C not yet redeployed). */
+function provOf(L){ return (L&&L.provenance)||{}; }
+function methodVersionOf(L){ const p=provOf(L); return p.method_version||(CATALOG&&CATALOG[L.method]&&CATALOG[L.method].version)||""; }
+function permalinkOf(L){ const p=provOf(L); return p.permalink||(location.href.split("#")[0]+(location.hash||"")); }
+function tsOf(L){ const p=provOf(L); return p.timestamp||""; }
+function tsClean(t){ return t?String(t).replace("T"," ").replace(/\..*/,"")+" UTC":""; }
+function methodLabel(m){ return (CATALOG&&CATALOG[m]&&CATALOG[m].label)||m||"analysis"; }
+/* a one-line, human-readable param string for captions */
+function paramsLine(L){
+  const ps=(L.body&&L.body.params)||provOf(L).params||{};
+  const parts=[];
+  Object.entries(ps).forEach(([k,v])=>{ if(v==null||v==="") return; parts.push(k+"="+(Array.isArray(v)?v.join(","):v)); });
+  return parts.join(", ");
+}
+/* Auto caption from provenance — shared by figure (SVG) and LaTeX table exports. */
+function provCaption(L){
+  const p=provOf(L), mv=methodVersionOf(L);
+  const bits=[methodLabel(L.method)+(mv?" v"+mv:"")];
+  const panel=p.panel_id||(L.body&&L.body.params&&L.body.params.dataset);
+  if(panel){ let pv=panel; if(p.panel_version) pv+=" v"+p.panel_version; if(p.panel_hash) pv+=" ("+String(p.panel_hash).slice(0,12)+")"; bits.push("panel: "+pv); }
+  const pl=paramsLine(L); if(pl) bits.push(pl);
+  if(p.data_vintage) bits.push("data vintage "+p.data_vintage);
+  const t=tsClean(tsOf(L)); if(t) bits.push("computed "+t);
+  return bits.join(" · ");
+}
+/* citation footer line for figures (engine + permalink) */
+function citeFooter(L){
+  const p=provOf(L), eng=p.engine_version?("SHSSM Compute Engine "+p.engine_version):"SHSSM Compute Engine";
+  const rev=p.engine_revision?(" · rev "+String(p.engine_revision).slice(0,10)):"";
+  return eng+rev+" · "+permalinkOf(L);
+}
 function bibtexFor(L){
   const p=L.provenance||{}, m=L.method, out=[];
+  const mv=methodVersionOf(L), url=permalinkOf(L), ts=tsOf(L);
+  // distinguishable key: method + ISO-date(+hash) so today's run ≠ a re-run six months later
+  const day=(ts||"").slice(0,10).replace(/-/g,"")||"undated";
+  const tail=(p.panel_hash?String(p.panel_hash).slice(0,6):(ts?ts.slice(11,19).replace(/:/g,""):""));
+  const key="shssm_"+m+"_"+day+(tail?"_"+tail:"");
+  // note: every provenance field that is present, so two results cite distinguishably
+  const noteBits=[];
+  if(mv) noteBits.push("method "+m+" v"+mv); else noteBits.push("method "+m);
+  if(p.engine_version) noteBits.push("engine "+p.engine_version);
+  if(p.engine_revision) noteBits.push("revision "+p.engine_revision);
+  if(p.panel_id) noteBits.push("panel "+p.panel_id+(p.panel_version?" v"+p.panel_version:"")+(p.panel_hash?" ["+p.panel_hash+"]":""));
+  if(p.data_vintage) noteBits.push("data vintage "+p.data_vintage);
+  if(ts) noteBits.push("run "+ts);
+  const fields=[
+    "  author = {Bhandari, Avishek}",
+    "  title  = {"+methodLabel(m)+" — live analysis on the SHSSM Research Engine}",
+    "  year   = {"+((ts||"2026").slice(0,4))+"}",
+    "  note   = {"+noteBits.join("; ")+"}",
+    "  howpublished = {SHSSM Compute Engine, IIT Bhubaneswar}",
+    "  url    = {"+url+"}"
+  ];
+  out.push("@misc{"+key+",\n"+fields.join(",\n")+"\n}");
   out.push(`@misc{shssm_compute_engine,\n  author = {Bhandari, Avishek},\n  title  = {SHSSM Compute Engine: a sandboxed open econometrics workbench},\n  year   = {2026},\n  note   = {Engine ${p.engine_version||""}, revision ${p.engine_revision||""}; method ${m}},\n  howpublished = {\\url{https://github.com/avishekb9/compute-engine}}\n}`);
   if(m==="soch_profile"){
     out.push(`@unpublished{bhandari_parida_2026_soch,\n  author = {Bhandari, Avishek and Parida, Ipsita},\n  title  = {Scale-Ordered Contagion},\n  year   = {2026},\n  note   = {Working paper, IIT Bhubaneswar}\n}`);
@@ -682,6 +738,321 @@ function showEmbed(){ if(!window.LAST)return;
   document.getElementById("results").appendChild(box);
 }
 
+/* ═════ Tier D — publication-quality export (figure SVG · LaTeX table · BibTeX) ═════
+   Self-contained outputs built from window.LAST (set by both the sync runner and the
+   #job= viewer). Okabe-Ito colourblind-safe categorical palette throughout. */
+const OKABE_ITO=["#0072B2","#E69F00","#009E73","#D55E00","#CC79A7","#56B4E9","#F0E442","#000000"];
+const xmlEsc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));
+/* word-wrap a long caption/footer into <=width-char lines (SVG has no flow text) */
+function wrapText(s,width){ const words=String(s).split(/\s+/), lines=[]; let cur="";
+  words.forEach(w=>{ if((cur+" "+w).trim().length>width){ if(cur)lines.push(cur); cur=w; } else cur=(cur?cur+" ":"")+w; });
+  if(cur)lines.push(cur); return lines; }
+/* Common publication frame: white background, title, plot area, auto-caption + citation footer.
+   `draw(ctx)` paints into the plot rect ctx={x,y,w,h,...}; returns a complete standalone SVG string. */
+function svgFrame(L,opt,draw){
+  const W=opt.W||640, pad=opt.pad||{l:64,r:24,t:54,b:48};
+  const capLines=wrapText("Figure. "+provCaption(L), Math.floor(W/6.2));
+  const footLines=wrapText(citeFooter(L), Math.floor(W/5.6));
+  const capH=12*capLines.length, footH=11*footLines.length;
+  const plotH=opt.plotH||300;
+  const H=pad.t+plotH+pad.b+capH+8+footH+10;
+  const px=pad.l, py=pad.t, pw=W-pad.l-pad.r, ph=plotH;
+  let s='<?xml version="1.0" encoding="UTF-8"?>\n';
+  s+='<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" font-family="Helvetica, Arial, sans-serif">';
+  s+='<rect width="'+W+'" height="'+H+'" fill="#ffffff"/>';
+  if(opt.title) s+='<text x="'+px+'" y="26" font-size="15" font-weight="700" fill="#111111">'+xmlEsc(opt.title)+'</text>';
+  if(opt.subtitle) s+='<text x="'+px+'" y="42" font-size="10.5" fill="#555555">'+xmlEsc(opt.subtitle)+'</text>';
+  s+=draw({x:px,y:py,w:pw,h:ph,W:W});
+  // caption + citation footer (below the plot)
+  let cy=py+ph+capH+2;
+  s+='<text x="'+px+'" y="'+cy+'" font-size="9.5" fill="#333333">';
+  capLines.forEach((ln,i)=>{ s+='<tspan x="'+px+'" dy="'+(i?12:0)+'">'+xmlEsc(ln)+'</tspan>'; });
+  s+='</text>';
+  let fy=cy+10+11;
+  s+='<text x="'+px+'" y="'+fy+'" font-size="8.5" fill="#888888">';
+  footLines.forEach((ln,i)=>{ s+='<tspan x="'+px+'" dy="'+(i?11:0)+'">'+xmlEsc(ln)+'</tspan>'; });
+  s+='</text>';
+  s+='</svg>';
+  return s;
+}
+/* horizontal categorical bar chart (KSG top links, SOCH profile, wavelet variance, connectedness net, …) */
+function barFigure(L,cfg){
+  const rows=cfg.rows; if(!rows||!rows.length) return null;
+  const signed=!!cfg.signed;
+  const vals=rows.map(r=>r.v);
+  const vmax=Math.max(0, ...vals, ...(signed?[]:[0])), vmin=Math.min(0, ...vals);
+  const lo=signed?Math.min(vmin,0):0, hi=Math.max(vmax,0.0001), span=(hi-lo)||1;
+  const labW=Math.min(150, 8+Math.max(...rows.map(r=>String(r.k).length))*6.0);
+  return svgFrame(L,{title:cfg.title,subtitle:cfg.subtitle,plotH:Math.max(120,rows.length*22+24),W:cfg.W||640},
+    ctx=>{
+      const bx=ctx.x+labW, bw=ctx.w-labW-46, bh=18, gap=4;
+      const sx=v=>bx+bw*((v-lo)/span);
+      let s='';
+      // x-axis baseline + ticks
+      const zx=sx(0);
+      s+='<line x1="'+bx.toFixed(1)+'" y1="'+ctx.y+'" x2="'+bx.toFixed(1)+'" y2="'+(ctx.y+rows.length*(bh+gap)).toFixed(1)+'" stroke="#cccccc"/>';
+      [lo,(lo+hi)/2,hi].forEach(t=>{ const tx=sx(t); s+='<line x1="'+tx.toFixed(1)+'" y1="'+(ctx.y+rows.length*(bh+gap)).toFixed(1)+'" x2="'+tx.toFixed(1)+'" y2="'+(ctx.y+rows.length*(bh+gap)+4).toFixed(1)+'" stroke="#999999"/><text x="'+tx.toFixed(1)+'" y="'+(ctx.y+rows.length*(bh+gap)+15).toFixed(1)+'" font-size="9" fill="#555555" text-anchor="middle">'+(+t).toFixed(cfg.dp!=null?cfg.dp:3)+'</text>'; });
+      if(cfg.xlabel) s+='<text x="'+(bx+bw/2).toFixed(1)+'" y="'+(ctx.y+rows.length*(bh+gap)+30).toFixed(1)+'" font-size="9.5" fill="#333333" text-anchor="middle">'+xmlEsc(cfg.xlabel)+'</text>';
+      rows.forEach((r,i)=>{
+        const yy=ctx.y+i*(bh+gap);
+        const x0=signed?Math.min(zx,sx(r.v)):bx, x1=signed?Math.max(zx,sx(r.v)):sx(r.v);
+        const col=r.col||OKABE_ITO[i%OKABE_ITO.length];
+        s+='<text x="'+(ctx.x+labW-6).toFixed(1)+'" y="'+(yy+bh*0.72).toFixed(1)+'" font-size="9.5" fill="#222222" text-anchor="end">'+xmlEsc(r.k)+'</text>';
+        s+='<rect x="'+x0.toFixed(1)+'" y="'+yy.toFixed(1)+'" width="'+Math.max(0.5,(x1-x0)).toFixed(1)+'" height="'+bh+'" fill="'+col+'"/>';
+        s+='<text x="'+(x1+4).toFixed(1)+'" y="'+(yy+bh*0.72).toFixed(1)+'" font-size="9" fill="#444444">'+(+r.v).toFixed(cfg.dp!=null?cfg.dp:4)+'</text>';
+      });
+      return s;
+    });
+}
+/* multi-line chart (IRF responses, rolling TCI) */
+function lineFigure(L,cfg){
+  const series=cfg.series.filter(s=>s.vals&&s.vals.length); if(!series.length) return null;
+  const n=Math.max(...series.map(s=>s.vals.length));
+  const all=series.flatMap(s=>s.vals.filter(isFinite));
+  let mx=Math.max(...all), mn=Math.min(...all); if(mx===mn){mx+=1;mn-=1;}
+  if(cfg.zeroline){ mx=Math.max(mx,0); mn=Math.min(mn,0); }
+  return svgFrame(L,{title:cfg.title,subtitle:cfg.subtitle,plotH:280,W:cfg.W||640},
+    ctx=>{
+      const x=i=>ctx.x+ctx.w*(n>1?i/(n-1):0), y=v=>ctx.y+ctx.h*(1-(v-mn)/((mx-mn)||1));
+      let s='';
+      // axes
+      s+='<line x1="'+ctx.x+'" y1="'+ctx.y+'" x2="'+ctx.x+'" y2="'+(ctx.y+ctx.h)+'" stroke="#444444"/>';
+      s+='<line x1="'+ctx.x+'" y1="'+(ctx.y+ctx.h)+'" x2="'+(ctx.x+ctx.w)+'" y2="'+(ctx.y+ctx.h)+'" stroke="#444444"/>';
+      // y ticks
+      [mn,(mn+mx)/2,mx].forEach(v=>{ const yy=y(v); s+='<line x1="'+(ctx.x-4)+'" y1="'+yy.toFixed(1)+'" x2="'+ctx.x+'" y2="'+yy.toFixed(1)+'" stroke="#444444"/><text x="'+(ctx.x-7)+'" y="'+(yy+3).toFixed(1)+'" font-size="9" fill="#555555" text-anchor="end">'+(+v).toFixed(cfg.dp!=null?cfg.dp:3)+'</text>'; });
+      if(cfg.zeroline && mn<0 && mx>0){ const zy=y(0); s+='<line x1="'+ctx.x+'" y1="'+zy.toFixed(1)+'" x2="'+(ctx.x+ctx.w)+'" y2="'+zy.toFixed(1)+'" stroke="#bbbbbb" stroke-dasharray="3,3"/>'; }
+      // x ticks
+      const xt=cfg.xticks||[0,Math.floor((n-1)/2),n-1];
+      xt.forEach(i=>{ const xx=x(i); const lab=cfg.xtickfmt?cfg.xtickfmt(i):String(i); s+='<line x1="'+xx.toFixed(1)+'" y1="'+(ctx.y+ctx.h)+'" x2="'+xx.toFixed(1)+'" y2="'+(ctx.y+ctx.h+4)+'" stroke="#444444"/><text x="'+xx.toFixed(1)+'" y="'+(ctx.y+ctx.h+15)+'" font-size="9" fill="#555555" text-anchor="middle">'+xmlEsc(lab)+'</text>'; });
+      // axis labels
+      if(cfg.xlabel) s+='<text x="'+(ctx.x+ctx.w/2).toFixed(1)+'" y="'+(ctx.y+ctx.h+32)+'" font-size="10" fill="#333333" text-anchor="middle">'+xmlEsc(cfg.xlabel)+'</text>';
+      if(cfg.ylabel) s+='<text transform="translate('+(ctx.x-46)+','+(ctx.y+ctx.h/2).toFixed(1)+') rotate(-90)" font-size="10" fill="#333333" text-anchor="middle">'+xmlEsc(cfg.ylabel)+'</text>';
+      // lines + legend
+      series.forEach((se,si)=>{ const col=OKABE_ITO[si%OKABE_ITO.length];
+        if(cfg.area){ const base=ctx.y+ctx.h; let pts=se.vals.map((v,i)=>x(i).toFixed(1)+","+y(v).toFixed(1)).join(" ");
+          s+='<polygon points="'+ctx.x.toFixed(1)+','+base.toFixed(1)+' '+pts+' '+(ctx.x+ctx.w).toFixed(1)+','+base.toFixed(1)+'" fill="'+col+'" fill-opacity="0.12" stroke="none"/>'; }
+        const pts=se.vals.map((v,i)=>x(i).toFixed(1)+","+y(v).toFixed(1)).join(" ");
+        s+='<polyline fill="none" stroke="'+col+'" stroke-width="1.8" points="'+pts+'"/>';
+      });
+      if(series.length>1 || cfg.forceLegend){ let lx=ctx.x+8, ly=ctx.y+12;
+        series.forEach((se,si)=>{ const col=OKABE_ITO[si%OKABE_ITO.length];
+          s+='<rect x="'+lx+'" y="'+(ly-8)+'" width="11" height="11" fill="'+col+'"/><text x="'+(lx+15)+'" y="'+(ly+1)+'" font-size="9.5" fill="#222222">'+xmlEsc(se.name)+'</text>';
+          lx+=22+String(se.name).length*6.2; if(lx>ctx.x+ctx.w-80){lx=ctx.x+8;ly+=14;} });
+      }
+      return s;
+    });
+}
+/* force-directed network (Granger / connectedness graph) — uses server x/y layout */
+function networkFigure(L,r){
+  const nodes=r.nodes||[], edges=r.edges||[]; if(!nodes.length) return null;
+  return svgFrame(L,{title:"Directed market network",subtitle:(r.n_edges!=null?r.n_edges+" edges · ":"")+(r.n_communities!=null?r.n_communities+" communities":""),plotH:380,W:680},
+    ctx=>{
+      const xs=nodes.map(n=>n.x), ys=nodes.map(n=>n.y);
+      const xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
+      const sx=v=>ctx.x+24+(ctx.w-48)*((v-xmin)/((xmax-xmin)||1));
+      const sy=v=>ctx.y+24+(ctx.h-48)*((v-ymin)/((ymax-ymin)||1));
+      const nById={}; nodes.forEach(n=>nById[n.id]=n);
+      const pos={}; nodes.forEach(n=>pos[n.id]=[sx(n.x),sy(n.y)]);
+      const rad=n=>5+1.6*Math.sqrt((n.in_degree||0)+(n.out_degree||0));
+      const wmax=Math.max(...edges.map(e=>e.weight||1),1);
+      let s='<defs><marker id="arrPub" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#888888"/></marker></defs>';
+      edges.forEach(e=>{const a=pos[e.from],b=pos[e.to]; if(!a||!b)return;
+        const dx=b[0]-a[0],dy=b[1]-a[1],Ln=Math.hypot(dx,dy)||1, tr=rad(nById[e.to])+4;
+        const ex=b[0]-dx/Ln*tr, ey=b[1]-dy/Ln*tr;
+        s+='<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+ex.toFixed(1)+'" y2="'+ey.toFixed(1)+'" stroke="#bbbbbb" stroke-width="'+(0.5+1.6*(e.weight||1)/wmax).toFixed(2)+'" marker-end="url(#arrPub)"/>';});
+      nodes.forEach(n=>{const p=pos[n.id], rr=rad(n), c=OKABE_ITO[(((n.community||1)-1)%OKABE_ITO.length)];
+        s+='<circle cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+rr.toFixed(1)+'" fill="'+c+'" fill-opacity="0.9" stroke="#ffffff" stroke-width="1"/>';
+        s+='<text x="'+p[0].toFixed(1)+'" y="'+(p[1]-rr-3).toFixed(1)+'" font-size="9" fill="#222222" text-anchor="middle">'+xmlEsc(n.id)+'</text>';});
+      return s;
+    });
+}
+/* dispatcher: build a publication SVG for the current result, or null if it has no chart */
+function buildFigureSVG(L){
+  const k=L.method, r=L.result||{};
+  if(k==="ksg_te"){
+    const rows=(r.top||[]).slice(0,15).map(e=>({k:e.from+"→"+e.to, v:e.te||0}));
+    return barFigure(L,{title:"KSG transfer entropy — strongest directed links",subtitle:"top significant links (IAAFT-surrogate test)",rows,xlabel:"transfer entropy (nats)",dp:4});
+  }
+  if(k==="var_irf"){
+    const irf=r.irf||[]; if(!irf.length) return null;
+    return lineFigure(L,{title:"Orthogonal impulse responses",subtitle:"shock: "+(r.irf_shock||"")+" · horizon "+(r.irf_horizon!=null?r.irf_horizon:irf[0].values.length-1),
+      series:irf.map(s=>({name:s.response,vals:s.values})),zeroline:true,xlabel:"horizon (periods)",ylabel:"response",xtickfmt:i=>String(i),dp:3});
+  }
+  if(k==="spillover_rolling"){
+    const v=(r.tci_series||[]).filter(p=>p&&isFinite(p.tci)); if(v.length<2) return null;
+    const dates=v.map(p=>(p.date||"").slice(0,7));
+    return lineFigure(L,{title:"Rolling total connectedness (Diebold-Yilmaz)",subtitle:"window TCI over time — peaks mark systemic-stress episodes",
+      series:[{name:"TCI",vals:v.map(p=>p.tci)}],area:true,forceLegend:false,xlabel:"window date",ylabel:"TCI (%)",
+      xticks:[0,Math.floor(v.length/2),v.length-1],xtickfmt:i=>dates[i]||"",dp:1});
+  }
+  if(k==="network"||k==="granger"&&(r.nodes&&r.nodes.length)){ if(r.nodes&&r.nodes.length) return networkFigure(L,r); }
+  if(k==="soch_profile"){
+    const F=r.profile_forward||[]; if(!F.length) return null;
+    return barFigure(L,{title:"SOCH scale-ordered contagion profile",subtitle:(r.from||"")+" → "+(r.to||"")+" (forward gain by MODWT scale)",
+      rows:F.map(p=>({k:p.scale, v:p.gain||0})),xlabel:"forward gain",dp:4});
+  }
+  if(k==="connectedness"){
+    const dir=r.directional||[]; if(!dir.length) return null;
+    return barFigure(L,{title:"Net directional connectedness",subtitle:"NET = TO − FROM (positive = net transmitter)",signed:true,
+      rows:dir.map(d=>({k:d.market, v:d.net, col:(d.net>=0?OKABE_ITO[2]:OKABE_ITO[3])})),xlabel:"net connectedness (%)",dp:2});
+  }
+  if(k==="wavelet"){
+    const sc=r.scales||[]; if(!sc.length) return null;
+    return barFigure(L,{title:"Wavelet variance decomposition",subtitle:"share of total variance by MODWT scale",
+      rows:sc.map(s=>({k:s.scale, v:s.pct_of_total||0})),xlabel:"% of total variance",dp:1});
+  }
+  if(k==="wavelet_coherence"){
+    const ps=r.per_scale||[]; if(!ps.length) return null;
+    return barFigure(L,{title:"Wavelet coherence by scale",subtitle:(r.series||[]).join(" / ")+" — squared coherence ∈ [0,1]",
+      rows:ps.map(p=>({k:p.scale, v:p.coherence||0})),xlabel:"squared coherence",dp:3});
+  }
+  if(k==="quantile_var"){
+    const dir=r.directional||[]; if(!dir.length) return null;
+    return barFigure(L,{title:"Net tail influence (quantile VAR)",subtitle:"τ="+(r.tau!=null?r.tau:"")+" · NET = drives − driven_by",signed:true,
+      rows:dir.map(d=>({k:d.market, v:d.net||0, col:((d.net||0)>=0?OKABE_ITO[0]:OKABE_ITO[3])})),xlabel:"net tail influence",dp:3});
+  }
+  if(k==="wqte"){
+    const ps=r.per_scale||[]; if(!ps.length) return null;
+    return barFigure(L,{title:"Wavelet-quantile transfer entropy by scale",subtitle:(r.from||"")+" → "+(r.to||"")+" · τ="+(r.tau!=null?r.tau:""),
+      rows:ps.map(p=>({k:p.scale, v:p.qte||0})),xlabel:"QTE",dp:4});
+  }
+  return null; // no chart for this method → toolbar omits the figure button
+}
+function exportFigureSVG(){ if(!window.LAST)return; const svg=buildFigureSVG(window.LAST); if(!svg)return;
+  downloadFile(window.LAST.method+"_figure_"+stamp()+".svg", svg, "image/svg+xml"); }
+
+/* ── D.2 LaTeX (booktabs) table export ── */
+function texEsc(s){ return String(s==null?"":s).replace(/\\/g,"\\textbackslash{}").replace(/([&%$#_{}])/g,"\\$1").replace(/\^/g,"\\^{}").replace(/~/g,"\\~{}").replace(/→/g,"$\\to$").replace(/≤/g,"$\\leq$").replace(/–/g,"--").replace(/·/g,";").replace(/α/g,"$\\alpha$").replace(/β/g,"$\\beta$").replace(/τ/g,"$\\tau$").replace(/ρ/g,"$\\rho$").replace(/²/g,"$^2$"); }
+function texNum(v,dp){ return typeof v==="number"&&isFinite(v)?v.toFixed(dp==null?4:dp):texEsc(v); }
+/* return {headers:[{t,unit?,num?}], rows:[[...]], colfmt, caption, label} for the current result, or null */
+function buildLatexTable(L){
+  const k=L.method, r=L.result||{};
+  const lbl="tab:"+k+"_"+((tsOf(L)||"").slice(0,10).replace(/-/g,"")||"run");
+  const mk=(headers,rows,colfmt)=>({headers,rows,colfmt,caption:provCaption(L),label:lbl});
+  if(k==="ksg_te"){
+    const eds=(JOBEDGES&&JOBEDGES.length?JOBEDGES:r.edges||[]).slice().sort((a,b)=>(b.te||0)-(a.te||0));
+    if(!eds.length) return null;
+    return mk([{t:"From"},{t:"To"},{t:"TE",unit:"nats",num:1},{t:"$p$",num:1},{t:"Sig.\\ ($p<0.05$)"}],
+      eds.map(e=>[texEsc(e.from),texEsc(e.to),texNum(e.te,4),texNum(e.p,3),(e.p!=null&&e.p<0.05)?"yes":"no"]),"llrrc");
+  }
+  if(k==="unit_root"){
+    const a=r.adf||{}, kp=r.kpss||{};
+    return mk([{t:"Test"},{t:"Statistic",num:1},{t:"5\\% crit.",num:1},{t:"$p$-value",num:1},{t:"Decision"}],
+      [["ADF",texNum(a.statistic,3),texNum(a.crit&&a.crit["5pct"],3),texNum(a.p_value,3),a.reject_unit_root_5pct?"reject unit root":"fail to reject"],
+       ["KPSS",texNum(kp.statistic,3),texNum(kp.crit&&kp.crit["5pct"],3),texNum(kp.p_value,3),kp.stationary_5pct?"stationary":"non-stationary"]],"lrrrl");
+  }
+  if(k==="panel_unit_root"){
+    const ips=r.ips||{}, llc=r.llc||{};
+    return mk([{t:"Test"},{t:"Statistic",num:1},{t:"$p$-value",num:1},{t:"Decision"}],
+      [["IPS $W_{\\bar t}$",texNum(ips.statistic,3),texNum(ips.p_value,3),(ips.p_value!=null&&ips.p_value<0.05)?"stationary":"unit root"],
+       ["LLC $t^*$",texNum(llc.statistic,3),texNum(llc.p_value,3),(llc.p_value!=null&&llc.p_value<0.05)?"stationary":"unit root"]],"lrrl");
+  }
+  if(k==="connectedness"){
+    const dir=r.directional||[]; if(!dir.length) return null;
+    return mk([{t:"Market"},{t:"TO",unit:"\\%",num:1},{t:"FROM",unit:"\\%",num:1},{t:"NET",unit:"\\%",num:1}],
+      dir.map(d=>[texEsc(d.market),texNum(d.to,2),texNum(d.from,2),(d.net>=0?"+":"")+texNum(d.net,2)]),"lrrr");
+  }
+  if(k==="vecm"){
+    const ts=r.trace_stat||[], cv=r.crit_5pct||[]; if(!ts.length) return null;
+    return mk([{t:"$H_0$: rank $\\leq r$"},{t:"Trace stat.",num:1},{t:"5\\% crit.",num:1},{t:"Decision"}],
+      ts.map((t,i)=>["$r \\leq "+i+"$",texNum(t,2),texNum(cv[i],2),(t>cv[i])?"reject":"--"]),"lrrl");
+  }
+  if(k==="granger"){
+    const od=r.out_degree||{}, idg=r.in_degree||{}, ms=r.series||Object.keys(od); if(!ms.length) return null;
+    return mk([{t:"Market"},{t:"Out-degree",num:0},{t:"In-degree",num:0}],
+      ms.map(s=>[texEsc(s),String(od[s]||0),String(idg[s]||0)]),"lrr");
+  }
+  if(k==="network"){
+    const nd=(r.nodes||[]).slice().sort((a,b)=>(b.out_degree+b.in_degree)-(a.out_degree+a.in_degree)); if(!nd.length) return null;
+    return mk([{t:"Node"},{t:"Out",num:0},{t:"In",num:0},{t:"Betw.",num:1},{t:"Eigen.",num:1},{t:"Comm.",num:0}],
+      nd.map(n=>[texEsc(n.id),String(n.out_degree),String(n.in_degree),texNum(n.betweenness,1),texNum(n.eigen,2),String(n.community)]),"lrrrrr");
+  }
+  if(k==="soch_profile"){
+    const F=r.profile_forward||[], Rv=r.profile_reverse||[]; if(!F.length) return null;
+    return mk([{t:"Scale"},{t:(r.from||"")+" $\\to$ "+(r.to||"")+" (fwd)",num:1},{t:(r.to||"")+" $\\to$ "+(r.from||"")+" (rev)",num:1}],
+      F.map((p,i)=>[texEsc(p.scale),texNum(p.gain,4),texNum((Rv[i]||{}).gain,4)]),"lrr");
+  }
+  if(k==="wqte"){
+    const ps=r.per_scale||[]; if(!ps.length) return null;
+    return mk([{t:"Scale"},{t:"QTE",num:1}], ps.map(p=>[texEsc(p.scale),texNum(p.qte,4)]),"lr");
+  }
+  if(k==="wavelet"){
+    const sc=r.scales||[]; if(!sc.length) return null;
+    return mk([{t:"Scale"},{t:"Horizon"},{t:"Variance share",unit:"\\%",num:1}],
+      sc.map(s=>[texEsc(s.scale),texEsc(s.horizon),texNum(s.pct_of_total,1)]),"llr");
+  }
+  if(k==="wavelet_coherence"){
+    const ps=r.per_scale||[]; if(!ps.length) return null;
+    return mk([{t:"Scale"},{t:"Squared coherence",num:1}], ps.map(p=>[texEsc(p.scale),texNum(p.coherence,3)]),"lr");
+  }
+  if(k==="rolling_dcc"){
+    const pr=r.pairs||[]; if(!pr.length) return null;
+    return mk([{t:"Pair"},{t:"Mean $\\rho$",num:1},{t:"Last $\\rho$",num:1},{t:"Min",num:1},{t:"Max",num:1}],
+      pr.map(p=>[texEsc(p.pair),texNum(p.mean_corr,3),texNum(p.last_corr,3),texNum(p.min_corr,3),texNum(p.max_corr,3)]),"lrrrr");
+  }
+  if(k==="quantile_var"){
+    const dir=r.directional||[]; if(!dir.length) return null;
+    return mk([{t:"Market"},{t:"Drives",num:1},{t:"Driven by",num:1},{t:"NET",num:1}],
+      dir.map(d=>[texEsc(d.market),texNum(d.drives,3),texNum(d.driven_by,3),(d.net>=0?"+":"")+texNum(d.net,3)]),"lrrr");
+  }
+  if(k==="garch"){
+    const co=r.coefficients||{};
+    return mk([{t:"Parameter"},{t:"Estimate",num:1}],
+      [["$\\alpha$ (ARCH)",texNum(co.a1,4)],["$\\beta$ (GARCH)",texNum(co.b1,4)],["Persistence $\\alpha+\\beta$",texNum(r.persistence,4)]],"lr");
+  }
+  if(k==="dfa_hurst"){
+    return mk([{t:"Quantity"},{t:"Value",num:1}],
+      [["Hurst $H$",texNum(r.hurst,3)],["Boxes",String(r.n_boxes!=null?r.n_boxes:"")],["Observations",String(r.n!=null?r.n:"")]],"lr");
+  }
+  return null; // no tabular form → toolbar omits the LaTeX button
+}
+function latexTableText(L){
+  const T=buildLatexTable(L); if(!T) return null;
+  const colspec=T.colfmt;
+  const head=T.headers.map(h=>"\\textbf{"+(h.t)+(h.unit?" ("+h.unit+")":"")+"}").join(" & ")+" \\\\";
+  const body=T.rows.map(r=>r.join(" & ")+" \\\\").join("\n");
+  return [
+    "\\begin{table}[htbp]",
+    "  \\centering",
+    "  \\caption{"+texEsc(T.caption)+"}",
+    "  \\label{"+T.label+"}",
+    "  \\begin{tabular}{"+colspec+"}",
+    "    \\toprule",
+    "    "+head,
+    "    \\midrule",
+    body.split("\n").map(l=>"    "+l).join("\n"),
+    "    \\bottomrule",
+    "  \\end{tabular}",
+    "\\end{table}"
+  ].join("\n");
+}
+function exportLatexTable(){ if(!window.LAST)return; const tex=latexTableText(window.LAST); if(!tex)return;
+  downloadFile(window.LAST.method+"_table_"+stamp()+".tex", tex, "text/plain"); }
+function showLatexTable(){ if(!window.LAST)return; const tex=latexTableText(window.LAST); if(!tex)return;
+  let box=document.getElementById("texbox"); if(box) box.remove();
+  box=document.createElement("div"); box.id="texbox";
+  box.style.cssText="margin-top:.6rem;padding:.6rem .8rem;border:1px solid var(--hot);border-radius:8px;background:var(--surface2)";
+  box.innerHTML='<div style="font-family:var(--mono);font-size:.7rem;color:var(--green);margin-bottom:.4rem">LaTeX (booktabs) '+
+    '<button onclick="copyPerma(document.getElementById(\'texpre\').textContent)" style="margin-left:.4rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">copy</button> '+
+    '<button onclick="exportLatexTable()" style="margin-left:.2rem;font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.2rem .5rem;cursor:pointer">⬇ .tex</button> '+
+    '<span style="color:var(--dim)">— needs \\usepackage{booktabs}</span></div>'+
+    '<pre id="texpre" class="mono" style="white-space:pre;overflow:auto;max-height:320px;font-size:.68rem;color:var(--mid);margin:0">'+esc(tex)+'</pre>';
+  document.getElementById("results").appendChild(box);
+}
+/* compact export toolbar surfaced on every rendered result (sync + #job=). Keyboard-accessible
+   <button>s; only shows actions that apply to this result. */
+function exportToolbarHTML(L){
+  if(!L) return "";
+  const B="font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.24rem .6rem;cursor:pointer";
+  const hasFig=!!buildFigureSVG(L), hasTab=!!buildLatexTable(L);
+  let btns="";
+  if(hasFig) btns+='<button type="button" onclick="exportFigureSVG()" title="Download a self-contained, publication-ready SVG" style="'+B+'">⬇ Export figure (SVG)</button>';
+  if(hasTab) btns+='<button type="button" onclick="showLatexTable()" title="booktabs LaTeX table, ready to paste" style="'+B+'">⊞ Export LaTeX table</button>';
+  btns+='<button type="button" onclick="showCite()" title="BibTeX @misc for this exact run" style="'+B+'">❝ Cite (BibTeX)</button>';
+  return '<div class="exptoolbar" role="group" aria-label="Publication export" style="display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-top:.8rem;padding-top:.7rem;border-top:1px solid var(--rule)">'+
+    '<span style="font-family:var(--mono);font-size:.64rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-right:.2rem">Export</span>'+btns+'</div>';
+}
+
 /* ───── run + render ───── */
 async function run(){
   const body=gatherParams(); const k=body.method, m=CATALOG[k];
@@ -696,7 +1067,7 @@ async function run(){
     const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const d=await r.json();
     if(!d.ok){ $("results").innerHTML=`<div class="warn">${esc(d.error||"analysis failed")}</div>`; }
-    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; window.LAST={method:k,body,result:d.result,provenance:d.provenance}; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
+    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; window.LAST={method:k,body,result:d.result,provenance:d.provenance}; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",exportToolbarHTML(window.LAST)); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
   }catch(e){ $("results").innerHTML=`<div class="warn">request failed: ${esc(e.message)}</div>`; }
   $("run").disabled=false;
 }
