@@ -114,6 +114,24 @@ svg.chart text{font-family:var(--mono);font-size:9px;fill:var(--dim)}
 .chip:hover{background:rgba(0,212,255,.12)}
 .chatin{display:flex;gap:.5rem}
 .chatin input{flex:1}
+
+/* capability filter (Tier B) — keyboard-navigable, aria-pressed, colour-not-the-only-signal */
+.capfilter{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.7rem}
+.capchip{font-family:var(--mono);font-size:.68rem;color:var(--mid);border:1px solid var(--border);border-radius:14px;
+  padding:.24rem .6rem;cursor:pointer;transition:.15s;background:var(--surface2);text-transform:capitalize;letter-spacing:.2px}
+.capchip:hover{border-color:var(--cyan);color:var(--cyan)}
+.capchip:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.capchip[aria-pressed="true"]{color:var(--green);border-color:var(--hot);border-width:2px;background:rgba(0,255,136,.1);font-weight:600;padding:.21rem .57rem}
+.capchip .mk{margin-right:.3rem;opacity:.8}
+.capcount{font-family:var(--mono);font-size:.6rem;color:var(--dim);margin-left:.28rem}
+
+/* per-method metadata tags (Tier B) */
+.metarow{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .45rem;margin-top:.55rem}
+.metatag{font-family:var(--mono);font-size:.64rem;color:var(--mid);border:1px solid var(--border);border-radius:5px;padding:.1rem .42rem;background:var(--surface2)}
+.metatag.ver{color:var(--cyan);border-color:rgba(0,212,255,.35)}
+.metatag.prim{color:var(--green);border-color:var(--hot)}
+.metatag.paper{color:var(--cyan)} .metatag.paper:hover{background:rgba(0,212,255,.1)}
+.deprnote{font-family:var(--mono);font-size:.7rem;color:var(--amber);background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);border-radius:6px;padding:.4rem .6rem;margin-top:.5rem;line-height:1.45}
 .chatin button{font-family:var(--mono);font-size:.78rem;color:var(--green);background:rgba(0,255,136,.12);
   border:1px solid var(--hot);border-radius:7px;padding:.45rem .9rem;cursor:pointer}
 .clearbtn{font-family:var(--mono);font-size:.68rem;color:var(--dim);background:none;border:none;cursor:pointer;float:right}
@@ -206,6 +224,10 @@ footer{border-top:1px solid var(--rule);padding:1.6rem 0 2.4rem;font-family:var(
     <div class="panel" id="rail">
       <div class="lbl">Workbench</div>
       <h2>Run an analysis</h2>
+      <div class="field" id="capfilter-field" style="display:none">
+        <label id="capfilter-label">Capability</label>
+        <div class="capfilter" id="capfilter" role="group" aria-label="Filter methods by capability"></div>
+      </div>
       <div class="field">
         <label for="method">Method</label>
         <select id="method"></select>
@@ -301,28 +323,103 @@ const fixed=(x,d=4)=>typeof x==="number"?x.toFixed(d):x;
 let CATALOG=null, SERIES=[];
 
 /* ───── catalog-driven left rail ───── */
+let CAPABILITIES=null, CAPFILTER="all"; // Tier B: capability grouping + active filter
 async function loadCatalog(){
   const r=await fetch(CE+"/api/compute/catalog"); const d=await r.json();
   CATALOG=d.methods; SERIES=(d.datasets&&d.datasets.g20&&d.datasets.g20.series)||[];
-  const msel=$("method"); msel.innerHTML="";
-  Object.entries(CATALOG).forEach(([k,m])=>{const o=document.createElement("option");o.value=k;o.textContent=m.label||k;msel.appendChild(o);});
+  CAPABILITIES=(d.capabilities&&typeof d.capabilities==="object")?d.capabilities:null;
+  populateMethodOptions("all");      // builds the method dropdown (optionally capability-filtered)
+  buildCapabilityFilter();           // renders chips, or stays hidden if catalog has no capabilities
   const sl=$("series"); sl.innerHTML="";
   SERIES.forEach(s=>{const id="s_"+s;sl.insertAdjacentHTML("beforeend",
     `<label><input type="checkbox" value="${esc(s)}" id="${id}">${esc(s)}</label>`);});
   $("catbadge").textContent=Object.keys(CATALOG).length+" methods live";
-  msel.addEventListener("change",onMethod); onMethod();
+  $("method").addEventListener("change",onMethod); onMethod();
   // #job=<id> permalink takes precedence over the sync #method= hash
   const jid=jobIdFromHash();
   if(jid) loadJob(jid); else applyHash();
 }
+/* Tier B: (re)build the method dropdown, optionally filtered to one capability.
+   Preserves the current selection when it survives the filter; never empties the list. */
+function methodIdsForCap(cap){
+  if(cap==="all"||!CAPABILITIES) return Object.keys(CATALOG);
+  const ids=(CAPABILITIES[cap]||[]).filter(id=>CATALOG[id]); // ignore unknown ids
+  return ids.length?ids:Object.keys(CATALOG);               // safety: never show an empty picker
+}
+function populateMethodOptions(cap){
+  CAPFILTER=cap||"all";
+  const msel=$("method"), prev=msel.value, ids=methodIdsForCap(CAPFILTER);
+  msel.innerHTML="";
+  ids.forEach(k=>{const m=CATALOG[k];const o=document.createElement("option");o.value=k;o.textContent=m.label||k;msel.appendChild(o);});
+  msel.value=ids.includes(prev)?prev:ids[0]; // keep selection if still valid, else first in group
+}
+/* Tier B: capability filter chips. Hidden entirely when the catalog has no `capabilities`
+   (graceful degradation against the current live catalog). */
+function buildCapabilityFilter(){
+  const field=$("capfilter-field"), box=$("capfilter");
+  if(!CAPABILITIES){ field.style.display="none"; return; } // graceful: no grouping → no filter
+  const caps=Object.keys(CAPABILITIES).filter(c=>methodIdsForCap(c).length && (CAPABILITIES[c]||[]).some(id=>CATALOG[id]));
+  if(!caps.length){ field.style.display="none"; return; }
+  field.style.display="block";
+  box.innerHTML="";
+  const chips=[["all","All",Object.keys(CATALOG).length]].concat(
+    caps.map(c=>[c,c.replace(/[-_]/g," "),(CAPABILITIES[c]||[]).filter(id=>CATALOG[id]).length]));
+  chips.forEach(([val,label,count])=>{
+    const b=document.createElement("button");
+    b.type="button"; b.className="capchip"; b.dataset.cap=val;
+    const on=(val===CAPFILTER);
+    b.setAttribute("aria-pressed",on?"true":"false");
+    // colour is not the only signal: a ● / ○ marker + bold border distinguish the active chip
+    b.innerHTML=`<span class="mk" aria-hidden="true">${on?"●":"○"}</span>${esc(label)}<span class="capcount">${count}</span>`;
+    b.addEventListener("click",()=>selectCapability(val));
+    b.addEventListener("keydown",capKeyNav);
+    box.appendChild(b);
+  });
+}
+function selectCapability(cap){
+  if(cap===CAPFILTER) return;
+  populateMethodOptions(cap);
+  // refresh chip pressed-state + markers without rebuilding (keeps focus stable)
+  [...$("capfilter").children].forEach(b=>{
+    const on=(b.dataset.cap===cap);
+    b.setAttribute("aria-pressed",on?"true":"false");
+    const mk=b.querySelector(".mk"); if(mk) mk.textContent=on?"●":"○";
+  });
+  onMethod(); // refresh metadata/params for the (possibly changed) selected method
+}
+// roving left/right arrow navigation across the chip group (ARIA toolbar pattern)
+function capKeyNav(e){
+  if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft") return;
+  const sibs=[...$("capfilter").children], i=sibs.indexOf(e.currentTarget);
+  if(i<0) return; e.preventDefault();
+  const n=sibs.length, j=e.key==="ArrowRight"?(i+1)%n:(i-1+n)%n;
+  sibs[j].focus();
+}
 function selectedSeries(){return [...document.querySelectorAll('#series input:checked')].map(c=>c.value);}
 function setSeries(arr){document.querySelectorAll('#series input').forEach(c=>{c.checked=arr.includes(c.value);});}
+// Tier B: per-method package metadata — each field rendered only if the catalog supplies it.
+function methodMetaHTML(m){
+  const tags=[];
+  if(m.version) tags.push('<span class="metatag ver">v'+esc(m.version)+'</span>');
+  if(m.paper){ const id=String(m.paper).replace(/^arXiv:/i,""); tags.push('<a class="metatag paper" href="https://arxiv.org/abs/'+esc(id)+'" target="_blank" rel="noopener">📄 arXiv:'+esc(id)+'</a>'); }
+  if(Array.isArray(m.primitives)) m.primitives.forEach(p=>tags.push('<span class="metatag prim">'+esc(p)+'</span>'));
+  if(m.min_obs!=null) tags.push('<span class="metatag">min n '+esc(m.min_obs)+'</span>');
+  let h=tags.length?'<div class="metarow">'+tags.join("")+'</div>':"";
+  if(m.deprecated){ const dep=(typeof m.deprecated==="object")?m.deprecated:{};
+    const repl=dep.replacement?' Use <b>'+esc((CATALOG[dep.replacement]&&CATALOG[dep.replacement].label)||dep.replacement)+'</b> instead.':"";
+    const sun=dep.sunset?' Sunset: '+esc(dep.sunset)+'.':"";
+    const why=dep.note?' '+esc(dep.note):"";
+    h+='<div class="deprnote">⚠ Deprecated.'+repl+sun+why+'</div>';
+  }
+  return h;
+}
 function onMethod(){
   const k=$("method").value, m=CATALOG[k];
-  // long-running affordance (T_A): background-job methods get a badge + one-line note.
-  // TODO Tier B: move `long_running` to the catalog and read m.long_running instead.
+  if(!m) return; // no valid method selected (e.g. empty picker) — nothing to render
+  // long-running affordance: prefer the catalog flag (Tier B), keep LONG_RUNNING set as fallback.
   const lr=LONG_RUNNING.has(k);
   $("mdesc").innerHTML=(m.long_running||lr?'<span class="lrbadge">⏳ long-running</span>':"")+esc(m.desc||"")+
+    methodMetaHTML(m)+
     (m.long_running||lr?'<div class="lrnote">Runs as a background job; on completion you get a shareable, citable permalink. Submission runs in the lab, not from this public page.</div>':"");
   const isLive=k==="live_unit_root";
   $("symbol-field").style.display=isLive?"block":"none";
