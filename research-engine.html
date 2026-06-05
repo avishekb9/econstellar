@@ -140,6 +140,33 @@ svg.chart text{font-family:var(--mono);font-size:9px;fill:var(--dim)}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--cyan);border-radius:50%;animation:s .7s linear infinite;vertical-align:middle;margin-right:.5rem}
 @keyframes s{to{transform:rotate(360deg)}}
 .warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:.6rem .9rem;font-family:var(--mono);font-size:.76rem;color:var(--amber)}
+
+/* async-job permalink viewer (Tier A) */
+.jobbanner{background:var(--surface2);border:1px solid var(--border);clip-path:var(--clip);padding:.85rem 1rem;margin-bottom:1rem;font-family:var(--mono)}
+.jobbanner .row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .9rem}
+.jobbanner .jmethod{font-size:.95rem;font-weight:600;color:var(--cyan);font-family:var(--sans)}
+.jobbanner .jmeta{font-size:.72rem;color:var(--dim)}
+.jobbanner .jmeta b{color:var(--mid);font-weight:500}
+.jstatus{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;border-radius:6px;padding:.22rem .6rem;border:1px solid var(--border)}
+.jstatus .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.jstatus.ok{color:var(--green);border-color:var(--hot);background:rgba(0,255,136,.1)}
+.jstatus.ok .dot{background:var(--green)}
+.jstatus.run{color:var(--cyan);background:rgba(0,212,255,.08)}
+.jstatus.run .dot{background:var(--cyan);animation:s 1.1s linear infinite}
+.jstatus.err{color:var(--red);border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.1)}
+.jstatus.err .dot{background:var(--red)}
+.jstatus.wait{color:var(--amber);border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.08)}
+.jstatus.wait .dot{background:var(--amber)}
+.jbtn{font-family:var(--mono);font-size:.66rem;background:var(--surface);color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.22rem .55rem;cursor:pointer}
+.jbtn:hover{background:rgba(0,255,136,.12)}
+.lrbadge{display:inline-block;font-family:var(--mono);font-size:.62rem;color:var(--amber);border:1px solid rgba(245,158,11,.35);background:rgba(245,158,11,.08);border-radius:5px;padding:.12rem .45rem;margin-left:.4rem;vertical-align:middle;text-transform:uppercase;letter-spacing:.5px}
+.lrnote{font-family:var(--mono);font-size:.7rem;color:var(--amber);background:rgba(245,158,11,.06);border-left:2px solid rgba(245,158,11,.4);border-radius:4px;padding:.4rem .6rem;margin-top:.5rem;line-height:1.45}
+table.rt th.sortable{cursor:pointer;user-select:none} table.rt th.sortable:hover{color:var(--cyan)}
+table.rt tr.tophit td{background:rgba(0,255,136,.07)}
+table.rt tr.tophit td:first-child{border-left:2px solid var(--green)}
+.sigtag{font-family:var(--mono);font-size:.62rem;border-radius:4px;padding:.04rem .35rem;border:1px solid var(--border)}
+.sigtag.y{color:var(--green);border-color:var(--hot);background:rgba(0,255,136,.08)}
+.sigtag.n{color:var(--dim)}
 footer{border-top:1px solid var(--rule);padding:1.6rem 0 2.4rem;font-family:var(--mono);font-size:.76rem;color:var(--dim);text-align:center;margin-top:1rem}
 </style>
 </head>
@@ -283,12 +310,20 @@ async function loadCatalog(){
   SERIES.forEach(s=>{const id="s_"+s;sl.insertAdjacentHTML("beforeend",
     `<label><input type="checkbox" value="${esc(s)}" id="${id}">${esc(s)}</label>`);});
   $("catbadge").textContent=Object.keys(CATALOG).length+" methods live";
-  msel.addEventListener("change",onMethod); onMethod(); applyHash();
+  msel.addEventListener("change",onMethod); onMethod();
+  // #job=<id> permalink takes precedence over the sync #method= hash
+  const jid=jobIdFromHash();
+  if(jid) loadJob(jid); else applyHash();
 }
 function selectedSeries(){return [...document.querySelectorAll('#series input:checked')].map(c=>c.value);}
 function setSeries(arr){document.querySelectorAll('#series input').forEach(c=>{c.checked=arr.includes(c.value);});}
 function onMethod(){
-  const k=$("method").value, m=CATALOG[k]; $("mdesc").textContent=m.desc||"";
+  const k=$("method").value, m=CATALOG[k];
+  // long-running affordance (T_A): background-job methods get a badge + one-line note.
+  // TODO Tier B: move `long_running` to the catalog and read m.long_running instead.
+  const lr=LONG_RUNNING.has(k);
+  $("mdesc").innerHTML=(m.long_running||lr?'<span class="lrbadge">⏳ long-running</span>':"")+esc(m.desc||"")+
+    (m.long_running||lr?'<div class="lrnote">Runs as a background job; on completion you get a shareable, citable permalink. Submission runs in the lab, not from this public page.</div>':"");
   const isLive=k==="live_unit_root";
   $("symbol-field").style.display=isLive?"block":"none";
   $("series-field").style.display=isLive?"none":"block";
@@ -357,6 +392,154 @@ function renderProvenance(d){
       <button onclick="showEmbed()" style="${B}">&lt;/&gt; Embed</button>
     </div>
   </div>`;
+}
+
+/* ═════ async-job permalink viewer (Tier A) ═════
+   On load, if location.hash carries #job=<id>, fetch the public job record
+   GET {CE}/api/jobs/<id> and render its status, provenance and result.
+   This is read-only: submission stays in the lab (job-server not public). */
+const LONG_RUNNING=new Set(['ksg_te']); // TODO Tier B: move to catalog (m.long_running)
+function jobIdFromHash(){ const m=(location.hash||"").match(/(?:^#|&)job=([^&]+)/); return m?decodeURIComponent(m[1]):null; }
+function statusPill(status,frac){
+  const s=(status||"").toLowerCase();
+  if(s==="succeeded"||s==="success"||s==="done") return '<span class="jstatus ok"><span class="dot"></span>✓ succeeded</span>';
+  if(s==="failed"||s==="error") return '<span class="jstatus err"><span class="dot"></span>✕ failed</span>';
+  if(s==="running"||s==="pending"||s==="queued"||s==="started") return `<span class="jstatus run"><span class="dot"></span>● ${esc(s)}${frac!=null?" "+Math.round(frac*100)+"%":""}</span>`;
+  return `<span class="jstatus wait"><span class="dot"></span>${esc(s||"unknown")}</span>`;
+}
+function renderJobBanner(d){
+  const prov=d.provenance||{}, worker=prov.worker||d.worker||"";
+  const fin=d.finished_at||prov.timestamp||"";
+  const finTxt=fin?esc(String(fin).replace("T"," ").replace(/\..*/,"")+" UTC"):"—";
+  const raw=d.permalink||prov.permalink||(location.href.split("#")[0]+(location.hash||""));
+  const frac=d.progress&&typeof d.progress.fraction==="number"?d.progress.fraction:null;
+  const lr=LONG_RUNNING.has(d.method)||(CATALOG&&CATALOG[d.method]&&CATALOG[d.method].long_running);
+  return `<div class="jobbanner"><div class="row">
+    <span class="jmethod">${esc((CATALOG&&CATALOG[d.method]&&CATALOG[d.method].label)||d.method||"job")}</span>
+    ${statusPill(d.status,frac)}
+    ${lr?'<span class="lrbadge">⏳ background job</span>':''}
+    <span class="jmeta">job <b>${esc(d.job_id||jobIdFromHash()||"")}</b></span>
+    ${worker?`<span class="jmeta">worker <b>${esc(worker)}</b></span>`:''}
+    <span class="jmeta">finished <b>${finTxt}</b></span>
+    <button class="jbtn" onclick="copyPerma('${String(raw).replace(/'/g,"\\'")}')">copy permalink</button>
+    <a class="jbtn" style="text-decoration:none" href="${esc(raw)}" target="_blank" rel="noopener">🔗 open</a>
+  </div></div>`;
+}
+async function loadJob(id){
+  const el=$("results");
+  $("cache").textContent="permalink";
+  el.innerHTML='<div class="msg"><span class="spin"></span>loading job '+esc(id)+'…</div>';
+  let d;
+  try{
+    const r=await fetch(CE+"/api/jobs/"+encodeURIComponent(id));
+    if(r.status===404){ el.innerHTML='<div class="jobbanner"><div class="row">'+statusPill("not found")+'<span class="jmeta">job <b>'+esc(id)+'</b></span></div></div><div class="warn">No job with that id. It may have expired or never existed.</div>'; return; }
+    if(!r.ok){ el.innerHTML='<div class="warn">job lookup failed (HTTP '+r.status+').</div>'; return; }
+    d=await r.json();
+  }catch(e){
+    el.innerHTML='<div class="warn">Could not reach the kernel to load this job: '+esc(e.message)+
+      '. <br>If you are viewing this from a non-allowlisted origin the kernel may block CORS; the canonical permalink is on <span style="color:var(--cyan)">avishekb9.github.io</span>, which the kernel allows.</div>';
+    return;
+  }
+  renderJob(d);
+}
+function renderJob(d){
+  const el=$("results"); let h=renderJobBanner(d);
+  const st=(d.status||"").toLowerCase();
+  if(st==="failed"||st==="error"){ h+='<div class="warn">'+esc(d.error||"This job failed without a recorded error message.")+'</div>'; el.innerHTML=h; return; }
+  if(!d.result || (st!=="succeeded"&&st!=="success"&&st!=="done")){
+    // honestly show real progress if running, else say so (Principle 3: never simulate)
+    const pr=d.progress||{}, frac=typeof pr.fraction==="number"?pr.fraction:null;
+    if(frac!=null){
+      h+='<div class="lbl" style="margin:.2rem 0 .3rem">progress'+(pr.stage?' · '+esc(pr.stage):'')+'</div>';
+      h+='<div class="fillbar"><div class="f" style="width:'+(frac*100).toFixed(1)+'%;background:linear-gradient(90deg,var(--cyan),var(--green))"></div></div>';
+      h+='<div class="subnote">'+(frac*100).toFixed(1)+'% complete'+(pr.elapsed_s!=null?' · '+Math.round(pr.elapsed_s)+'s elapsed':'')+' — this is the live job progress; refresh for updates.</div>';
+    } else {
+      h+='<div class="warn">This job is still running and has not reported a progress fraction yet. Refresh to check again.</div>';
+    }
+    el.innerHTML=h; return;
+  }
+  // succeeded with a result → bespoke renderer if we have one, else generic
+  if(d.method==="ksg_te") h+=renderKsgTe(d.result);
+  else h+=renderJobGeneric(d.result);
+  el.innerHTML=h;
+}
+
+/* directed-edge view for KSG transfer entropy */
+let JOBEDGES=[], JOBTOP=new Set();
+function renderKsgTe(r){
+  const edges=r.edges||[];
+  JOBEDGES=edges.slice();
+  JOBTOP=new Set((r.top||[]).map(e=>e.from+""+e.to));
+  let h='<div class="kpirow">'+
+    kpi(r.n_pairs!=null?r.n_pairs:edges.length,"directed pairs")+
+    kpi(r.n_significant!=null?r.n_significant:edges.filter(e=>e.p<0.05).length,"significant (p<0.05)",'g')+
+    kpi(r.k!=null?r.k:"–","KSG k")+
+    kpi(r.lag!=null?r.lag:"–","lag")+
+    kpi(r.n_surrogates!=null?r.n_surrogates:"–","surrogates")+
+    kpi(r.runtime_s!=null?fixed(r.runtime_s,0)+"s":"–","runtime")+'</div>';
+  if(r.top&&r.top.length){
+    h+='<div class="lbl" style="margin:.3rem 0 .2rem">top '+r.top.length+' strongest significant links</div><div class="bars">';
+    const mx=Math.max(0.001,...r.top.map(e=>e.te||0));
+    r.top.forEach(e=>{h+='<div class="barrow" style="grid-template-columns:150px 1fr 70px"><span>'+esc(e.from+'→'+e.to)+'</span><span class="track"><span class="fill" style="width:'+Math.min(100,100*(e.te||0)/mx)+'%"></span></span><span>'+fixed(e.te,4)+'</span></div>';});
+    h+='</div>';
+  }
+  h+='<div class="lbl" style="margin:.6rem 0 .2rem">all directed links <span style="color:var(--dim)">· click a header to sort</span></div>';
+  h+='<table class="rt" id="ksgtbl"><thead><tr>'+
+     '<th class="sortable" onclick="sortKsg(\'dir\')">from → to</th>'+
+     '<th class="sortable num" style="text-align:right" onclick="sortKsg(\'te\')">TE</th>'+
+     '<th class="sortable num" style="text-align:right" onclick="sortKsg(\'p\')">p</th>'+
+     '<th>sig.</th></tr></thead><tbody id="ksgbody"></tbody></table>';
+  h+='<div class="interp">'+esc(r.interpretation||"")+'</div>';
+  // default sort: strongest TE first
+  setTimeout(()=>sortKsg('te'),0);
+  return h;
+}
+function sortKsg(by){
+  const arr=JOBEDGES.slice();
+  if(by==='dir') arr.sort((a,b)=>(a.from+a.to).localeCompare(b.from+b.to));
+  else if(by==='p') arr.sort((a,b)=>(a.p||0)-(b.p||0));
+  else arr.sort((a,b)=>(b.te||0)-(a.te||0)); // te desc
+  const body=$("ksgbody"); if(!body) return;
+  body.innerHTML=arr.map(e=>{
+    const top=JOBTOP.has(e.from+""+e.to), sig=(e.p!=null&&e.p<0.05);
+    return '<tr class="'+(top?'tophit':'')+'"><td>'+esc(e.from)+' <span style="color:var(--dim)">→</span> '+esc(e.to)+
+      '</td><td class="num">'+fixed(e.te,4)+'</td><td class="num">'+fixed(e.p,3)+
+      '</td><td><span class="sigtag '+(sig?'y':'n')+'">'+(sig?'p&lt;.05':'ns')+'</span></td></tr>';
+  }).join("");
+}
+
+/* generic fallback: viewable result for any method without a bespoke renderer */
+function renderJobGeneric(r){
+  if(r==null) return '<div class="msg">No result payload.</div>';
+  if(typeof r!=="object") return '<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(String(r))+'</pre>';
+  const scalars=[], rest=[];
+  Object.entries(r).forEach(([k,v])=>{
+    if(k==="interpretation"||k==="method") return;
+    if(typeof v==="number"||typeof v==="boolean"||v==null||typeof v==="string") scalars.push([k,v]);
+    else rest.push([k,v]);
+  });
+  let h="";
+  const nums=scalars.filter(([k,v])=>typeof v==="number").slice(0,6);
+  if(nums.length){ h+='<div class="kpirow">'+nums.map(([k,v])=>kpi(fixed(v,4),k)).join("")+'</div>'; }
+  if(scalars.length){
+    h+='<table class="rt"><thead><tr><th>key</th><th>value</th></tr></thead><tbody>';
+    scalars.forEach(([k,v])=>{h+='<tr><td>'+esc(k)+'</td><td class="num">'+esc(typeof v==="number"?fixed(v,6):String(v))+'</td></tr>';});
+    h+='</tbody></table>';
+  }
+  rest.forEach(([k,v])=>{
+    const arr=Array.isArray(v);
+    h+='<div class="lbl" style="margin:.5rem 0 .2rem">'+esc(k)+(arr?' ['+v.length+']':'')+'</div>';
+    if(arr && v.length && typeof v[0]==="object"){
+      const cols=Object.keys(v[0]).slice(0,8);
+      h+='<table class="rt"><thead><tr>'+cols.map(c=>'<th>'+esc(c)+'</th>').join("")+'</tr></thead><tbody>';
+      v.slice(0,50).forEach(row=>{h+='<tr>'+cols.map(c=>{const cv=row[c];return '<td class="'+(typeof cv==="number"?'num':'')+'">'+esc(typeof cv==="number"?fixed(cv,4):(cv==null?"":(typeof cv==="object"?JSON.stringify(cv):String(cv))))+'</td>';}).join("")+'</tr>';});
+      h+='</tbody></table>'; if(v.length>50) h+='<div class="subnote">showing first 50 of '+v.length+' rows</div>';
+    } else {
+      h+='<pre class="mono" style="white-space:pre-wrap;font-size:.72rem;max-height:240px;overflow:auto">'+esc(JSON.stringify(v,null,2))+'</pre>';
+    }
+  });
+  if(r.interpretation) h+='<div class="interp">'+esc(r.interpretation)+'</div>';
+  return h||'<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(JSON.stringify(r,null,2))+'</pre>';
 }
 /* ───── export + cite (T1.4) ───── */
 function downloadFile(name,content,mime){ const b=new Blob([content],{type:mime}); const u=URL.createObjectURL(b); const a=document.createElement("a"); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); }
@@ -754,7 +937,12 @@ $("chatclear").addEventListener("click",()=>{CHATCTX=[];$("chatlog").innerHTML='
 $("rxsend").addEventListener("click",()=>doResearch());
 $("rxq").addEventListener("keydown",e=>{if(e.key==="Enter")doResearch();});
 buildChips(); buildRxChips(); buildFrameworks();
-loadCatalog().catch(e=>{$("results").innerHTML='<div class="warn">catalog load failed: '+esc(e.message)+'</div>';});
+loadCatalog().catch(e=>{
+  // catalog down: a #job=<id> permalink is still viewable (it doesn't need the catalog)
+  const jid=jobIdFromHash();
+  if(jid) loadJob(jid);
+  else $("results").innerHTML='<div class="warn">catalog load failed: '+esc(e.message)+'</div>';
+});
 loadNeuricx();
 </script>
 </body>
