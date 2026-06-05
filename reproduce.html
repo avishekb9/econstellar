@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Reproduce the Paper — Live · SHSSM Research Engine</title>
-<meta name="description" content="Watch the live econometrics engine re-run our published Scale-Ordered Contagion result on real G20 data and match the paper, right now.">
+<title>Reproduce the Papers — Live · SHSSM Research Engine</title>
+<meta name="description" content="Every claim is either regenerated live through the same code that produced it, or shown with its published source and an explicit status. Nothing is simulated.">
 <!-- Open Graph / social preview (full image set added in Tier 2) -->
-<meta property="og:title" content="Reproduce the Paper — Live">
-<meta property="og:description" content="The live engine re-runs a published financial-contagion result on real market data and matches the paper, in seconds.">
+<meta property="og:title" content="Reproduce the Papers — Live">
+<meta property="og:description" content="The live engine re-runs a published financial-contagion result on real market data and matches the paper — and is honest about what it cannot yet recompute.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://avishekb9.github.io/econstellar/reproduce.html">
 <meta property="og:image" content="https://avishekb9.github.io/econstellar/og-image.png">
@@ -15,8 +15,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Reproduce the Paper — Live">
-<meta name="twitter:description" content="Watch a real engine regenerate a published result on real data and match the paper.">
+<meta name="twitter:title" content="Reproduce the Papers — Live">
+<meta name="twitter:description" content="A real engine regenerates a published result on real data and matches the paper — and says plainly what it cannot yet recompute.">
 <meta name="twitter:image" content="https://avishekb9.github.io/econstellar/og-image.png">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
@@ -39,30 +39,46 @@ nav a{color:var(--dim)} nav .sp{flex:1}
 header{padding:2.6rem 0 1.4rem}
 .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
 h1{font-family:var(--disp);font-size:clamp(1.8rem,4.4vw,3rem);margin:.5rem 0 .4rem;line-height:1.05}
-.lede{font-size:1.06rem;color:var(--mid);max-width:60ch}
+.lede{font-size:1.06rem;color:var(--mid);max-width:62ch}
 .live-pill{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.72rem;color:var(--green);border:1px solid var(--hot);border-radius:999px;padding:.25rem .7rem;margin-top:.9rem}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:p 1.4s infinite}
 @keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
 section{margin:1.6rem 0}
+.principle{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:10px;padding:1rem 1.2rem;margin:1.2rem 0;font-size:.96rem;color:var(--mid)}
+.principle b{color:var(--text)}
+.principle .legend{display:flex;gap:1.2rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;margin-top:.7rem;color:var(--dim)}
+.principle .legend span{display:inline-flex;align-items:center;gap:.4rem}
+.swatch{width:10px;height:10px;border-radius:50%}
+.swatch.g{background:var(--green);box-shadow:0 0 6px var(--green)}
+.swatch.a{background:var(--amber);box-shadow:0 0 6px var(--amber)}
 .card{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.2rem 1.3rem}
-.h2{font-family:var(--disp);font-size:1.15rem;margin:0 0 .2rem}
+.h2{font-family:var(--disp);font-size:1.15rem;margin:0 0 .2rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:.6rem;letter-spacing:1px;text-transform:uppercase;padding:.18rem .5rem;border-radius:999px}
+.tag.live{color:var(--green);border:1px solid var(--hot)}
+.tag.pend{color:var(--amber);border:1px solid rgba(245,158,11,.4)}
 .sub{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-bottom:1rem}
 .cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:680px){.cols{grid-template-columns:1fr}}
 .panel{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem}
 .panel h3{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:1px;margin:0 0 .8rem;color:var(--dim)}
-.panel.live h3{color:var(--green)} .panel.pub h3{color:var(--cyan)}
+.panel.live h3{color:var(--green)} .panel.pub h3{color:var(--cyan)} .panel.pend h3{color:var(--amber)}
+.panel.pend{border-color:rgba(245,158,11,.35)}
 .barrow{display:grid;grid-template-columns:34px 1fr 64px;align-items:center;gap:.5rem;margin:.34rem 0;font-family:var(--mono);font-size:.74rem}
 .track{height:10px;background:rgba(255,255,255,.06);border-radius:5px;overflow:hidden}
 .fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .6s ease}
 .fill.pub{background:linear-gradient(90deg,rgba(0,212,255,.55),rgba(0,212,255,.85))}
+.fill.amb{background:linear-gradient(90deg,rgba(245,158,11,.4),rgba(245,158,11,.75))}
 .kpirow{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:.6rem;margin-top:.9rem}
 .kpi{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:.6rem;text-align:center}
 .kpi .v{font-family:var(--mono);font-size:1.18rem;font-weight:600;color:var(--cyan)}
-.kpi .v.g{color:var(--green)} .kpi .c{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.25rem;text-transform:uppercase;letter-spacing:.5px}
+.kpi .v.g{color:var(--green)} .kpi .v.a{color:var(--amber)}
+.kpi .c{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.25rem;text-transform:uppercase;letter-spacing:.5px}
 .verdict{font-family:var(--mono);font-size:.84rem;padding:.6rem .9rem;border-radius:8px;margin:1rem 0 .2rem;text-align:center}
 .verdict.g{background:rgba(0,255,136,.1);border:1px solid var(--hot);color:var(--green)}
 .verdict.n{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);color:var(--amber)}
+.statusbar{font-family:var(--mono);font-size:.82rem;padding:.7rem .9rem;border-radius:8px;margin:1rem 0 .2rem;display:flex;align-items:center;gap:.6rem;
+  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);color:var(--amber)}
+.statusbar .ic{flex:0 0 auto}
 .warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:.6rem .9rem;font-family:var(--mono);font-size:.76rem;color:var(--amber)}
 .msg{color:var(--dim);font-family:var(--mono);font-size:.8rem;padding:.6rem 0}
 .spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:s .7s linear infinite;vertical-align:middle;margin-right:.5rem}
@@ -71,12 +87,14 @@ section{margin:1.6rem 0}
 select,button{font-family:var(--mono);font-size:.8rem;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:7px;padding:.45rem .6rem}
 button{cursor:pointer;color:var(--green);border-color:var(--hot)} button:hover{background:rgba(0,255,136,.08)}
 button:disabled{opacity:.5;cursor:not-allowed}
-.preds{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}
+.preds{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1rem}
 @media(max-width:680px){.preds{grid-template-columns:1fr}}
 .pred{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.9rem}
 .pred .t{font-family:var(--disp);color:var(--green);font-size:.92rem}
 .pred .s{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin:.3rem 0 .5rem}
 .pred .r{font-family:var(--mono);font-size:.84rem;color:var(--cyan)}
+.chrow{display:grid;grid-template-columns:120px 1fr 52px;align-items:center;gap:.5rem;margin:.34rem 0;font-family:var(--mono);font-size:.74rem}
+.chrow span:first-child{color:var(--mid)}
 .foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2rem;padding:1.3rem 0 2.4rem;line-height:1.8}
 .foot a{color:var(--cyan)}
 .note{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.6rem}
@@ -94,32 +112,49 @@ code{font-family:var(--mono);color:var(--green)}
 <div class="wrap">
   <header>
     <div class="eyebrow">Reproducibility, live</div>
-    <h1>Reproduce the paper —<br>right now, on real data</h1>
+    <h1>Reproduce the papers —<br>right now, on real data</h1>
     <p class="lede">Published research usually asks you to trust the numbers. Here you don't have to.
-      Below, our live econometrics engine re-runs a headline result from our financial-contagion
-      paper on <strong>real G20 market data</strong> and shows it matching the published figure —
-      computed in your browser session, not replayed from a cache.</p>
+      Below are the headline results from three of our papers. Each is either re-run live, in your
+      browser session, through the same code that produced it — or shown with its published source
+      and an explicit status saying exactly what cannot yet be recomputed.</p>
     <div class="live-pill"><span class="dot"></span> <span id="livestate">contacting the live engine…</span></div>
   </header>
 
-  <!-- ── headline reproduction ── -->
+  <!-- ── the operating principle ── -->
+  <div class="principle">
+    <b>The rule on this page.</b> Every claim is either <b>regenerated live</b> through the same code
+    that produced it, or shown with its <b>published source and an explicit status</b> — nothing here
+    is simulated. Where the compute engine does not yet expose a method, we say so plainly and link
+    the paper rather than invent a live number. The Scale-Ordered Contagion profile below genuinely
+    recomputes on real G20 data each time you load this page; the other two results are shown from
+    their papers with an honest "live regeneration pending" status until their methods are registered
+    in the engine.
+    <div class="legend">
+      <span><span class="swatch g"></span> regenerated live by the engine</span>
+      <span><span class="swatch a"></span> published result · live regeneration pending</span>
+    </div>
+  </div>
+
+  <!-- ════════════════ 1 · SOCH (LIVE) ════════════════ -->
   <section class="card">
-    <div class="h2">USA → India: tail spillover by time-scale</div>
-    <div class="sub">Directed wavelet-quantile transfer entropy at the 5% tail, across 4 wavelet scales (d1≈2–4 days → d4≈16–32 days). Method: <code>soch_profile</code> · the published <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">sochcontagion</a> package, run live.</div>
+    <div class="h2">USA → India: tail spillover by time-scale <span class="tag live">live regeneration</span></div>
+    <div class="sub">SOCH · <a href="https://arxiv.org/abs/2606.04113" target="_blank" rel="noopener">arXiv:2606.04113</a> · directed wavelet-quantile transfer entropy at the 5% tail, across 4 wavelet scales (d1≈2–4 days → d4≈16–32 days). Method: <code>soch_profile</code> · the published <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">sochcontagion</a> package, run live.</div>
     <div class="cols">
       <div class="panel pub">
         <h3>Published — Bhandari &amp; Parida (2026)</h3>
         <div id="pubbars"></div>
         <div class="kpirow">
-          <div class="kpi"><div class="v" id="pubagg">0.039</div><div class="c">aggregate</div></div>
+          <div class="kpi"><div class="v" id="pubagg4">0.0391</div><div class="c">4-scale agg</div></div>
+          <div class="kpi"><div class="v" id="pubagg5">0.0426</div><div class="c">5-scale agg (paper)</div></div>
           <div class="kpi"><div class="v" id="pubpeak">d4</div><div class="c">peak scale</div></div>
         </div>
+        <div class="note">The paper reports a 5-scale profile <code>(0.0155, 0.0425, 0.0491, 0.0494, 0.0567)</code> across d1–d5, aggregate <b>0.0426</b>. The live engine decomposes to 4 scales (d1–d4), aggregate <b>0.0391</b>. The whole difference is the d5 (32–64 day) band — the per-scale d1–d4 values match exactly.</div>
       </div>
       <div class="panel live">
         <h3>Regenerated live <span id="livestamp" style="text-transform:none;letter-spacing:0;color:var(--dim)"></span></h3>
         <div id="livebars"><div class="msg"><span class="spin"></span>running on the live engine…</div></div>
         <div class="kpirow" id="livekpis" style="display:none">
-          <div class="kpi"><div class="v g" id="liveagg">—</div><div class="c">aggregate</div></div>
+          <div class="kpi"><div class="v g" id="liveagg">—</div><div class="c">4-scale agg</div></div>
           <div class="kpi"><div class="v g" id="livepeak">—</div><div class="c">peak scale</div></div>
         </div>
       </div>
@@ -131,28 +166,84 @@ code{font-family:var(--mono);color:var(--green)}
       <button id="run">▶ Run live</button>
       <span class="note" id="runnote"></span>
     </div>
-  </section>
-
-  <!-- ── the three predictions ── -->
-  <section class="card">
-    <div class="h2">The three falsifiable predictions</div>
-    <div class="sub">Scale-Ordered Contagion makes three sharp, testable claims about these profiles. Results from the full G20 battery in the paper.</div>
     <div class="preds">
       <div class="pred"><div class="t">SOCH-A · Ordering</div><div class="s">The profile peaks at a coarser scale when the slower market is involved.</div><div class="r">✓ p = 0.042</div></div>
-      <div class="pred"><div class="t">SOCH-B · Shape symmetry</div><div class="s">The profile's <em>shape</em> is direction-symmetric even when its level is not.</div><div class="r">✓ 28 / 28 pairs</div></div>
+      <div class="pred"><div class="t">SOCH-B · Shape symmetry</div><div class="s">The profile's <em>shape</em> is direction-symmetric even when its level is not.</div><div class="r">✓ 28 / 28 pairs (p&gt;0.05)</div></div>
       <div class="pred"><div class="t">SOCH-C · Level asymmetry</div><div class="s">The overall level is directionally asymmetric (connectivity × shock).</div><div class="r">p = 0.105 (n.s.)</div></div>
     </div>
-    <div class="note">The USA→India panel above is the live, single-pair proof of reproducibility. The full 28-pair symmetry battery (block-bootstrap) is the paper's heavier computation, available in the <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">package</a>; it is not run on page load.</div>
+    <div class="note">The USA→India panel above is the live, single-pair proof. The full 28-pair shape-symmetry battery (block-bootstrap) is the paper's heavier computation, available in the <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">package</a>; it is not run on page load.</div>
+  </section>
+
+  <!-- ════════════════ 2 · MCPFM (PENDING) ════════════════ -->
+  <section class="card">
+    <div class="h2">Systemic Risk Index: crisis early-warning <span class="tag pend">live regeneration pending</span></div>
+    <div class="sub">MCPFM · <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">arXiv:2507.08065</a> · the equilibrium-derived Systemic Risk Index (SRI) discriminating crisis from non-crisis days. Validation: ten major U.S. equities, 2010–2024, COVID-19 crash as natural experiment.</div>
+    <div class="cols">
+      <div class="panel pub">
+        <h3>Published — Bhandari (2026)</h3>
+        <div class="barrow"><span>SRI</span><span class="track"><span class="fill pub" style="width:91.5%"></span></span><span>0.915</span></div>
+        <div class="barrow"><span>VIX</span><span class="track"><span class="fill pub" style="width:94.7%"></span></span><span>0.947</span></div>
+        <div class="kpirow">
+          <div class="kpi"><div class="v" id="sriauc">0.915</div><div class="c">SRI AUC</div></div>
+          <div class="kpi"><div class="v">1 day</div><div class="c">SRI lead time</div></div>
+          <div class="kpi"><div class="v">0.947</div><div class="c">VIX AUC</div></div>
+        </div>
+        <div class="note">The SRI achieves AUC = 0.915 (excellent crisis discrimination). It sits modestly below the VIX benchmark (AUC 0.947, gap −3.4%) but warns earlier — 1-day lead vs the VIX's 2 days, with peak detection on 10 Mar 2020, one day before the WHO pandemic declaration.</div>
+      </div>
+      <div class="panel pend">
+        <h3>Live regeneration</h3>
+        <div class="msg">No systemic-risk-index method is registered in the compute engine yet, so this result is <b>not</b> recomputed here. It is shown above from the paper. We will not fabricate a live number — when the SRI method is registered, this panel will recompute the AUC on the live engine, exactly as the SOCH profile does above.</div>
+        <div class="kpirow">
+          <div class="kpi"><div class="v a">—</div><div class="c">live AUC</div></div>
+          <div class="kpi"><div class="v a">Tier&nbsp;G</div><div class="c">method status</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="statusbar"><span class="ic">◷</span> Live regeneration available once the systemic-risk method is registered (Tier&nbsp;G). Until then, the figure above is the published result, not a live value.</div>
+    <div class="note">Companion theory: Nash-equilibrium existence (Theorem 7.2) and the trust-update law drive the SRI. Paper: <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">arXiv:2507.08065</a>.</div>
+  </section>
+
+  <!-- ════════════════ 3 · CONTAGION-CHANNELS (PENDING) ════════════════ -->
+  <section class="card">
+    <div class="h2">Contagion channel attribution <span class="tag pend">live regeneration pending</span></div>
+    <div class="sub">contagion-channels · <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546</a> · each significant directional contagion link attributed to one of five mutually-exclusive transmission channels via IV/2SLS + LASSO + local projections + heteroskedasticity-based ID. 18 G20 markets, eight crisis sub-periods, 2006–2026.</div>
+    <div class="cols">
+      <div class="panel pub">
+        <h3>Published — Bhandari &amp; Parida (2026)</h3>
+        <div class="chrow"><span>Trade (GFC)</span><span class="track"><span class="fill pub" style="width:87.5%"></span></span><span>28%</span></div>
+        <div class="chrow"><span>Behavioural</span><span class="track"><span class="fill pub" style="width:68.75%"></span></span><span>≤22%</span></div>
+        <div class="chrow"><span>Trade (Pre-Crisis)</span><span class="track"><span class="fill pub" style="width:28.1%"></span></span><span>9%</span></div>
+        <div class="kpirow">
+          <div class="kpi"><div class="v">5</div><div class="c">channels</div></div>
+          <div class="kpi"><div class="v">8</div><div class="c">crisis episodes</div></div>
+          <div class="kpi"><div class="v">14–32%</div><div class="c">network density</div></div>
+        </div>
+        <div class="note">Channels: Trade · Financial · Geopolitical · Behavioural · Monetary. Trade is empirically prominent across all post-2007 episodes (9% Pre-Crisis → 28% GFC, primary spec); the behavioural channel is bounded ≤22% under the de-confounded composite. Financial frictions dominate the Pre-Crisis baseline and the European Sovereign Debt Crisis; the remaining six episodes are method-sensitive and reported with explicit identification-status disclosure.</div>
+      </div>
+      <div class="panel pend">
+        <h3>Live regeneration</h3>
+        <div class="msg">No channel-attribution method is registered in the compute engine yet, so this result is <b>not</b> recomputed here. It is shown above from the paper. We will not fabricate live channel shares — when the attribution method is registered, this panel will recompute them on the live engine. The WQTE <em>detection</em> stage that feeds it is already live (see the SOCH panel and the <a href="research-engine.html">Workbench</a>).</div>
+        <div class="kpirow">
+          <div class="kpi"><div class="v a">—</div><div class="c">live shares</div></div>
+          <div class="kpi"><div class="v a">Tier&nbsp;G</div><div class="c">method status</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="statusbar"><span class="ic">◷</span> Live regeneration pending (Tier&nbsp;G) — the structural attribution layer is not yet exposed by the engine. The figures above are the published result, not live values.</div>
+    <div class="note">Paper: <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546</a> (working paper, IIT Bhubaneswar).</div>
   </section>
 
   <div class="foot wrap" style="max-width:none">
-    <strong style="color:var(--mid)">Real data · real engine · not a cached replay.</strong><br>
-    Live profiles are computed by the sandboxed compute engine at
+    <strong style="color:var(--mid)">Real data · real engine · honest about its limits.</strong><br>
+    The live SOCH profile is computed by the sandboxed compute engine at
     <a id="celink" href="#" target="_blank" rel="noopener">shssm-compute…run.app</a> on the bundled G20 daily-returns panel (18 markets, 2006–2026).
-    Paper: Bhandari &amp; Parida (2026), <em>Scale-Ordered Contagion</em> (working paper, IIT Bhubaneswar).
+    The MCPFM and contagion-channels results are shown from their papers with an explicit "live regeneration pending (Tier G)" status — they are not simulated and not a substitute live value.<br>
+    Papers: <a href="https://arxiv.org/abs/2606.04113" target="_blank" rel="noopener">SOCH (2606.04113)</a> ·
+    <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">MCPFM (2507.08065)</a> ·
+    <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">contagion-channels (2604.26546)</a>.
     Code: <a href="https://github.com/avishekb9/sochcontagion" target="_blank" rel="noopener">sochcontagion</a> (GPL-3) ·
     install from <a href="https://avishekb9.r-universe.dev" target="_blank" rel="noopener">r-universe</a> ·
-    explore every method in the <a href="research-engine.html">Workbench</a>.
+    explore every registered method in the <a href="research-engine.html">Workbench</a>.
   </div>
 </div>
 
@@ -161,7 +252,9 @@ const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
 try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"reproduce"}));}catch(e){} /* aggregate beacon (T3.2) */
 document.getElementById('celink').href=CE; document.getElementById('celink').textContent=CE.replace('https://','');
 // Published USA->India values (Bhandari & Parida 2026; tau=0.05, J=4) — immutable.
-const PUB={profile:[0.01546,0.04254,0.04907,0.04936], agg:0.0391, peak:"d4"};
+// Paper's 5-scale profile is (0.0155,0.0425,0.0491,0.0494,0.0567), aggregate 0.0426.
+// The engine decomposes to 4 scales (d1-d4); the d1-d4 values match the paper exactly.
+const PUB={profile:[0.01546,0.04254,0.04907,0.04936], agg4:0.0391, agg5:0.0426, peak:"d4"};
 const SCALES=["d1","d2","d3","d4"];
 const MARKETS=["Argentina","Australia","Brazil","Canada","China","France","Germany","India","Indonesia","Italy","Japan","Mexico","Russia","SouthAfrica","SouthKorea","Turkey","UK","USA"];
 const $=id=>document.getElementById(id);
@@ -172,7 +265,6 @@ function bars(el,prof,pub){
     return `<div class="barrow"><span>${SCALES[i]}</span><span class="track"><span class="fill ${pub?'pub':''}" style="width:${w}%"></span></span><span>${g.toFixed(4)}</span></div>`;
   }).join("");
 }
-function peakOf(p){let m=0,k=0;p.forEach((g,i)=>{if(g>m){m=g;k=i;}});return SCALES[k];}
 // populate published bars + the pair selectors
 bars($('pubbars'),PUB.profile,true);
 MARKETS.forEach(m=>{["from","to"].forEach(s=>{const o=document.createElement('option');o.value=m;o.textContent=m;if((s==='from'&&m==='USA')||(s==='to'&&m==='India'))o.selected=true;$(s).appendChild(o);});});
@@ -198,7 +290,7 @@ async function runLive(from,to,isHeadline){
     if(isHeadline){
       const dmax=Math.max(...prof.map((g,i)=>Math.abs(g-PUB.profile[i])));
       const ok=dmax<0.004;
-      $('match').innerHTML=`<div class="verdict ${ok?'g':'n'}">${ok?'✓ The live engine reproduces the published profile':'≈ Live profile (max Δ '+dmax.toFixed(4)+' vs published)'} — max difference ${dmax.toFixed(4)} across the 4 scales.</div>`;
+      $('match').innerHTML=`<div class="verdict ${ok?'g':'n'}">${ok?'✓ The live engine reproduces the published per-scale shape':'≈ Live profile (max Δ '+dmax.toFixed(4)+' vs published)'} — max difference ${dmax.toFixed(4)} across the 4 scales (live 4-scale aggregate ${d.result.aggregate_forward.toFixed(4)} vs published 0.0391; the paper's 5-scale aggregate 0.0426 adds the d5 band).</div>`;
     } else {
       $('runnote').textContent=from+'→'+to+': aggregate '+d.result.aggregate_forward.toFixed(4)+', peak '+d.result.peak_scale_forward;
     }
