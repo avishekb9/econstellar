@@ -187,6 +187,65 @@ table.rt tr.tophit td:first-child{border-left:2px solid var(--green)}
 .sigtag.n{color:var(--dim)}
 footer{border-top:1px solid var(--rule);padding:1.6rem 0 2.4rem;font-family:var(--mono);font-size:.76rem;color:var(--dim);text-align:center;margin-top:1rem}
 </style>
+<!-- ════ Tier E (computational Notebook) — ADDITIVE styles (no existing rule touched) ════ -->
+<style id="nbstyle">
+/* header mode toggle */
+.modetoggle{display:inline-flex;gap:0;margin:.9rem auto 0;border:1px solid var(--border);border-radius:8px;overflow:hidden;clip-path:var(--clip)}
+.modetoggle button{font-family:var(--mono);font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;
+  background:var(--surface2);color:var(--dim);border:none;padding:.5rem 1.1rem;cursor:pointer;transition:.15s}
+.modetoggle button:hover{color:var(--cyan)}
+.modetoggle button[aria-pressed="true"]{background:rgba(0,255,136,.12);color:var(--green)}
+.modetoggle button:focus-visible{outline:2px solid var(--cyan);outline-offset:-2px}
+/* notebook view container */
+#nbview{display:none;margin:1.2rem 0}
+#nbview.on{display:block}
+body.nbmode .hideinnb{display:none!important}
+/* notebook bar (title + global ops) */
+.nbbar{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:.9rem 1.1rem;margin-bottom:1rem}
+.nbbar .row{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem .8rem}
+.nbtitle{font-family:var(--sans);font-size:1.05rem;font-weight:600;background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);border-radius:7px;padding:.4rem .7rem;flex:1;min-width:180px}
+.nbtitle:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.nbbtn{font-family:var(--mono);font-size:.68rem;background:var(--surface2);color:var(--cyan);border:1px solid var(--border);
+  border-radius:6px;padding:.34rem .65rem;cursor:pointer;transition:.15s;white-space:nowrap}
+.nbbtn:hover{border-color:var(--cyan);background:rgba(0,212,255,.08)}
+.nbbtn:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.nbbtn.g{color:var(--green)} .nbbtn.g:hover{border-color:var(--hot);background:rgba(0,255,136,.1)}
+.nbsave{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-left:.2rem}
+/* cells */
+.nbcells{display:flex;flex-direction:column;gap:1rem}
+.nbcell{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:.9rem 1rem;position:relative}
+.nbcell:focus-within{border-color:rgba(0,212,255,.35)}
+.nbcell .cellhdr{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem}
+.nbcell .ctype{font-family:var(--mono);font-size:.6rem;color:var(--dim);text-transform:uppercase;letter-spacing:1.5px;border:1px solid var(--border);border-radius:5px;padding:.12rem .45rem}
+.nbcell .ctype.md{color:var(--cyan)} .nbcell .ctype.method{color:var(--green)}
+.nbcell .cellops{margin-left:auto;display:flex;gap:.3rem}
+.cellop{font-family:var(--mono);font-size:.66rem;background:var(--surface2);color:var(--mid);border:1px solid var(--border);
+  border-radius:5px;padding:.18rem .45rem;cursor:pointer;transition:.15s}
+.cellop:hover{border-color:var(--cyan);color:var(--cyan)}
+.cellop:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.cellop.del:hover{border-color:rgba(239,68,68,.5);color:var(--red)}
+.cellop[disabled]{opacity:.35;cursor:default}
+.nbcell textarea{width:100%;min-height:90px;font-family:var(--mono);font-size:.82rem;line-height:1.55;background:var(--surface2);
+  color:var(--text);border:1px solid var(--border);border-radius:7px;padding:.55rem .7rem;resize:vertical}
+.nbcell textarea:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.mdrendered{padding:.2rem .1rem;cursor:text}
+.mdrendered:empty::before{content:"(empty markdown cell — click Edit)";color:var(--dim);font-family:var(--mono);font-size:.76rem}
+.nbcell .cellbody-method{display:grid;grid-template-columns:280px 1fr;gap:1rem;align-items:start}
+@media(max-width:760px){.nbcell .cellbody-method{grid-template-columns:1fr}}
+.nbcell .mparams .field{margin-bottom:.7rem}
+.nbcell .mparams label{display:block;font-family:var(--mono);font-size:.7rem;color:var(--mid);margin-bottom:.25rem}
+.nbcell .serieslist{max-height:150px}
+.nbcell .cellresult{min-width:0}
+.nbcell .cellresult .msg{padding:.8rem}
+.nbrun{font-family:var(--mono);font-size:.74rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;cursor:pointer;
+  background:rgba(0,255,136,.12);color:var(--green);border:1px solid var(--hot);border-radius:7px;padding:.5rem .9rem;margin-top:.3rem;transition:.15s}
+.nbrun:hover{background:rgba(0,255,136,.22)} .nbrun:disabled{opacity:.5;cursor:wait}
+.nbrun:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.nbadd{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.nbmeta{font-family:var(--mono);font-size:.66rem;color:var(--dim);margin-top:.4rem}
+.nbcell .jobid-in{font-family:var(--mono);font-size:.76rem}
+</style>
 </head>
 <body>
     <!-- Shared cosmic nav (inlined per econstellar convention) -->
@@ -1587,6 +1646,546 @@ loadCatalog().catch(e=>{
   else $("results").innerHTML='<div class="warn">catalog load failed: '+esc(e.message)+'</div>';
 });
 loadNeuricx();
+</script>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     Tier E — computational Notebook (ADDITIVE, client-side only)
+     A separate classic <script> that shares global scope with the
+     workbench script above. It INVOKES the existing machinery and does
+     NOT modify any existing function. Reused verbatim by calling:
+       · CATALOG, SERIES                                     (catalog + datasets)
+       · onMethod(), gatherParams()                          (param-form builder, incl. int_array/enum_multi)
+       · run()                                               (sync /api/compute/run runner)
+       · loadJob(), renderJob(), statusPill()                (async #job= viewer path)
+       · renderResult()                                      (per-method sync renderers)
+       · exportToolbarHTML(), buildFigureSVG, buildLatexTable, latexTableText,
+         bibtexFor, hashFor, exportFigureSVG/CSV/JSON, copyPerma   (Tier-D export)
+       · md(), esc(), $(), CE, selectedSeries(), setSeries()  (markdown / helpers / kernel base)
+     Bridge: a method cell drives the SHARED workbench rail
+     (#method,#dynparams,#series,#symbol) + the shared #results sink, then
+     transplants the produced result DOM into the cell. Rail + hash + LAST
+     are snapshotted and restored, so the Workbench is never regressed.
+     NO workspaces / NO #nb= sharing in this pass (deferred).
+     ════════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){
+"use strict";
+/* ---------- tiny locals (do not shadow page globals) ---------- */
+const uid=()=>"c"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const nbEl=id=>document.getElementById(id);
+const LS=window.localStorage;
+/* reuse the page's md() renderer; fall back to a minimal HTML-escaped one only if absent */
+const renderMd=(t)=> (typeof md==="function") ? md(t)
+  : '<div>'+String(t==null?"":t).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])).replace(/\n/g,"<br>")+'</div>';
+
+/* ---------- persistence (single notebook) ---------- */
+const K_NB="econstellar.notebook";
+function readJSON(k,d){ try{const s=LS.getItem(k);return s?JSON.parse(s):d;}catch(e){return d;} }
+function writeJSON(k,v){ try{LS.setItem(k,JSON.stringify(v));}catch(e){} }
+
+/* ---------- in-memory state ---------- */
+let NB=null;                  // { title, cells:[...] }
+let RUNLOCK=false;            // serialise method-cell runs (the shared rail is a single resource)
+let saveTimer=null;
+
+function defaultMethod(){ return (typeof CATALOG==="object"&&CATALOG)?Object.keys(CATALOG)[0]:"unit_root"; }
+function isLongRunning(method){
+  return !!(CATALOG&&CATALOG[method]&&CATALOG[method].long_running) ||
+         (typeof LONG_RUNNING!=="undefined"&&LONG_RUNNING.has&&LONG_RUNNING.has(method));
+}
+function newNotebook(){
+  return {title:"Untitled notebook",cells:[
+    {id:uid(),type:"markdown",md:"# Untitled notebook\n\nNarrate your analysis here, then add a method cell below.",editing:false}
+  ]};
+}
+
+/* store keeps the last result so a refresh keeps what you saw; export strips results */
+function serializeForStore(nb){
+  return {title:nb.title,cells:nb.cells.map(c=>({
+    id:c.id,type:c.type,md:c.md||"",editing:!!c.editing,
+    method:c.method,params:c.params,result:c.result||null,
+    provenance:c.provenance||null,methodBody:c.methodBody||null,async:c.async||null
+  }))};
+}
+function persistNb(){ if(NB) writeJSON(K_NB,serializeForStore(NB)); }
+function scheduleSave(){
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{ persistNb(); const n=nbEl("nbsave"); if(n) n.textContent="✓ saved "+new Date().toLocaleTimeString(); },650);
+}
+function flushSave(){ if(saveTimer){ clearTimeout(saveTimer); saveTimer=null; } persistNb(); }
+
+/* ---------- export / import SPEC (results EXCLUDED) ---------- */
+function nbToSpec(nb){
+  return {title:nb.title, cells:nb.cells.map(c=> c.type==="markdown"
+    ? {type:"markdown", markdown:c.md||""}
+    : {type:"method", method:c.method||"", params:c.params||{}} )};
+}
+function specToNb(spec){
+  const nb={title:(spec&&spec.title)||"Imported notebook",cells:[]};
+  ((spec&&spec.cells)||[]).forEach(cs=>{
+    if(cs.type==="markdown") nb.cells.push({id:uid(),type:"markdown",md:cs.markdown||cs.md||"",editing:false});
+    else if(cs.type==="method") nb.cells.push({id:uid(),type:"method",method:cs.method||defaultMethod(),params:cs.params||{},result:null});
+  });
+  if(!nb.cells.length) nb.cells.push({id:uid(),type:"markdown",md:"",editing:true});
+  return nb;
+}
+
+/* ════════ shared-rail bridge (reuse onMethod/gatherParams/run/renderResult) ════════ */
+/* snapshot enough of the workbench rail + globals to restore it after a cell run */
+function snapshotRail(){
+  const dynVals={};
+  [...document.querySelectorAll('#dynparams [id^="p_"]')].forEach(el=>{
+    if(el.classList&&el.classList.contains("serieslist")) dynVals[el.id]=[...el.querySelectorAll("input:checked")].map(c=>c.value);
+    else dynVals[el.id]=el.value;
+  });
+  return {
+    method: nbEl("method").value,
+    series: (typeof selectedSeries==="function")?selectedSeries():[],
+    symbol: nbEl("symbol")?nbEl("symbol").value:"",
+    dynVals,
+    last: window.LAST,
+    hash: location.hash,
+    resultsHTML: nbEl("results").innerHTML,
+    cacheTxt: nbEl("cache")?nbEl("cache").textContent:""
+  };
+}
+function restoreRail(s){
+  nbEl("method").value=s.method;
+  if(typeof onMethod==="function") onMethod();            // rebuilds #dynparams for the restored method (reuse)
+  if(typeof setSeries==="function") setSeries(s.series);
+  if(nbEl("symbol")) nbEl("symbol").value=s.symbol;
+  Object.entries(s.dynVals).forEach(([id,v])=>{ const el=nbEl(id); if(!el) return;
+    if(el.classList&&el.classList.contains("serieslist")){ const want=Array.isArray(v)?v:[]; el.querySelectorAll("input").forEach(c=>{c.checked=want.includes(c.value);}); }
+    else el.value=v; });
+  window.LAST=s.last;
+  nbEl("results").innerHTML=s.resultsHTML;
+  if(nbEl("cache")) nbEl("cache").textContent=s.cacheTxt;
+  try{ history.replaceState(null,"",s.hash||location.pathname+location.search); }catch(e){ location.hash=s.hash||""; }
+}
+/* apply a cell's method+params into the (onMethod-built) shared rail before calling run() */
+function applyParamsToRail(method,params){
+  nbEl("method").value=method;
+  if(typeof onMethod==="function") onMethod();            // build #dynparams for this method (reuse)
+  const p=params||{};
+  if(method==="live_unit_root"){ if(nbEl("symbol")&&p.symbol!=null) nbEl("symbol").value=p.symbol; }
+  else if(typeof setSeries==="function") setSeries(p.series||[]);
+  Object.keys(p).forEach(key=>{                            // generic params → #p_<key> (mirrors applyHash)
+    if(["series","symbol"].includes(key)) return;
+    const el=nbEl("p_"+key); if(!el) return;
+    const v=p[key];
+    if(el.classList&&el.classList.contains("serieslist")){ const want=Array.isArray(v)?v.map(String):String(v).split(","); el.querySelectorAll("input").forEach(c=>{c.checked=want.includes(c.value);}); }
+    else el.value=Array.isArray(v)?v.join(","):v;
+  });
+}
+
+/* ════════ build a cell's DOM ════════ */
+function cellTypeBadge(c){ return c.type==="markdown"
+  ? '<span class="ctype md">markdown</span>'
+  : '<span class="ctype method">method</span>'; }
+function opsHTML(idx,n){
+  const up=idx>0, dn=idx<n-1;
+  return '<div class="cellops">'+
+    '<button class="cellop mv" data-act="up" aria-label="Move cell up" '+(up?'':'disabled')+'>↑</button>'+
+    '<button class="cellop mv" data-act="down" aria-label="Move cell down" '+(dn?'':'disabled')+'>↓</button>'+
+    '<button class="cellop del" data-act="del" aria-label="Delete cell">✕</button>'+
+  '</div>';
+}
+function renderCell(c,idx,n){
+  const wrap=document.createElement("div");
+  wrap.className="nbcell"; wrap.dataset.cid=c.id; wrap.tabIndex=-1;
+  let body="";
+  if(c.type==="markdown"){
+    if(c.editing){
+      body='<textarea aria-label="Markdown source" placeholder="Write markdown… (# heading, **bold**, lists, [links](https://…))">'+esc(c.md||"")+'</textarea>'+
+           '<div style="margin-top:.5rem"><button class="nbbtn g" data-act="md-render">✓ Render</button></div>';
+    } else {
+      body='<div class="mdrendered" data-act="md-edit" title="click to edit">'+(c.md?renderMd(c.md):"")+'</div>';
+    }
+    wrap.innerHTML='<div class="cellhdr">'+cellTypeBadge(c)+opsHTML(idx,n)+'</div>'+body;
+  } else {
+    const lr=isLongRunning(c.method);
+    body='<div class="cellbody-method">'+
+      '<div class="mparams" data-role="params"></div>'+
+      '<div class="cellresult" data-role="result"><div class="msg">Configure parameters, then Run this cell.</div></div>'+
+    '</div>'+
+    '<button class="nbrun" data-act="run">▶ Run cell'+(lr?' (async)':'')+'</button>';
+    wrap.innerHTML='<div class="cellhdr">'+cellTypeBadge(c)+(lr?'<span class="lrbadge">⏳ long-running</span>':'')+opsHTML(idx,n)+'</div>'+body;
+  }
+  return wrap;
+}
+/* build a method cell's param form by reusing the shared rail builder (onMethod),
+   then transplanting the freshly-built #dynparams (+ method picker + series) into the cell */
+function mountMethodCellForm(wrap,c){
+  const host=wrap.querySelector('[data-role="params"]'); if(!host) return;
+  const snap=snapshotRail();
+  try{
+    applyParamsToRail(c.method,c.params||{});             // drives onMethod() → #dynparams built for this method
+    host.innerHTML='<div class="field"><label>Method</label><select class="cell-method"></select></div>';
+    const sel=host.querySelector(".cell-method");
+    Object.keys(CATALOG).forEach(k=>{ const o=document.createElement("option"); o.value=k; o.textContent=(CATALOG[k].label||k); sel.appendChild(o); });
+    sel.value=c.method;
+    // series OR symbol field (mirror the rail's current state)
+    if(c.method==="live_unit_root"){
+      const sym=nbEl("symbol")?nbEl("symbol").value:"^GSPC";
+      host.insertAdjacentHTML("beforeend",'<div class="field"><label>Live symbol (Yahoo/FRED)</label><input class="cell-symbol" type="text" value="'+esc(sym)+'"></div>');
+    } else {
+      const m=CATALOG[c.method], nspec=m&&m.params&&m.params.series&&m.params.series.n;
+      const lbl=Array.isArray(nspec)?("Series ("+nspec[0]+"–"+nspec[1]+")"):(nspec===1?"Series (1)":"Series");
+      const checked=(c.params&&c.params.series)||[];
+      let boxes="";
+      (SERIES||[]).forEach(s=>{ boxes+='<label><input type="checkbox" value="'+esc(s)+'"'+(checked.includes(s)?" checked":"")+'>'+esc(s)+'</label>'; });
+      host.insertAdjacentHTML("beforeend",'<div class="field"><label>'+lbl+'</label><div class="serieslist cell-series">'+boxes+'</div></div>');
+    }
+    // transplant the rail-built dynamic params (reuses int_array/enum_multi/enum/num/int markup verbatim)
+    const dyn=nbEl("dynparams"), dynClone=document.createElement("div"); dynClone.className="celldyn";
+    [...dyn.children].forEach(ch=>dynClone.appendChild(ch.cloneNode(true)));
+    dynClone.querySelectorAll('[id^="p_"]').forEach(e=>{ e.dataset.pk=e.id.slice(2); e.removeAttribute("id"); }); // re-id so they don't collide with the rail
+    dynClone.querySelectorAll('label[for^="p_"]').forEach(l=>l.removeAttribute("for"));
+    host.appendChild(dynClone);
+    // method description (reuse the rail's mdesc that onMethod just set)
+    host.insertAdjacentHTML("beforeend",'<div class="nbmeta">'+(nbEl("mdesc")?nbEl("mdesc").innerHTML:"")+'</div>');
+    // method change → rebuild this cell's form + clear its result
+    sel.addEventListener("change",()=>{ c.method=sel.value; c.params={}; c.result=null; c.provenance=null; mountMethodCellForm(wrap,c);
+      const rb=wrap.querySelector('[data-role="result"]'); if(rb) rb.innerHTML='<div class="msg">Configure parameters, then Run this cell.</div>'; scheduleSave(); });
+  } finally { restoreRail(snap); }
+}
+/* read params back out of a mounted method cell (mirrors gatherParams' type handling) */
+function gatherCellParams(wrap,c){
+  const host=wrap.querySelector('[data-role="params"]'); const m=CATALOG[c.method]||{}; const params={};
+  if(c.method==="live_unit_root"){ const s=host.querySelector(".cell-symbol"); params.symbol=(s&&s.value.trim())||"^GSPC"; }
+  else { params.series=[...host.querySelectorAll(".cell-series input:checked")].map(c=>c.value); }
+  Object.keys(m.params||{}).forEach(pk=>{
+    if(pk==="series") return;
+    const t=m.params[pk].type, el=host.querySelector('[data-pk="'+pk+'"]'); if(!el) return;
+    if(t==="enum_multi"){ const vals=[...el.querySelectorAll("input:checked")].map(c=>c.value); if(vals.length) params[pk]=vals; }
+    else if(t==="int_array"){ const arr=el.value.split(/[\s,]+/).map(s=>s.trim()).filter(s=>s!=="").map(s=>parseInt(s,10)).filter(n=>!isNaN(n)); if(arr.length) params[pk]=arr; }
+    else if(el.value!=null && String(el.value).trim()!==""){ params[pk]= t==="num"?parseFloat(el.value):(t==="enum"||t==="symbol")?el.value:parseInt(el.value,10); }
+  });
+  return params;
+}
+
+/* ════════ run a method cell ════════ */
+async function runCell(wrap,c){
+  if(c.type!=="method") return;
+  if(RUNLOCK) return;                       // the shared rail is single-resource → serialise
+  const resBox=wrap.querySelector('[data-role="result"]');
+  c.params=gatherCellParams(wrap,c);
+  if(isLongRunning(c.method)) return runCellAsync(wrap,c,resBox);
+  // ----- sync path: drive the EXISTING run() against the shared rail, then transplant -----
+  RUNLOCK=true;
+  const runBtn=wrap.querySelector(".nbrun"); if(runBtn) runBtn.disabled=true;
+  resBox.innerHTML='<div class="msg"><span class="spin"></span>running '+esc((CATALOG[c.method]&&CATALOG[c.method].label)||c.method)+' in sandbox…</div>';
+  const snap=snapshotRail();
+  try{
+    applyParamsToRail(c.method,c.params);
+    await run();                            // EXISTING sync runner → writes #results + window.LAST + exportToolbar + provenance
+    resBox.innerHTML=nbEl("results").innerHTML;   // transplant the produced result DOM (incl. export toolbar + provenance)
+    rebindToolbar(resBox,c);               // make the transplanted export buttons act on THIS cell's result
+    if(window.LAST){ c.result=window.LAST.result; c.provenance=window.LAST.provenance; c.methodBody=window.LAST.body; }
+  }catch(e){ resBox.innerHTML='<div class="warn">cell run failed: '+esc(e.message)+'</div>'; }
+  finally{ restoreRail(snap); if(runBtn) runBtn.disabled=false; RUNLOCK=false; scheduleSave(); }
+}
+/* async (long_running): submit via the SAME job path the page uses; surface the permalink and
+   poll without blocking. Honest if submission is not reachable from this public origin. */
+async function runCellAsync(wrap,c,resBox){
+  RUNLOCK=true;
+  const runBtn=wrap.querySelector(".nbrun"); if(runBtn) runBtn.disabled=true;
+  resBox.innerHTML='<div class="msg"><span class="spin"></span>submitting background job…</div>';
+  let submitted=null, failMsg="";
+  try{
+    const r=await fetch(CE+"/api/jobs/submit",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({method:c.method,params:c.params})});
+    if(r.ok){ const d=await r.json(); submitted=d.job_id||d.id||(d.job&&d.job.job_id)||null; }
+    else { failMsg="HTTP "+r.status+(r.status===404?" — job submission is not exposed on this public kernel (it runs in the lab).":""); }
+  }catch(e){ failMsg=e.message; }
+  if(submitted){
+    c.async={job_id:submitted};
+    resBox.innerHTML=asyncJobBox(submitted,c.method,"submitted");
+    wireAsyncBox(resBox,c);
+    pollAsyncIntoCell(resBox,c,submitted);
+  } else {
+    // honest fallback: no public submit → let the user view a completed job by id (reuses loadJob/renderJob)
+    c.async={job_id:null};
+    resBox.innerHTML=
+      '<div class="lrnote"><b>'+esc((CATALOG[c.method]&&CATALOG[c.method].label)||c.method)+'</b> is a background job. '+
+      'Submission is not available from this public page'+(failMsg?' ('+esc(failMsg)+')':'')+
+      ' — it runs in the lab. You can still view a completed run by its permalink id below, which renders with the same engine.</div>'+
+      '<div style="display:flex;gap:.5rem;margin-top:.6rem;flex-wrap:wrap;align-items:center">'+
+        '<input class="jobid-in" type="text" placeholder="job_20260606_… " style="flex:1;min-width:200px">'+
+        '<button class="nbbtn g" data-act="viewjob">View job result</button>'+
+      '</div>';
+    wireAsyncBox(resBox,c);
+  }
+  if(runBtn) runBtn.disabled=false; RUNLOCK=false; scheduleSave();
+}
+function asyncJobBox(jobId,method,status){
+  return '<div class="jobbanner"><div class="row">'+
+    '<span class="jmethod">'+esc((CATALOG[method]&&CATALOG[method].label)||method)+'</span>'+
+    (typeof statusPill==="function"?statusPill(status):'<span class="jstatus wait"><span class="dot"></span>'+esc(status)+'</span>')+
+    '<span class="jmeta">job <b>'+esc(jobId)+'</b></span>'+
+    '<a class="jbtn" style="text-decoration:none" href="'+esc(location.pathname)+'#job='+esc(jobId)+'" target="_blank" rel="noopener">🔗 open permalink</a>'+
+  '</div></div><div class="subnote">Polling for completion… you can keep working on other cells.</div>';
+}
+function wireAsyncBox(resBox,c){
+  const vb=resBox.querySelector('[data-act="viewjob"]');
+  if(vb) vb.addEventListener("click",()=>{ const inp=resBox.querySelector(".jobid-in"); const id=inp&&inp.value.trim(); if(id) viewJobIntoCell(resBox,c,id); });
+}
+/* render a completed/known job into the cell by reusing loadJob()'s fetch + renderJob via #results transplant */
+async function viewJobIntoCell(resBox,c,jobId){
+  resBox.innerHTML='<div class="msg"><span class="spin"></span>loading job '+esc(jobId)+'…</div>';
+  const snap=snapshotRail();
+  try{
+    await loadJob(jobId);                  // EXISTING: fetch + renderJob into #results
+    resBox.innerHTML=nbEl("results").innerHTML;
+    rebindToolbar(resBox,c);
+    if(window.LAST){ c.result=window.LAST.result; c.provenance=window.LAST.provenance; c.methodBody=window.LAST.body; c.async={job_id:jobId}; }
+  }catch(e){ resBox.innerHTML='<div class="warn">could not load job: '+esc(e.message)+'</div>'; }
+  finally{ restoreRail(snap); scheduleSave(); }
+}
+async function pollAsyncIntoCell(resBox,c,jobId){
+  for(let i=0;i<5;i++){                     // light polling: 5 × 6s; never blocks other cells
+    await new Promise(r=>setTimeout(r,6000));
+    if(!document.body.contains(resBox)) return;   // cell deleted
+    try{
+      const r=await fetch(CE+"/api/jobs/"+encodeURIComponent(jobId));
+      if(!r.ok) continue;
+      const d=await r.json(); const st=(d.status||"").toLowerCase();
+      if(st==="succeeded"||st==="success"||st==="done"||st==="failed"||st==="error") return viewJobIntoCell(resBox,c,jobId);
+      const banner=resBox.querySelector(".jobbanner .row .jstatus");
+      if(banner&&typeof statusPill==="function"){ const fr=d.progress&&typeof d.progress.fraction==="number"?d.progress.fraction:null; banner.outerHTML=statusPill(st,fr); }
+    }catch(e){ /* keep trying */ }
+  }
+}
+/* rebind the EXISTING export toolbar/provenance buttons (they read window.LAST) so they act on
+   THIS cell's result rather than whatever the workbench last ran. The builders are reused as-is. */
+function rebindToolbar(resBox,c){
+  const L={method:c.method,body:c.methodBody||{method:c.method,params:c.params},result:c.result,provenance:c.provenance||{}};
+  resBox.querySelectorAll("button[onclick]").forEach(b=>{
+    const code=b.getAttribute("onclick")||"";
+    b.removeAttribute("onclick");
+    b.addEventListener("click",()=>{ const prev=window.LAST; window.LAST=L;
+      try{
+        if(/exportFigureSVG/.test(code)) exportFigureSVG();
+        else if(/showLatexTable/.test(code)) showLatexTableInto(resBox,L);
+        else if(/exportLatexTable/.test(code)) exportLatexTable();
+        else if(/showCite/.test(code)) showCiteInto(resBox,L);
+        else if(/showEmbed/.test(code)) showEmbedInto(resBox,L);
+        else if(/exportCSV/.test(code)) exportCSV();
+        else if(/exportJSON/.test(code)) exportJSON();
+        else if(/copyPerma/.test(code)){ const mm=code.match(/copyPerma\((['"])(.*?)\1\)/); if(mm) copyPerma(mm[2]); }
+      } finally { window.LAST=prev; }
+    });
+  });
+}
+/* cell-local variants of showCite/showLatexTable/showEmbed that reuse the SAME builders
+   (bibtexFor/latexTableText/hashFor) but append into the cell instead of #results */
+function showCiteInto(resBox,L){ const prev=window.LAST; window.LAST=L; try{ appendBox(resBox,"citebox-cell","BibTeX",esc(bibtexFor(L))); }finally{window.LAST=prev;} }
+function showLatexTableInto(resBox,L){ const prev=window.LAST; window.LAST=L; try{ const tex=latexTableText(L); if(!tex)return; appendBox(resBox,"texbox-cell","LaTeX (booktabs)",esc(tex)); }finally{window.LAST=prev;} }
+function showEmbedInto(resBox,L){ const prev=window.LAST; window.LAST=L; try{
+  const src="https://avishekb9.github.io/econstellar/embed.html"+hashFor(L.body);
+  const code='<iframe src="'+src+'" width="100%" height="340" style="border:0;border-radius:12px" loading="lazy" title="Econstellar live analysis"></iframe>';
+  appendBox(resBox,"embedbox-cell","Embed this live analysis",esc(code)); }finally{window.LAST=prev;} }
+function appendBox(resBox,id,title,pre){
+  let box=resBox.querySelector("#"+id); if(box) box.remove();
+  box=document.createElement("div"); box.id=id;
+  box.style.cssText="margin-top:.6rem;padding:.6rem .8rem;border:1px solid var(--hot);border-radius:8px;background:var(--surface2)";
+  box.innerHTML='<div style="font-family:var(--mono);font-size:.7rem;color:var(--green);margin-bottom:.4rem">'+title+
+    ' <button class="nbbtn g copybox">copy</button></div><pre class="mono" style="white-space:pre-wrap;font-size:.7rem;color:var(--mid);margin:0;max-height:320px;overflow:auto">'+pre+'</pre>';
+  box.querySelector(".copybox").addEventListener("click",()=>{ try{navigator.clipboard.writeText(box.querySelector("pre").textContent);}catch(e){} });
+  resBox.appendChild(box);
+}
+
+/* ════════ notebook render ════════ */
+function renderNotebook(){
+  const host=nbEl("nbcells"); if(!host||!NB) return;
+  host.innerHTML="";
+  const n=NB.cells.length;
+  NB.cells.forEach((c,idx)=>{
+    const w=renderCell(c,idx,n);
+    host.appendChild(w);
+    if(c.type==="method" && CATALOG){
+      mountMethodCellForm(w,c);
+      if(c.result){ const rb=w.querySelector('[data-role="result"]'); if(rb) renderStoredResult(rb,c); }  // restore stored result
+    }
+  });
+  const tf=nbEl("nbtitle"); if(tf&&tf.value!==NB.title) tf.value=NB.title;
+}
+/* re-render a stored result without re-running: reuse renderResult/renderJob via #results transplant */
+function renderStoredResult(rb,c){
+  const snap=snapshotRail();
+  try{
+    window.LAST={method:c.method,body:c.methodBody||{method:c.method,params:c.params},result:c.result,provenance:c.provenance||{}};
+    if(c.async&&c.async.job_id && typeof renderJob==="function"){
+      renderJob({job_id:c.async.job_id,method:c.method,status:"succeeded",result:c.result,params:c.params,provenance:c.provenance||{}});
+    } else {
+      renderResult(c.method,c.result);                                       // EXISTING per-method renderer
+      nbEl("results").insertAdjacentHTML("beforeend",exportToolbarHTML(window.LAST));  // EXISTING export toolbar
+    }
+    rb.innerHTML='<div class="subnote" style="margin-bottom:.4rem">↺ stored result (re-run to refresh)</div>'+nbEl("results").innerHTML;
+    rebindToolbar(rb,c);
+  }catch(e){ rb.innerHTML='<div class="msg">stored result could not be re-rendered; Run again.</div>'; }
+  finally{ restoreRail(snap); }
+}
+
+/* ════════ cell ops ════════ */
+function findCell(id){ return NB.cells.findIndex(c=>c.id===id); }
+function addCell(type){
+  const c= type==="markdown" ? {id:uid(),type:"markdown",md:"",editing:true}
+                             : {id:uid(),type:"method",method:defaultMethod(),params:{},result:null};
+  NB.cells.push(c); renderNotebook(); scheduleSave();
+  const w=nbEl("nbcells").lastElementChild; if(w){ const f=w.querySelector("textarea,select,button"); if(f) f.focus(); }
+}
+function deleteCell(id){ const i=findCell(id); if(i<0)return; NB.cells.splice(i,1);
+  if(!NB.cells.length) NB.cells.push({id:uid(),type:"markdown",md:"",editing:true}); renderNotebook(); scheduleSave(); }
+function moveCell(id,dir){ const i=findCell(id); if(i<0)return; const j=i+(dir==="up"?-1:1);
+  if(j<0||j>=NB.cells.length)return; const a=NB.cells; [a[i],a[j]]=[a[j],a[i]]; renderNotebook(); scheduleSave(); }
+
+function onCellsClick(e){
+  const wrap=e.target.closest(".nbcell"); if(!wrap) return; const cid=wrap.dataset.cid; const i=findCell(cid); if(i<0)return; const c=NB.cells[i];
+  const act=e.target.dataset.act;
+  if(act==="del") return deleteCell(cid);
+  if(act==="up") return moveCell(cid,"up");
+  if(act==="down") return moveCell(cid,"down");
+  if(act==="md-edit"){ c.editing=true; renderNotebook(); const w=nbEl("nbcells").children[i]; const ta=w&&w.querySelector("textarea"); if(ta){ta.focus();ta.value=c.md||"";} return; }
+  if(act==="md-render"){ const ta=wrap.querySelector("textarea"); c.md=ta?ta.value:""; c.editing=false; renderNotebook(); scheduleSave(); return; }
+  if(act==="run") return runCell(wrap,c);
+}
+function onCellsInput(e){
+  const wrap=e.target.closest(".nbcell"); if(!wrap)return; const cid=wrap.dataset.cid; const i=findCell(cid); if(i<0)return; const c=NB.cells[i];
+  if(c.type==="markdown" && e.target.tagName==="TEXTAREA"){ c.md=e.target.value; scheduleSave(); }
+  else if(c.type==="method"){ c.params=gatherCellParams(wrap,c); scheduleSave(); }
+}
+/* keyboard: Ctrl/Cmd+Enter runs a method cell or renders a markdown cell */
+function onCellsKey(e){
+  if(!(e.key==="Enter"&&(e.ctrlKey||e.metaKey))) return;
+  const wrap=e.target.closest(".nbcell"); if(!wrap)return; const cid=wrap.dataset.cid; const i=findCell(cid); if(i<0)return; const c=NB.cells[i];
+  e.preventDefault();
+  if(c.type==="markdown"){ const ta=wrap.querySelector("textarea"); if(ta){ c.md=ta.value; c.editing=false; renderNotebook(); scheduleSave(); } }
+  else runCell(wrap,c);
+}
+
+/* ════════ Run all — sequential; async cells submit without blocking ════════ */
+async function runAll(){
+  const host=nbEl("nbcells");
+  for(let i=0;i<NB.cells.length;i++){
+    const c=NB.cells[i]; if(c.type!=="method") continue;
+    const wrap=host.children[i]; if(!wrap) continue;
+    wrap.scrollIntoView({behavior:"smooth",block:"nearest"});
+    await runCell(wrap,c);    // sync cells await their result; async cells submit + return promptly
+  }
+}
+
+/* ════════ export / import (JSON; results excluded) ════════ */
+function exportNbJSON(){
+  const blob={econstellar_notebook:1, exported:new Date().toISOString(), title:NB.title, cells:nbToSpec(NB).cells};
+  const b=new Blob([JSON.stringify(blob,null,2)],{type:"application/json"});
+  const u=URL.createObjectURL(b), a=document.createElement("a");
+  a.href=u; a.download=(NB.title||"notebook").replace(/[^\w.-]+/g,"_")+".econstellar.json";
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+function importNbFromFile(file){
+  const fr=new FileReader();
+  fr.onload=()=>{ try{
+    const o=JSON.parse(fr.result);
+    const spec=o.cells?o:(o.spec||o);     // accept {title,cells}, wrapped {spec}, or raw spec
+    NB=specToNb(spec); persistNb(); renderNotebook();
+    const tf=nbEl("nbtitle"); if(tf) tf.value=NB.title;
+    const note=nbEl("nbsave"); if(note) note.textContent="imported "+(NB.cells.length)+" cells";
+  }catch(e){ alert("Import failed: "+e.message); } };
+  fr.readAsText(file);
+}
+
+/* ════════ mode toggle ════════ */
+function setMode(mode){
+  const on=(mode==="notebook");
+  document.body.classList.toggle("nbmode",on);
+  nbEl("nbview").classList.toggle("on",on);
+  const tW=nbEl("mode-wb"), tN=nbEl("mode-nb");
+  if(tW) tW.setAttribute("aria-pressed",on?"false":"true");
+  if(tN) tN.setAttribute("aria-pressed",on?"true":"false");
+  if(on){ ensureNotebook(); renderNotebook(); }   // always (re)render on switch so a restored/saved notebook shows, not just when NB was null
+}
+function ensureNotebook(){
+  if(NB) return;
+  const stored=readJSON(K_NB,null);
+  NB = stored ? specToStored(stored) : newNotebook();
+}
+/* normalise a stored record (which may carry results) back into the working model */
+function specToStored(stored){
+  const nb={title:stored.title||"Untitled notebook",cells:(stored.cells||[]).map(c=>({editing:false,...c,id:c.id||uid()}))};
+  if(!nb.cells.length) nb.cells.push({id:uid(),type:"markdown",md:"",editing:true});
+  return nb;
+}
+
+/* ════════ build Notebook DOM (purely additive — no existing markup modified) ════════ */
+function buildNotebookDom(){
+  // 1) header mode toggle (after the reproduce CTA)
+  const hero=document.querySelector("header.hero");
+  if(hero && !nbEl("modetoggle")){
+    const tog=document.createElement("div");
+    tog.className="modetoggle"; tog.id="modetoggle"; tog.setAttribute("role","group"); tog.setAttribute("aria-label","View mode");
+    tog.innerHTML='<button id="mode-wb" type="button" aria-pressed="true">⌗ Workbench</button>'+
+                  '<button id="mode-nb" type="button" aria-pressed="false">▤ Notebook</button>';
+    hero.appendChild(tog);
+    nbEl("mode-wb").addEventListener("click",()=>setMode("workbench"));
+    nbEl("mode-nb").addEventListener("click",()=>setMode("notebook"));
+  }
+  // 2) notebook view panel — inserted right after the .bench grid
+  if(!nbEl("nbview")){
+    const view=document.createElement("div");
+    view.id="nbview"; view.className="wrap"; view.style.padding="0";
+    view.innerHTML=
+      '<div class="nbbar"><div class="row">'+
+        '<input class="nbtitle" id="nbtitle" type="text" aria-label="Notebook title" placeholder="Notebook title">'+
+        '<button class="nbbtn g" id="nb-runall">▶▶ Run all</button>'+
+        '<button class="nbbtn" id="nb-export">⬇ Export JSON</button>'+
+        '<button class="nbbtn" id="nb-import">⬆ Import JSON</button>'+
+        '<input type="file" id="nb-file" accept="application/json,.json" style="display:none">'+
+        '<span class="nbsave" id="nbsave"></span>'+
+      '</div></div>'+
+      '<div class="nbcells" id="nbcells"></div>'+
+      '<div class="nbadd">'+
+        '<button class="nbbtn" id="add-md">+ Markdown cell</button>'+
+        '<button class="nbbtn g" id="add-method">+ Method cell</button>'+
+      '</div>';
+    const bench=document.querySelector(".bench");
+    if(bench&&bench.parentNode){ bench.parentNode.insertBefore(view,bench.nextSibling); }
+    else document.querySelector(".wrap").appendChild(view);
+    // tag workbench-only sections so Notebook mode can hide them (additive class only; removed on switch-back)
+    [".bench","#research-panel"].forEach(s=>{const el=document.querySelector(s); if(el) el.classList.add("hideinnb");});
+    let sib=view.nextElementSibling;     // the framework + NEURICX panels (the .panel siblings after #nbview)
+    while(sib){ if(sib.tagName==="DIV"&&sib.classList.contains("panel")) sib.classList.add("hideinnb"); if(sib.tagName==="FOOTER") break; sib=sib.nextElementSibling; }
+    // wire bar
+    nbEl("nb-runall").addEventListener("click",runAll);
+    nbEl("nb-export").addEventListener("click",exportNbJSON);
+    nbEl("nb-import").addEventListener("click",()=>nbEl("nb-file").click());
+    nbEl("nb-file").addEventListener("change",e=>{ if(e.target.files&&e.target.files[0]) importNbFromFile(e.target.files[0]); e.target.value=""; });
+    nbEl("add-md").addEventListener("click",()=>addCell("markdown"));
+    nbEl("add-method").addEventListener("click",()=>addCell("method"));
+    nbEl("nbtitle").addEventListener("input",e=>{ NB.title=e.target.value; scheduleSave(); });
+    const host=nbEl("nbcells");
+    host.addEventListener("click",onCellsClick);
+    host.addEventListener("input",onCellsInput);
+    host.addEventListener("change",onCellsInput);
+    host.addEventListener("keydown",onCellsKey);
+    // never lose work on refresh/close
+    window.addEventListener("pagehide",()=>{ if(NB) flushSave(); });
+    document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden"&&NB) flushSave(); });
+  }
+}
+
+/* ════════ boot: build DOM, restore from localStorage (default view stays Workbench) ════════ */
+function boot(){
+  buildNotebookDom();
+  ensureNotebook();   // load saved notebook (or seed) so it's ready the moment the user switches
+}
+function waitForCatalog(tries){
+  if((typeof CATALOG==="object" && CATALOG) || tries<=0){ boot(); return; }   // build anyway after timeout; cells degrade gracefully
+  setTimeout(()=>waitForCatalog(tries-1),200);
+}
+if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>waitForCatalog(60));
+else waitForCatalog(60);
+})();
 </script>
 </body>
 </html>
