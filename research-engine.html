@@ -445,6 +445,12 @@ function onMethod(){
       const boxes=(pv.values||[]).map(v=>`<label><input type="checkbox" value="${esc(v)}">${esc(v)}</label>`).join("");
       dp.insertAdjacentHTML("beforeend",
         `<div class="field">${lbl}<div class="serieslist" id="p_${pk}" role="group" aria-label="${esc(pk)}">${boxes}</div><div class="subnote">none checked → all ${(pv.values||[]).length||""}</div></div>`);
+    } else if(pv.type==='int_array'){
+      // comma/space-separated list of ints (e.g. ksg_robustness k_grid/lag_grid). Pre-filled with the
+      // catalog default; clearing it omits the param so the server default applies. Mirrors enum_multi.
+      const def=Array.isArray(pv.default)?pv.default.join(","):"";
+      dp.insertAdjacentHTML("beforeend",
+        `<div class="field">${lbl}<input id="p_${pk}" type="text" value="${esc(def)}" placeholder="${esc(def)||"3,4,6,8"}"/><div class="subnote">comma-separated integers · blank → server default</div></div>`);
     } else {
       const ph={tau:"0.05",scale:"5",edge_quantile:"0.75",irf_h:"10",p:"7",lag:"2",alpha:"0.05",K:"2",H:"10",q:"1",levels:"6",lags:"4"}[pk]||"";
       dp.insertAdjacentHTML("beforeend",
@@ -461,6 +467,9 @@ function gatherParams(){
     const t=m.params[pk].type, el=$("p_"+pk); if(!el) return;
     if(t==="enum_multi"){ // checkbox group → array; omit entirely when nothing is checked (server default = all)
       const vals=[...el.querySelectorAll('input:checked')].map(c=>c.value); if(vals.length) params[pk]=vals;
+    } else if(t==="int_array"){ // "3,4,6,8" or "3 4 6 8" → [3,4,6,8]; omit when blank (server default applies)
+      const arr=el.value.split(/[\s,]+/).map(s=>s.trim()).filter(s=>s!=="").map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
+      if(arr.length) params[pk]=arr;
     } else if(el.value.trim()!==""){
       params[pk]= t==="num"?parseFloat(el.value): (t==="enum"||t==="symbol")?el.value : parseInt(el.value,10);
     }
@@ -509,7 +518,7 @@ function renderProvenance(d){
    On load, if location.hash carries #job=<id>, fetch the public job record
    GET {CE}/api/jobs/<id> and render its status, provenance and result.
    This is read-only: submission stays in the lab (job-server not public). */
-const LONG_RUNNING=new Set(['ksg_te']); // TODO Tier B: move to catalog (m.long_running)
+const LONG_RUNNING=new Set(['ksg_te','ksg_robustness']); // TODO Tier B: move to catalog (m.long_running)
 function jobIdFromHash(){ const m=(location.hash||"").match(/(?:^#|&)job=([^&]+)/); return m?decodeURIComponent(m[1]):null; }
 function statusPill(status,frac){
   const s=(status||"").toLowerCase();
@@ -571,6 +580,7 @@ function renderJob(d){
   }
   // succeeded with a result → bespoke renderer if we have one, else generic
   if(d.method==="ksg_te") h+=renderKsgTe(d.result);
+  else if(d.method==="ksg_robustness") h+=renderKsgRobustness(d.result);
   else h+=renderJobGeneric(d.result);
   // make Tier D exports work for permalinked jobs too (params come from the job record)
   window.LAST={method:d.method,body:{method:d.method,params:d.params||(d.provenance&&d.provenance.params)||{}},result:d.result,provenance:d.provenance||{}};
@@ -620,6 +630,57 @@ function sortKsg(by){
       '</td><td class="num">'+fixed(e.te,4)+'</td><td class="num">'+fixed(e.p,3)+
       '</td><td><span class="sigtag '+(sig?'y':'n')+'">'+(sig?'p&lt;.05':'ns')+'</span></td></tr>';
   }).join("");
+}
+
+/* KSG k/lag robustness sweep — magnitude/ranking stability of the KSG-TE result (async-only).
+   Renders via the #job= viewer path. Honest framing: this checks TE magnitude/ranking stability,
+   NOT significance-count stability. */
+function renderKsgRobustness(r){
+  const grid=r.grid||[], stab=r.stability||{}, base=r.baseline||{}, he=stab.headline_edge||{};
+  const ranks=he.ranks_across_grid||[];
+  const robustNo1=ranks.length>0 && ranks.every(x=>x===1);          // headline edge is #1 at every grid point?
+  const heLabel=(he.from!=null?he.from+"→"+he.to:"–");
+  const isBase=(g)=>(g.k===base.k && g.lag===base.lag);
+  // KPIs
+  let h='<div class="kpirow">'+
+    kpi((base.k!=null?"k="+base.k:"–")+(base.lag!=null?", lag="+base.lag:""),"exact baseline")+
+    kpi(stab.mean_spearman!=null?fixed(stab.mean_spearman,3):"–","mean Spearman vs baseline",'g')+
+    kpi(stab.min_spearman!=null?fixed(stab.min_spearman,3):"–","min Spearman",(stab.min_spearman!=null&&stab.min_spearman<0.9)?'a':'g')+
+    kpi(esc(heLabel),"headline edge")+
+    kpi(robustNo1?"robustly #1":"not always #1",robustNo1?'g':'a')+
+    kpi(grid.length||r.n_pairs!=null?(grid.length||"–"):"–","grid points")+'</div>';
+  // verdict string (server-supplied)
+  if(stab.verdict_string){
+    const vs=String(stab.verdict_string).toLowerCase();
+    const cls=/highly stable|stable/.test(vs)?(vs.indexOf("un")===0?'r':'g'):/unstable|fragile/.test(vs)?'r':'n';
+    h+='<div class="verdict '+cls+'">Stability verdict: '+esc(stab.verdict_string)+
+       (robustNo1?' · headline edge '+esc(heLabel)+' ranks #1 across the whole k/lag grid'
+        :' · headline edge '+esc(heLabel)+' is NOT #1 at every grid point (ranks '+esc(ranks.join(", "))+')')+'</div>';
+  }
+  // grid table
+  h+='<div class="lbl" style="margin:.5rem 0 .2rem">k/lag sensitivity grid <span style="color:var(--dim)">· baseline row highlighted · ⚠ flags points where the headline edge is not #1</span></div>';
+  h+='<table class="rt"><caption class="subnote" style="text-align:left;caption-side:top;margin:0 0 .3rem">'+
+     'KSG transfer-entropy k/lag robustness sweep — Spearman rank-correlation and top-10 Jaccard of each (k,lag) edge ranking against the exact baseline (k='+esc(base.k)+', lag='+esc(base.lag)+'). The baseline row is highlighted; the rightmost column shows each point&#39;s strongest directed edge.</caption>';
+  h+='<thead><tr><th scope="col">k</th><th scope="col">lag</th><th scope="col" class="num">Spearman vs baseline</th>'+
+     '<th scope="col" class="num">top-10 Jaccard</th><th scope="col" class="num">headline rank</th><th scope="col">#1 edge (TE)</th></tr></thead><tbody>';
+  grid.forEach(g=>{
+    const b=isBase(g), flag=(g.headline_edge_rank!=null&&g.headline_edge_rank!==1);
+    const te=(g.top_edges&&g.top_edges[0])||null;
+    const teTxt=te?esc(te.from+"→"+te.to)+' <span style="color:var(--dim)">('+fixed(te.te,3)+')</span>':"–";
+    h+='<tr class="'+(b?'tophit':'')+'">'+
+       '<td class="num">'+esc(g.k)+'</td><td class="num">'+esc(g.lag)+'</td>'+
+       '<td class="num">'+(g.spearman_vs_baseline!=null?fixed(g.spearman_vs_baseline,3):"–")+'</td>'+
+       '<td class="num">'+(g.top10_jaccard_vs_baseline!=null?fixed(g.top10_jaccard_vs_baseline,2):"–")+'</td>'+
+       '<td class="num"'+(flag?' style="color:var(--amber);font-weight:600"':'')+'>'+(g.headline_edge_rank!=null?(flag?'⚠ #'+g.headline_edge_rank:'#'+g.headline_edge_rank):"–")+'</td>'+
+       '<td>'+teTxt+(b?' <span style="color:var(--green);font-size:.62rem">baseline</span>':'')+'</td></tr>';
+  });
+  h+='</tbody></table>';
+  h+='<div class="subnote">n_series '+(r.n_series!=null?esc(r.n_series):"–")+' · n_obs '+(r.n_obs!=null?esc(r.n_obs):"–")+' · n_pairs '+(r.n_pairs!=null?esc(r.n_pairs):"–")+
+     (r.runtime_s!=null?' · runtime '+fixed(r.runtime_s,0)+'s':'')+'</div>';
+  // honest interpretation
+  h+='<div class="lrnote" style="margin-top:.6rem">This sweep checks <b>TE magnitude and ranking stability</b> across k/lag choices — it does <b>not</b> re-test significance, so it says nothing about how the count of significant links would move.</div>';
+  if(r.interpretation) h+='<div class="interp">'+esc(r.interpretation)+'</div>';
+  return h;
 }
 
 /* generic fallback: viewable result for any method without a bespoke renderer */
@@ -969,6 +1030,16 @@ function buildFigureSVG(L){
       cats:eps.map(e=>({label:e.period, exploratory:!!e.exploratory, seg:chans.map(c=>chanShare(e.shares,c)||0)})),
       xlabel:"crisis episode (2006–2026)", ylabel:"channel share (%)"});
   }
+  if(k==="ksg_robustness"){
+    const grid=r.grid||[]; if(!grid.length) return null;
+    const base=r.baseline||{}, labs=grid.map(g=>"k"+g.k+"·l"+g.lag);
+    return lineFigure(L,{title:"KSG-TE k/lag robustness — Spearman vs baseline",
+      subtitle:"edge-ranking agreement with the exact baseline (k="+(base.k!=null?base.k:"?")+", lag="+(base.lag!=null?base.lag:"?")+") across the k/lag grid",
+      series:[{name:"Spearman vs baseline",vals:grid.map(g=>g.spearman_vs_baseline)},
+              {name:"top-10 Jaccard",vals:grid.map(g=>g.top10_jaccard_vs_baseline)}],
+      forceLegend:true,xlabel:"k / lag grid point",ylabel:"agreement with baseline",
+      xticks:grid.map((g,i)=>i),xtickfmt:i=>labs[i]||"",dp:3});
+  }
   return null; // no chart for this method → toolbar omits the figure button
 }
 function exportFigureSVG(){ if(!window.LAST)return; const svg=buildFigureSVG(window.LAST); if(!svg)return;
@@ -1067,6 +1138,20 @@ function buildLatexTable(L){
     const T=mk(headers,rows,"l"+chans.map(()=>"r").join("")+"lr");
     // caption is run through texEsc by latexTableText, so keep this note plain-text (the * marks the rows)
     if(eps.some(e=>e.exploratory)) T.caption+=" * exploratory episode (Sargan over-identification rejection); shares reported descriptively.";
+    return T;
+  }
+  if(k==="ksg_robustness"){
+    const grid=r.grid||[], base=r.baseline||{}; if(!grid.length) return null;
+    const isBase=g=>(g.k===base.k && g.lag===base.lag);
+    const T=mk([{t:"$k$",num:0},{t:"Lag",num:0},{t:"Spearman",num:1},{t:"Top-10 Jaccard",num:1},{t:"Headline rank",num:0},{t:"Strongest edge"}],
+      grid.map(g=>{const te=(g.top_edges&&g.top_edges[0])||{};
+        return [String(g.k),String(g.lag),texNum(g.spearman_vs_baseline,3),texNum(g.top10_jaccard_vs_baseline,2),
+          (g.headline_edge_rank!=null?String(g.headline_edge_rank):"--"),
+          (te.from!=null?texEsc(te.from)+" $\\to$ "+texEsc(te.to)+" ("+texNum(te.te,3)+")":"--")
+          +(isBase(g)?" $^{*}$":"")];}),"rrrrrl");
+    // caption is run through texEsc by latexTableText, so keep this note plain-text (the * marks the baseline row)
+    T.caption+=" * exact baseline (k="+(base.k!=null?base.k:"?")+", lag="+(base.lag!=null?base.lag:"?")+
+      "); Spearman and Jaccard measure edge-ranking agreement with it. Checks magnitude/ranking stability, not significance-count stability.";
     return T;
   }
   return null; // no tabular form → toolbar omits the LaTeX button
@@ -1307,6 +1392,7 @@ function renderResult(k,r){
     if(anyExpl) h+='<div class="subnote">* Episode flagged <b>exploratory</b> by the paper — the Sargan over-identification test rejects, so its channel shares are reported descriptively, not as identified causal estimates.</div>';
     h+=`<div class="interp">${esc(r.interpretation||(r.source?("Source: "+r.source):""))}</div>`;
   }
+  else if(k==="ksg_robustness"){ h+=renderKsgRobustness(r); } // async-only, but share the renderer for parity
   else { h+='<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(JSON.stringify(r,null,2))+'</pre>'; }
   el.innerHTML=h;
 }
