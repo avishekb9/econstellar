@@ -212,6 +212,15 @@ body.nbmode .hideinnb{display:none!important}
 .nbbtn:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
 .nbbtn.g{color:var(--green)} .nbbtn.g:hover{border-color:var(--hot);background:rgba(0,255,136,.1)}
 .nbsave{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-left:.2rem}
+/* Tier F: workspace bar */
+.wsbar{background:var(--surface2);border:1px solid var(--border);clip-path:var(--clip);padding:.6rem 1.1rem;margin-bottom:.7rem}
+.wsbar .row{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem}
+.wsbar .wslbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green)}
+.wsbar .wssep{color:var(--dim);margin:0 .15rem}
+.wsbar .wssel{width:auto;min-width:140px;font-family:var(--mono);font-size:.76rem;background:var(--surface);color:var(--cyan);
+  border:1px solid var(--border);border-radius:6px;padding:.3rem .5rem;cursor:pointer}
+.wsbar .wssel:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.wsbar .nbbtn{padding:.3rem .55rem}
 /* cells */
 .nbcells{display:flex;flex-direction:column;gap:1rem}
 .nbcell{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:.9rem 1rem;position:relative}
@@ -1707,12 +1716,52 @@ function serializeForStore(nb){
     provenance:c.provenance||null,methodBody:c.methodBody||null,async:c.async||null
   }))};
 }
-function persistNb(){ if(NB) writeJSON(K_NB,serializeForStore(NB)); }
+function persistNb(){ if(NB){ ensureRegistry(); writeJSON(activeNbKey(),serializeForStore(NB)); syncNbTitle(); } }
 function scheduleSave(){
   if(saveTimer) clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>{ persistNb(); const n=nbEl("nbsave"); if(n) n.textContent="✓ saved "+new Date().toLocaleTimeString(); },650);
 }
 function flushSave(){ if(saveTimer){ clearTimeout(saveTimer); saveTimer=null; } persistNb(); }
+
+/* ════════ Tier F: Workspaces (additive registry over the Tier-E per-notebook store) ════════
+   Registry  econstellar.workspaces = { active:<wsId>, order:[wsId…],
+                                         ws:{ <wsId>:{ name, activeNb:<nbId>, nbs:[{id,title}] } } }
+   Per-notebook payload lives at  econstellar.ws.<wsId>.nb.<nbId>  in the SAME serializeForStore() shape.
+   Legacy single notebook (econstellar.notebook) is migrated in once into a seeded "Default" workspace. */
+const K_WS="econstellar.workspaces";
+const nbKey=(wsId,nbId)=>"econstellar.ws."+wsId+".nb."+nbId;
+const wsuid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+let REG=null;                                            // the in-memory registry (mirrors K_WS)
+
+function persistReg(){ if(REG) writeJSON(K_WS,REG); }
+function activeWs(){ return REG?REG.ws[REG.active]:null; }
+function activeNbKey(){ const w=activeWs(); return w?nbKey(REG.active,w.activeNb):K_NB; }
+function activeWsName(){ const w=activeWs(); return w?w.name:""; }
+
+/* seed a fresh registry holding one empty Default workspace + one empty notebook */
+function seedRegistry(){
+  const wsId=wsuid("w"), nbId=wsuid("n");
+  writeJSON(nbKey(wsId,nbId),serializeForStore(newNotebook()));
+  return {active:wsId,order:[wsId],ws:{[wsId]:{name:"Default",activeNb:nbId,nbs:[{id:nbId,title:"Untitled notebook"}]}}};
+}
+/* one-time migration: build the registry; if a legacy notebook exists, adopt it as Default's first notebook */
+function ensureRegistry(){
+  if(REG) return;
+  REG=readJSON(K_WS,null);
+  if(REG && REG.ws && REG.active && REG.ws[REG.active]) return;   // already on Tier-F store
+  const wsId=wsuid("w"), nbId=wsuid("n");
+  const legacy=readJSON(K_NB,null);                               // Tier-E single notebook (may be null)
+  const stored=legacy?specToStored(legacy):newNotebook();        // reuse Tier-E normaliser
+  writeJSON(nbKey(wsId,nbId),serializeForStore(stored));         // copy into the keyed store (legacy left intact)
+  REG={active:wsId,order:[wsId],ws:{[wsId]:{name:"Default",activeNb:nbId,nbs:[{id:nbId,title:stored.title||"Untitled notebook"}]}}};
+  persistReg();
+}
+/* keep the registry's title mirror for the active notebook in sync with NB.title */
+function syncNbTitle(){
+  const w=activeWs(); if(!w||!NB) return;
+  const ent=w.nbs.find(e=>e.id===w.activeNb);
+  if(ent && ent.title!==(NB.title||"Untitled notebook")){ ent.title=NB.title||"Untitled notebook"; persistReg(); }
+}
 
 /* ---------- export / import SPEC (results EXCLUDED) ---------- */
 function nbToSpec(nb){
@@ -1894,7 +1943,7 @@ async function runCellAsync(wrap,c,resBox){
   let submitted=null, failMsg="";
   try{
     const r=await fetch(CE+"/api/jobs/submit",{method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({method:c.method,params:c.params})});
+      body:JSON.stringify({method:c.method,params:c.params,workspace:activeWsName()})});  // Tier F: tag job with active workspace
     if(r.ok){ const d=await r.json(); submitted=d.job_id||d.id||(d.job&&d.job.job_id)||null; }
     else { failMsg="HTTP "+r.status+(r.status===404?" — job submission is not exposed on this public kernel (it runs in the lab).":""); }
   }catch(e){ failMsg=e.message; }
@@ -2107,7 +2156,8 @@ function setMode(mode){
 }
 function ensureNotebook(){
   if(NB) return;
-  const stored=readJSON(K_NB,null);
+  ensureRegistry();                                  // migrate/seed the registry on first use
+  const stored=readJSON(activeNbKey(),null);         // load the ACTIVE (workspace,notebook)
   NB = stored ? specToStored(stored) : newNotebook();
 }
 /* normalise a stored record (which may carry results) back into the working model */
@@ -2115,6 +2165,99 @@ function specToStored(stored){
   const nb={title:stored.title||"Untitled notebook",cells:(stored.cells||[]).map(c=>({editing:false,...c,id:c.id||uid()}))};
   if(!nb.cells.length) nb.cells.push({id:uid(),type:"markdown",md:"",editing:true});
   return nb;
+}
+
+/* ════════ Tier F: workspace + notebook controller (load/switch/CRUD) ════════ */
+/* load the active (workspace,notebook) into NB and repaint everything */
+function loadActiveNotebook(){
+  ensureRegistry();
+  const stored=readJSON(activeNbKey(),null);
+  NB = stored ? specToStored(stored) : newNotebook();
+  renderNotebook();
+  const tf=nbEl("nbtitle"); if(tf) tf.value=NB.title;
+  renderWsBar();
+}
+/* switch the active notebook within the current workspace */
+function selectNotebook(nbId){
+  const w=activeWs(); if(!w||nbId===w.activeNb) { renderWsBar(); return; }
+  flushSave();                       // persist the current NB before swapping
+  w.activeNb=nbId; persistReg();
+  NB=null; loadActiveNotebook();
+}
+/* switch workspace → load that workspace's active notebook */
+function selectWorkspace(wsId){
+  if(!REG.ws[wsId]||wsId===REG.active){ renderWsBar(); return; }
+  flushSave();
+  REG.active=wsId; persistReg();
+  NB=null; loadActiveNotebook();
+}
+function createNotebook(){
+  const w=activeWs(); if(!w) return;
+  flushSave();
+  const nbId=wsuid("n"); const fresh=newNotebook();
+  writeJSON(nbKey(REG.active,nbId),serializeForStore(fresh));
+  w.nbs.push({id:nbId,title:fresh.title}); w.activeNb=nbId; persistReg();
+  NB=null; loadActiveNotebook();
+}
+function renameNotebook(){
+  const w=activeWs(); if(!w||!NB) return;
+  const cur=NB.title||"Untitled notebook";
+  const name=(prompt("Rename notebook",cur)||"").trim(); if(!name||name===cur) return;
+  NB.title=name; const tf=nbEl("nbtitle"); if(tf) tf.value=name;
+  persistNb(); persistReg(); renderWsBar();
+}
+function deleteNotebook(){
+  const w=activeWs(); if(!w) return;
+  if(w.nbs.length<=1){ alert("A workspace keeps at least one notebook. Delete the workspace instead, or clear this notebook's cells."); return; }
+  const ent=w.nbs.find(e=>e.id===w.activeNb);
+  if(!confirm("Delete notebook \""+((ent&&ent.title)||"Untitled")+"\"? This cannot be undone.")) return;
+  flushSave();
+  try{ LS.removeItem(nbKey(REG.active,w.activeNb)); }catch(e){}
+  w.nbs=w.nbs.filter(e=>e.id!==w.activeNb);
+  w.activeNb=w.nbs[0].id; persistReg();
+  NB=null; loadActiveNotebook();
+}
+function createWorkspace(){
+  const name=(prompt("New workspace name","Workspace "+(REG.order.length+1))||"").trim(); if(!name) return;
+  flushSave();
+  const wsId=wsuid("w"), nbId=wsuid("n"), fresh=newNotebook();
+  writeJSON(nbKey(wsId,nbId),serializeForStore(fresh));
+  REG.ws[wsId]={name,activeNb:nbId,nbs:[{id:nbId,title:fresh.title}]};
+  REG.order.push(wsId); REG.active=wsId; persistReg();
+  NB=null; loadActiveNotebook();
+}
+function renameWorkspace(){
+  const w=activeWs(); if(!w) return;
+  const name=(prompt("Rename workspace",w.name)||"").trim(); if(!name||name===w.name) return;
+  w.name=name; persistReg(); renderWsBar();
+}
+function deleteWorkspace(){
+  const w=activeWs(); if(!w) return;
+  if(!confirm("Delete workspace \""+w.name+"\" and all its notebooks? This cannot be undone.")) return;
+  flushSave();
+  w.nbs.forEach(e=>{ try{ LS.removeItem(nbKey(REG.active,e.id)); }catch(err){} });
+  delete REG.ws[REG.active];
+  REG.order=REG.order.filter(id=>id!==REG.active);
+  if(!REG.order.length){ REG=seedRegistry(); }       // deleting the last workspace re-seeds a Default
+  else REG.active=REG.order[0];
+  persistReg();
+  NB=null; loadActiveNotebook();
+}
+/* render the workspace + notebook selectors in the notebook bar (keyboard-accessible <select>s) */
+function renderWsBar(){
+  if(!REG) return;
+  const wsSel=nbEl("ws-select");
+  if(wsSel){
+    wsSel.innerHTML="";
+    REG.order.forEach(id=>{ const o=document.createElement("option"); o.value=id; o.textContent=REG.ws[id].name; wsSel.appendChild(o); });
+    wsSel.value=REG.active;
+  }
+  const nbSel=nbEl("ws-nb-select"), w=activeWs();
+  if(nbSel&&w){
+    nbSel.innerHTML="";
+    w.nbs.forEach(e=>{ const o=document.createElement("option"); o.value=e.id; o.textContent=e.title||"Untitled notebook"; nbSel.appendChild(o); });
+    nbSel.value=w.activeNb;
+  }
 }
 
 /* ════════ build Notebook DOM (purely additive — no existing markup modified) ════════ */
@@ -2135,6 +2278,19 @@ function buildNotebookDom(){
     const view=document.createElement("div");
     view.id="nbview"; view.className="wrap"; view.style.padding="0";
     view.innerHTML=
+      '<div class="wsbar"><div class="row">'+
+        '<span class="wslbl">Workspace</span>'+
+        '<select class="wssel" id="ws-select" aria-label="Active workspace"></select>'+
+        '<button class="nbbtn" id="ws-new" aria-label="New workspace">+ Workspace</button>'+
+        '<button class="nbbtn" id="ws-rename" aria-label="Rename workspace">✎</button>'+
+        '<button class="nbbtn" id="ws-delete" aria-label="Delete workspace">🗑</button>'+
+        '<span class="wssep" aria-hidden="true">│</span>'+
+        '<span class="wslbl">Notebook</span>'+
+        '<select class="wssel" id="ws-nb-select" aria-label="Active notebook"></select>'+
+        '<button class="nbbtn" id="ws-nb-new" aria-label="New notebook">+ Notebook</button>'+
+        '<button class="nbbtn" id="ws-nb-rename" aria-label="Rename notebook">✎</button>'+
+        '<button class="nbbtn" id="ws-nb-delete" aria-label="Delete notebook">🗑</button>'+
+      '</div></div>'+
       '<div class="nbbar"><div class="row">'+
         '<input class="nbtitle" id="nbtitle" type="text" aria-label="Notebook title" placeholder="Notebook title">'+
         '<button class="nbbtn g" id="nb-runall">▶▶ Run all</button>'+
@@ -2163,6 +2319,16 @@ function buildNotebookDom(){
     nbEl("add-md").addEventListener("click",()=>addCell("markdown"));
     nbEl("add-method").addEventListener("click",()=>addCell("method"));
     nbEl("nbtitle").addEventListener("input",e=>{ NB.title=e.target.value; scheduleSave(); });
+    nbEl("nbtitle").addEventListener("change",()=>{ syncNbTitle(); renderWsBar(); });   // mirror title into the registry option
+    // wire workspace bar (Tier F)
+    nbEl("ws-select").addEventListener("change",e=>selectWorkspace(e.target.value));
+    nbEl("ws-new").addEventListener("click",createWorkspace);
+    nbEl("ws-rename").addEventListener("click",renameWorkspace);
+    nbEl("ws-delete").addEventListener("click",deleteWorkspace);
+    nbEl("ws-nb-select").addEventListener("change",e=>selectNotebook(e.target.value));
+    nbEl("ws-nb-new").addEventListener("click",createNotebook);
+    nbEl("ws-nb-rename").addEventListener("click",renameNotebook);
+    nbEl("ws-nb-delete").addEventListener("click",deleteNotebook);
     const host=nbEl("nbcells");
     host.addEventListener("click",onCellsClick);
     host.addEventListener("input",onCellsInput);
@@ -2177,7 +2343,8 @@ function buildNotebookDom(){
 /* ════════ boot: build DOM, restore from localStorage (default view stays Workbench) ════════ */
 function boot(){
   buildNotebookDom();
-  ensureNotebook();   // load saved notebook (or seed) so it's ready the moment the user switches
+  ensureNotebook();   // migrate/seed registry + load the active notebook so it's ready the moment the user switches
+  renderWsBar();      // populate the workspace/notebook selectors
 }
 function waitForCatalog(tries){
   if((typeof CATALOG==="object" && CATALOG) || tries<=0){ boot(); return; }   // build anyway after timeout; cells degrade gracefully
