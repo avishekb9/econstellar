@@ -647,7 +647,7 @@ function renderKsgRobustness(r){
     kpi(stab.mean_spearman!=null?fixed(stab.mean_spearman,3):"–","mean Spearman vs baseline",'g')+
     kpi(stab.min_spearman!=null?fixed(stab.min_spearman,3):"–","min Spearman",(stab.min_spearman!=null&&stab.min_spearman<0.9)?'a':'g')+
     kpi(esc(heLabel),"headline edge")+
-    kpi(robustNo1?"robustly #1":"not always #1",robustNo1?'g':'a')+
+    kpi(robustNo1?"robustly #1":"not always #1","across the k/lag grid",robustNo1?'g':'a')+
     kpi(grid.length||r.n_pairs!=null?(grid.length||"–"):"–","grid points")+'</div>';
   // verdict string (server-supplied)
   if(stab.verdict_string){
