@@ -254,6 +254,21 @@ body.nbmode .hideinnb{display:none!important}
 .nbadd{display:flex;gap:.5rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
 .nbmeta{font-family:var(--mono);font-size:.66rem;color:var(--dim);margin-top:.4rem}
 .nbcell .jobid-in{font-family:var(--mono);font-size:.76rem}
+/* ── publish control + #nb= published-notebook viewer (additive) ── */
+.nbpub{font-family:var(--mono);font-size:.62rem;margin-left:.2rem;display:inline-flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.nbpub .ok{color:var(--green)} .nbpub .err{color:var(--amber)}
+.nbpub .perma{color:var(--cyan);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom;direction:rtl}
+.pubbanner{background:linear-gradient(120deg,rgba(0,212,255,.08),rgba(0,255,136,.08));border:1px solid var(--hot);clip-path:var(--clip);
+  padding:.8rem 1.1rem;margin-bottom:1rem;font-family:var(--mono);font-size:.74rem;color:var(--mid)}
+.pubbanner .row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .8rem}
+.pubbanner .ttl{font-family:var(--sans);font-size:1.05rem;font-weight:600;color:var(--cyan)}
+.pubbanner .ro{font-size:.6rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);border:1px solid var(--hot);border-radius:5px;padding:.12rem .45rem}
+.pubbanner .meta{color:var(--dim)}
+body.nbview-ro .nbtitle{pointer-events:none;opacity:.85}
+body.nbview-ro .nbcell .cellops,body.nbview-ro .nbcell .nbrun,body.nbview-ro .nbadd{display:none!important}
+body.nbview-ro .nbcell textarea{display:none}
+body.nbview-ro .nbcell [data-role="params"]{pointer-events:none;opacity:.7}   /* params shown but not editable */
+body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /* no publish/run-all on a published view */
 </style>
 </head>
 <body>
@@ -552,6 +567,8 @@ function hashFor(body){
   return "#"+parts.join("&");
 }
 function applyHash(){
+  // #nb=<id> published-notebook permalink → hand off to the notebook viewer (Tier-E/F script), read-only
+  if(/(?:^#|&)nb=/.test(location.hash||"")){ if(typeof window.routeNbHash==="function"){ window.routeNbHash(); return true; } return false; }
   const h=decodeURIComponent((location.hash||"").replace(/^#/,"")); if(h.indexOf("method=")<0) return false;
   const q={}; h.split("&").forEach(kv=>{const i=kv.indexOf("="); if(i>0)q[kv.slice(0,i)]=kv.slice(i+1);});
   if(!q.method||!CATALOG||!CATALOG[q.method]) return false;
@@ -1696,6 +1713,7 @@ function writeJSON(k,v){ try{LS.setItem(k,JSON.stringify(v));}catch(e){} }
 let NB=null;                  // { title, cells:[...] }
 let RUNLOCK=false;            // serialise method-cell runs (the shared rail is a single resource)
 let saveTimer=null;
+let VIEWING_PUBLISHED=false;  // #nb= read-only viewer active → never persist (don't clobber local notebooks)
 
 function defaultMethod(){ return (typeof CATALOG==="object"&&CATALOG)?Object.keys(CATALOG)[0]:"unit_root"; }
 function isLongRunning(method){
@@ -1716,7 +1734,7 @@ function serializeForStore(nb){
     provenance:c.provenance||null,methodBody:c.methodBody||null,async:c.async||null
   }))};
 }
-function persistNb(){ if(NB){ ensureRegistry(); writeJSON(activeNbKey(),serializeForStore(NB)); syncNbTitle(); } }
+function persistNb(){ if(VIEWING_PUBLISHED) return; if(NB){ ensureRegistry(); writeJSON(activeNbKey(),serializeForStore(NB)); syncNbTitle(); } }
 function scheduleSave(){
   if(saveTimer) clearTimeout(saveTimer);
   saveTimer=setTimeout(()=>{ persistNb(); const n=nbEl("nbsave"); if(n) n.textContent="✓ saved "+new Date().toLocaleTimeString(); },650);
@@ -2296,9 +2314,12 @@ function buildNotebookDom(){
         '<button class="nbbtn g" id="nb-runall">▶▶ Run all</button>'+
         '<button class="nbbtn" id="nb-export">⬇ Export JSON</button>'+
         '<button class="nbbtn" id="nb-import">⬆ Import JSON</button>'+
+        '<button class="nbbtn g" id="nb-publish" aria-label="Publish notebook">🌐 Publish</button>'+
         '<input type="file" id="nb-file" accept="application/json,.json" style="display:none">'+
         '<span class="nbsave" id="nbsave"></span>'+
+        '<span class="nbpub" id="nbpub"></span>'+
       '</div></div>'+
+      '<div id="nbpubbanner"></div>'+
       '<div class="nbcells" id="nbcells"></div>'+
       '<div class="nbadd">'+
         '<button class="nbbtn" id="add-md">+ Markdown cell</button>'+
@@ -2315,6 +2336,7 @@ function buildNotebookDom(){
     nbEl("nb-runall").addEventListener("click",runAll);
     nbEl("nb-export").addEventListener("click",exportNbJSON);
     nbEl("nb-import").addEventListener("click",()=>nbEl("nb-file").click());
+    nbEl("nb-publish").addEventListener("click",publishNotebook);
     nbEl("nb-file").addEventListener("change",e=>{ if(e.target.files&&e.target.files[0]) importNbFromFile(e.target.files[0]); e.target.value=""; });
     nbEl("add-md").addEventListener("click",()=>addCell("markdown"));
     nbEl("add-method").addEventListener("click",()=>addCell("method"));
@@ -2340,11 +2362,132 @@ function buildNotebookDom(){
   }
 }
 
+/* ════════ Publish: POST serializeForStore(NB)+results to the LOCAL job-server ════════
+   Publishing runs only from the engine host (localhost:3030). From any other origin the POST
+   is refused/unreachable → we say so honestly and never fabricate a permalink. Operator-only. */
+const JOB_SERVER="http://localhost:3030";          // local job-server (operator host only)
+function setPubMsg(html){ const el=nbEl("nbpub"); if(el) el.innerHTML=html; }
+async function publishNotebook(){
+  if(!NB){ ensureNotebook(); }
+  const btn=nbEl("nb-publish"); if(btn) btn.disabled=true;
+  setPubMsg('<span class="spin"></span>publishing…');
+  let d=null, failMsg="";
+  try{
+    flushSave();                                   // make sure the active notebook reflects what we publish
+    const r=await fetch(JOB_SERVER+"/api/notebooks",{method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({notebook:serializeForStore(NB),workspace:activeWsName()})});
+    if(r.ok){ d=await r.json(); }
+    else { failMsg="HTTP "+r.status; }
+  }catch(e){ failMsg=e.message||"network error"; }
+  finally{ if(btn) btn.disabled=false; }
+  if(d && (d.permalink||d.url||d.id)){
+    const perma=d.permalink || (d.id?(location.pathname+"#nb="+d.id):d.url);
+    setPubMsg('<span class="ok">✓ published</span> '+
+      '<a class="perma" href="'+esc(perma)+'" title="'+esc(perma)+'" target="_blank" rel="noopener">'+esc(perma)+'</a>'+
+      '<button class="nbbtn g" id="nbpub-copy">copy link</button>');
+    const cp=nbEl("nbpub-copy"); if(cp) cp.addEventListener("click",()=>{ try{ navigator.clipboard.writeText(perma); cp.textContent="copied ✓"; }catch(e){} });
+  } else {
+    // honest: no fabricated permalink. Publishing only works from the engine host.
+    setPubMsg('<span class="err">⚠ Publishing runs from the engine host (localhost:3030)</span>'+
+      (failMsg?'<span class="meta" style="color:var(--dim)"> · '+esc(failMsg)+'</span>':''));
+  }
+}
+
+/* ════════ #nb=<id> read-only published-notebook viewer ════════
+   Fetch GET {CE}/api/notebooks/<id> → render the stored spec read-only (reuse renderNotebook/
+   renderCell/renderStoredResult; edit/run/reorder/delete chrome hidden via body.nbview-ro).
+   Autosave is suppressed (VIEWING_PUBLISHED) so a shared link never clobbers a local notebook. */
+let PUB_META=null;                                  // {id,published_at,workspace} for the banner / "open a copy"
+let PUB_LOADING=null;                               // id currently being fetched (guards the boot/applyHash race)
+function nbIdFromHash(){ const m=(location.hash||"").match(/(?:^#|&)nb=([^&]+)/); return m?decodeURIComponent(m[1]):null; }
+function setBanner(html){ const b=nbEl("nbpubbanner"); if(b) b.innerHTML=html||""; }
+async function viewPublishedNotebook(id){
+  if(PUB_LOADING===id) return;                      // a fetch for this id is already in flight
+  PUB_LOADING=id;
+  VIEWING_PUBLISHED=true; PUB_META=null;
+  document.body.classList.add("nbview-ro");
+  if(!document.body.classList.contains("nbmode")) setMode("notebook");   // ensure the notebook view is shown
+  setBanner('<div class="pubbanner"><div class="row"><span class="ro">read-only</span><span class="meta"><span class="spin"></span> loading published notebook '+esc(id)+'…</span></div></div>');
+  const host=nbEl("nbcells"); if(host) host.innerHTML="";
+  let d=null, failMsg="", notFound=false;
+  try{
+    const r=await fetch(CE+"/api/notebooks/"+encodeURIComponent(id));
+    if(r.status===404){ notFound=true; }
+    else if(!r.ok){ failMsg="HTTP "+r.status; }
+    else { d=await r.json(); }
+  }catch(e){ failMsg=e.message||"network error"; }
+  finally{ PUB_LOADING=null; }
+  if(notFound){
+    setBanner('<div class="pubbanner"><div class="row"><span class="ro">read-only</span>'+
+      '<span class="meta">📄 notebook <b>'+esc(id)+'</b> not found — it may have expired or never existed.</span></div></div>');
+    if(host) host.innerHTML='<div class="warn">No published notebook with that id.</div>'; return;
+  }
+  if(!d){
+    setBanner('<div class="pubbanner"><div class="row"><span class="ro">read-only</span>'+
+      '<span class="meta">📄 could not load published notebook '+esc(id)+(failMsg?' ('+esc(failMsg)+')':'')+'.</span></div></div>');
+    if(host) host.innerHTML='<div class="warn">Could not reach the kernel to load this published notebook'+(failMsg?': '+esc(failMsg):'')+'.</div>'; return;
+  }
+  const spec=d.notebook||d.spec||d;                 // {notebook:<spec>} per contract; tolerate a raw spec
+  PUB_META={id:d.id||id, published_at:d.published_at||spec.published_at||"", workspace:d.workspace||spec.workspace||""};
+  // render read-only: reuse specToStored (keeps results) → renderNotebook/renderCell/renderStoredResult
+  NB=specToStored(spec);                            // VIEWING_PUBLISHED blocks persistNb, so this won't touch storage
+  renderPublishedBanner();
+  renderNotebook();
+}
+function renderPublishedBanner(){
+  const m=PUB_META||{};
+  const dt=m.published_at?esc(String(m.published_at).replace("T"," ").replace(/\..*/,"")):"";
+  const copyBtn='<button class="nbbtn g" id="pub-open-copy">📥 Open a copy in my workspace</button>';
+  setBanner('<div class="pubbanner"><div class="row">'+
+    '<span class="ttl">'+esc((NB&&NB.title)||"Published notebook")+'</span>'+
+    '<span class="ro">read-only</span>'+
+    '<span class="meta">📄 Published notebook (read-only)'+(dt?' · published <b>'+dt+'</b>':'')+(m.workspace?' · workspace <b>'+esc(m.workspace)+'</b>':'')+'</span>'+
+    copyBtn+
+  '</div></div>');
+  const cb=nbEl("pub-open-copy"); if(cb) cb.addEventListener("click",openPublishedCopy);
+}
+/* import the published spec as a NEW editable notebook in the current workspace, then leave read-only */
+function openPublishedCopy(){
+  if(!NB) return;
+  const spec=nbToSpec(NB);                          // SPEC (results excluded) — same path as JSON import
+  spec.title=(NB.title||"Published notebook")+" (copy)";
+  // leave read-only mode + clear the published hash so autosave resumes on the new copy
+  VIEWING_PUBLISHED=false; PUB_META=null; PUB_LOADING=null;
+  document.body.classList.remove("nbview-ro"); setBanner("");
+  try{ history.replaceState(null,"",location.pathname+location.search); }catch(e){ location.hash=""; }
+  ensureRegistry();
+  const nbId=wsuid("n"), imported=specToNb(spec);
+  writeJSON(nbKey(REG.active,nbId),serializeForStore(imported));
+  const w=activeWs(); w.nbs.push({id:nbId,title:imported.title}); w.activeNb=nbId; persistReg();
+  NB=null; loadActiveNotebook();                    // load the fresh editable copy + repaint the bar
+}
+/* exit a read-only published view back to the normal local notebook (used when hash leaves #nb=) */
+function exitPublishedView(){
+  if(!VIEWING_PUBLISHED) return;
+  VIEWING_PUBLISHED=false; PUB_META=null; PUB_LOADING=null;
+  document.body.classList.remove("nbview-ro"); setBanner("");
+  NB=null; loadActiveNotebook();
+}
+/* hash router for #nb= — additive: workbench applyHash()/loadJob already ignore #nb= (no method=/job=) */
+function routeNbHash(){
+  const id=nbIdFromHash();
+  if(id){
+    if(!nbEl("nbview")) return true;                 // notebook DOM not built yet (applyHash won the boot race) → boot() re-runs routeNbHash after buildNotebookDom()
+    if(PUB_LOADING===id || (VIEWING_PUBLISHED && PUB_META && PUB_META.id===id)) return true;   // already loading/showing this one
+    viewPublishedNotebook(id); return true;
+  }
+  if(VIEWING_PUBLISHED) exitPublishedView();
+  return false;
+}
+window.routeNbHash=routeNbHash;                      // exposed so the workbench applyHash() can delegate
+
 /* ════════ boot: build DOM, restore from localStorage (default view stays Workbench) ════════ */
 function boot(){
   buildNotebookDom();
   ensureNotebook();   // migrate/seed registry + load the active notebook so it's ready the moment the user switches
   renderWsBar();      // populate the workspace/notebook selectors
+  window.addEventListener("hashchange",routeNbHash);   // live #nb= navigation (to and away)
+  routeNbHash();      // honour a #nb= present on initial load
 }
 function waitForCatalog(tries){
   if((typeof CATALOG==="object" && CATALOG) || tries<=0){ boot(); return; }   // build anyway after timeout; cells degrade gracefully
