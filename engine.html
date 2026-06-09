@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Research Engine — one substrate, five frameworks · SHSSM IIT Bhubaneswar</title>
+<meta name="description" content="The whole research portfolio as one methodological substrate — long-memory, multi-scale, information-theoretic, network-formation — instantiated by five frameworks, each asking one scientific question, with live status from the compute engine. SHSSM, IIT Bhubaneswar.">
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Research Engine — SHSSM IIT Bhubaneswar">
+<meta property="og:description" content="One long-memory + multi-scale + information-theoretic + network-formation substrate, instantiated by five frameworks — each asking a single scientific question, with live status.">
+<meta property="og:url" content="https://avishekb9.github.io/econstellar/engine.html">
+<meta property="og:image" content="https://avishekb9.github.io/econstellar/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="The SHSSM research engine: one methodological substrate instantiated by five financial-econometrics frameworks, with live compute status.">
+<meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Research Engine — SHSSM IIT Bhubaneswar">
+<meta name="twitter:description" content="One substrate, five frameworks, one live engine — the methodological spine behind the portfolio, with honest live status.">
+<meta name="twitter:image" content="https://avishekb9.github.io/econstellar/og-image.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15); --hot:rgba(0,255,136,.32); --rule:rgba(255,255,255,.06);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --disp:'Orbitron',sans-serif;
+  --clip:polygon(0 12px,12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 15% 8%,rgba(0,212,255,.07),transparent 40%),radial-gradient(circle at 85% 70%,rgba(0,255,136,.06),transparent 45%)}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;position:sticky;top:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:10}
+nav .brand{color:var(--green);font-weight:600;letter-spacing:.5px} nav .sp{flex:1} nav a{color:var(--dim)}
+nav a.active{color:var(--cyan);border-bottom:2px solid var(--cyan);padding-bottom:.15rem}
+/* hero */
+header{padding:3rem 0 1rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--disp);font-size:clamp(2rem,5vw,3.4rem);margin:.6rem 0 .5rem;line-height:1.04}
+.lede{font-size:1.1rem;color:var(--mid);max-width:66ch}
+.subline{font-family:var(--mono);font-size:.82rem;color:var(--dim);margin:.7rem 0 0;letter-spacing:.5px}
+.live-pill{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.72rem;color:var(--green);border:1px solid var(--hot);border-radius:999px;padding:.3rem .8rem;margin-top:1rem}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:p 1.4s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+@media(prefers-reduced-motion:reduce){.dot{animation:none}}
+/* sections */
+section{margin:2.4rem 0}
+.sec-h{font-family:var(--disp);font-size:1.3rem;margin:0 0 .2rem}
+.sec-s{color:var(--dim);font-family:var(--mono);font-size:.76rem;margin-bottom:1rem;max-width:74ch}
+/* card vocabulary (from reproduce.html) */
+.card{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.2rem 1.3rem}
+.h2{font-family:var(--disp);font-size:1.15rem;margin:0 0 .2rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:.6rem;letter-spacing:1px;text-transform:uppercase;padding:.18rem .5rem;border-radius:999px;white-space:nowrap}
+.tag.live{color:var(--green);border:1px solid var(--hot)}
+.tag.pub{color:var(--cyan);border:1px solid var(--border)}
+.tag.pend{color:var(--amber);border:1px solid rgba(245,158,11,.4)}
+.sub{font-family:var(--mono);font-size:.74rem;color:var(--dim);margin-bottom:1rem}
+.note{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.6rem}
+.note b{color:var(--mid)}
+code{font-family:var(--mono);color:var(--green)}
+/* substrate chip grid */
+.chipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:.7rem}
+.primitive{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem}
+.primitive .pn{font-family:var(--sans);font-weight:600;font-size:.95rem;color:#fff;display:flex;align-items:baseline;gap:.5rem}
+.primitive .pn .px{font-family:var(--mono);font-size:.66rem;color:var(--cyan);letter-spacing:.5px}
+.primitive .pd{font-family:var(--mono);font-size:.74rem;color:var(--mid);margin-top:.3rem;line-height:1.5}
+/* framework cards grid */
+.fwgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.fw{display:flex;flex-direction:column;gap:.5rem}
+.fw .q{color:var(--mid);font-size:.98rem;line-height:1.45}
+.fw .meth{font-family:var(--mono);font-size:.73rem;color:var(--dim);line-height:1.5}
+.fw .headline{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:.6rem .8rem;font-size:.9rem;color:var(--mid)}
+.fw .headline.empty{border-left-color:var(--dim);color:var(--dim)}
+.fw .headline .lbl{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--green);display:block;margin-bottom:.25rem}
+.fw .headline.empty .lbl{color:var(--dim)}
+.fw .lnk{font-family:var(--mono);font-size:.78rem;margin-top:auto;padding-top:.3rem}
+.fw .lnk .soon{color:var(--dim)}
+/* kpi strip (from reproduce.html) */
+.kpirow{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:.6rem;margin-top:.4rem}
+.kpi{background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:.7rem;text-align:center}
+.kpi .v{font-family:var(--mono);font-size:1.18rem;font-weight:600;color:var(--cyan)}
+.kpi .v.g{color:var(--green)} .kpi .v.a{color:var(--amber)}
+.kpi .c{font-family:var(--mono);font-size:.62rem;color:var(--dim);margin-top:.25rem;text-transform:uppercase;letter-spacing:.5px}
+.kpi .v .spin{vertical-align:middle}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:s .7s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.spin{animation:none;border-top-color:var(--border)}}
+/* consistency table (table.rt) */
+table.rt{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.76rem;margin:.2rem 0}
+table.rt th,table.rt td{text-align:left;padding:.5rem .55rem;border-bottom:1px solid var(--rule);vertical-align:top}
+table.rt thead th{color:var(--dim);font-size:.66rem;text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+table.rt tbody th{color:var(--mid);font-weight:600;font-size:.78rem}
+table.rt td{color:var(--mid)}
+.verdtag{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--mono);font-size:.7rem;white-space:nowrap}
+.verdtag .sw{width:9px;height:9px;border-radius:2px;flex:0 0 auto}
+.verdtag.div{color:var(--amber)} .verdtag.div .sw{background:var(--amber)}
+.verdtag.shared{color:var(--green)} .verdtag.shared .sw{background:var(--green)}
+.caption{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.8rem;line-height:1.6}
+/* two-panel cols */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.panel{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem}
+.panel h3{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:1px;margin:0 0 .7rem;color:var(--dim)}
+.panel p{font-size:.92rem;color:var(--mid);margin:.4rem 0}
+.panel .big{font-family:var(--disp);font-size:1.05rem;color:var(--cyan);margin:.2rem 0 .5rem}
+.statusbar{font-family:var(--mono);font-size:.78rem;padding:.6rem .8rem;border-radius:8px;margin:.8rem 0 0;display:flex;align-items:center;gap:.6rem;
+  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);color:var(--amber)}
+.statusbar .ic{flex:0 0 auto}
+/* footer */
+.foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2rem;padding:1.4rem 0 2.6rem;line-height:1.9}
+.foot a{color:var(--cyan)}
+.foot strong{color:var(--mid)}
+/* responsive */
+@media(max-width:680px){
+  .fwgrid{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+  .chipgrid{grid-template-columns:1fr}
+  .kpirow{grid-template-columns:repeat(2,1fr)}
+  table.rt{font-size:.7rem}
+  table.rt th,table.rt td{padding:.4rem .35rem}
+}
+@media(max-width:380px){
+  .kpirow{grid-template-columns:1fr}
+  .wrap{padding:0 14px}
+  nav{gap:.6rem;font-size:.72rem;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+<nav class="wrap" style="max-width:none" aria-label="Primary">
+  <span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+  <a href="index.html">Home</a>
+  <a href="engine.html" class="active" aria-current="page">The Engine</a>
+  <a href="research-engine.html">Workbench</a>
+  <a href="reproduce.html">Reproduce</a>
+  <a href="changelog.html">What's new</a>
+</nav>
+
+<main class="wrap">
+
+  <!-- ════════════════ 1 · HERO ════════════════ -->
+  <header>
+    <div class="eyebrow">The methodological spine of the portfolio</div>
+    <h1>The Research Engine</h1>
+    <p class="lede">A unified long-memory + multi-scale + information-theoretic + network-formation
+      substrate. Each framework asks one scientific question by parameterising the substrate on a
+      specific panel, calendar, and channel taxonomy.</p>
+    <p class="subline">SHSSM · IIT Bhubaneswar.</p>
+    <div class="live-pill"><span class="dot"></span> <span id="enginestate">contacting the live engine…</span></div>
+  </header>
+
+  <!-- ════════════════ 2 · SUBSTRATE ════════════════ -->
+  <section aria-label="The eight shared method primitives">
+    <h2 class="sec-h">One substrate · eight shared primitives</h2>
+    <div class="sec-s">Every framework below is built from the same toolkit. Nothing in the portfolio is bespoke at the method level — what changes between papers is which primitives are composed, on which panel, at which calendar and quantile.</div>
+    <div class="chipgrid">
+      <div class="primitive"><div class="pn">Long-memory estimation <span class="px">DFA · GPH · Hurst</span></div><div class="pd">Measures how persistent a return series is — the Hurst exponent that drives market-efficiency node-weights.</div></div>
+      <div class="primitive"><div class="pn">Multi-scale wavelet decomposition <span class="px">MODWT · LA8</span></div><div class="pd">Splits each series into time-scale bands (days → weeks → months) using the maximal-overlap discrete wavelet transform, Daubechies LA8.</div></div>
+      <div class="primitive"><div class="pn">Transfer entropy <span class="px">binned · KSG · quantile</span></div><div class="pd">Directional information flow X→Y — estimated three ways: histogram-binned, KSG k-nearest-neighbour, and quantile-conditioned for tails.</div></div>
+      <div class="primitive"><div class="pn">Surrogate inference <span class="px">IAAFT · block-bootstrap</span></div><div class="pd">Builds null distributions that preserve a series' own structure, so a measured spillover is tested against chance, not asserted.</div></div>
+      <div class="primitive"><div class="pn">Community detection <span class="px">Leiden · Walktrap · Louvain · CNM</span></div><div class="pd">Finds clusters of markets that move together inside the spillover network — the mesoscale structure of contagion.</div></div>
+      <div class="primitive"><div class="pn">Network-formation game theory <span class="px">CARA-Nash · CRRA-Bellman</span></div><div class="pd">Treats the network itself as an equilibrium outcome of agents trading off risk and connection, not just a correlation snapshot.</div></div>
+      <div class="primitive"><div class="pn">Structural channel attribution <span class="px">IV/2SLS · LASSO · local projections · Rigobon</span></div><div class="pd">Assigns each contagion link to an economic mechanism (trade, financial, policy…) using identification-by-heteroskedasticity and instruments.</div></div>
+      <div class="primitive"><div class="pn">ROC validation <span class="px">DeLong · Youden</span></div><div class="pd">Scores how well a risk index separates crisis from calm — area-under-curve with DeLong tests and the Youden optimal threshold.</div></div>
+    </div>
+  </section>
+
+  <!-- ════════════════ 3 · FRAMEWORK CARDS ════════════════ -->
+  <section aria-label="The five frameworks">
+    <h2 class="sec-h">Five frameworks · one substrate</h2>
+    <div class="sec-s">Each card is a single scientific question, the substrate parameterisation that answers it, the current publication status, and one headline result. Two frameworks are on arXiv; three are working papers or in preparation with no DOI — and we say so.</div>
+    <div class="fwgrid">
+
+      <article class="card fw">
+        <div class="h2">NAMH <span class="tag pend">working paper · 2026</span></div>
+        <div class="q">Does network-mediated adaptive efficiency explain Hurst-exponent crisis dynamics?</div>
+        <div class="meth">DFA-Hurst + KSG transfer entropy + IAAFT surrogates + HWTE weighting + Leiden communities + network fixed point.</div>
+        <div class="headline"><span class="lbl">Headline result</span>Japan the eigenvector hub in 13 of 20 windows (magnitude-gated; the surrogate-FDR network is empty — see Reproduce). Hurst panel reproduces live to floating-point precision (max Δ &lt; 1e-8).</div>
+        <div class="lnk"><a href="reproduce.html">see it reproduce live →</a></div>
+      </article>
+
+      <article class="card fw">
+        <div class="h2">MCPFM <span class="tag pub">arXiv:2507.08065</span></div>
+        <div class="q">Can a protocol-based agent-communication game yield a tractable systemic-risk index?</div>
+        <div class="meth">MODWT + binned transfer entropy + block-bootstrap + Walktrap communities + SRI composite + ROC/DeLong validation.</div>
+        <div class="headline"><span class="lbl">Headline result</span>Systemic-Risk Index AUC 0.915 (US, COVID-19 crash) — published; live regeneration pending.</div>
+        <div class="lnk"><a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">arXiv:2507.08065 ↗</a></div>
+      </article>
+
+      <article class="card fw">
+        <div class="h2">contagion-channels <span class="tag pub">arXiv:2604.26546 · CRAN v0.1.3</span></div>
+        <div class="q">What share of cross-border equity contagion is Trade / Financial / Geopolitical / Behavioural / Monetary-Policy?</div>
+        <div class="meth">MODWT + quantile transfer entropy + structural IV/2SLS attribution + Cinelli-Hazlett sensitivity.</div>
+        <div class="headline"><span class="lbl">Headline result</span>Financial dominates the European Sovereign-Debt Crisis (39.5%, identified); the GFC Trade share (27.9%) is flagged exploratory (Sargan).</div>
+        <div class="lnk"><a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">arXiv:2604.26546 ↗</a></div>
+      </article>
+
+      <article class="card fw">
+        <div class="h2">WaveQTE <span class="tag pend">working paper</span></div>
+        <div class="q">An earlier activation-scoring approach to the same channel question — what changes when hand-crafted scores are replaced by structural-IV identification?</div>
+        <div class="meth">GPH long-memory + MODWT + quantile-regression transfer entropy + Walktrap; Stage-2 activation scoring (18 markets, 2004–2024, 7 crisis windows).</div>
+        <div class="headline"><span class="lbl">Headline result</span>Activation scoring puts Trade at 3.9% of GFC links; the structural-IV upgrade (contagion-channels) reverses this to 27.9% — identification changes the conclusion.</div>
+        <div class="lnk"><span class="soon">working paper · no DOI · direct predecessor of contagion-channels</span></div>
+      </article>
+
+      <article class="card fw">
+        <div class="h2">commodity <span class="tag pend">in preparation</span></div>
+        <div class="q">The same question for 23 commodity futures rather than equities.</div>
+        <div class="meth">DFA-Hurst + quantile transfer entropy + Clauset-Newman-Moore communities.</div>
+        <div class="headline empty"><span class="lbl">Headline result</span>— results not yet released</div>
+        <div class="lnk"><span class="soon">coming soon</span></div>
+      </article>
+
+      <div class="note" style="grid-column:1/-1;margin-top:.4rem;border-left:3px solid var(--green);padding-left:.85rem">
+        <b>Plus SOCH —</b> the Scale-Ordered Contagion result (<a href="https://arxiv.org/abs/2606.04113" target="_blank" rel="noopener">arXiv:2606.04113</a>, the published <code>sochcontagion</code> package) is the portfolio's flagship live reproduction: it regenerates on real G20 data, scale by scale, on the <a href="reproduce.html">Reproduce page</a> — max Δ &lt; 0.004, and the scale-ordering prediction holds (p = 0.042).
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════ 4 · LIVE EVALUATORS ════════════════ -->
+  <section aria-label="Portfolio evaluators">
+    <h2 class="sec-h">What an evaluator can check today</h2>
+    <div class="sec-s">Most of these are fixed facts of the published record. One is read live from the compute engine on page load — the number of registered methods.</div>
+    <div class="card">
+      <div class="kpirow">
+        <div class="kpi"><div class="v">5</div><div class="c">frameworks</div></div>
+        <div class="kpi"><div class="v">3</div><div class="c">arXiv preprints</div></div>
+        <div class="kpi"><div class="v">3 + 1</div><div class="c">R packages (public + pending)</div></div>
+        <div class="kpi"><div class="v g" id="kpimethods"><span class="spin" aria-hidden="true"></span></div><div class="c">methods live</div></div>
+      </div>
+      <div class="note"><b>How to read this:</b> the three arXiv preprints are MCPFM (2507.08065), contagion-channels (2604.26546) and the Scale-Ordered Contagion result (2606.04113). The R packages are the group's published code — contagionchannels (CRAN v0.1.3) · ManyIVsNets (CRAN v0.1.1) · sochcontagion (r-universe v0.1.0) — with a 4th, namh, release-pending. The "methods live" tile is fetched from the engine catalog on load; if the engine is unreachable it falls back to the last known count, labelled as such.</div>
+    </div>
+  </section>
+
+  <!-- ════════════════ 5 · CROSS-PAPER CONSISTENCY ════════════════ -->
+  <section aria-label="Cross-paper methodological consistency">
+    <h2 class="sec-h">Cross-paper consistency — divergent by design, shared at the spine</h2>
+    <div class="sec-s">A common substrate does not mean identical settings. Where the frameworks differ, they differ on purpose, because they ask different scientific questions. Where they agree, the agreement is the methodological spine that makes them one engine.</div>
+    <div class="card">
+      <table class="rt">
+        <thead>
+          <tr>
+            <th scope="col">Methodological marker</th>
+            <th scope="col">Per-framework setting</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Rolling-window length</th>
+            <td>NAMH 252d · MCPFM 21d · commodity 260d</td>
+            <td><span class="verdtag div"><span class="sw" aria-hidden="true"></span>Divergent — different questions</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Transfer-entropy estimator</th>
+            <td>NAMH KSG k-NN · MCPFM binned · contagion-channels quantile-conditioned</td>
+            <td><span class="verdtag div"><span class="sw" aria-hidden="true"></span>Divergent by design</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Surrogate count B</th>
+            <td>NAMH 200 · MCPFM 200 · contagion-channels 1000</td>
+            <td><span class="verdtag div"><span class="sw" aria-hidden="true"></span>Divergent</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Community detection</th>
+            <td>NAMH Leiden · MCPFM / contagion Walktrap · commodity CNM</td>
+            <td><span class="verdtag div"><span class="sw" aria-hidden="true"></span>Divergent</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Multi-scale basis</th>
+            <td>All MODWT Daubechies LA8</td>
+            <td><span class="verdtag shared"><span class="sw" aria-hidden="true"></span>Shared / consistent</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Stationarity discipline</th>
+            <td>All transfer entropy on log-returns I(0), never price levels I(1)</td>
+            <td><span class="verdtag shared"><span class="sw" aria-hidden="true"></span>Shared / consistent</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="caption">Divergence here is a deliberate scientific choice, not an inconsistency: a 21-day systemic-risk window and a 252-day efficiency window answer different questions on purpose. The shared rows — the same wavelet basis, the same I(0) stationarity discipline across every paper — are the common spine that makes these five frameworks one engine. Status is conveyed by the text label (and an amber/green marker), never colour alone.</div>
+    </div>
+  </section>
+
+  <!-- ════════════════ 6 · COMPUTE ECONOMICS + REPRODUCIBILITY ════════════════ -->
+  <section aria-label="Compute economics and reproducibility">
+    <h2 class="sec-h">Compute economics &amp; reproducibility</h2>
+    <div class="sec-s">What it costs to run, and how anyone can verify the results without taking our word for it.</div>
+    <div class="cols">
+
+      <div class="panel">
+        <h3>Compute economics</h3>
+        <p class="big">₹4,50,000 in Google Cloud research credits</p>
+        <p>Funded by Google Cloud research credits awarded to SHSSM, IIT Bhubaneswar, expiring April 2027. This covers the sandboxed compute engine that powers the live reproductions and the Workbench.</p>
+        <div class="statusbar"><span class="ic" aria-hidden="true">◷</span> <span>Live billing meter: not yet wired. We do not display a precise spend or compute-hours figure because it is not yet metered — when it is, it will appear here as a measured number, not an estimate.</span></div>
+      </div>
+
+      <div class="panel">
+        <h3>Reproducibility ledger</h3>
+        <p>Three published surfaces regenerate live on real data through each paper's own published package — so those live and published numbers are identical by construction. Two heavier surfaces (the MCPFM systemic-risk index and NAMH's surrogate-gated network) are honestly marked pending, not simulated.</p>
+        <p><a href="reproduce.html">Open the reproducibility ledger →</a></p>
+        <p>Every result in the <a href="research-engine.html">Workbench</a> carries a permalink, a CSV/JSON export, and a one-click BibTeX citation — a number becomes a citable artifact.</p>
+        <p><a href="https://github.com/avishekb9" target="_blank" rel="noopener">All code on GitHub ↗</a></p>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="foot wrap" style="max-width:none">
+    <strong>One substrate · five frameworks · one live engine.</strong><br>
+    The live method count is read from the sandboxed compute engine (<a id="celink" href="#" target="_blank" rel="noopener">shssm-compute…run.app</a>) on page load.
+    On arXiv: <a href="https://arxiv.org/abs/2507.08065" target="_blank" rel="noopener">MCPFM (2507.08065)</a> ·
+    <a href="https://arxiv.org/abs/2604.26546" target="_blank" rel="noopener">contagion-channels (2604.26546)</a> ·
+    <a href="https://arxiv.org/abs/2606.04113" target="_blank" rel="noopener">SOCH (2606.04113)</a>.
+    NAMH, WaveQTE and commodity are working papers / in preparation with no DOI.<br>
+    <a href="reproduce.html">Reproduce the papers</a> ·
+    <a href="research-engine.html">Workbench</a> ·
+    <a href="https://github.com/avishekb9" target="_blank" rel="noopener">GitHub</a> ·
+    SHSSM, IIT Bhubaneswar.
+  </div>
+</main>
+
+<script>
+const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const $=id=>document.getElementById(id);
+$("celink").href=CE; $("celink").textContent=CE.replace("https://","");
+try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"engine_surface"}));}catch(e){} /* privacy-respecting aggregate beacon */
+
+/* The one live fetch: read the engine catalog, fill the hero pill + the "methods live" KPI.
+   On any failure we show an honest unavailable message and a labelled fallback — never NaN/undefined. */
+(async function(){
+  const pill=$("enginestate"), kpi=$("kpimethods");
+  try{
+    const r=await fetch(CE+"/api/compute/catalog");
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const d=await r.json();
+    const n=d&&d.methods?Object.keys(d.methods).length:0;
+    const caps=d&&d.capabilities?Object.keys(d.capabilities).length:0;
+    if(!n) throw new Error("empty catalog");
+    kpi.textContent=n;
+    pill.textContent="live engine · "+n+" methods · "+caps+" capability groups";
+  }catch(e){
+    pill.textContent="live engine status unavailable — showcase figures below are from the published record";
+    kpi.textContent="23";
+    kpi.setAttribute("title","fallback: last known registered-method count; the live engine was unreachable on load");
+  }
+})();
+</script>
+</body>
+</html>
