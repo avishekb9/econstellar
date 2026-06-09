@@ -408,19 +408,18 @@ const CHAN_SHORT=c=>String(c).replace(/_Policy$/,"");
 function chanShare(shares,ch){ if(!shares)return null; const v=shares[ch]; return v!=null?v:shares[CHAN_SHORT(ch)]; }
 function chanChannels(r){ return (r&&r.channels&&r.channels.length)?r.channels:["Trade","Financial","Geopolitical","Behavioral","Monetary_Policy"]; }
 
-let CATALOG=null, SERIES=[];
+let CATALOG=null, SERIES=[], SERIES24=[], SERIES_CUR=null;
 
 /* ───── catalog-driven left rail ───── */
 let CAPABILITIES=null, CAPFILTER="all"; // Tier B: capability grouping + active filter
 async function loadCatalog(){
   const r=await fetch(CE+"/api/compute/catalog"); const d=await r.json();
   CATALOG=d.methods; SERIES=(d.datasets&&d.datasets.g20&&d.datasets.g20.series)||[];
+  SERIES24=(d.datasets&&d.datasets.g20_24&&d.datasets.g20_24.series)||SERIES;  // namh runs on the 24-series G20+commodities panel
   CAPABILITIES=(d.capabilities&&typeof d.capabilities==="object")?d.capabilities:null;
   populateMethodOptions("all");      // builds the method dropdown (optionally capability-filtered)
   buildCapabilityFilter();           // renders chips, or stays hidden if catalog has no capabilities
-  const sl=$("series"); sl.innerHTML="";
-  SERIES.forEach(s=>{const id="s_"+s;sl.insertAdjacentHTML("beforeend",
-    `<label><input type="checkbox" value="${esc(s)}" id="${id}">${esc(s)}</label>`);});
+  buildSeriesPicker(SERIES);   // initial universe (g20, 18); onMethod() swaps to g20_24 (24) for namh methods
   $("catbadge").textContent=Object.keys(CATALOG).length+" methods live";
   $("method").addEventListener("change",onMethod); onMethod();
   // #job=<id> permalink takes precedence over the sync #method= hash
@@ -485,6 +484,20 @@ function capKeyNav(e){
 }
 function selectedSeries(){return [...document.querySelectorAll('#series input:checked')].map(c=>c.value);}
 function setSeries(arr){document.querySelectorAll('#series input').forEach(c=>{c.checked=arr.includes(c.value);});}
+// Which series universe a method draws from: namh's series.n max is 24 → g20_24 (incl. commodities); everything else → g20 (18).
+function seriesUniverseFor(k){
+  const m=CATALOG&&CATALOG[k], n=m&&m.params&&m.params.series&&m.params.series.n;
+  const mx=Array.isArray(n)?n[1]:18;
+  return (mx>18&&SERIES24&&SERIES24.length)?SERIES24:SERIES;
+}
+// (Re)build the #series checkbox list, but only when the universe actually changes — preserves checks across param-only edits.
+function buildSeriesPicker(list){
+  if(SERIES_CUR===list) return;
+  SERIES_CUR=list;
+  const sl=$("series"); if(!sl) return; sl.innerHTML="";
+  (list||[]).forEach(s=>{const id="s_"+s;sl.insertAdjacentHTML("beforeend",
+    `<label><input type="checkbox" value="${esc(s)}" id="${id}">${esc(s)}</label>`);});
+}
 // Tier B: per-method package metadata — each field rendered only if the catalog supplies it.
 function methodMetaHTML(m){
   const tags=[];
@@ -504,6 +517,7 @@ function methodMetaHTML(m){
 function onMethod(){
   const k=$("method").value, m=CATALOG[k];
   if(!m) return; // no valid method selected (e.g. empty picker) — nothing to render
+  buildSeriesPicker(seriesUniverseFor(k));   // namh → g20_24 (24, incl. commodities); others → g20 (18)
   // long-running affordance: prefer the catalog flag (Tier B), keep LONG_RUNNING set as fallback.
   const lr=LONG_RUNNING.has(k);
   $("mdesc").innerHTML=(m.long_running||lr?'<span class="lrbadge">⏳ long-running</span>':"")+esc(m.desc||"")+
@@ -1478,6 +1492,39 @@ function renderResult(k,r){
     h+=`<div class="interp">${esc(r.interpretation||(r.source?("Source: "+r.source):""))}</div>`;
   }
   else if(k==="ksg_robustness"){ h+=renderKsgRobustness(r); } // async-only, but share the renderer for parity
+  else if(k==="namh_hurst"){
+    const f4=v=>v!=null?fixed(v,4):'–', f3=v=>v!=null?fixed(v,3):'–';
+    const ps=(r.per_series||[]).slice().sort((a,b)=>(b.phi_mean||0)-(a.phi_mean||0)); // most efficient (φ→1) first
+    const cf=r.config||{};
+    h+='<div class="kpirow">'+kpi(ps.length,"markets")+kpi(r.n_windows!=null?r.n_windows:"–","windows")+
+       (cf.window!=null?kpi(cf.window,"DFA window"):"")+(cf.step!=null?kpi(cf.step,"step"):"")+'</div>';
+    h+='<div class="lbl" style="margin:.4rem 0 .2rem">rolling DFA Hurst per market · φ(H)=1−2|H−0.5| is the NAMH efficiency node-weight</div>';
+    h+='<table class="rt"><tr><th>market</th><th class="num">mean H</th><th class="num">SD</th><th class="num">φ(H)</th><th class="num">windows</th></tr>';
+    ps.forEach(s=>{const phi=s.phi_mean, pc=(phi==null)?'var(--dim)':phi>=0.9?'var(--green)':phi>=0.8?'var(--cyan)':'var(--amber)';
+      h+=`<tr><td>${esc(s.market)}</td><td class="num">${f4(s.H_mean)}</td><td class="num">${f3(s.H_sd)}</td><td class="num" style="color:${pc}">${f3(phi)}</td><td class="num">${s.n_valid!=null?s.n_valid:'–'}</td></tr>`;});
+    h+='</table>';
+    h+='<div class="subnote">H ≈ 0.5 ⇒ efficient / random-walk-like (φ→1); |H−0.5| large ⇒ inefficient (φ→0). Published namh::estimate_hurst_panel (Bhandari &amp; Sahu 2026) — the engine runs the paper\'s own code.</div>';
+    if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="namh_te"){
+    const pw=r.per_window||[], cf=r.config||{};
+    const npairs=(pw[0]&&pw[0].n_pairs!=null)?pw[0].n_pairs:null;
+    h+='<div class="kpirow">'+kpi(pw.length,pw.length===1?"window":"windows")+
+       (npairs!=null?kpi(npairs,"directed pairs"):"")+
+       (cf.k_nn!=null?kpi("k="+cf.k_nn,"KSG k-NN"):"")+(cf.window!=null?kpi(cf.window,"window len"):"")+'</div>';
+    h+='<table class="rt"><tr><th class="num">window</th><th>span</th><th class="num">TE mean</th><th class="num">TE sd</th><th class="num">pairs</th></tr>';
+    pw.forEach(w=>{h+=`<tr><td class="num">${w.window}</td><td>${esc((w.date_start||'')+(w.date_end?' → '+w.date_end:''))}</td><td class="num">${fixed(w.te_mean,4)}</td><td class="num">${fixed(w.te_sd,4)}</td><td class="num">${w.n_pairs!=null?w.n_pairs:'–'}</td></tr>`;});
+    h+='</table>';
+    const tf=r.top_flows||[];
+    if(tf.length){
+      h+='<div class="lbl" style="margin:.5rem 0 .2rem">strongest directed flows'+(r.matrix_window!=null?' · window '+r.matrix_window:'')+' (TE: source → target)</div>';
+      h+='<table class="rt"><tr><th>source → target</th><th class="num">TE</th></tr>';
+      tf.slice(0,15).forEach(f=>{h+=`<tr><td>${esc(f.from+' → '+f.to)}</td><td class="num">${fixed(f.te,4)}</td></tr>`;});
+      h+='</table>';
+    }
+    h+='<div class="subnote">Raw KSG transfer entropy (the magnitude surface; a negative mean is normal small-sample KSG bias). Surrogate / effective-TE gating is the heavier async pipeline, not run here. Published namh::te_matrix (Bhandari &amp; Sahu 2026). Tip: set <b>window_index</b> (1–24) for one window; leaving it blank computes every window and can exceed the live request limit.</div>';
+    if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
   else { h+='<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(JSON.stringify(r,null,2))+'</pre>'; }
   el.innerHTML=h;
 }
@@ -1621,7 +1668,7 @@ function renderResearch(d){
 const FRAMEWORKS=[
   {key:"MCPFM",q:"Protocol-based systemic-risk index",url:"https://arxiv.org/abs/2507.08065",ulabel:"arXiv:2507.08065",method:"var_irf",series:["India","USA","UK"]},
   {key:"contagion-channels",q:"Cross-border contagion attribution",url:"https://arxiv.org/abs/2604.26546",ulabel:"arXiv:2604.26546",method:"wqte",series:["USA","India"]},
-  {key:"NAMH",q:"Network adaptive market hypothesis",url:null,ulabel:"working paper",method:"dfa_hurst",series:["India"]},
+  {key:"NAMH",q:"Network adaptive market hypothesis",url:null,ulabel:"working paper",method:"namh_hurst",series:["Japan","USA","China","Australia"]},
   {key:"WaveQTE",q:"Wavelet-quantile transfer entropy",url:null,ulabel:"working paper",method:"wavelet",series:["India"]},
   {key:"commodity",q:"Commodity-futures contagion",url:null,ulabel:"coming soon",method:null,series:[]},
 ];
@@ -1900,7 +1947,7 @@ function mountMethodCellForm(wrap,c){
       const lbl=Array.isArray(nspec)?("Series ("+nspec[0]+"–"+nspec[1]+")"):(nspec===1?"Series (1)":"Series");
       const checked=(c.params&&c.params.series)||[];
       let boxes="";
-      (SERIES||[]).forEach(s=>{ boxes+='<label><input type="checkbox" value="'+esc(s)+'"'+(checked.includes(s)?" checked":"")+'>'+esc(s)+'</label>'; });
+      seriesUniverseFor(c.method).forEach(s=>{ boxes+='<label><input type="checkbox" value="'+esc(s)+'"'+(checked.includes(s)?" checked":"")+'>'+esc(s)+'</label>'; });
       host.insertAdjacentHTML("beforeend",'<div class="field"><label>'+lbl+'</label><div class="serieslist cell-series">'+boxes+'</div></div>');
     }
     // transplant the rail-built dynamic params (reuses int_array/enum_multi/enum/num/int markup verbatim)
