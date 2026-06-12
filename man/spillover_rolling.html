@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>spillover_rolling — Rolling Connectedness (time-varying Diebold-Yilmaz) · Econstellar method manual</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{--bg:#000;--surface:rgba(8,10,14,.92);--border:rgba(0,212,255,.15);--rule:rgba(255,255,255,.06);--text:#fff;--mid:#c9d1d9;--dim:#6b7280;--cyan:#00d4ff;--green:#00ff88;--amber:#f59e0b;--mono:'JetBrains Mono',monospace;--disp:'Orbitron',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.55}
+a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;background:rgba(0,0,0,.7)}
+nav .brand{color:var(--green);font-weight:600}nav .sp{flex:1}nav a{color:var(--dim)}
+h1{font-family:var(--disp);font-size:1.6rem;margin:1.6rem 0 .2rem}
+.cat{font-family:var(--mono);font-size:.72rem;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px}
+.desc{color:var(--mid);max-width:74ch}
+h2{font-family:var(--disp);font-size:.95rem;margin:1.6rem 0 .5rem;color:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:.84rem}
+td,th{padding:.4rem .7rem;border-bottom:1px solid var(--rule);text-align:left;color:var(--mid)}
+th{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
+td.mono,code{font-family:var(--mono);font-size:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font-family:var(--mono);font-size:.72rem;border:1px solid var(--border);border-radius:7px;padding:.25rem .55rem;color:var(--mid)}
+pre{background:rgba(12,18,28,.92);border:1px solid var(--border);border-radius:10px;padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:.76rem;color:var(--mid)}
+.kv{font-family:var(--mono);font-size:.8rem;color:var(--mid)}.kv b{color:#fff}
+.none{color:var(--amber);font-family:var(--mono);font-size:.8rem}
+.foot{font-family:var(--mono);font-size:.72rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2.2rem;padding:1.2rem 0 2.4rem;line-height:1.8}
+.os-kbtn{font-family:var(--mono);font-size:.7rem;background:none;border:1px solid rgba(0,212,255,.25);color:var(--cyan);border-radius:6px;cursor:pointer;padding:.1rem .5rem}
+</style></head>
+<body>
+<nav><span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+<a href="../index.html">Portal</a><a href="index.html">Methods</a><a href="../research-engine.html">Workbench</a><a href="../evals.html">Evals</a><a href="../observatory.html">Observatory</a>
+<button id="os-kbtn" class="os-kbtn" aria-label="Open command palette (Ctrl+K)">⌘K</button></nav>
+<div id="os-strip" role="status" aria-live="polite"></div>
+<div class="wrap">
+<div class="cat">Contagion · Spillover (dynamic)</div>
+<h1>spillover_rolling</h1>
+<div class="desc"><b>Rolling Connectedness (time-varying Diebold-Yilmaz).</b> Time-varying Diebold-Yilmaz total connectedness over a sliding window (same GFEVD computation as 'connectedness') across 2-6 markets; returns the TCI time series whose peaks mark systemic-stress episodes.</div>
+<h2>Identity</h2>
+<div class="kv">version <b>1.0.0</b> · capability <b>contagion</b> · min_obs <b>300</b> · runner <b>r (spillover_rolling.R)</b></div>
+<h2>Primitives</h2>
+<div class="chips"><span class="chip">P7</span></div>
+<h2>Composes with</h2>
+<div class="none">not yet a catalog field — operator-composition metadata lands with Pathway F; nothing is invented here.</div>
+<h2>Parameters</h2>
+<table><thead><tr><th>name</th><th>type</th><th>req</th><th>values / range</th></tr></thead><tbody><tr><td class="mono">series</td><td class="mono">series (n=2–6)</td><td><b>required</b></td><td class="mono"></td></tr><tr><td class="mono">p</td><td class="mono">int</td><td>optional</td><td class="mono"></td></tr><tr><td class="mono">H</td><td class="mono">int</td><td>optional</td><td class="mono"></td></tr><tr><td class="mono">window</td><td class="mono">int</td><td>optional</td><td class="mono"></td></tr><tr><td class="mono">step</td><td class="mono">int</td><td>optional</td><td class="mono"></td></tr></tbody></table>
+<h2>Returns</h2>
+<div class="desc">method,dataset,series,n,var_lag,horizon,window,step,windows,tci_series,tci_mean,tci_min,tci_max,tci_last,interpretation</div>
+<h2>Paper</h2>
+<div><span class="none">none — honest: a substrate method; no single companion paper claims it.</span></div>
+<h2>Changelog</h2>
+<div class="kv">[object Object]</div>
+<h2>Run it</h2>
+<pre>curl -s -X POST https://shssm-compute-b7ui3oxaqq-el.a.run.app/api/compute/run \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;method&quot;:&quot;spillover_rolling&quot;,&quot;params&quot;:{&quot;series&quot;:[&quot;India&quot;,&quot;USA&quot;]}}'</pre>
+<div><a href="../research-engine.html#method=spillover_rolling">▶ open in the Workbench with spillover_rolling preselected</a></div>
+<div class="foot">Generated from <code>GET /api/compute/catalog</code> by <code>scripts/gen-man.mjs</code> —
+the catalog is the truth; no hand-written method docs. · <a href="../index.html">Econstellar</a> · SHSSM, IIT Bhubaneswar.</div>
+</div>
+<script>window.__manbase=1</script>
+<script src="../assets/os.js" defer></script>
+</body></html>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Observatory — daily systemic-risk index · Econstellar</title>
+<meta name="description" content="The system monitor of the economics OS: a daily cross-market connectivity index (mean KSG transfer entropy), appended nightly from real settled closes, every point traceable to its computation.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15); --rule:rgba(255,255,255,.06);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444;
+  /* Okabe-Ito (colour-blind-safe) for DATA marks only */
+  --oi-blue:#0072B2; --oi-verm:#D55E00; --oi-sky:#56B4E9; --oi-orange:#E69F00; --oi-green:#009E73;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --disp:'Orbitron',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 15% 8%,rgba(0,212,255,.07),transparent 40%),radial-gradient(circle at 85% 70%,rgba(0,255,136,.06),transparent 45%)}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;position:sticky;top:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:10}
+nav .brand{color:var(--green);font-weight:600;letter-spacing:.5px} nav .sp{flex:1} nav a{color:var(--dim)}
+header{padding:2.2rem 0 .6rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--disp);font-size:clamp(1.5rem,4vw,2.3rem);margin:.5rem 0 .4rem}
+.lede{color:var(--mid);max-width:74ch;font-size:1.02rem}
+section{margin:1.8rem 0}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.3rem}
+.sec-h{font-family:var(--disp);font-size:1.15rem;margin:0 0 .2rem}
+.sec-s{color:var(--dim);font-family:var(--mono);font-size:.74rem;margin-bottom:.9rem}
+.kpis{display:flex;gap:1.6rem;flex-wrap:wrap;font-family:var(--mono);font-size:.8rem;color:var(--mid);margin:.6rem 0 .2rem}
+.kpis b{color:var(--green);font-size:1.05rem}
+svg text{font-family:'JetBrains Mono',monospace}
+.pt{cursor:pointer}
+.pt:focus{outline:none}
+.pt:focus circle.vis{stroke:#fff;stroke-width:2}
+#prov{margin-top:1rem;border-left:3px solid var(--oi-blue);background:rgba(0,114,178,.07);border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:.9rem;color:var(--mid)}
+#prov .mono,#prov td{font-family:var(--mono);font-size:.78rem}
+#prov table{border-collapse:collapse;margin:.5rem 0}
+#prov td{padding:.15rem .7rem .15rem 0;color:var(--mid)}
+#prov .h{color:var(--dim);text-transform:uppercase;font-size:.64rem;letter-spacing:1px}
+.honest{border-left:3px solid var(--amber);background:rgba(245,158,11,.06);border-radius:0 8px 8px 0;padding:1rem 1.2rem;font-size:.92rem;color:var(--mid)}
+.honest b{color:var(--amber)}
+.honest ul{margin:.5rem 0 0 1.1rem;padding:0}
+.honest li{margin:.3rem 0}
+.netlegend{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.4rem}
+.foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2rem;padding:1.4rem 0 2.6rem;line-height:1.9}
+.err{color:var(--amber);font-family:var(--mono);font-size:.8rem}
+.os-kbtn{font-family:var(--mono);font-size:.7rem;background:none;border:1px solid rgba(0,212,255,.25);color:var(--cyan);border-radius:6px;cursor:pointer;padding:.1rem .5rem}
+</style>
+</head>
+<body>
+<nav class="wrap" style="max-width:none">
+  <span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+  <a href="index.html">Portal</a><a href="research-engine.html">Workbench</a><a href="evals.html">Evals</a><a href="man/index.html">Methods</a><a href="reproduce.html">Reproduce</a><a href="changelog.html">What's new</a>
+  <button id="os-kbtn" class="os-kbtn" aria-label="Open command palette (Ctrl+K)" title="Command palette (Ctrl+K)">⌘K</button>
+</nav>
+<div id="os-strip" role="status" aria-live="polite"></div>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">System monitor · evolution semigroup</div>
+  <h1>The Observatory</h1>
+  <p class="lede">A daily <strong>cross-market connectivity index</strong>: the mean of 272 directed
+  KSG transfer entropies across G20 equity markets, recomputed every night on settled real closes and
+  appended — never interpolated, never fabricated. Every point traces to its computation.</p>
+  <div class="kpis" id="kpis"><span class="err">loading the live series…</span></div>
+</header>
+
+<section class="card">
+  <div class="sec-h">Daily series — every point clickable</div>
+  <div class="sec-s">GET /api/sri/history · trading-day axis · click (or Tab + Enter) a point for its provenance</div>
+  <div id="chart" aria-label="SRI daily time series chart"></div>
+  <div id="prov" hidden></div>
+</section>
+
+<section class="card">
+  <div class="sec-h">Latest directed network</div>
+  <div class="sec-s">GET /api/sri/network · strongest directed transfer-entropy edges on the latest vintage</div>
+  <div id="net"></div>
+  <div class="netlegend">edge width ∝ transfer entropy · arrow = direction of information flow · hover an edge for the exact TE</div>
+</section>
+
+<section class="honest" id="honesty">
+  <b>What this index is — and is not.</b>
+  <ul>
+    <li>It is a <b>connectivity index</b> — the cross-market mean of directed KSG/Frenzel-Pompe transfer
+      entropies (k=4, lag=1, 250-trading-day window) on log-returns. It is <b>not</b> the validated MCPFM
+      systemic-risk index: <b>no AUC claim transfers</b> (MCPFM's AUC 0.915 US/COVID · 0.581 India is a separate,
+      not-yet-reproduced result — an honest hole, not a feature of this page).</li>
+    <li><b>Russia (IMOEX) is excluded</b> from every live vintage — it has no Yahoo source. Live points are
+      17 markets / 272 directed pairs. NaN means absent, never imputed.</li>
+    <li><b>Vintage flags:</b> South Africa uses a Top-40 proxy; Australia's feed needed a timezone correction
+      (validated ρ 0.26 → 0.99). The first point (2026-03-18, 0.00849) comes from the 18-market / 306-pair
+      static research panel — the series carries a labeled <b>regime note</b>, not a silent splice.</li>
+    <li>The nightly tick appends <b>only settled real closes</b> (identity on holidays; composition on
+      catch-up — e.g. 2026-06-09 landed on the 06-11 tick after Yahoo's close-settlement lag). A missing
+      evening is a fact about the data vendor, recorded honestly, not papered over.</li>
+  </ul>
+</section>
+
+<div class="foot wrap" style="max-width:none">
+  Computed by the <a href="man/sri_daily.html">sri_daily</a> method on the sandboxed engine ·
+  series in BigQuery <span style="color:var(--mid)">systemic_risk.daily</span> ·
+  <a href="research-engine.html#method=sri_daily">run it yourself in the Workbench</a> ·
+  <a href="index.html">Econstellar</a> · SHSSM, IIT Bhubaneswar.
+</div>
+</div>
+
+<script>
+/* Observatory (OS-P2). Zero-dep. Okabe-Ito for data marks. One fetch per surface
+   on load (no polling). Eval: evals/os-p2.test.mjs drives the pure builders below
+   in node:vm with fixtures; live shape is smoke-checked when the network allows. */
+const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ── pure: series -> inline SVG (trading-day axis; latest point vermillion) ── */
+function buildChart(series){
+  const W=1000,H=290,P={l:64,r:18,t:14,b:34};
+  if(!series||!series.length) return '<div class="err">series unavailable</div>';
+  const v=series.map(p=>Number(p.sri));
+  const lo=Math.min(...v), hi=Math.max(...v), pad=(hi-lo)*0.12||1e-4;
+  const y0=lo-pad, y1=hi+pad;
+  const X=i=>P.l+(W-P.l-P.r)*(series.length===1?0.5:i/(series.length-1));
+  const Y=s=>P.t+(H-P.t-P.b)*(1-(s-y0)/(y1-y0));
+  let g="";
+  for(let k=0;k<=3;k++){ const yv=y0+(y1-y0)*k/3, yy=Y(yv);
+    g+=`<line x1="${P.l}" y1="${yy}" x2="${W-P.r}" y2="${yy}" stroke="rgba(255,255,255,.07)"/>`+
+       `<text x="${P.l-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="#6b7280">${yv.toFixed(4)}</text>`; }
+  const path=series.map((p,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(Number(p.sri)).toFixed(1)).join(" ");
+  const pts=series.map((p,i)=>{
+    const last=i===series.length-1;
+    return `<g class="pt" tabindex="0" role="button" data-date="${esc(p.date)}" aria-label="SRI ${Number(p.sri).toFixed(6)} on ${esc(p.date)} — open provenance">`+
+      `<circle cx="${X(i).toFixed(1)}" cy="${Y(Number(p.sri)).toFixed(1)}" r="9" fill="transparent"/>`+
+      `<circle class="vis" cx="${X(i).toFixed(1)}" cy="${Y(Number(p.sri)).toFixed(1)}" r="${last?4.5:2.6}" fill="${last?"#D55E00":"#0072B2"}"/></g>`;
+  }).join("");
+  const first=series[0], lastp=series[series.length-1];
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Daily connectivity index, ${series.length} points, ${esc(first.date)} to ${esc(lastp.date)}">`+
+    g+`<path d="${path}" fill="none" stroke="#0072B2" stroke-width="2"/>`+pts+
+    `<text x="${P.l}" y="${H-8}" font-size="11" fill="#6b7280">${esc(first.date)}</text>`+
+    `<text x="${W-P.r}" y="${H-8}" text-anchor="end" font-size="11" fill="#D55E00">${esc(lastp.date)} · ${Number(lastp.sri).toFixed(6)}</text></svg>`;
+}
+
+/* ── pure: provenance panel for one date (network payload + method stamp) ── */
+function buildProvenance(date,net){
+  let edges="";
+  if(net&&net.status==="ok"&&net.edges&&net.edges.length){
+    edges='<table><tr><td class="h">from</td><td class="h">to</td><td class="h">te</td></tr>'+
+      net.edges.map(e=>`<tr><td>${esc(e.from)}</td><td>${esc(e.to)}</td><td>${esc(Number(e.te).toFixed(6))}</td></tr>`).join("")+"</table>";
+  } else edges=`<div class="err">edge detail unavailable for this date${net&&net.reason?(" — "+esc(net.reason)):""}</div>`;
+  const sri=net&&net.sri!=null?Number(net.sri).toFixed(6):"—";
+  return `<div><span class="h mono">provenance · ${esc(date)}</span></div>`+
+    `<div style="margin:.3rem 0"><b style="color:#fff">SRI ${sri}</b> — mean directed KSG transfer entropy, window 250 · k 4 · lag 1, log-returns (I(0), never levels).</div>`+
+    edges+
+    `<div class="mono" style="color:#6b7280">computed by <a href="man/sri_daily.html">sri_daily</a> on the sandboxed engine · stored in BigQuery systemic_risk.daily · panel: Yahoo-fed panels.g20_returns (UTC-date convention) · permalink <a href="observatory.html#date=${esc(date)}">#date=${esc(date)}</a></div>`;
+}
+
+/* ── pure: edges -> small deterministic force layout SVG (workbench idiom) ── */
+function buildNetwork(net){
+  if(!net||net.status!=="ok"||!net.edges||!net.edges.length) return '<div class="err">network unavailable</div>';
+  const edges=net.edges.map(e=>({from:e.from,to:e.to,te:Number(e.te)}));
+  const names=[...new Set(edges.flatMap(e=>[e.from,e.to]))];
+  const W=1000,H=360,cx=W/2,cy=H/2;
+  // deterministic seed: circle by index (no RNG — reproducible render)
+  const pos={}; names.forEach((n,i)=>{const a=2*Math.PI*i/names.length; pos[n]={x:cx+Math.cos(a)*120,y:cy+Math.sin(a)*95};});
+  for(let it=0;it<220;it++){
+    const f={}; names.forEach(n=>f[n]={x:0,y:0});
+    for(let i=0;i<names.length;i++)for(let j=i+1;j<names.length;j++){
+      const a=names[i],b=names[j],dx=pos[a].x-pos[b].x,dy=pos[a].y-pos[b].y;
+      const d2=Math.max(dx*dx+dy*dy,64),r=14000/d2,d=Math.sqrt(d2);
+      f[a].x+=r*dx/d; f[a].y+=r*dy/d; f[b].x-=r*dx/d; f[b].y-=r*dy/d;
+    }
+    edges.forEach(e=>{const dx=pos[e.to].x-pos[e.from].x,dy=pos[e.to].y-pos[e.from].y,d=Math.max(Math.sqrt(dx*dx+dy*dy),1),k=0.012*(d-170);
+      f[e.from].x+=k*dx/d; f[e.from].y+=k*dy/d; f[e.to].x-=k*dx/d; f[e.to].y-=k*dy/d;});
+    names.forEach(n=>{pos[n].x=Math.min(W-90,Math.max(90,pos[n].x+f[n].x*0.85)); pos[n].y=Math.min(H-34,Math.max(30,pos[n].y+f[n].y*0.85));});
+  }
+  const teMax=Math.max(...edges.map(e=>e.te));
+  const lines=edges.map(e=>{
+    const a=pos[e.from],b=pos[e.to],w=(0.8+3.2*e.te/teMax).toFixed(1);
+    const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy),ux=dx/d,uy=dy/d;
+    const x2=b.x-ux*26,y2=b.y-uy*26;  // stop at node edge for the arrowhead
+    return `<line x1="${a.x.toFixed(1)}" y1="${a.y.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#E69F00" stroke-width="${w}" stroke-opacity="${(0.35+0.55*e.te/teMax).toFixed(2)}" marker-end="url(#arr)"><title>${esc(e.from)} → ${esc(e.to)} · TE ${e.te.toFixed(6)}</title></line>`;
+  }).join("");
+  const nodes=names.map(n=>`<g><circle cx="${pos[n].x.toFixed(1)}" cy="${pos[n].y.toFixed(1)}" r="22" fill="rgba(86,180,233,.14)" stroke="#56B4E9" stroke-width="1.4"/>`+
+    `<text x="${pos[n].x.toFixed(1)}" y="${pos[n].y.toFixed(1)+4}" text-anchor="middle" font-size="11" fill="#fff">${esc(n)}</text></g>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Latest directed transfer-entropy network, ${names.length} markets, ${edges.length} edges">`+
+    `<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#E69F00"/></marker></defs>`+
+    lines+nodes+`</svg>`;
+}
+
+/* ── wiring (one fetch per surface; honest errors; #date= deep link) ── */
+async function jget(u){const r=await fetch(u);if(!r.ok)throw new Error("HTTP "+r.status);return r.json();}
+async function showProvenance(date){
+  const el=$("prov"); el.hidden=false;
+  el.innerHTML='<span class="mono" style="color:#6b7280">fetching provenance for '+esc(date)+'…</span>';
+  let net=null;
+  try{ net=await jget(CE+"/api/sri/network?date="+encodeURIComponent(date)); }catch(e){ net={status:"unavailable",reason:e.message}; }
+  el.innerHTML=buildProvenance(date,net);
+  try{ history.replaceState(null,"","#date="+date); }catch(e){}
+}
+async function boot(){
+  let hist=null;
+  try{ hist=await jget(CE+"/api/sri/history"); }catch(e){}
+  if(hist&&hist.status==="ok"&&hist.series&&hist.series.length){
+    const s=hist.series;
+    $("chart").innerHTML=buildChart(s);
+    const last=s[s.length-1];
+    $("kpis").innerHTML=`<span>latest <b>${Number(last.sri).toFixed(6)}</b> · ${esc(last.date)}</span>`+
+      `<span>points <b>${s.length}</b></span><span>first <b>${esc(s[0].date)}</b> (static-panel origin)</span>`;
+    document.querySelectorAll(".pt").forEach(p=>{
+      const open=()=>showProvenance(p.getAttribute("data-date"));
+      p.addEventListener("click",open);
+      p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});
+    });
+    const m=(location.hash||"").match(/date=(\d{4}-\d{2}-\d{2})/);
+    showProvenance(m?m[1]:last.date);
+  } else {
+    $("chart").innerHTML='<div class="err">⚠ live series unreachable — the engine may be cold-starting; refresh in a moment. Nothing is shown rather than something invented.</div>';
+    $("kpis").innerHTML='<span class="err">series unavailable</span>';
+  }
+  try{ $("net").innerHTML=buildNetwork(await jget(CE+"/api/sri/network")); }
+  catch(e){ $("net").innerHTML='<div class="err">network view unreachable</div>'; }
+}
+if(typeof window!=="undefined"&&typeof document!=="undefined"&&document.getElementById("chart")){ boot(); }
+if(typeof window!=="undefined") window.__obs={buildChart,buildNetwork,buildProvenance};
+</script>
+<script src="assets/os.js" defer></script>
+</body>
+</html>

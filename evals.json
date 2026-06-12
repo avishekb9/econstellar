@@ -1,0 +1,401 @@
+{
+ "run_at": "2026-06-12T02:33:17.620Z",
+ "engine": {
+  "url": "https://shssm-compute-b7ui3oxaqq-el.a.run.app",
+  "ok": true,
+  "methods": 23,
+  "revision": "shssm-compute-00032-c8q"
+ },
+ "suite": "evals/run-evals.mjs v1 — bands from documented verified values (ARCHITECTURE.md A2 / golden suite); never hand-edited (K5)",
+ "results": [
+  {
+   "method": "unit_root",
+   "expected": "India ADF stat in [-55,-45] (verified -49.18)",
+   "source": "A2 + golden",
+   "params": {
+    "series": [
+     "India"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": -49.17960762,
+   "ms": 4414,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "var_irf",
+   "expected": "stable VAR: max companion root < 1, finite",
+   "source": "A2 invariant (verified tuple: lag 7, root 0.705)",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.70532304,
+   "ms": 3164,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "dfa_hurst",
+   "expected": "India Hurst in [0.45,0.65] (verified 0.542)",
+   "source": "A2 + golden",
+   "params": {
+    "series": [
+     "India"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.54197024,
+   "ms": 2295,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "garch",
+   "expected": "India GARCH persistence in [0.95,1.0] (verified 0.991)",
+   "source": "A2 + golden",
+   "params": {
+    "series": [
+     "India"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.99102203,
+   "ms": 2258,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "wavelet",
+   "expected": "India d1 share of variance in [35,60]% (verified 47.07)",
+   "source": "A2 + golden",
+   "params": {
+    "series": [
+     "India"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 47.07,
+   "ms": 1944,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "wqte",
+   "expected": "USA→India tau.05 aggregate spillover in [0.02,0.06] (verified 0.039)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "USA",
+     "India"
+    ],
+    "tau": 0.05
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.03910699,
+   "ms": 4859,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "soch_profile",
+   "expected": "USA→India aggregate in [0.03,0.05] (verified 0.0391, peak d4)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "USA",
+     "India"
+    ],
+    "tau": 0.05
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.03910699,
+   "ms": 4287,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "channel_attribution",
+   "expected": "GFC: Trade 27.9% (Table 5, 0.000pp) and dominant == Trade",
+   "source": "A2 + arXiv:2604.26546",
+   "params": {
+    "episodes": [
+     "GFC"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 27.9,
+   "ms": 46100,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "namh_hurst",
+   "expected": "g20_24 Gold H_mean in [0.4889,0.4909] (bit-exact verified 0.4899)",
+   "source": "A2 #45",
+   "params": {},
+   "async": false,
+   "status": "pass",
+   "value": 0.48990576,
+   "ms": 15298,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "namh_te",
+   "expected": "g20_24 window-1 te_mean in [-0.2242,-0.2222] (bit-exact verified -0.223222)",
+   "source": "A2 #45",
+   "params": {
+    "window_index": 1
+   },
+   "async": false,
+   "status": "pass",
+   "value": -0.22322165,
+   "ms": 26536,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "vecm",
+   "expected": "Johansen rank 3 (verified trace 7265.97→1851.19)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 3,
+   "ms": 1870,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "granger",
+   "expected": "6 significant directed edges (verified; USA out-degree 3)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK",
+     "China"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 6,
+   "ms": 4188,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "panel_unit_root",
+   "expected": "panel stationarity rejected: IPS and LLC < -10, p ≈ 0 (this exact 5-market panel: IPS -77.26, LLC -51.79)",
+   "source": "A2 invariant — series set resolved 2026-06-11: the documented tuple is the {India,USA,UK,China,Japan} panel (live re-run -77.2594/-51.7933, exact)",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK",
+     "China",
+     "Japan"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": -77.25938898,
+   "ms": 3357,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "connectedness",
+   "expected": "total connectedness in [25,35]% (verified TCI 30.25)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 30.25,
+   "ms": 2501,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "network",
+   "expected": "6-node graph, density in (0,1], communities ≥ 1",
+   "source": "A2 invariant",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK",
+     "China",
+     "Brazil",
+     "Japan"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.5667,
+   "ms": 6750,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "rolling_dcc",
+   "expected": "India–USA mean dynamic correlation in [0.15,0.31] (verified 0.23)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "India",
+     "USA"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.2295,
+   "ms": 17681,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "wavelet_coherence",
+   "expected": "mean coherence in [0.2,0.3] (verified 0.249, peak d6)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "USA",
+     "India"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.24851479666666665,
+   "ms": 1657,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "spillover_rolling",
+   "expected": "mean rolling TCI in [20,35]% (verified 28.4)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK"
+    ]
+   },
+   "async": false,
+   "status": "pass",
+   "value": 28.39,
+   "ms": 2786,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "quantile_var",
+   "expected": "USA is the top tail driver with positive net score (verified +0.70)",
+   "source": "A2",
+   "params": {
+    "series": [
+     "India",
+     "USA",
+     "UK"
+    ],
+    "tau": 0.05
+   },
+   "async": false,
+   "status": "pass",
+   "value": 0.7006,
+   "ms": 3775,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "live_unit_root",
+   "expected": "live S&P: levels non-stationary, returns stationary (the stationarity gate)",
+   "source": "A2 + invariant 4 (TE on I(0) returns, never levels)",
+   "params": {
+    "symbol": "^GSPC",
+    "transform": "both"
+   },
+   "async": false,
+   "status": "pass",
+   "value": null,
+   "ms": 2271,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "sri_daily",
+   "expected": "static-panel SRI = 0.00849 exactly ±1e-5 (first honest point, 306 pairs)",
+   "source": "A2 Phase 30",
+   "params": {},
+   "async": false,
+   "status": "pass",
+   "value": 0.00849,
+   "ms": 24573,
+   "cached": false,
+   "note": ""
+  },
+  {
+   "method": "ksg_te",
+   "expected": "USA→Japan full-sample KSG TE in [0.150,0.158] (verified 0.1542)",
+   "source": "A2 + #39 anchor",
+   "params": {
+    "series": [
+     "USA",
+     "Japan"
+    ]
+   },
+   "async": true,
+   "status": "pass",
+   "value": 0.154234,
+   "ms": 120097,
+   "cached": false,
+   "note": " job job_20260612_625dad02"
+  },
+  {
+   "method": "ksg_robustness",
+   "expected": "USA→Japan rank-1 in 8/8 (k,lag) configs; mean Spearman in [0.6,0.85] (verified 0.728)",
+   "source": "A2 G.3",
+   "params": {},
+   "async": true,
+   "status": "pass",
+   "value": 0.7282,
+   "ms": 1407083,
+   "cached": false,
+   "note": " job job_20260612_9638fee2"
+  }
+ ],
+ "summary": {
+  "pass": 23,
+  "fail": 0,
+  "async_pending": 0,
+  "total": 23
+ }
+}
