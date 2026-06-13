@@ -374,6 +374,110 @@ body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /*
     <div class="nxlist" id="nxlist"><div class="msg"><span class="spin"></span>loading live economic news…</div></div>
   </div>
 
+  <!-- ============================================================
+       Compute-Run Reports — auto-published paper gallery
+       Reads reports/manifest.json (written by compute-engine
+       scripts/publish-reports.mjs after each run); cards open a
+       full-screen modal with the browser's native PDF viewer
+       (zoom, page navigation, fit-width / fit-page).
+       ============================================================ -->
+  <style>
+  #reports-gallery .rg-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+  #reports-gallery .rg-count{font-family:var(--mono);font-size:.7rem;color:var(--green);border:1px solid var(--hot);padding:.1rem .5rem;border-radius:3px}
+  #reports-gallery .rg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.1rem;margin-top:1.1rem}
+  #reports-gallery .rg-card{cursor:pointer;background:var(--surface2);border:1px solid var(--border);clip-path:var(--clip);
+    display:flex;flex-direction:column;overflow:hidden;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+  #reports-gallery .rg-card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 10px 30px rgba(0,212,255,.12)}
+  #reports-gallery .rg-thumb{position:relative;aspect-ratio:1 / 1.294;background:#0a0e14 center/cover no-repeat;border-bottom:1px solid var(--border);overflow:hidden}
+  #reports-gallery .rg-thumb img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block}
+  #reports-gallery .rg-thumb .rg-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-size:2.2rem;color:var(--border)}
+  #reports-gallery .rg-thumb .rg-open{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;
+    background:rgba(0,8,14,.55);color:var(--cyan);font-family:var(--mono);font-size:.72rem;letter-spacing:1px;text-transform:uppercase;transition:opacity .15s}
+  #reports-gallery .rg-card:hover .rg-open{opacity:1}
+  #reports-gallery .rg-body{padding:.7rem .8rem .85rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+  #reports-gallery .rg-title{font-family:var(--sans);font-size:.82rem;font-weight:600;color:var(--text);line-height:1.3}
+  #reports-gallery .rg-tags{display:flex;gap:.45rem;font-family:var(--mono);font-size:.66rem;color:var(--dim);text-transform:uppercase;letter-spacing:.5px}
+  #reports-gallery .rg-tags b{color:var(--cyan);font-weight:600}
+  #reports-gallery .rg-sum{font-family:var(--sans);font-size:.74rem;color:var(--mid);line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  #reports-gallery .rg-empty{font-family:var(--mono);font-size:.78rem;color:var(--dim);padding:1.2rem 0}
+  #rg-modal{position:fixed;inset:0;z-index:10000;display:none;flex-direction:column;background:rgba(0,4,8,.93);backdrop-filter:blur(4px)}
+  #rg-modal.open{display:flex}
+  #rg-modal .rg-bar{display:flex;align-items:center;gap:.6rem;padding:.55rem .8rem;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+  #rg-modal .rg-bar .rg-mt{font-family:var(--sans);font-weight:600;font-size:.86rem;color:var(--text);margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #rg-modal .rg-btn{font-family:var(--mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;color:var(--mid);background:var(--surface2);
+    border:1px solid var(--border);padding:.32rem .6rem;border-radius:3px;cursor:pointer;text-decoration:none;white-space:nowrap}
+  #rg-modal .rg-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+  #rg-modal .rg-btn.rg-x{color:var(--red)}#rg-modal .rg-btn.rg-x:hover{border-color:var(--red);color:var(--red)}
+  #rg-modal .rg-views{display:flex;gap:.3rem}
+  #rg-modal iframe{flex:1;width:100%;border:0;background:#525659}
+  @media(max-width:600px){#rg-modal .rg-views,#reports-gallery .rg-sum{display:none}}
+  </style>
+  <div class="panel" id="reports-gallery" style="margin-top:1rem">
+    <div class="rg-head">
+      <div class="lbl" style="margin:0">Compute-Run Reports · Auto-published</div>
+      <span class="rg-count" id="rg-count">…</span>
+    </div>
+    <h2>Verification-run papers</h2>
+    <div class="subnote" style="margin:.2rem 0 0">Every compute run renders a LaTeX manuscript from its run artefact (verbatim from <span class="mono">evals.json</span>, never recomputed) and publishes the PDF here automatically. Click a paper to read it — zoom, page navigation and fit options are in the viewer.</div>
+    <div class="rg-grid" id="rg-grid"><div class="rg-empty"><span class="spin"></span> loading reports…</div></div>
+  </div>
+
+  <div id="rg-modal" role="dialog" aria-modal="true" aria-label="Report viewer">
+    <div class="rg-bar">
+      <span class="rg-mt" id="rg-mtitle">Report</span>
+      <div class="rg-views">
+        <button class="rg-btn" data-view="FitH">Fit width</button>
+        <button class="rg-btn" data-view="Fit">Fit page</button>
+        <button class="rg-btn" data-view="zoom=100">100%</button>
+      </div>
+      <a class="rg-btn" id="rg-newtab" href="#" target="_blank" rel="noopener">Open ↗</a>
+      <a class="rg-btn" id="rg-dl" href="#" download>Download</a>
+      <button class="rg-btn rg-x" id="rg-close">Close ✕</button>
+    </div>
+    <iframe id="rg-frame" title="Report PDF" src="about:blank"></iframe>
+  </div>
+  <script>
+  (function(){
+    var grid=document.getElementById('rg-grid'),modal=document.getElementById('rg-modal'),
+        frame=document.getElementById('rg-frame'),mt=document.getElementById('rg-mtitle'),
+        newtab=document.getElementById('rg-newtab'),dl=document.getElementById('rg-dl'),
+        cnt=document.getElementById('rg-count'),cur=null;
+    function setView(v){ if(cur) frame.src=cur.file+'#view='+v; }
+    function open(r){ cur=r; frame.src=r.file+'#view=FitH'; mt.textContent=r.title;
+      mt.title=r.title; newtab.href=r.file; dl.href=r.file; modal.classList.add('open');
+      document.body.style.overflow='hidden'; }
+    function close(){ modal.classList.remove('open'); frame.src='about:blank'; cur=null;
+      document.body.style.overflow=''; }
+    document.getElementById('rg-close').onclick=close;
+    modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+    Array.prototype.forEach.call(document.querySelectorAll('#rg-modal .rg-views .rg-btn'),
+      function(b){ b.onclick=function(){ setView(b.getAttribute('data-view')); }; });
+    function card(r){
+      var c=document.createElement('div'); c.className='rg-card';
+      var t=document.createElement('div'); t.className='rg-thumb';
+      if(r.thumb){ var im=document.createElement('img'); im.loading='lazy'; im.alt=r.title; im.src=r.thumb;
+        im.onerror=function(){ t.innerHTML='<div class="rg-ph">PDF</div>'; }; t.appendChild(im); }
+      else { t.innerHTML='<div class="rg-ph">PDF</div>'; }
+      var ov=document.createElement('div'); ov.className='rg-open'; ov.textContent='Read paper'; t.appendChild(ov);
+      var b=document.createElement('div'); b.className='rg-body';
+      var h=document.createElement('div'); h.className='rg-title'; h.textContent=r.title;
+      var tg=document.createElement('div'); tg.className='rg-tags';
+      tg.innerHTML='<b>'+(r.date||'')+'</b><span>'+(r.pages?r.pages+' pp':'')+'</span><span>'+(r.size_kb?r.size_kb+' KB':'')+'</span>';
+      var s=document.createElement('div'); s.className='rg-sum'; s.textContent=r.summary||'';
+      b.appendChild(h); b.appendChild(tg); b.appendChild(s);
+      c.appendChild(t); c.appendChild(b); c.onclick=function(){ open(r); };
+      return c;
+    }
+    fetch('reports/manifest.json',{cache:'no-store'}).then(function(res){ if(!res.ok) throw 0; return res.json(); })
+      .then(function(m){ var rs=(m&&m.reports)||[];
+        if(!rs.length){ grid.innerHTML='<div class="rg-empty">No compute-run reports published yet — they appear automatically after each run.</div>'; cnt.textContent='0'; return; }
+        grid.innerHTML=''; rs.forEach(function(r){ grid.appendChild(card(r)); });
+        cnt.textContent=rs.length+(rs.length>1?' reports':' report'); })
+      .catch(function(){ grid.innerHTML='<div class="rg-empty">Reports manifest not available yet.</div>'; cnt.textContent='—'; });
+  })();
+  </script>
+
   <footer>
     The Research Engine · SHSSM IIT Bhubaneswar · compute engine + NEURICX + Vertex AI analyst.
     Built on a verified open-source econometrics stack.
