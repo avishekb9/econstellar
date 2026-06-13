@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-13T08:12:07.344Z",
+  "generated_at": "2026-06-13T08:58:04.941Z",
   "count": 1,
   "reports": [
     {
@@ -7,8 +7,8 @@
       "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-12",
       "date_iso": "2026-06-12T17:41:53.875Z",
       "date": "2026-06-12",
-      "pages": 7,
-      "size_kb": 219,
+      "pages": 8,
+      "size_kb": 235,
       "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 26 method rows — spanning stationarity, unit roots and…",
       "thumb": "reports/run_report_2026-06-12_1741.thumb.png"
     }
