@@ -1,7 +1,17 @@
 {
-  "generated_at": "2026-06-13T08:58:04.941Z",
-  "count": 1,
+  "generated_at": "2026-06-14T00:30:00.000Z",
+  "count": 2,
   "reports": [
+    {
+      "file": "reports/compute_run_commodity_2026-06-14.pdf",
+      "title": "A Reproducible CPU-to-GPU Pipeline for Transfer-Entropy Networks: The Econstellar Compute Run behind the Commodity Study",
+      "date_iso": "2026-06-14T00:00:00.000Z",
+      "date": "2026-06-14",
+      "pages": 7,
+      "size_kb": 294,
+      "summary": "An authored compute-run companion to the commodity transfer-entropy study. It documents how the Econstellar engine estimated directed information-flow networks for 23 commodity futures across eight crisis windows, and what migrating the bottleneck k-nearest-neighbour search from 22 CPU cores to a single GPU bought: bit-identical results (agreeing to within 9e-16), an honest crossover — the CPU wins on the bare estimate, and the GPU only repays its fixed overhead once B=99 surrogate testing inflates the work, by 1.3x to 2.1x as the window lengthens — and two reusable cautions, on JIT compilation cost and on why a block bootstrap silently breaks a k-NN estimator.",
+      "thumb": "reports/compute_run_commodity_2026-06-14.thumb.png"
+    },
     {
       "file": "reports/run_report_2026-06-12_1741.pdf",
       "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-12",
