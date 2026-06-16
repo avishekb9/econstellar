@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What we know — epistemic claim layer · Econstellar</title>
+<meta name="description" content="The space's self-description: every claim seeded from verified ground truth with full provenance — established, contested and superseded states all visible. Honest holes are claims too.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15); --rule:rgba(255,255,255,.06);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444;
+  /* Okabe-Ito (colour-blind-safe) for DATA marks only */
+  --oi-blue:#0072B2; --oi-verm:#D55E00; --oi-sky:#56B4E9; --oi-orange:#E69F00; --oi-green:#009E73;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --disp:'Orbitron',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 15% 8%,rgba(0,212,255,.07),transparent 40%),radial-gradient(circle at 85% 70%,rgba(0,255,136,.06),transparent 45%)}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;position:sticky;top:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:10;flex-wrap:wrap}
+nav .brand{color:var(--green);font-weight:600;letter-spacing:.5px} nav .sp{flex:1} nav a{color:var(--dim)}
+header{padding:2.2rem 0 .6rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--disp);font-size:clamp(1.5rem,4vw,2.3rem);margin:.5rem 0 .4rem}
+.lede{color:var(--mid);max-width:74ch;font-size:1.02rem}
+section{margin:1.8rem 0}
+.kpis{display:flex;gap:1.6rem;flex-wrap:wrap;font-family:var(--mono);font-size:.8rem;color:var(--mid);margin:.6rem 0 .2rem}
+.kpis b{color:var(--green);font-size:1.05rem}
+.kpis b.warn{color:var(--amber)}
+.claim{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.2rem;margin:.9rem 0}
+.claim.contested{border-color:rgba(245,158,11,.45);background:rgba(245,158,11,.05)}
+.claim.superseded{opacity:.62}
+.chip{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:1px;text-transform:uppercase;padding:.16rem .55rem;border-radius:999px;margin-right:.45rem;vertical-align:middle}
+.chip.st-established{color:var(--green);border:1px solid rgba(0,255,136,.4)}
+.chip.st-contested{color:var(--amber);border:1px solid rgba(245,158,11,.55)}
+.chip.st-superseded{color:var(--dim);border:1px solid var(--rule)}
+.chip.ty{color:var(--oi-sky);border:1px solid rgba(86,180,233,.35)}
+.cid{font-family:var(--mono);font-size:.68rem;color:var(--dim)}
+.stmt{margin:.55rem 0 .5rem;color:var(--text);font-size:.97rem;max-width:90ch}
+.confwrap{margin:.45rem 0 .2rem;max-width:430px}
+.conflab{font-family:var(--mono);font-size:.68rem;color:var(--dim);margin-bottom:.2rem}
+.conftrack{height:8px;border-radius:5px;background:rgba(255,255,255,.07);overflow:hidden}
+.conffill{height:100%;background:var(--oi-blue)}
+.cl{margin:.45rem 0 0;padding:0;list-style:none;font-size:.84rem;color:var(--mid)}
+.cl li{padding-left:1.05rem;position:relative;margin:.18rem 0}
+.cl.cond li::before{content:"▸";position:absolute;left:0;color:var(--oi-green)}
+.cl.counter li::before{content:"▾";position:absolute;left:0;color:var(--oi-verm)}
+.cl-h{font-family:var(--mono);font-size:.66rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);margin-top:.55rem}
+.prov{margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.35rem}
+.prov .p{font-family:var(--mono);font-size:.66rem;padding:.16rem .5rem;border-radius:6px;border:1px solid var(--rule);color:var(--mid);background:var(--surface2)}
+.prov a.p{color:var(--cyan);border-color:rgba(0,212,255,.3)}
+.dates{font-family:var(--mono);font-size:.66rem;color:var(--dim);margin-top:.55rem}
+.msg{border-left:3px solid var(--amber);background:rgba(245,158,11,.07);border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:.9rem;color:var(--mid);margin:1rem 0}
+.spin{display:inline-block;width:.85em;height:.85em;border:2px solid var(--dim);border-top-color:var(--cyan);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-.12em;margin-right:.4em}
+@keyframes sp{to{transform:rotate(360deg)}}
+footer{border-top:1px solid var(--rule);margin-top:2.5rem;padding:1.2rem 0 2rem;color:var(--dim);font-size:.8rem;font-family:var(--mono)}
+@media(max-width:640px){ .claim{padding:.9rem .85rem} .stmt{font-size:.92rem} .kpis{gap:1rem} }
+</style>
+</head>
+<body>
+<nav>
+  <span class="brand">ECONSTELLAR</span>
+  <a href="index.html">portal</a>
+  <a href="research-engine.html">workbench</a>
+  <a href="observatory.html">observatory</a>
+  <a href="reproduce.html">reproduce</a>
+  <a href="evals.html">evals</a>
+  <span class="sp"></span>
+  <a href="https://github.com/avishekb9" target="_blank" rel="noopener">github</a>
+</nav>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Phase 34 · Epistemic claim layer</div>
+  <h1>What we know</h1>
+  <p class="lede">The space describing itself. Every claim below is seeded from <b>verified ground truth only</b> —
+  a live reproduction, a pre-registered robustness badge, a machine-checked theorem, or an honestly recorded gap —
+  and carries its <b>provenance</b>: the job, badge row, file or chronology entry it traces to.
+  <b>Contested</b> and <b>superseded</b> are visible states — the history of revision is part of the knowledge.
+  Honest holes (what we <em>cannot</em> verify yet) are claims too. Nothing here is invented; confidence values are
+  measured badge pass-rates, never assigned by hand.</p>
+</header>
+
+<section>
+  <div class="kpis" id="kpis"><span><span class="spin"></span>loading the claim table…</span></div>
+  <div id="claims"></div>
+</section>
+
+<footer class="wrap" style="padding-left:0;padding-right:0">
+  Source of record: BigQuery <code>epistemic.claims</code>, read via <code>GET /api/claims</code> on the sandboxed
+  compute engine (CORS-open, graceful-degrade — this page renders an honest pending state when the table is
+  unreachable, never a fabricated claim). Refresh discipline: the nightly loop re-verifies and updates
+  <code>last_verified</code>; a contradiction creates a contested pair — claims are never silently deleted.
+</footer>
+</div>
+
+<script>
+/* What-we-know panel (Phase 34). Zero-dep. The renderers are PURE (claim → HTML
+   string) and exposed on window.__claims so the eval harness drives the
+   established / contested / superseded / hole and degrade paths with fixtures. */
+const CE = "https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+/* provenance id → {label, href|null}. Only PUBLIC surfaces get links:
+   job: → workbench permalink · page:/eval-page → the page · eval:evals.json → evals.html ·
+   method: → man page · arXiv → arxiv.org. Repo-internal anchors (file:, chronology:,
+   badge:, doc:, lean:, pkg:, decision:, lesson:, flag:, catalog:) stay plain chips. */
+function provLink(p) {
+  const s = String(p || "");
+  let m;
+  if ((m = s.match(/^job:(job_[A-Za-z0-9_]+)$/))) return { label: s, href: "research-engine.html#job=" + m[1] };
+  if ((m = s.match(/^page:([a-z0-9\-]+\.html)(#[A-Za-z0-9_\-]+)?/))) return { label: s, href: m[1] + (m[2] || "") };
+  if ((m = s.match(/^eval:evals\.json\/([a-z0-9_]+)$/))) return { label: s, href: "evals.html" };
+  if ((m = s.match(/^eval:evals\//))) return { label: s, href: "evals.html" };
+  if ((m = s.match(/^method:([a-z0-9_]+)/))) return { label: s, href: "man/" + m[1] + ".html" };
+  if ((m = s.match(/^arXiv:(\d{4}\.\d{4,5})$/i))) return { label: s, href: "https://arxiv.org/abs/" + m[1] };
+  return { label: s, href: null };
+}
+
+function confidenceHTML(c) {
+  if (c == null || isNaN(Number(c))) return "";
+  const v = Number(c);
+  return '<div class="confwrap"><div class="conflab">confidence = measured badge pass-rate ' + v.toFixed(3) +
+    ' — read with its decomposition (fragile aggregate &ne; refutation)</div>' +
+    '<div class="conftrack"><div class="conffill" style="width:' + (Math.max(0, Math.min(1, v)) * 100).toFixed(1) + '%"></div></div></div>';
+}
+
+function listHTML(items, cls, head) {
+  if (!items || !items.length) return "";
+  return '<div class="cl-h">' + head + '</div><ul class="cl ' + cls + '">' +
+    items.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>";
+}
+
+function claimCardHTML(c) {
+  if (!c || !c.claim_id) return null;
+  const st = ["established", "contested", "superseded"].includes(c.status) ? c.status : "established";
+  const prov = (c.provenance_ids || []).map((p) => {
+    const { label, href } = provLink(p);
+    return href ? '<a class="p" href="' + esc(href) + '">' + esc(label) + "</a>" : '<span class="p">' + esc(label) + "</span>";
+  }).join("");
+  const papers = (c.paper_refs || []).map((p) => {
+    const { label, href } = provLink(p);
+    return href ? '<a class="p" href="' + esc(href) + '" target="_blank" rel="noopener">' + esc(label) + "</a>" : '<span class="p">' + esc(label) + "</span>";
+  }).join("");
+  const d = (t) => (t ? String(t).slice(0, 10) : "—");
+  return '<article class="claim ' + st + '" id="c-' + esc(c.claim_id) + '">' +
+    '<span class="chip st-' + st + '">' + st + (st === "contested" ? " — under investigation" : "") + "</span>" +
+    '<span class="chip ty">' + esc(c.type || "") + "</span>" +
+    '<span class="cid">' + esc(c.claim_id) + "</span>" +
+    '<p class="stmt">' + esc(c.statement) + "</p>" +
+    confidenceHTML(c.confidence) +
+    listHTML(c.conditions, "cond", "holds under") +
+    listHTML(c.counter_conditions, "counter", st === "contested" ? "the other side" : "known to weaken") +
+    (prov || papers ? '<div class="prov">' + prov + papers + "</div>" : "") +
+    '<div class="dates">established ' + d(c.established_at) + " · last verified " + d(c.last_verified) + "</div>" +
+    "</article>";
+}
+
+function summaryHTML(claims) {
+  const n = { established: 0, contested: 0, superseded: 0 };
+  (claims || []).forEach((c) => { if (n[c.status] != null) n[c.status]++; });
+  const lv = (claims || []).map((c) => String(c.last_verified || "").slice(0, 10)).filter(Boolean).sort().pop() || "—";
+  return "<span><b>" + (claims || []).length + "</b> claims</span>" +
+    '<span><b>' + n.established + "</b> established</span>" +
+    '<span><b class="warn">' + n.contested + "</b> contested</span>" +
+    "<span><b>" + n.superseded + "</b> superseded</span>" +
+    "<span>latest verification <b>" + esc(lv) + "</b></span>";
+}
+
+function degradeHTML(reason) {
+  return '<div class="msg"><b>Honest pending.</b> The claim table is not reachable from this page right now (' +
+    esc(reason || "no response") + "). Nothing is rendered that was not computed — no cached copy, no fabricated " +
+    "claims. The seeding script (<code>scripts/claims-seed.mjs</code>, engine repo) provisions " +
+    "<code>epistemic.claims</code> from verified ground truth only; once it is live this panel populates itself.</div>";
+}
+
+window.__claims = { claimCardHTML, provLink, summaryHTML, confidenceHTML, degradeHTML };
+
+async function load() {
+  const kp = document.getElementById("kpis"), box = document.getElementById("claims");
+  try {
+    const r = await fetch(CE + "/api/claims", { signal: AbortSignal.timeout(12000) });
+    const j = await r.json();
+    if (j.status !== "ok" || !Array.isArray(j.claims) || !j.claims.length) {
+      kp.innerHTML = "<span>claim table: <b class=\"warn\">pending</b></span>";
+      box.innerHTML = degradeHTML(j.reason || (r.ok ? "table is empty" : "engine returned HTTP " + r.status + (j.error ? " (" + j.error + ")" : "")));
+      return;
+    }
+    kp.innerHTML = summaryHTML(j.claims);
+    box.innerHTML = j.claims.map(claimCardHTML).filter(Boolean).join("");
+  } catch (e) {
+    kp.innerHTML = "<span>claim table: <b class=\"warn\">unreachable</b></span>";
+    box.innerHTML = degradeHTML(e && e.message);
+  }
+}
+load();
+</script>
+</body>
+</html>
