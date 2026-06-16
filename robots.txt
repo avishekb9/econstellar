@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://avishekb9.github.io/econstellar/sitemap.xml
