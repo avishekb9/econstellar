@@ -327,6 +327,9 @@ section{margin:2.4rem 0}
 /* uniform card height: clamp the abstract; full text lives on the detail page */
 .paper__abstract{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
 
+/* journal-grade abstracts: justified with automatic hyphenation (lang="en" set on <html>) */
+.abstract,.paper__abstract{text-align:justify;text-justify:inter-word;-webkit-hyphens:auto;-ms-hyphens:auto;hyphens:auto}
+
 /* hover zooms */
 .paper{transition:transform .22s ease,box-shadow .22s ease}
 .paper:hover{transform:translateY(-4px);box-shadow:0 20px 48px -24px rgba(0,212,255,.55)}
