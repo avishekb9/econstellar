@@ -148,6 +148,7 @@
     { label: "Reproduce the paper", href: BASE + "reproduce.html", kind: "page" },
     { label: "Changelog — what's new", href: BASE + "changelog.html", kind: "page" },
     { label: "Research Station", href: BASE + "research-station.html", kind: "page" },
+    { label: "Research Papers — publications, preprints & the book", href: BASE + "research-papers.html", kind: "page" },
     { label: "Notebooks (in the Workbench bar)", href: BASE + "research-engine.html", kind: "page" }
   ];
   var ACTIONS = [

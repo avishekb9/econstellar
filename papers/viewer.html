@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper viewer · Econstellar</title>
+<meta name="description" content="In-page PDF viewer for open-access Econstellar research papers.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://avishekb9.github.io/econstellar/papers/viewer.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="stylesheet" href="../assets/research-papers.css">
+<style>
+  /* viewer-only: keep the toolbar buttons tidy; the shared sheet supplies .viewer/.vtoolbar/etc. */
+  body{overflow:hidden}
+  .vlink{font-family:var(--mono);font-size:.74rem;color:var(--cyan);text-decoration:none;padding:.35rem .2rem}
+  .vlink:hover{text-decoration:underline}
+  .vloading{margin:3rem auto;text-align:center;color:var(--dim);font-family:var(--mono);font-size:.82rem}
+  .vspin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--green);
+    border-radius:50%;animation:vs .7s linear infinite;vertical-align:middle;margin-right:.5rem}
+  @keyframes vs{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.vspin{animation:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#vscroll">Skip to document</a>
+<div class="viewer">
+  <div class="vtoolbar" role="toolbar" aria-label="Document controls">
+    <a class="vlink" id="vback" href="../research-papers.html" title="Back to paper (Esc)">&#8592; Back to paper</a>
+    <span class="vtitle" id="vtitle">Paper</span>
+    <span class="vspace"></span>
+    <button class="vbtn" id="vthumbtoggle" aria-pressed="true" title="Toggle page thumbnails (g)">&#9783; Pages</button>
+    <button class="vbtn" id="vprev" title="Previous page (&#8592;)" aria-label="Previous page">&#8249;</button>
+    <span class="vpage" id="vpage" aria-live="polite">&#8230;</span>
+    <button class="vbtn" id="vnext" title="Next page (&#8594;)" aria-label="Next page">&#8250;</button>
+    <button class="vbtn" id="vzout" title="Zoom out (-)" aria-label="Zoom out">&#8722;</button>
+    <span class="vpage" id="vzoom">100%</span>
+    <button class="vbtn" id="vzin" title="Zoom in (+)" aria-label="Zoom in">+</button>
+    <a class="vbtn" id="vdl" download title="Download PDF">&#8681; Download</a>
+    <button class="vbtn" id="vshare" title="Share this view">&#8599; Share</button>
+    <a class="vbtn" id="vsrc" target="_blank" rel="noopener" title="Open at source" hidden>arXiv &#8599;</a>
+  </div>
+  <div class="vbody">
+    <div class="vthumbs" id="vthumbs" role="listbox" aria-label="Page thumbnails" tabindex="-1"></div>
+    <div class="vscroll" id="vscroll" tabindex="0" aria-label="Document pages">
+      <div class="vloading" id="vloading"><span class="vspin"></span>Loading document&#8230;</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs';
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.worker.min.mjs';
+
+const q = new URLSearchParams(location.search);
+const rawSrc = q.get('src') || '';
+const rawTitle = q.get('title') || 'Paper';
+const rawBack = q.get('back') || '';
+
+// ---- sanitise inputs (static site, no backend) ----
+const okArxiv = /^https:\/\/arxiv\.org\/pdf\/\d{3,4}\.\d{4,5}(v\d+)?(\.pdf)?$/;
+const okLocal = /^pdf\/[\w.-]+\.pdf$/;                 // same-dir self-hosted (future unlock)
+const src = (okArxiv.test(rawSrc) || okLocal.test(rawSrc)) ? rawSrc : '';
+const back = /^[\w-]+\.html$/.test(rawBack) ? rawBack : '../research-papers.html';
+const title = rawTitle.slice(0, 200);
+
+const $ = id => document.getElementById(id);
+$('vtitle').textContent = title;
+document.title = title + ' · Econstellar';
+$('vback').href = back;
+$('vdl').href = src || '#';
+// derive the arXiv abstract page for "Open at source"
+const m = rawSrc.match(/arxiv\.org\/pdf\/(\d{3,4}\.\d{4,5})/);
+if (m) { const s = $('vsrc'); s.href = 'https://arxiv.org/abs/' + m[1]; s.hidden = false; }
+
+function fallback(msg){
+  $('vscroll').innerHTML =
+    '<div class="vfallback"><p style="font-family:var(--serif);font-size:1.05rem;color:var(--mid)">'
+    + (msg || 'This document could not be displayed in the in-page viewer.') + '</p>'
+    + (src ? '<a class="btn primary" href="'+src+'" target="_blank" rel="noopener">&#8681; Download / open the PDF</a>' : '')
+    + (m ? '<a class="btn" href="https://arxiv.org/abs/'+m[1]+'" target="_blank" rel="noopener">Open at source &#8599;</a>' : '')
+    + '<a class="btn ghost" href="'+back+'">&#8592; Back to paper</a></div>';
+}
+
+if (!src){ fallback('No valid document was requested.'); throw new Error('no src'); }
+
+const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+const scroll = $('vscroll'), thumbs = $('vthumbs');
+let pdf=null, N=0, scale=1.15, current=1, aspect=1.294;
+const slots=[], rendered=new Set(), thumbRendered=new Set();
+
+function baseWidth(){ return Math.min(scroll.clientWidth - 40, 900); }
+
+async function boot(){
+  try{
+    pdf = await pdfjsLib.getDocument(src).promise;
+  }catch(e){ fallback('The document failed to load. It may be temporarily unavailable at the source.'); return; }
+  N = pdf.numPages;
+  const p1 = await pdf.getPage(1);
+  const vp = p1.getViewport({scale:1});
+  aspect = vp.height / vp.width;
+  $('vloading').remove();
+  buildSlots();
+  buildThumbs();
+  updatePage(1);
+}
+
+function slotHeight(){ return baseWidth()*scale*aspect; }
+
+function buildSlots(){
+  scroll.querySelectorAll('.vslot').forEach(n=>n.remove());
+  slots.length=0; rendered.clear();
+  for(let i=1;i<=N;i++){
+    const d=document.createElement('div');
+    d.className='vslot'; d.dataset.page=i; d.style.minHeight=slotHeight()+'px';
+    d.style.width='100%'; d.style.display='flex'; d.style.justifyContent='center';
+    scroll.appendChild(d); slots.push(d);
+    pageObs.observe(d);
+  }
+}
+
+async function renderPage(i){
+  if(rendered.has(i)) return;
+  rendered.add(i);
+  const page=await pdf.getPage(i);
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const vp=page.getViewport({scale});
+  const cw=baseWidth();
+  const css=cw/vp.width;                        // fit to column
+  const rvp=page.getViewport({scale:scale*css*dpr});
+  const canvas=document.createElement('canvas');
+  canvas.width=rvp.width; canvas.height=rvp.height;
+  canvas.style.width=(vp.width*css)+'px'; canvas.style.height=(vp.height*css)+'px';
+  const slot=slots[i-1]; slot.style.minHeight=''; slot.innerHTML=''; slot.appendChild(canvas);
+  await page.render({canvasContext:canvas.getContext('2d'),viewport:rvp}).promise;
+}
+
+const pageObs=new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting){ renderPage(+e.target.dataset.page); }});
+  // current page = most-visible slot
+  let best=current,ratio=0;
+  for(const e of es){ if(e.intersectionRatio>ratio){ratio=e.intersectionRatio;best=+e.target.dataset.page;} }
+  if(ratio>0) updatePage(best);
+},{root:scroll,rootMargin:'200px 0px',threshold:[0,.25,.5,.75,1]});
+
+function buildThumbs(){
+  thumbs.innerHTML='';
+  for(let i=1;i<=N;i++){
+    const b=document.createElement('button');
+    b.className='vthumb'; b.dataset.page=i; b.setAttribute('role','option');
+    b.setAttribute('aria-label','Page '+i); b.tabIndex=(i===1?0:-1);
+    b.innerHTML='<div class="n">'+i+'</div>';
+    b.addEventListener('click',()=>goto(i,true));
+    thumbs.appendChild(b);
+    thumbObs.observe(b);
+  }
+}
+async function renderThumb(b){
+  const i=+b.dataset.page;
+  if(thumbRendered.has(i)) return; thumbRendered.add(i);
+  const page=await pdf.getPage(i);
+  const vp=page.getViewport({scale:1});
+  const w=132, s=w/vp.width, dpr=Math.min(window.devicePixelRatio||1,2);
+  const rvp=page.getViewport({scale:s*dpr});
+  const c=document.createElement('canvas');
+  c.width=rvp.width; c.height=rvp.height; c.style.width=w+'px';
+  await page.render({canvasContext:c.getContext('2d'),viewport:rvp}).promise;
+  b.insertBefore(c,b.firstChild);
+}
+const thumbObs=new IntersectionObserver((es)=>{
+  es.forEach(e=>{ if(e.isIntersecting) renderThumb(e.target); });
+},{root:thumbs,rootMargin:'300px 0px'});
+
+function updatePage(i){
+  current=i; $('vpage').textContent=i+' / '+N;
+  thumbs.querySelectorAll('.vthumb').forEach(b=>{
+    const on=(+b.dataset.page===i);
+    b.setAttribute('aria-current',on?'true':'false');
+    b.tabIndex=on?0:-1;
+    if(on) b.scrollIntoView({block:'nearest',behavior:reduce?'auto':'smooth'});
+  });
+}
+function goto(i,focusScroll){
+  i=Math.max(1,Math.min(N,i));
+  const slot=slots[i-1]; if(!slot) return;
+  renderPage(i);
+  slot.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+  updatePage(i); if(focusScroll) scroll.focus();
+}
+function setZoom(delta){
+  scale=Math.max(.6,Math.min(2.4,+(scale+delta).toFixed(2)));
+  $('vzoom').textContent=Math.round(scale*100)+'%';
+  const keep=current;
+  slots.forEach(s=>{s.style.minHeight=slotHeight()+'px';}); rendered.clear();
+  slots.forEach(s=>{ if(!isFar(s)) renderPage(+s.dataset.page); });
+  goto(keep,false);
+}
+function isFar(slot){ const r=slot.getBoundingClientRect(); return r.bottom< -400 || r.top>innerHeight+400; }
+
+// toolbar
+$('vprev').onclick=()=>goto(current-1,true);
+$('vnext').onclick=()=>goto(current+1,true);
+$('vzin').onclick=()=>setZoom(.15);
+$('vzout').onclick=()=>setZoom(-.15);
+$('vthumbtoggle').onclick=()=>{ const on=thumbs.style.display!=='none';
+  thumbs.style.display=on?'none':''; $('vthumbtoggle').setAttribute('aria-pressed',(!on).toString()); };
+$('vshare').onclick=async()=>{
+  const url=location.href;
+  try{ if(navigator.share){ await navigator.share({title,url}); } else { await navigator.clipboard.writeText(url); flash('Link copied'); } }
+  catch(_){ try{ await navigator.clipboard.writeText(url); flash('Link copied'); }catch(e){} }
+};
+function flash(t){ const s=$('vshare'); const o=s.textContent; s.textContent='✓ '+t; setTimeout(()=>s.textContent=o,1400); }
+
+// keyboard (whole document)
+addEventListener('keydown',(e)=>{
+  if(['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  switch(e.key){
+    case 'ArrowRight': case 'PageDown': e.preventDefault(); goto(current+1,false); break;
+    case 'ArrowLeft': case 'PageUp': e.preventDefault(); goto(current-1,false); break;
+    case 'Home': e.preventDefault(); goto(1,false); break;
+    case 'End': e.preventDefault(); goto(N,false); break;
+    case '+': case '=': e.preventDefault(); setZoom(.15); break;
+    case '-': e.preventDefault(); setZoom(-.15); break;
+    case 'g': case 'G': $('vthumbtoggle').click(); break;
+    case 'Escape': location.href=back; break;
+  }
+});
+// roving tabindex within thumbnails
+thumbs.addEventListener('keydown',(e)=>{
+  if(!['ArrowUp','ArrowDown','Enter',' '].includes(e.key)) return;
+  const i=current;
+  if(e.key==='ArrowDown'){ e.preventDefault(); goto(i+1,false); thumbs.querySelector('[data-page="'+Math.min(N,i+1)+'"]').focus(); }
+  else if(e.key==='ArrowUp'){ e.preventDefault(); goto(i-1,false); thumbs.querySelector('[data-page="'+Math.max(1,i-1)+'"]').focus(); }
+});
+
+boot();
+</script>
+</body>
+</html>

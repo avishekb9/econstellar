@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PLACEHOLDER book cover for *Entronomics* — original typographic artwork built
+  entirely from Econstellar's own design tokens (black / cyan #00d4ff / green #00ff88,
+  Orbitron display, JetBrains Mono metadata, --clip corner geometry).
+  NOT a stock photo, NOT an AI-generated "book photo". Swap for the real cover when it exists.
+  Title + working subtitle are the author's own (Avishek Bhandari). All other book facts
+  (ISBN, publisher, price, date) remain unknown and are deliberately absent.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="960" viewBox="0 0 640 960" role="img" aria-label="Entronomics — book cover placeholder">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="26%" r="62%">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.20"/>
+      <stop offset="42%" stop-color="#00d4ff" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="spectrum" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#00ff88"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#00ff88" stop-opacity="0.35"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+  </defs>
+
+  <!-- field -->
+  <rect width="640" height="960" fill="#000000"/>
+  <rect width="640" height="960" fill="url(#glow)"/>
+
+  <!-- clipped-corner frame (mirrors --clip polygon at 22px) -->
+  <path d="M40 62 L62 40 L600 40 L600 898 L578 920 L40 920 Z"
+        fill="none" stroke="url(#edge)" stroke-width="1.4"/>
+  <path d="M52 74 L74 52 L588 52 L588 886 L566 908 L52 908 Z"
+        fill="none" stroke="#00d4ff" stroke-opacity="0.10" stroke-width="1"/>
+
+  <!-- constellation / spectral-network motif (the "Econstellar" nod) -->
+  <g stroke="#00d4ff" stroke-opacity="0.28" stroke-width="1">
+    <line x1="132" y1="150" x2="236" y2="196"/>
+    <line x1="236" y1="196" x2="196" y2="286"/>
+    <line x1="236" y1="196" x2="352" y2="168"/>
+    <line x1="352" y1="168" x2="470" y2="214"/>
+    <line x1="470" y1="214" x2="424" y2="300"/>
+    <line x1="352" y1="168" x2="300" y2="262"/>
+    <line x1="196" y1="286" x2="300" y2="262"/>
+    <line x1="300" y1="262" x2="424" y2="300"/>
+  </g>
+  <g fill="#00ff88">
+    <circle cx="132" cy="150" r="3.5"/>
+    <circle cx="236" cy="196" r="5"/>
+    <circle cx="352" cy="168" r="4.5"/>
+    <circle cx="470" cy="214" r="3.5"/>
+    <circle cx="196" cy="286" r="3"/>
+    <circle cx="300" cy="262" r="4.5"/>
+    <circle cx="424" cy="300" r="3.5"/>
+  </g>
+  <g fill="#00d4ff" filter="url(#soft)" opacity="0.7">
+    <circle cx="236" cy="196" r="7"/>
+    <circle cx="300" cy="262" r="6"/>
+  </g>
+
+  <!-- eyebrow -->
+  <text x="320" y="452" text-anchor="middle"
+        font-family="'JetBrains Mono',ui-monospace,monospace" font-size="15"
+        letter-spacing="7" fill="#6b7280">A GENERAL THEORY</text>
+
+  <!-- title lockup (Orbitron display) -->
+  <text x="320" y="536" text-anchor="middle"
+        font-family="Orbitron,'Space Grotesk',sans-serif" font-weight="900" font-size="66"
+        letter-spacing="3" fill="#ffffff">ENTRO</text>
+  <text x="320" y="606" text-anchor="middle"
+        font-family="Orbitron,'Space Grotesk',sans-serif" font-weight="900" font-size="66"
+        letter-spacing="3" fill="url(#spectrum)">NOMICS</text>
+
+  <!-- accent rule -->
+  <rect x="220" y="642" width="200" height="2.5" fill="url(#spectrum)"/>
+
+  <!-- working subtitle (author's own) -->
+  <text x="320" y="694" text-anchor="middle"
+        font-family="'Space Grotesk',sans-serif" font-weight="500" font-size="19"
+        fill="#c9d1d9">Self-Learning Adaptive Economies</text>
+
+  <!-- eigenvalue-spectrum footer motif -->
+  <g transform="translate(196,772)">
+    <line x1="0" y1="34" x2="248" y2="34" stroke="#ffffff" stroke-opacity="0.10" stroke-width="1"/>
+    <g fill="url(#spectrum)" opacity="0.9">
+      <rect x="6"   y="6"  width="10" height="28"/>
+      <rect x="30"  y="14" width="10" height="20"/>
+      <rect x="54"  y="2"  width="10" height="32"/>
+      <rect x="78"  y="20" width="10" height="14"/>
+      <rect x="102" y="12" width="10" height="22"/>
+      <rect x="126" y="24" width="10" height="10"/>
+      <rect x="150" y="8"  width="10" height="26"/>
+      <rect x="174" y="18" width="10" height="16"/>
+      <rect x="198" y="26" width="10" height="8"/>
+      <rect x="222" y="22" width="10" height="12"/>
+    </g>
+  </g>
+
+  <!-- author -->
+  <text x="320" y="856" text-anchor="middle"
+        font-family="'JetBrains Mono',ui-monospace,monospace" font-size="17"
+        letter-spacing="5" fill="#ffffff">AVISHEK BHANDARI</text>
+
+  <!-- status tag -->
+  <g transform="translate(320,884)">
+    <rect x="-70" y="0" width="140" height="24" rx="0" fill="none" stroke="#00ff88" stroke-opacity="0.5" stroke-width="1"/>
+    <text x="0" y="16" text-anchor="middle"
+          font-family="'JetBrains Mono',ui-monospace,monospace" font-size="11"
+          letter-spacing="4" fill="#00ff88">FORTHCOMING</text>
+  </g>
+</svg>
