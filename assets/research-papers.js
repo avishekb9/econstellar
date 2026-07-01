@@ -96,12 +96,22 @@
         if(j.ok && j.results && j.results.length){
           var items = j.results.map(function(it){
             var doc = it.document || it;
-            var d = doc.derivedStructData || doc.structData || doc || {};
+            // the corpus fields (title, authors, paper_id, content) live in structData;
+            // derivedStructData holds only ranking scores, so merge with structData winning
+            var d = (doc.structData || doc.derivedStructData)
+                      ? Object.assign({}, doc.derivedStructData || {}, doc.structData || {})
+                      : (doc || {});
             var title = d.title || doc.id || 'Result';
-            var link = d.link || d.url || '';
-            var snip = (d.snippets && d.snippets[0] && (d.snippets[0].snippet||'')) ||
-                       (d.extractive_answers && d.extractive_answers[0] && (d.extractive_answers[0].content||'')) || '';
-            var head = link ? ('<a href="'+esc(link)+'" target="_blank" rel="noopener">'+esc(title)+'</a>') : esc(title);
+            var pid   = d.paper_id || '';
+            var link  = d.link || d.url || (d.source === 'arxiv' && pid ? 'https://arxiv.org/abs/' + pid : '');
+            var authors = Array.isArray(d.authors) ? d.authors.join(', ') : (d.authors || '');
+            var meta  = [authors, d.date, d.category || d.venue].filter(Boolean).join(' · ');
+            var snip  = (typeof d.content === 'string' && d.content.trim() && d.content.slice(0, 300)) ||
+                        (d.snippets && d.snippets[0] && (d.snippets[0].snippet||'')) ||
+                        (d.extractive_answers && d.extractive_answers[0] && (d.extractive_answers[0].content||'')) ||
+                        (Array.isArray(d.methods_mentioned) && d.methods_mentioned.length ? d.methods_mentioned.join('; ') : '') ||
+                        meta;
+            var head  = link ? ('<a href="'+esc(link)+'" target="_blank" rel="noopener">'+esc(title)+'</a>') : esc(title);
             return '<li class="ask__r"><div class="ask__rt">'+head+'</div>'+(snip?('<p class="ask__rs">'+esc(snip)+'</p>'):'')+'</li>';
           }).join('');
           show('<ol class="ask__list">'+items+'</ol>');
