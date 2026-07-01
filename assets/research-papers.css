@@ -5,10 +5,10 @@
    --mono JetBrains = metadata. Restraint everywhere except the Tier-1 verify strip.
    Shared by research-papers.html, papers/<slug>.html, papers/entronomics.html,
    papers/viewer.html.  Relative-path site at /econstellar/ (see build notes).
-   NB: the @import keeps this file self-sufficient; a <link> to the same Google
-   Fonts URL in each page <head> is preferable for first paint.
+   Fonts are requested once via a preconnected <link> in each page <head>
+   (better first paint); this stylesheet intentionally carries no @import so
+   the font request is never duplicated.
    ========================================================================== */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&display=swap');
 
 :root{
   --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
@@ -407,4 +407,39 @@ section{margin:2.4rem 0}
   .themenav__panel{width:88vw;grid-template-columns:1fr;max-height:68vh;overflow:auto}
   .toc__parts{grid-template-columns:1fr}
   .totop{right:12px;bottom:12px}
+}
+
+/* =====================================================================
+   PRINT / SAVE-AS-PDF - collapse the dark OS chrome into a clean, journal
+   style monochrome article. Navigation and interactive controls are hidden;
+   the title, byline, citation, abstract, key results, any verification data
+   and the citation block are kept. Colours are darkened for paper contrast.
+   ===================================================================== */
+@media print{
+  :root{--bg:#fff;--surface:#fff;--surface2:#fff;--border:#c2c2c2;--rule:#dcdcdc;--hot:#c2c2c2;
+    --text:#000;--mid:#1c1c1c;--dim:#555;--cyan:#004a63;--green:#0a6b3f;--amber:#7a4a00}
+  html{scroll-behavior:auto}
+  body{background:#fff!important;color:#000;background-image:none!important;
+    background-attachment:scroll!important;font-family:var(--serif);font-size:11pt;line-height:1.5}
+  nav,.themenav-wrap,.controls,.totop,.skip,.foot,.os-kbtn,#os-strip,.jump,.xref,
+  .paper__actions,.book-hero__actions,.rail .btn,.rail__label,.vswitch,.spotlight__head .tag,
+  [data-copy],[data-share],.locked__preview,.locked__seal,.locked__actions{display:none!important}
+  main,.wrap{max-width:none!important;margin:0!important;padding:0!important}
+  .detail{display:block!important;grid-template-columns:1fr!important}
+  .rail{position:static!important;border:none!important;box-shadow:none!important;
+    clip-path:none!important;padding:0!important;margin-top:1rem}
+  a{color:#000;text-decoration:none}
+  *{box-shadow:none!important;text-shadow:none!important;filter:none!important;
+    animation:none!important;transition:none!important}
+  h1,.paper-title,.book-hero__title,.paper__title{color:#000}
+  .abstract{border-left:2px solid #888;color:#111}
+  .locked{border:1px solid #ccc}
+  .locked__lockup{margin-top:0!important;text-align:left;padding:.5rem .2rem}
+  .verify,.panel,.kpi,.paper,.toc__part,.spotlight,.book-hero,.locked{
+    background:#fff!important;border-color:#ccc!important;clip-path:none!important;break-inside:avoid}
+  .track{background:#eee!important}.fill{background:#8a8a8a!important}.fill.pub{background:#adadad!important}
+  .cite{background:#f6f6f6!important;border-color:#ccc!important;color:#111}
+  .kpi .v,.kpi .v.g{color:#004a63}
+  .verdict.g,.verdict.n{border:1px solid #bbb;color:#111}
+  .paper-title,.h-res,.theme__label{page-break-after:avoid}
 }
