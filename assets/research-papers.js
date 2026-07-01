@@ -34,6 +34,60 @@
     });
   });
 
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- back to top (every Research Papers page) ---------- */
+  (function(){
+    var tt = document.createElement('button');
+    tt.className = 'totop'; tt.type = 'button';
+    tt.setAttribute('aria-label', 'Back to top'); tt.innerHTML = '&#8593;';
+    document.body.appendChild(tt);
+    tt.addEventListener('click', function(){ window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' }); });
+    var on = function(){ tt.classList.toggle('show', window.pageYOffset > 600); };
+    window.addEventListener('scroll', on, { passive: true }); on();
+  })();
+
+  /* ---------- theme navigator: sticky offset under the nav + close behaviour ---------- */
+  (function(){
+    var topnav = document.querySelector('nav');
+    if(topnav){
+      var setH = function(){ document.documentElement.style.setProperty('--navh', topnav.offsetHeight + 'px'); };
+      setH(); window.addEventListener('resize', setH, { passive: true });
+    }
+    var tn = document.getElementById('themenav');
+    if(!tn) return;                         // only on the hub
+    tn.querySelectorAll('.themenav__panel a').forEach(function(a){
+      a.addEventListener('click', function(){ tn.removeAttribute('open'); });
+    });
+    document.addEventListener('click', function(ev){
+      if(tn.open && !tn.contains(ev.target)) tn.removeAttribute('open');
+    });
+    document.addEventListener('keydown', function(ev){
+      if(ev.key === 'Escape' && tn.open){ tn.removeAttribute('open'); var s = tn.querySelector('summary'); if(s) s.focus(); }
+    });
+  })();
+
+  /* ---------- scroll-spy: highlight the theme in view ---------- */
+  (function(){
+    var secs = Array.prototype.slice.call(document.querySelectorAll('.theme-sec[id]'));
+    if(!secs.length || !('IntersectionObserver' in window)) return;
+    var links = {};
+    document.querySelectorAll('.jump a[href^="#"], .themenav__theme[href^="#"]').forEach(function(a){
+      var id = a.getAttribute('href').slice(1); (links[id] = links[id] || []).push(a);
+    });
+    var io = new IntersectionObserver(function(ents){
+      ents.forEach(function(en){
+        if(en.isIntersecting){
+          var id = en.target.id;
+          Object.keys(links).forEach(function(k){
+            links[k].forEach(function(a){ a.classList.toggle('is-active', k === id); });
+          });
+        }
+      });
+    }, { rootMargin: '-140px 0px -70% 0px', threshold: 0 });
+    secs.forEach(function(s){ io.observe(s); });
+  })();
+
   /* ---------- hub filter + search ---------- */
   var controls = document.getElementById('controls');
   if(!controls) return;                 // not the hub

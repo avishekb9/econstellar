@@ -1,10 +1,11 @@
 {
  "generated_at": "2026-07-01",
- "count": 39,
+ "count": 40,
  "tiers": {
   "live-reproducible": 2,
   "published": 7,
-  "working-paper": 30
+  "working-paper": 29,
+  "preprint": 2
  },
  "themes": [
   {
@@ -48,6 +49,12 @@
    "label": "Antecedents: Long Memory & Multiscale Market Structure",
    "eyebrow": "PEER-REVIEWED · WAVELET & FRACTAL CONNECTIVITY",
    "blurb": "The seven peer-reviewed papers, 2020 to 2023, that seeded the programme: wavelet and fractal connectivity, multivariate long memory, time-varying interdependence, and time-frequency analysis of markets and climate. The empirical lineage from which the recovered-operator idea grew."
+  },
+  {
+   "id": "methods-engine",
+   "eyebrow": "INSTRUMENTS & COMPUTATION",
+   "label": "Methods & the Research Engine",
+   "blurb": "The open computational substrate behind these results: an AI-augmented engine that runs publication-grade financial econometrics in the browser and regenerates the headline figures on demand."
   }
  ],
  "book": {
@@ -56,7 +63,7 @@
   "subtitle": "A General Theory of Self-Learning Adaptive Economies",
   "author": "Avishek Bhandari",
   "status": "forthcoming",
-  "cover_image": "images/entronomics-cover.svg",
+  "cover_image": "images/entronomics-cover.png",
   "contact_email": "avishekb@iitbbs.ac.in",
   "detail_page": "papers/entronomics.html"
  },
@@ -655,21 +662,30 @@
   },
   {
    "id": "equilibrium-as-a-limit",
-   "tier": "working-paper",
+   "tier": "preprint",
    "theme": "foundations",
    "title": "Equilibrium as a Limit: The Competitive Canon Nested in an Adaptive, Information-Theoretic Economy",
    "authors": "Avishek Bhandari",
-   "venue": "Working paper · Entronomics programme",
+   "venue": "arXiv preprint",
    "venue_badge": "PREPRINT",
    "pages": 32,
-   "abstract": "Economics has long pictured a market as equations solved for a price equilibrium. The classic theorems prove such an equilibrium exists, but cannot guarantee it is unique, stable, or ever reached. This paper rebuilds the economy as a process unfolding over time, not a fixed point to solve for: an evolving information source of limited-capacity agents. It proves, as a theorem, that the textbook competitive equilibrium re-emerges exactly in a precise limit, as noise, capacity limits, and adaptation vanish, and is a strict special case everywhere else. The same framework covers human and machine decision-makers, and welfare is recast as an economy's viability over time. The results are mathematical, with a fully worked example; the recovered structure is only partially identified from data, and no empirical test is claimed.",
+   "abstract": "The competitive equilibrium of general equilibrium theory exists as a fixed point and is, by the theory's own results on aggregate excess demand, in general silent on whether that fixed point is unique, stable, or attained. This paper takes the economy to be not a configuration to be solved for but a process to be recovered, an asymptotically mean stationary information source carrying a partially identified operator of statistical dependence, populated by agents that are finite-capacity information channels. Within this adaptive order the competitive, rational expectations equilibrium is recovered exactly, as a joint limit taken along an explicit scaling path. Three parameter limits and two fixed-point conditions deliver it, the entropy rate falls to zero, agent channel capacity diverges, selection intensity grows infinitely sharp, adaptive learning reaches its expectationally stable rest point, and the recovered structure ceases to coevolve. At that corner the limiting object satisfies the axioms of the canon and its rest state is a Walrasian equilibrium, away from it the adaptive economy is a strict generalisation, carrying a positive entropy rate and a recovered dependence structure that the equilibrium primitive cannot express. We give the nesting as a theorem, establish the result by result correspondence with existence, with the Sonnenschein Mantel Debreu indeterminacy, and with the regular economies recovery, and characterise exactly what the equilibrium limit erases.",
    "locked": true,
    "preview_image": "preview/equilibrium-as-a-limit.png",
    "coming_soon": "Full version coming soon",
-   "notify_subject": "Entronomics paper: Equilibrium as a Limit: The Competitive Canon Nested in an Adaptive, Information-Theoretic Economy",
    "in_book": true,
    "detail_page": "papers/equilibrium-as-a-limit.html",
-   "journal_cut": true
+   "arxiv_id": "2606.28295",
+   "arxiv_subject": "econ.TH",
+   "datePublished": "2026-06",
+   "pdf_url": "https://arxiv.org/pdf/2606.28295",
+   "abstract_url": "https://arxiv.org/abs/2606.28295",
+   "programme": "entronomics",
+   "key_results": [
+    "The competitive, rational expectations equilibrium is recovered exactly as a joint limit along an explicit scaling path: three parameter limits and two fixed-point conditions.",
+    "Result-by-result correspondence with existence, with the Sonnenschein Mantel Debreu indeterminacy, and with regular-economies recovery.",
+    "Away from the limit the adaptive economy is a strict generalisation, carrying a positive entropy rate and a recovered dependence structure the equilibrium primitive cannot express."
+   ]
   },
   {
    "id": "choice-at-finite-capacity",
@@ -829,6 +845,27 @@
    "notify_subject": "Entronomics paper: Labour as Adaptive Energy Allocation: The Worker as a Finite-Capacity Channel and the: Recovered Wage Structure",
    "in_book": true,
    "detail_page": "papers/flagship-06-labour.html"
+  },
+  {
+   "id": "econstellar-engine",
+   "tier": "preprint",
+   "theme": "methods-engine",
+   "title": "Econstellar: An Open-Source AI-Augmented Research Engine for Computational Financial Econometrics",
+   "authors": "Avishek Bhandari",
+   "abstract": "Turning a promising economic idea into a credible empirical finding is, in practice, an expensive undertaking: it demands a great deal of specialised computation, and the results are seldom released in a form that others can check or build upon. Econstellar is our response. It is an open, publicly served research engine that runs publication-grade financial econometrics from an ordinary web browser and explains what the results mean, so that a reader does not merely read a finding but can re-run it, vary its inputs, and trace exactly how it was produced. Three choices give the system its character. The heavy computation is placed on the processor that suits it, rather than forced onto hardware ill-matched to the task, which is much of the reason analysis of this kind is so rarely served to the public. An artificial-intelligence assistant selects and interprets the analyses but never originates a number, so every quantity it reports is a real computation the reader can reproduce. And the engine a visitor exercises is the same code that produced the figures in our published research. We expose seventeen econometric methods, each reported with a verified live value and reproducible at the public endpoint, computed under a single discipline: prices are treated as non-stationary and all methods are applied to returns. The system also regenerates, on demand, the headline result of an accompanying study of financial contagion, from the package that generated it. The platform is the working core of an active research programme spanning three software releases and three preprints, and it is available now, free and open-source, at a live public address. Our aim is a simple one: to shorten the distance between a research claim and the moment another person can independently verify it.",
+   "arxiv_id": "2606.05705",
+   "arxiv_subject": "econ.EM",
+   "venue": "arXiv preprint",
+   "datePublished": "2026-06",
+   "pdf_url": "https://arxiv.org/pdf/2606.05705",
+   "abstract_url": "https://arxiv.org/abs/2606.05705",
+   "code_url": "https://github.com/avishekb9/econstellar",
+   "detail_page": "papers/econstellar-engine.html",
+   "key_results": [
+    "Seventeen econometric methods exposed in the browser, each reported with a verified live value and reproducible at a public endpoint.",
+    "One stationarity discipline throughout: prices are treated as non-stationary and every method is applied to returns.",
+    "The engine a visitor runs is the same code that produced the figures in the published research; the AI assistant selects and interprets analyses but never originates a number."
+   ]
   }
  ]
 }
