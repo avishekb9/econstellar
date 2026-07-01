@@ -421,7 +421,7 @@ section{margin:2.4rem 0}
   html{scroll-behavior:auto}
   body{background:#fff!important;color:#000;background-image:none!important;
     background-attachment:scroll!important;font-family:var(--serif);font-size:11pt;line-height:1.5}
-  nav,.themenav-wrap,.controls,.totop,.skip,.foot,.os-kbtn,#os-strip,.jump,.xref,
+  nav,.themenav-wrap,.controls,.ask,.totop,.skip,.foot,.os-kbtn,#os-strip,.jump,.xref,
   .paper__actions,.book-hero__actions,.rail .btn,.rail__label,.vswitch,.spotlight__head .tag,
   [data-copy],[data-share],.locked__preview,.locked__seal,.locked__actions{display:none!important}
   main,.wrap{max-width:none!important;margin:0!important;padding:0!important}
@@ -473,3 +473,20 @@ html[data-theme="light"] .toc__chs li{border-bottom:1px solid rgba(15,23,42,.05)
   border:1px solid rgba(0,212,255,.25);color:var(--cyan);border-radius:6px;cursor:pointer;
   padding:.16rem .42rem;transition:border-color .2s,color .2s}
 .themetoggle:hover{border-color:var(--cyan);color:var(--text)}
+
+/* ---- grounded "Ask the research programme" (user-initiated; tokens auto-adapt to light mode) ---- */
+.ask{border:1px solid var(--border);clip-path:var(--clip);background:var(--surface);padding:1.4rem 1.5rem;margin:1.6rem 0}
+.ask__eyebrow{font-family:var(--mono);font-size:.66rem;letter-spacing:2px;text-transform:uppercase;color:var(--cyan)}
+.ask__h{font-family:var(--disp);font-size:1.2rem;margin:.3rem 0 .2rem;color:var(--text)}
+.ask__sub{font-family:var(--serif);color:var(--mid);font-size:.98rem;max-width:72ch;margin:0 0 .9rem}
+.ask__form{display:flex;gap:.6rem;flex-wrap:wrap}
+.ask__input{flex:1;min-width:220px;font-family:var(--sans);font-size:.92rem;color:var(--text);
+  background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:.6rem .8rem}
+.ask__btn{flex:none}
+.ask__out{margin-top:1rem}
+.ask__note{font-family:var(--mono);font-size:.8rem;color:var(--dim);line-height:1.5;max-width:74ch}
+.ask__list{list-style:none;margin:.4rem 0 0;padding:0;display:flex;flex-direction:column;gap:.7rem}
+.ask__r{border-left:2px solid var(--hot);padding:.1rem 0 .1rem .9rem}
+.ask__rt{font-family:var(--serif);font-weight:600;font-size:1rem;color:var(--text)}
+.ask__rt a{color:inherit}.ask__rt a:hover{color:var(--cyan)}
+.ask__rs{font-family:var(--serif);font-size:.92rem;line-height:1.5;color:var(--mid);margin:.2rem 0 0}

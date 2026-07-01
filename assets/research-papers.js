@@ -66,6 +66,56 @@
     });
   })();
 
+  /* ---------- grounded "Ask the research programme" (hub only; USER-INITIATED calls only,
+     never on load; degrades gracefully to a dormant message until the engine capability is on) ---------- */
+  (function(){
+    var form = document.getElementById('ask-form');
+    if(!form) return;                                   // only on the hub
+    var input = document.getElementById('ask-input');
+    var out   = document.getElementById('ask-out');
+    var btn   = form.querySelector('button[type=submit]');
+    var ENGINE = 'https://shssm-compute-b7ui3oxaqq-el.a.run.app';   // called ONLY on user submit
+    var DORMANT = 'The grounded assistant is being switched on. Meanwhile, use the search and theme filters below, or open any paper to read it in full.';
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+    function show(html){ out.hidden = false; out.innerHTML = html; }
+    function note(t){ show('<p class="ask__note">'+esc(t)+'</p>'); }
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var q = (input.value||'').trim();
+      if(!q) return;
+      var old = btn.textContent; btn.disabled = true; btn.textContent = 'Asking…';
+      note('Searching the programme…');
+      fetch(ENGINE + '/api/upgrade/run', {
+        method:'POST', headers:{'content-type':'application/json'},
+        body: JSON.stringify({ capability:'grounded_search', params:{ query:q } })
+      })
+      .then(function(r){ return r.json().then(function(j){ return { status:r.status, j:j }; }, function(){ return { status:r.status, j:{} }; }); })
+      .then(function(res){
+        var j = res.j || {};
+        if(res.status === 429){ note('Busy right now, please try again in a moment.'); return; }
+        if(j.ok && j.results && j.results.length){
+          var items = j.results.map(function(it){
+            var doc = it.document || it;
+            var d = doc.derivedStructData || doc.structData || doc || {};
+            var title = d.title || doc.id || 'Result';
+            var link = d.link || d.url || '';
+            var snip = (d.snippets && d.snippets[0] && (d.snippets[0].snippet||'')) ||
+                       (d.extractive_answers && d.extractive_answers[0] && (d.extractive_answers[0].content||'')) || '';
+            var head = link ? ('<a href="'+esc(link)+'" target="_blank" rel="noopener">'+esc(title)+'</a>') : esc(title);
+            return '<li class="ask__r"><div class="ask__rt">'+head+'</div>'+(snip?('<p class="ask__rs">'+esc(snip)+'</p>'):'')+'</li>';
+          }).join('');
+          show('<ol class="ask__list">'+items+'</ol>');
+        } else if(j.ok){
+          note('No matching passages found. Try rephrasing, or browse by theme below.');
+        } else {
+          note(DORMANT);                                // CAPABILITY_OFF / not-yet-provisioned
+        }
+      })
+      .catch(function(){ note(DORMANT); })
+      .then(function(){ btn.disabled = false; btn.textContent = old; });
+    });
+  })();
+
   /* ---------- theme navigator: sticky offset under the nav + close behaviour ---------- */
   (function(){
     var topnav = document.querySelector('nav');
