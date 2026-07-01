@@ -443,3 +443,33 @@ section{margin:2.4rem 0}
   .verdict.g,.verdict.n{border:1px solid #bbb;color:#111}
   .paper-title,.h-res,.theme__label{page-break-after:avoid}
 }
+
+/* =====================================================================
+   LIGHT READING MODE - opt-in only (toggle in the nav; the default stays the
+   dark Econstellar-OS brand). Scoped to html[data-theme="light"] so it never
+   activates unless the reader asks for it. Token overrides plus the few
+   hard-coded dark surfaces; every text pair meets WCAG AA (>=4.5:1 body).
+   ===================================================================== */
+html[data-theme="light"]{
+  --bg:#f7f8fa;--surface:#ffffff;--surface2:#eef2f7;
+  --border:rgba(3,105,161,.28);--hot:rgba(4,120,87,.42);--rule:rgba(15,23,42,.10);
+  --text:#0f172a;--mid:#334155;--dim:#55607a;
+  --cyan:#0369a1;--green:#047857;--amber:#9e4a08;--amber-line:rgba(158,74,8,.42);
+}
+html[data-theme="light"] body{background:var(--bg);
+  background-image:radial-gradient(circle at 15% 8%,rgba(3,105,161,.05),transparent 42%),
+                   radial-gradient(circle at 85% 74%,rgba(4,120,87,.045),transparent 45%)}
+html[data-theme="light"] nav{background:rgba(247,248,250,.88)}
+html[data-theme="light"] .btn.primary{color:#fff}
+html[data-theme="light"] .cite,html[data-theme="light"] .kpi{background:#eef2f7}
+html[data-theme="light"] .track{background:rgba(15,23,42,.08)}
+html[data-theme="light"] .themenav-wrap{background:linear-gradient(180deg,rgba(247,248,250,.96),rgba(247,248,250,.78))}
+html[data-theme="light"] .locked__preview::after{
+  background:linear-gradient(180deg,rgba(238,242,247,0) 0,rgba(238,242,247,.1) 34%,rgba(238,242,247,.8) 72%,var(--surface2) 100%)}
+html[data-theme="light"] .toc__chs li{border-bottom:1px solid rgba(15,23,42,.05)}
+
+/* light/dark reading-mode toggle control (nav) */
+.themetoggle{font-family:var(--mono);font-size:.86rem;line-height:1;background:none;
+  border:1px solid rgba(0,212,255,.25);color:var(--cyan);border-radius:6px;cursor:pointer;
+  padding:.16rem .42rem;transition:border-color .2s,color .2s}
+.themetoggle:hover{border-color:var(--cyan);color:var(--text)}

@@ -47,6 +47,25 @@
     window.addEventListener('scroll', on, { passive: true }); on();
   })();
 
+  /* ---------- light / dark reading mode (opt-in; default dark, persisted) ---------- */
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('rp-theme-toggle');
+    if(!btn) return;
+    function sync(){
+      var light = root.getAttribute('data-theme') === 'light';
+      btn.setAttribute('aria-pressed', light ? 'true' : 'false');
+      btn.innerHTML = light ? '&#9681;' : '&#9680;';   // ◑ light on : ◐ dark
+    }
+    sync();
+    btn.addEventListener('click', function(){
+      var light = root.getAttribute('data-theme') === 'light';
+      if(light){ root.removeAttribute('data-theme'); try{ localStorage.setItem('rp-theme','dark'); }catch(e){} }
+      else { root.setAttribute('data-theme','light'); try{ localStorage.setItem('rp-theme','light'); }catch(e){} }
+      sync();
+    });
+  })();
+
   /* ---------- theme navigator: sticky offset under the nav + close behaviour ---------- */
   (function(){
     var topnav = document.querySelector('nav');
