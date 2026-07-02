@@ -84,6 +84,13 @@ select,input[type=text],input[type=number]{width:100%;font-family:var(--mono);fo
 .verdict.g{background:rgba(0,255,136,.1);border:1px solid var(--hot);color:var(--green)}
 .verdict.r{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.4);color:var(--red)}
 .verdict.n{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);color:var(--amber)}
+.gatebar{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin-top:.7rem;padding-top:.6rem;border-top:1px solid var(--rule)}
+.gatebar-lbl{font-family:var(--mono);font-size:.62rem;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-right:.15rem}
+.gatebar-help{font-family:var(--mono);font-size:.72rem;color:var(--dim);cursor:help;margin-left:.1rem}
+.cert{font-family:var(--mono);font-size:.62rem;padding:.16rem .5rem;border-radius:5px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;white-space:nowrap}
+.cert.strong{background:rgba(0,255,136,.14);color:var(--green);border:1px solid var(--hot)}
+.cert.proxy{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.4)}
+.cert.unidentified{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.4)}
 table.rt{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:.78rem;margin:.5rem 0}
 table.rt th,table.rt td{text-align:left;padding:.35rem .5rem;border-bottom:1px solid var(--rule);color:var(--mid)}
 table.rt th{color:var(--dim);text-transform:uppercase;font-size:.68rem;letter-spacing:.5px}
@@ -280,6 +287,7 @@ body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /*
     <nav class="cosmic-nav-enhanced" id="nav-container">
         <div class="cosmic-nav-container">
             <a href="index.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Main Portal</span></a>
+        <a href="research-papers.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Papers</span></a>
             <a href="engine.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">The Engine</span></a>
             <a href="research-engine.html" class="cosmic-nav-link mcp-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Workbench</span></a>
             <a href="observatory.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Observatory</span></a>
@@ -520,7 +528,7 @@ const CHAN_SHORT=c=>String(c).replace(/_Policy$/,"");
 function chanShare(shares,ch){ if(!shares)return null; const v=shares[ch]; return v!=null?v:shares[CHAN_SHORT(ch)]; }
 function chanChannels(r){ return (r&&r.channels&&r.channels.length)?r.channels:["Trade","Financial","Geopolitical","Behavioral","Monetary_Policy"]; }
 
-let CATALOG=null, SERIES=[], SERIES24=[], SERIES_CUR=null;
+let CATALOG=null, SERIES=[], SERIES24=[], SERIES_CUR=null, SERIES_BY_DATASET=null;
 
 /* ───── catalog-driven left rail ───── */
 let CAPABILITIES=null, CAPFILTER="all"; // Tier B: capability grouping + active filter
@@ -528,6 +536,10 @@ async function loadCatalog(){
   const r=await fetch(CE+"/api/compute/catalog"); const d=await r.json();
   CATALOG=d.methods; SERIES=(d.datasets&&d.datasets.g20&&d.datasets.g20.series)||[];
   SERIES24=(d.datasets&&d.datasets.g20_24&&d.datasets.g20_24.series)||SERIES;  // namh runs on the 24-series G20+commodities panel
+  // generic per-dataset series lookup (any catalog dataset with a `series` array), so a
+  // method bound to a non-g20/g20_24 panel (e.g. crisis_regime_panel, news_attention)
+  // gets ITS OWN checkbox universe instead of falling through the g20/g20_24 heuristic.
+  SERIES_BY_DATASET=Object.fromEntries(Object.entries(d.datasets||{}).filter(([,v])=>Array.isArray(v.series)).map(([k,v])=>[k,v.series]));
   CAPABILITIES=(d.capabilities&&typeof d.capabilities==="object")?d.capabilities:null;
   populateMethodOptions("all");      // builds the method dropdown (optionally capability-filtered)
   buildCapabilityFilter();           // renders chips, or stays hidden if catalog has no capabilities
@@ -598,7 +610,10 @@ function selectedSeries(){return [...document.querySelectorAll('#series input:ch
 function setSeries(arr){document.querySelectorAll('#series input').forEach(c=>{c.checked=arr.includes(c.value);});}
 // Which series universe a method draws from: namh's series.n max is 24 → g20_24 (incl. commodities); everything else → g20 (18).
 function seriesUniverseFor(k){
-  const m=CATALOG&&CATALOG[k], n=m&&m.params&&m.params.series&&m.params.series.n;
+  const m=CATALOG&&CATALOG[k];
+  // prefer the method's actual bound dataset (exact) over the old size-heuristic fallback.
+  if(m&&m.dataset&&SERIES_BY_DATASET&&SERIES_BY_DATASET[m.dataset]) return SERIES_BY_DATASET[m.dataset];
+  const n=m&&m.params&&m.params.series&&m.params.series.n;
   const mx=Array.isArray(n)?n[1]:18;
   return (mx>18&&SERIES24&&SERIES24.length)?SERIES24:SERIES;
 }
@@ -792,6 +807,7 @@ function renderJob(d){
   // succeeded with a result → bespoke renderer if we have one, else generic
   if(d.method==="ksg_te") h+=renderKsgTe(d.result);
   else if(d.method==="ksg_robustness") h+=renderKsgRobustness(d.result);
+  else if(d.method==="regime_conditioned_te") h+=renderRegimeConditionedTe(d.result);
   else h+=renderJobGeneric(d.result);
   // make Tier D exports work for permalinked jobs too (params come from the job record)
   window.LAST={method:d.method,body:{method:d.method,params:d.params||(d.provenance&&d.provenance.params)||{}},result:d.result,provenance:d.provenance||{}};
@@ -837,6 +853,62 @@ function sortKsg(by){
   const body=$("ksgbody"); if(!body) return;
   body.innerHTML=arr.map(e=>{
     const top=JOBTOP.has(e.from+""+e.to), sig=(e.p!=null&&e.p<0.05);
+    return '<tr class="'+(top?'tophit':'')+'"><td>'+esc(e.from)+' <span style="color:var(--dim)">→</span> '+esc(e.to)+
+      '</td><td class="num">'+fixed(e.te,4)+'</td><td class="num">'+fixed(e.p,3)+
+      '</td><td><span class="sigtag '+(sig?'y':'n')+'">'+(sig?'p&lt;.05':'ns')+'</span></td></tr>';
+  }).join("");
+}
+
+/* Regime-conditioned, wavelet-scale directed contagion network (MST-contagion, async-only).
+   Same directed-edge shape as ksg_te (edges/top) plus a per-market net-strength/BH-q table
+   (the paper's node-level significance claim, distinct from the uncorrected edge p-values). */
+let RCEDGES=[], RCTOP=new Set();
+function renderRegimeConditionedTe(r){
+  const edges=r.edges||[];
+  RCEDGES=edges.slice();
+  RCTOP=new Set((r.top_edges||[]).map(e=>e.from+""+e.to));
+  let h='<div class="kpirow">'+
+    kpi(esc(r.regime||"–"),"regime")+
+    kpi(esc(r.scale||"–"),"wavelet scale")+
+    kpi(r.n_regime_days!=null?r.n_regime_days:"–","regime days")+
+    kpi(r.n_significant_edges!=null?r.n_significant_edges:edges.filter(e=>e.p<0.05).length,"significant edges (p<0.05)",'g')+
+    kpi(r.n_surrogates!=null?r.n_surrogates:"–","surrogates")+
+    kpi(r.runtime_s!=null?fixed(r.runtime_s,0)+"s":"–","runtime")+'</div>';
+  if(r.top_edges&&r.top_edges.length){
+    h+='<div class="lbl" style="margin:.3rem 0 .2rem">top '+r.top_edges.length+' strongest significant links</div><div class="bars">';
+    const mx=Math.max(0.001,...r.top_edges.map(e=>e.te||0));
+    r.top_edges.forEach(e=>{h+='<div class="barrow" style="grid-template-columns:150px 1fr 70px"><span>'+esc(e.from+'→'+e.to)+'</span><span class="track"><span class="fill" style="width:'+Math.min(100,100*(e.te||0)/mx)+'%"></span></span><span>'+fixed(e.te,4)+'</span></div>';});
+    h+='</div>';
+  }
+  if(r.nodes&&r.nodes.length){
+    h+='<div class="lbl" style="margin:.6rem 0 .2rem">net directional strength by market <span style="color:var(--dim)">· q = Benjamini-Hochberg over the '+r.nodes.length+' markets</span></div>';
+    h+='<table class="rt"><thead><tr><th>market</th><th class="num" style="text-align:right">net TE</th><th class="num" style="text-align:right">p</th><th class="num" style="text-align:right">q</th></tr></thead><tbody>';
+    r.nodes.slice().sort((a,b)=>(b.net_te||0)-(a.net_te||0)).forEach(nd=>{
+      const sig=nd.q!=null&&nd.q<0.05;
+      h+='<tr><td>'+esc(nd.asset)+'</td><td class="num">'+fixed(nd.net_te,4)+'</td><td class="num">'+fixed(nd.p,3)+
+         '</td><td class="num"><span class="sigtag '+(sig?'y':'n')+'">'+fixed(nd.q,3)+'</span></td></tr>';
+    });
+    h+='</tbody></table>';
+  }
+  h+='<div class="lbl" style="margin:.6rem 0 .2rem">all directed links <span style="color:var(--dim)">· click a header to sort</span></div>';
+  h+='<table class="rt" id="rctbl"><thead><tr>'+
+     '<th class="sortable" onclick="sortRc(\'dir\')">from → to</th>'+
+     '<th class="sortable num" style="text-align:right" onclick="sortRc(\'te\')">TE</th>'+
+     '<th class="sortable num" style="text-align:right" onclick="sortRc(\'p\')">p</th>'+
+     '<th>sig.</th></tr></thead><tbody id="rcbody"></tbody></table>';
+  h+='<div class="interp">'+esc(r.interpretation||"")+'</div>';
+  if(r.paper) h+='<div class="subnote">'+esc(r.paper)+'</div>';
+  setTimeout(()=>sortRc('te'),0);
+  return h;
+}
+function sortRc(by){
+  const arr=RCEDGES.slice();
+  if(by==='dir') arr.sort((a,b)=>(a.from+a.to).localeCompare(b.from+b.to));
+  else if(by==='p') arr.sort((a,b)=>(a.p||0)-(b.p||0));
+  else arr.sort((a,b)=>(b.te||0)-(a.te||0));
+  const body=$("rcbody"); if(!body) return;
+  body.innerHTML=arr.map(e=>{
+    const top=RCTOP.has(e.from+""+e.to), sig=(e.p!=null&&e.p<0.05);
     return '<tr class="'+(top?'tophit':'')+'"><td>'+esc(e.from)+' <span style="color:var(--dim)">→</span> '+esc(e.to)+
       '</td><td class="num">'+fixed(e.te,4)+'</td><td class="num">'+fixed(e.p,3)+
       '</td><td><span class="sigtag '+(sig?'y':'n')+'">'+(sig?'p&lt;.05':'ns')+'</span></td></tr>';
@@ -1417,9 +1489,10 @@ function exportToolbarHTML(L){
 /* ───── run + render ───── */
 async function run(){
   const body=gatherParams(); const k=body.method, m=CATALOG[k];
-  // validate series count client-side
-  if(k!=="live_unit_root"){
-    const n=m.params.series.n, c=body.params.series.length;
+  // validate series count client-side — only for methods that declare a series input
+  // (parameter-only methods such as the control operators carry no m.params.series)
+  if(k!=="live_unit_root" && m.params && m.params.series){
+    const n=m.params.series.n, c=(body.params.series||[]).length;
     if(Array.isArray(n)?(c<n[0]||c>n[1]):c!==n){ $("results").innerHTML=`<div class="warn">${m.label} needs ${Array.isArray(n)?n[0]+"–"+n[1]:n} series; you selected ${c}.</div>`; return; }
   }
   $("run").disabled=true; $("cache").textContent="";
@@ -1428,11 +1501,27 @@ async function run(){
     const r=await fetch(CE+"/api/compute/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
     const d=await r.json();
     if(!d.ok){ $("results").innerHTML=`<div class="warn">${esc(d.error||"analysis failed")}</div>`; }
-    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; window.LAST={method:k,body,result:d.result,provenance:d.provenance}; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",exportToolbarHTML(window.LAST)); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
+    else { $("cache").textContent=(d.cached?"⚡ cached":"computed")+" · "+(d.ms||0)+"ms"; window.LAST={method:k,body,result:d.result,provenance:d.provenance}; renderResult(k,d.result); $("results").insertAdjacentHTML("beforeend",gateCertHTML(d.result)); $("results").insertAdjacentHTML("beforeend",exportToolbarHTML(window.LAST)); $("results").insertAdjacentHTML("beforeend",renderProvenance(d)); location.hash=hashFor(body); }
   }catch(e){ $("results").innerHTML=`<div class="warn">request failed: ${esc(e.message)}</div>`; }
   $("run").disabled=false;
 }
 function kpi(v,c,cls){return `<div class="kpi"><div class="v ${cls||''}">${esc(v)}</div><div class="c">${esc(c)}</div></div>`;}
+/* Project-V identification gate: stamp each reported quantity STRONG / PROXY / UNIDENTIFIED.
+   The engine emits this verbatim at result.gate (a {quantity: class} map) and, when a control
+   target is supplied, at result.control_target / result.control_target_gate. Renderer reads
+   only what the engine sends; it never assigns a class itself. */
+function gateCertHTML(r){
+  if(!r||typeof r!=="object") return "";
+  const cls=g=>({STRONG:"strong",PROXY:"proxy",UNIDENTIFIED:"unidentified"}[g]||"proxy");
+  const items=[];
+  if(r.gate&&typeof r.gate==="object") Object.keys(r.gate).forEach(q=>items.push({q,g:String(r.gate[q]).toUpperCase()}));
+  if(r.control_target&&r.control_target_gate) items.push({q:"target: "+r.control_target,g:String(r.control_target_gate).toUpperCase()});
+  if(!items.length) return "";
+  const badges=items.map(it=>`<span class="cert ${cls(it.g)}">${esc(it.q)} · ${esc(it.g)}</span>`).join("");
+  return `<div class="gatebar" role="group" aria-label="Project-V identification certification">`+
+    `<span class="gatebar-lbl">identification</span>${badges}`+
+    `<span class="gatebar-help" title="STRONG = identified and reportable · PROXY = identified under an explicit hedge · UNIDENTIFIED = never a control target">&#9432;</span>`+
+  `</div>`;}
 function renderResult(k,r){
   const el=$("results"); let h="";
   if(k==="unit_root"){
@@ -1635,6 +1724,41 @@ function renderResult(k,r){
       h+='</table>';
     }
     h+='<div class="subnote">Raw KSG transfer entropy (the magnitude surface; a negative mean is normal small-sample KSG bias). Surrogate / effective-TE gating is the heavier async pipeline, not run here. Published namh::te_matrix (Bhandari &amp; Sahu 2026). Tip: set <b>window_index</b> (1–24) for one window; leaving it blank computes every window and can exceed the live request limit.</div>';
+    if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="turnpike"){
+    const je=r.jacobian_eigs||[];
+    h+='<div class="kpirow">'+kpi(fixed(r.eta_bar,4),"turnpike η̄",r.turnpike_matches_v1?'g':'a')+
+       kpi(fixed(r.v1_interior_optimum,4),"V.1 interior optimum")+
+       kpi(r.turnpike_matches_v1?"yes":"no","matches V.1",r.turnpike_matches_v1?'g':'r')+
+       kpi(r.is_saddle?"saddle":"non-saddle","steady state",r.is_saddle?'g':'a')+'</div>';
+    h+=`<div class="verdict ${r.turnpike_matches_v1?'g':'r'}">state-costate Jacobian eigenvalues ${je.map(x=>fixed(x,4)).join(', ')} · stable-manifold dimension ${esc(r.stable_manifold_dim)}</div>`;
+    if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="fragility_barrier"){
+    h+='<div class="kpirow">'+kpi(fixed(r.barrier,3),"barrier β·r(B)=1")+
+       kpi(fixed(r.g_onset_analytic,3),"flip onset (analytic)")+
+       kpi(fixed(r.largest_lyapunov_max,3),"max Lyapunov",r.largest_lyapunov_max>0?'a':'g')+
+       kpi(r.chaotic_band_present?"present":"absent","chaotic band",r.chaotic_band_present?'a':'g')+'</div>';
+    h+=`<div class="verdict ${r.onset_analytic_matches_numeric?'g':'r'}">onset gain analytic ${fixed(r.g_onset_analytic,4)} vs numeric ${fixed(r.g_onset_numeric,4)} · &sigma;&#772; ${fixed(r.sigma_bar,4)}</div>`;
+    if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+    if(r.diagnostic_note) h+=`<div class="subnote">${esc(r.diagnostic_note)}</div>`;
+  }
+  else if(k==="lq_regulator"){
+    const ce=(typeof r.certainty_equivalence_residual==="number")?r.certainty_equivalence_residual.toExponential(1):esc(r.certainty_equivalence_residual);
+    h+='<div class="kpirow">'+kpi(fixed(r.rho_open,3),"open-loop ρ",r.open_loop_nonstationary?'r':'g')+
+       kpi(fixed(r.rho_closed,3),"closed-loop ρ",r.closed_loop_stationary?'g':'r')+
+       kpi(fixed(r.J_optimal,1),"optimal cost J*")+
+       kpi(r.cost_ranking_holds?"holds":"fails","J*≤thr<open",r.cost_ranking_holds?'g':'r')+'</div>';
+    h+=`<div class="verdict ${r.closed_loop_stationary?'g':'r'}">cost ranking ${fixed(r.J_optimal,1)} ≤ ${fixed(r.J_threshold,1)} &lt; ${Number.isFinite(r.J_open)?fixed(r.J_open,1):'∞'} · certainty-equivalence residual ${ce}</div>`;
+    if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
+  }
+  else if(k==="bellman_value"){
+    h+='<div class="kpirow">'+kpi(fixed(r.contraction_ratio,4),"contraction modulus",r.contraction_matches_beta?'g':'a')+
+       kpi(fixed(r.beta,3),"discount β")+
+       kpi(r.iters,"value-iteration steps")+
+       kpi(fixed(r.policy_rest_eta,4),"rest point η")+'</div>';
+    h+=`<div class="verdict ${r.contraction_matches_beta?'g':'r'}">contraction modulus ${fixed(r.contraction_ratio,4)} ${r.contraction_matches_beta?'=':'≠'} β = ${fixed(r.beta,3)} · value at rest ${fixed(r.value_at_rest,3)}</div>`;
     if(r.interpretation) h+=`<div class="interp">${esc(r.interpretation)}</div>`;
   }
   else { h+='<pre class="mono" style="white-space:pre-wrap;font-size:.74rem">'+esc(JSON.stringify(r,null,2))+'</pre>'; }
