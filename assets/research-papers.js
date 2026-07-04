@@ -67,7 +67,9 @@
   })();
 
   /* ---------- grounded "Ask the research programme" (hub only; USER-INITIATED calls only,
-     never on load; degrades gracefully to a dormant message until the engine capability is on) ---------- */
+     never on load). Primary: POST /api/research — the programme's research engine (Gemini on
+     Vertex, grounded on the programme corpus + literature knowledge bank); returns a full
+     synthesised answer with citations. Fallback: grounded_search passage retrieval. ---------- */
   (function(){
     var form = document.getElementById('ask-form');
     if(!form) return;                                   // only on the hub
@@ -79,13 +81,36 @@
     function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
     function show(html){ out.hidden = false; out.innerHTML = html; }
     function note(t){ show('<p class="ask__note">'+esc(t)+'</p>'); }
-    form.addEventListener('submit', function(ev){
-      ev.preventDefault();
-      var q = (input.value||'').trim();
-      if(!q) return;
-      var old = btn.textContent; btn.disabled = true; btn.textContent = 'Asking…';
-      note('Searching the programme…');
-      fetch(ENGINE + '/api/upgrade/run', {
+
+    /* minimal, safe markdown: escape first, then re-introduce a small whitelist */
+    function md(src){
+      var lines = String(src||'').split(/\r?\n/), html = [], para = [];
+      function flush(){ if(para.length){ html.push('<p>'+para.join('<br>')+'</p>'); para = []; } }
+      function inline(s){
+        s = esc(s);
+        s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+        s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+        s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+          '<a href="$2" target="_blank" rel="noopener">$1</a>');
+        return s;
+      }
+      for(var i=0;i<lines.length;i++){
+        var L = lines[i];
+        if(/^\s*$/.test(L)){ flush(); continue; }
+        if(/^\s*(\*{3,}|-{3,}|_{3,})\s*$/.test(L)){ flush(); continue; }        // hr → break
+        var h = L.match(/^\s*#{1,6}\s+(.*)$/);
+        if(h){ flush(); html.push('<p class="ask__hd"><strong>'+inline(h[1])+'</strong></p>'); continue; }
+        var li = L.match(/^\s*(?:[-*]|\d+[.)])\s+(.*)$/);
+        if(li){ flush(); html.push('<p class="ask__li">&#8226; '+inline(li[1])+'</p>'); continue; }
+        para.push(inline(L));
+      }
+      flush();
+      return html.join('');
+    }
+
+    /* fallback: passage retrieval over the programme corpus */
+    function passages(q){
+      return fetch(ENGINE + '/api/upgrade/run', {
         method:'POST', headers:{'content-type':'application/json'},
         body: JSON.stringify({ capability:'grounded_search', params:{ query:q } })
       })
@@ -96,8 +121,6 @@
         if(j.ok && j.results && j.results.length){
           var items = j.results.map(function(it){
             var doc = it.document || it;
-            // the corpus fields (title, authors, paper_id, content) live in structData;
-            // derivedStructData holds only ranking scores, so merge with structData winning
             var d = (doc.structData || doc.derivedStructData)
                       ? Object.assign({}, doc.derivedStructData || {}, doc.structData || {})
                       : (doc || {});
@@ -109,19 +132,59 @@
             var snip  = (typeof d.content === 'string' && d.content.trim() && d.content.slice(0, 300)) ||
                         (d.snippets && d.snippets[0] && (d.snippets[0].snippet||'')) ||
                         (d.extractive_answers && d.extractive_answers[0] && (d.extractive_answers[0].content||'')) ||
-                        (Array.isArray(d.methods_mentioned) && d.methods_mentioned.length ? d.methods_mentioned.join('; ') : '') ||
                         meta;
             var head  = link ? ('<a href="'+esc(link)+'" target="_blank" rel="noopener">'+esc(title)+'</a>') : esc(title);
             return '<li class="ask__r"><div class="ask__rt">'+head+'</div>'+(snip?('<p class="ask__rs">'+esc(snip)+'</p>'):'')+'</li>';
           }).join('');
-          show('<ol class="ask__list">'+items+'</ol>');
+          show('<p class="ask__note">Closest passages from the programme corpus:</p><ol class="ask__list">'+items+'</ol>');
         } else if(j.ok){
           note('No matching passages found. Try rephrasing, or browse by theme below.');
         } else {
-          note(DORMANT);                                // CAPABILITY_OFF / not-yet-provisioned
+          note(DORMANT);
         }
       })
-      .catch(function(){ note(DORMANT); })
+      .catch(function(){ note(DORMANT); });
+    }
+
+    form.addEventListener('submit', function(ev){
+      ev.preventDefault();
+      var q = (input.value||'').trim();
+      if(!q) return;
+      var old = btn.textContent; btn.disabled = true; btn.textContent = 'Asking…';
+      note('Consulting the research engine — a grounded synthesis can take up to a minute…');
+      var ctl = ('AbortController' in window) ? new AbortController() : null;
+      var timer = ctl ? setTimeout(function(){ ctl.abort(); }, 180000) : null;
+      fetch(ENGINE + '/api/research', {
+        method:'POST', headers:{'content-type':'application/json'},
+        body: JSON.stringify({ query:q }),
+        signal: ctl ? ctl.signal : undefined
+      })
+      .then(function(r){ return r.json().then(function(j){ return { status:r.status, j:j }; }, function(){ return { status:r.status, j:{} }; }); })
+      .then(function(res){
+        if(timer) clearTimeout(timer);
+        var j = res.j || {};
+        if(res.status === 200 && j.answer){
+          var htmlOut = '<div class="ask__answer">' + md(j.answer) + '</div>';
+          if(Array.isArray(j.citations) && j.citations.length){
+            htmlOut += '<p class="ask__note">Sources:</p><ol class="ask__list">' + j.citations.map(function(c){
+              var t = c.title || c.uri || 'source';
+              return '<li class="ask__r">' + (c.uri
+                ? '<a href="'+esc(c.uri)+'" target="_blank" rel="noopener">'+esc(t)+'</a>' : esc(t)) + '</li>';
+            }).join('') + '</ol>';
+          }
+          if(Array.isArray(j.analyses) && j.analyses.length){
+            htmlOut += '<p class="ask__note">' + j.analyses.length +
+              ' live computation' + (j.analyses.length===1?'':'s') + ' ran on the engine to ground this answer.</p>';
+          }
+          htmlOut += '<p class="ask__note ask__attrib">Answered by the programme&#8217;s research engine, grounded on the programme corpus and literature knowledge bank. Verify against the papers below.</p>';
+          show(htmlOut);
+          return;
+        }
+        if(res.status === 429){ note('The assistant is rate-limited right now — please try again in a minute.'); return; }
+        /* 503 (capacity / key) or any other failure → passage fallback */
+        return passages(q);
+      })
+      .catch(function(){ if(timer) clearTimeout(timer); return passages(q); })
       .then(function(){ btn.disabled = false; btn.textContent = old; });
     });
   })();

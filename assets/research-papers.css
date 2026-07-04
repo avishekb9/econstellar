@@ -490,3 +490,10 @@ html[data-theme="light"] .toc__chs li{border-bottom:1px solid rgba(15,23,42,.05)
 .ask__rt{font-family:var(--serif);font-weight:600;font-size:1rem;color:var(--text)}
 .ask__rt a{color:inherit}.ask__rt a:hover{color:var(--cyan)}
 .ask__rs{font-family:var(--serif);font-size:.92rem;line-height:1.5;color:var(--mid);margin:.2rem 0 0}
+.ask__answer{font-family:var(--serif);font-size:.98rem;line-height:1.65;color:var(--text);max-width:74ch}
+.ask__answer p{margin:.55rem 0}
+.ask__answer code{font-family:var(--mono);font-size:.85em;background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:.05em .35em}
+.ask__answer a{color:var(--cyan)}
+.ask__hd{margin-top:.9rem}
+.ask__li{margin:.15rem 0 .15rem .6rem}
+.ask__attrib{margin-top:.9rem;border-top:1px solid var(--border);padding-top:.6rem}
