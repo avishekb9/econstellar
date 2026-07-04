@@ -369,6 +369,15 @@ body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /*
     <div id="rxout"><div class="msg">Your answer appears here: the agent may run analyses on the live engine, then cite verified sources.</div></div>
   </div>
 
+  <!-- GPU sweep networks pane -->
+  <div class="panel" id="tenet-panel" style="margin-bottom:1rem">
+    <div class="lbl">GPU Compute &middot; Transfer-Entropy Networks</div>
+    <h2>Sweep results, straight from the accelerator</h2>
+    <div class="subnote" style="margin:.2rem 0 .7rem">Directed KSG transfer-entropy networks computed on Vertex Spot GPUs (large-B surrogate robustness, regime-conditioned, rolling-window), persisted with full provenance. Every number is a real computation; the source result blob is recorded per run.</div>
+    <div class="chips" id="tenetchips"><span class="msg"><span class="spin"></span>loading runs&hellip;</span></div>
+    <div id="tenetout"></div>
+  </div>
+
   <!-- Framework strip -->
   <div class="panel">
     <div class="lbl">Substrate ⊕ Frameworks</div>
@@ -2780,6 +2789,53 @@ function waitForCatalog(tries){
 if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",()=>waitForCatalog(60));
 else waitForCatalog(60);
 })();
+
+/* ---------- GPU sweep transfer-entropy networks (/api/te/networks) ---------- */
+(function(){
+  const chips=document.getElementById("tenetchips"), out=document.getElementById("tenetout");
+  if(!chips||!out) return;
+  const J=x=>{ if(x==null) return x; if(typeof x==="string"){ try{ return JSON.parse(x); }catch(e){ return null; } } return x; };
+  function kv(o){ return o&&typeof o==="object" ? o : {}; }
+  function renderRun(r){
+    const P=kv(J(r.params)), top=J(r.top)||[], edges=J(r.edges)||[];
+    let h='<div class="kpirow">'+
+      kpi(esc(r.dataset||"–"),"dataset")+
+      kpi(r.n_pairs!=null?r.n_pairs:"–","directed pairs")+
+      kpi(r.n_significant!=null?r.n_significant:"–","significant (p<0.05)","g")+
+      kpi(P.B!=null?P.B:"–","surrogates B")+
+      kpi(P.gpu?esc(String(P.gpu).replace(/^Tesla /,"")):"–","accelerator")+
+      kpi(P.runtime_s!=null?fixed(P.runtime_s,0)+"s":"–","runtime")+'</div>';
+    if(top.length){
+      h+='<div class="lbl" style="margin:.3rem 0 .2rem">top '+top.length+' strongest significant links</div><div class="bars">';
+      const mx=Math.max(1e-3,...top.map(e=>e.te||0));
+      top.forEach(e=>{h+='<div class="barrow" style="grid-template-columns:150px 1fr 70px"><span>'+esc(e.from+"→"+e.to)+'</span><span class="track"><span class="fill" style="width:'+Math.min(100,100*(e.te||0)/mx)+'%"></span></span><span>'+fixed(e.te,4)+'</span></div>';});
+      h+='</div>';
+    }
+    if(edges.length){
+      const sig=edges.filter(e=>(e.p!=null&&e.p<0.05)).sort((a,b)=>(b.te||0)-(a.te||0));
+      h+='<details style="margin-top:.5rem"><summary class="lbl" style="cursor:pointer">all '+sig.length+' significant directed edges</summary><div style="max-height:300px;overflow:auto"><table class="jobs"><thead><tr><th>edge</th><th class="num">TE</th><th class="num">p</th></tr></thead><tbody>';
+      sig.forEach(e=>{h+='<tr><td>'+esc(e.from)+' <span style="color:var(--dim)">→</span> '+esc(e.to)+'</td><td class="num">'+fixed(e.te,4)+'</td><td class="num">'+fixed(e.p,3)+'</td></tr>';});
+      h+='</tbody></table></div></details>';
+    }
+    h+='<div class="subnote" style="margin-top:.5rem">run <code>'+esc(r.run_id||"")+'</code> · seed '+esc(P.seed!=null?String(P.seed):"–")+' · n='+esc(P.n_obs!=null?String(P.n_obs):"–")+' · method '+esc(r.method||"ksg_te")+' · Spot GPU on the managed cloud; provenance blob recorded in the results table.</div>';
+    out.innerHTML=h;
+  }
+  function pick(id){
+    out.innerHTML='<div class="msg"><span class="spin"></span>loading run…</div>';
+    fetch(CE+"/api/te/networks?run="+encodeURIComponent(id)+"&edges=1").then(r=>r.json()).then(d=>{
+      if(d.status==="ok"&&d.run) renderRun(d.run);
+      else out.innerHTML='<div class="msg">Run unavailable right now.</div>';
+    }).catch(()=>{out.innerHTML='<div class="msg">Engine unreachable.</div>';});
+  }
+  fetch(CE+"/api/te/networks").then(r=>r.json()).then(d=>{
+    const runs=(d.runs||[]);
+    if(!runs.length){ chips.innerHTML='<span class="msg">No sweep runs published yet.</span>'; return; }
+    chips.innerHTML=runs.map((r,i)=>'<button class="chip" data-run="'+esc(r.run_id)+'">'+esc(r.dataset)+' · '+esc((r.method||"ksg_te"))+' · '+esc(String(r.run_id).slice(-15))+'</button>').join("");
+    chips.querySelectorAll("button[data-run]").forEach(b=>b.addEventListener("click",()=>pick(b.getAttribute("data-run"))));
+    pick(runs[0].run_id);
+  }).catch(()=>{chips.innerHTML='<span class="msg">Engine unreachable — runs will appear when it wakes.</span>';});
+})();
+
 </script>
 </body>
 </html>
