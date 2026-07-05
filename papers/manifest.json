@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-07-01",
- "count": 40,
+ "generated_at": "2026-07-05",
+ "count": 42,
  "tiers": {
   "live-reproducible": 2,
   "published": 7,
-  "working-paper": 29,
+  "working-paper": 31,
   "preprint": 2
  },
  "themes": [
@@ -336,6 +336,23 @@
    "notify_subject": "Entronomics paper: Rational Bubbles at the Spectral Edge: An Operator-Spectral Theory of Fragility, Identification, and Finite-Sample Certification",
    "in_book": true,
    "detail_page": "papers/rational-bubbles-spectral-edge.html"
+  },
+  {
+   "id": "amplification-recovered-network",
+   "tier": "working-paper",
+   "theme": "crisis-contagion-fragility",
+   "title": "Amplification on a Recovered Network: Endogenous Risk, Spectral Concentration, and the Certified Distance to the Fragility Edge",
+   "authors": "Avishek Bhandari",
+   "venue": "Working paper · Entronomics programme",
+   "venue_badge": "PREPRINT",
+   "pages": 23,
+   "abstract": "Continuous-time macro-finance carries amplification in a scalar state, while systemic-risk measurement recovers dependence networks in reduced form. This paper builds one intermediary economy in which both are projections of a single object: the instantaneous response of returns to fundamental shocks is exactly the resolvent of a symmetric exposure-overlap operator scaled by a leverage multiplier, so the scalar liquidity spiral is the rank-one shadow of a spectral condition. Crisis dynamics reduce, under an alignment hypothesis, to one dimension along the dominant eigenvector; calm erodes the distance to the fragility edge through leverage and spectral concentration at once; a claim loading off the carrier earns an endogenous hedging premium; and resilience, the distance to the edge, admits a conditional finite-sample band with a refusal rule, while the direction of amplification is proved unidentified from symmetric-moment estimators.",
+   "locked": true,
+   "preview_image": "preview/amplification-recovered-network.png",
+   "coming_soon": "Full version coming soon",
+   "notify_subject": "Entronomics paper: Amplification on a Recovered Network: Endogenous Risk, Spectral Concentration, and the Certified Distance to the Fragility Edge",
+   "in_book": true,
+   "detail_page": "papers/amplification-recovered-network.html"
   },
   {
    "id": "refusal-as-an-optimum",
@@ -721,6 +738,23 @@
    "notify_subject": "Entronomics paper: The Partial Identification of a Dependence Operator: What an Observed Spectrum Recovers from Economic Comovement",
    "in_book": true,
    "detail_page": "papers/partial-identification-dependence-operator.html"
+  },
+  {
+   "id": "context-sensitive-choice-aggregate-dependence",
+   "tier": "working-paper",
+   "theme": "identification",
+   "title": "Context-Sensitive Choice and the Spectrum of Aggregate Dependence: Salience, Costly Attention, and Concentration Collapse",
+   "authors": "Avishek Bhandari",
+   "venue": "Working paper · Entronomics programme",
+   "venue_badge": "PREPRINT",
+   "pages": 18,
+   "abstract": "When many people pay attention to the same things, the risks they jointly create pile onto a single axis, and the market starts to move as one. This paper turns that idea into theorems. What people's choices reveal is only the undirected part of this shared dependence; the direction of attention, who draws whose eye, is invisible to the data, so the paper refuses to claim it rather than smuggling it in by assumption. As shared attention grows, dependence concentrates, and the passage into concentration is a clean tipping point with no jump and no hysteresis. Below a measurement floor a single mode of attention cannot be told from noise, so the correct report is to abstain. The paper draws the boundary between individual attention and systemic concentration, and says which parts of it data can certify.",
+   "locked": true,
+   "preview_image": "preview/context-sensitive-choice-aggregate-dependence.png",
+   "coming_soon": "Full version coming soon",
+   "notify_subject": "Entronomics paper: Context-Sensitive Choice and the Spectrum of Aggregate Dependence: Salience, Costly Attention, and Concentration Collapse",
+   "in_book": true,
+   "detail_page": "papers/context-sensitive-choice-aggregate-dependence.html"
   },
   {
    "id": "strategic-interaction-bounded-capacity",
