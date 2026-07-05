@@ -1,10 +1,10 @@
 {
  "generated_at": "2026-07-05",
- "count": 42,
+ "count": 43,
  "tiers": {
   "live-reproducible": 2,
   "published": 7,
-  "working-paper": 31,
+  "working-paper": 32,
   "preprint": 2
  },
  "themes": [
@@ -353,6 +353,25 @@
    "notify_subject": "Entronomics paper: Amplification on a Recovered Network: Endogenous Risk, Spectral Concentration, and the Certified Distance to the Fragility Edge",
    "in_book": true,
    "detail_page": "papers/amplification-recovered-network.html"
+  },
+  {
+   "id": "erosion-in-motion",
+   "tier": "working-paper",
+   "theme": "crisis-contagion-fragility",
+   "title": "Erosion in Motion: Leverage Closures, the Quiet Trap, and Certified Path Refusals on a Recovered Network",
+   "authors": "Avishek Bhandari",
+   "year": 2026,
+   "venue": "Working paper · Entronomics programme",
+   "venue_badge": "PREPRINT",
+   "venue_target": "Journal of Economic Dynamics and Control",
+   "pages": 16,
+   "abstract": "A closure family with one exponent unifies the leverage responses of an operator theory of financial amplification, and two closed-form elasticities follow: the distance to the fragility edge and endogenous volatility, with a trichotomy at the margin closure under the gross wealth-share loading. The quiet trap, that calm shortens the expected time to the crisis region, binds exactly when the leverage response is steeper than the margin closure in the scaling register, and at the margin closure itself the registered family is exactly invariant to fundamental risk. A registered solver exhibit, frozen before its single outcome-open run, returned seven of nine checks: the invariance held to the last bit, the trap side held everywhere, and both weak-response sign cells failed, published as they fell. On a certified twenty-six-market spectral series, marginal bands at their measured level support no ninety per cent path statement: a fourth refusal category, path not certified, fires by arithmetic.",
+   "locked": true,
+   "preview_image": "preview/erosion-in-motion.png",
+   "coming_soon": "Full version coming soon",
+   "notify_subject": "Entronomics paper: Erosion in Motion: Leverage Closures, the Quiet Trap, and Certified Path Refusals on a Recovered Network",
+   "in_book": true,
+   "detail_page": "papers/erosion-in-motion.html"
   },
   {
    "id": "refusal-as-an-optimum",
