@@ -4,7 +4,7 @@
    error is structured JSON with an honest reason — no stack traces, no HTML
    error pages, no bare text. Run: node evals/probe-failures.mjs
    Exit non-zero if any functional violates the mandate. */
-const ENGINE = process.env.ENGINE_URL || "https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const ENGINE = process.env.ENGINE_URL || "https://sys128-tower-1.tailac24de.ts.net";
 
 let pass = 0, fail = 0;
 const ok = (cond, name, detail) => { console.log(`${cond ? "PASS" : "FAIL"}  ${name}${cond ? "" : "  ⟵ " + detail}`); cond ? pass++ : fail++; };

@@ -18,7 +18,7 @@
    Env:   ENGINE_URL (override; the dead-URL red-path eval uses this) */
 import { writeFileSync } from "node:fs";
 
-const ENGINE = process.env.ENGINE_URL || "https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const ENGINE = process.env.ENGINE_URL || "https://sys128-tower-1.tailac24de.ts.net";
 const JOBS = process.env.JOBS_URL || "http://127.0.0.1:3030";
 const args = process.argv.slice(2);
 const WITH_ASYNC = args.includes("--async");

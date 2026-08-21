@@ -12,7 +12,7 @@ import { writeFileSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ENGINE = process.env.ENGINE_URL || "https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const ENGINE = process.env.ENGINE_URL || "https://sys128-tower-1.tailac24de.ts.net";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = join(ROOT, "man");
 mkdirSync(OUT, { recursive: true });

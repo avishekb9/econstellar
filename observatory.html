@@ -115,7 +115,7 @@ svg text{font-family:'JetBrains Mono',monospace}
 /* Observatory (OS-P2). Zero-dep. Okabe-Ito for data marks. One fetch per surface
    on load (no polling). Eval: evals/os-p2.test.mjs drives the pure builders below
    in node:vm with fixtures; live shape is smoke-checked when the network allows. */
-const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const CE=window.ECONSTELLAR_ENGINE||"https://sys128-tower-1.tailac24de.ts.net";
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 

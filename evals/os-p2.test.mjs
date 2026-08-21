@@ -66,7 +66,7 @@ ok(obs.buildNetwork({ status: "unavailable" }).includes("unavailable"), "network
 
 // ── live smoke (skips honestly offline) ──
 try {
-  const r = await fetch("https://shssm-compute-b7ui3oxaqq-el.a.run.app/api/sri/history", { signal: AbortSignal.timeout(20000) });
+  const r = await fetch("https://sys128-tower-1.tailac24de.ts.net/api/sri/history", { signal: AbortSignal.timeout(20000) });
   const j = await r.json();
   ok(j.status === "ok" && j.series.length >= 56, `LIVE /api/sri/history serves >=56 points (got ${j.series.length})`);
 } catch (e) {

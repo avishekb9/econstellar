@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lq_regulator — LQ Regulator — optimal additive control (FRONTIERS V.2 · T1) · Econstellar method manual</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{--bg:#000;--surface:rgba(8,10,14,.92);--border:rgba(0,212,255,.15);--rule:rgba(255,255,255,.06);--text:#fff;--mid:#c9d1d9;--dim:#6b7280;--cyan:#00d4ff;--green:#00ff88;--amber:#f59e0b;--mono:'JetBrains Mono',monospace;--disp:'Orbitron',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;line-height:1.55}
+a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;background:rgba(0,0,0,.7)}
+nav .brand{color:var(--green);font-weight:600}nav .sp{flex:1}nav a{color:var(--dim)}
+h1{font-family:var(--disp);font-size:1.6rem;margin:1.6rem 0 .2rem}
+.cat{font-family:var(--mono);font-size:.72rem;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px}
+.desc{color:var(--mid);max-width:74ch}
+h2{font-family:var(--disp);font-size:.95rem;margin:1.6rem 0 .5rem;color:var(--green)}
+table{border-collapse:collapse;width:100%;font-size:.84rem}
+td,th{padding:.4rem .7rem;border-bottom:1px solid var(--rule);text-align:left;color:var(--mid)}
+th{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
+td.mono,code{font-family:var(--mono);font-size:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem}
+.chip{font-family:var(--mono);font-size:.72rem;border:1px solid var(--border);border-radius:7px;padding:.25rem .55rem;color:var(--mid)}
+pre{background:rgba(12,18,28,.92);border:1px solid var(--border);border-radius:10px;padding:1rem;overflow-x:auto;font-family:var(--mono);font-size:.76rem;color:var(--mid)}
+.kv{font-family:var(--mono);font-size:.8rem;color:var(--mid)}.kv b{color:#fff}
+.none{color:var(--amber);font-family:var(--mono);font-size:.8rem}
+.foot{font-family:var(--mono);font-size:.72rem;color:var(--dim);border-top:1px solid var(--rule);margin-top:2.2rem;padding:1.2rem 0 2.4rem;line-height:1.8}
+.os-kbtn{font-family:var(--mono);font-size:.7rem;background:none;border:1px solid rgba(0,212,255,.25);color:var(--cyan);border-radius:6px;cursor:pointer;padding:.1rem .5rem}
+</style></head>
+<body>
+<nav><span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+<a href="../index.html">Portal</a><a href="index.html">Methods</a><a href="../research-engine.html">Workbench</a><a href="../evals.html">Evals</a><a href="../observatory.html">Observatory</a>
+<button id="os-kbtn" class="os-kbtn" aria-label="Open command palette (Ctrl+K)">⌘K</button></nav>
+<div id="os-strip" role="status" aria-live="polite"></div>
+<div class="wrap">
+<div class="cat">Optimal Control · Recursive (Econstellar v5)</div>
+<h1>lq_regulator</h1>
+<div class="desc"><b>LQ Regulator — optimal additive control (FRONTIERS V.2 · T1).</b> Discounted linear-quadratic-Gaussian regulator on the recovered partial-adjustment plant: solves the discrete algebraic Riccati equation for the optimal additive-injection feedback, verifies certainty equivalence (the feedback is independent of the shock loading C — only the value constant moves), and reports the closed-loop spectral radius and the discounted-cost ranking optimal &lt;= V.1-threshold &lt; open. Reproduces FRONTIERS V.2 Theorem 1 on the stressed crisis calibration: the uncontrolled plant is non-stationary (rho 1.207, infinite discounted cost) and the optimal feedback stabilises it (closed-loop rho 0.424) at cost 540.2 &lt; threshold 723.5 &lt; infinity. The DARE is solved by a Riccati value-recursion plus a quadratically-convergent policy-iteration polish (DARE residual ~1e-15); it agrees with a Schur solver to ~4e-9, the DARE forward-error floor for this near-unstable plant. Bounded (n=26 fixture, sub-second). Gate: closed-loop rho / feedback / r(B) are STRONG.</div>
+<h2>Identity</h2>
+<div class="kv">version <b>1.1.0</b> · capability <b>control</b> · min_obs <b>0</b> · runner <b>r (lq_regulator.R)</b></div>
+<h2>Primitives</h2>
+<div class="chips"><span class="chip">—</span></div>
+<h2>Composes with</h2>
+<div class="none">not yet a catalog field — operator-composition metadata lands with Pathway F; nothing is invented here.</div>
+<h2>Parameters</h2>
+<table><thead><tr><th>name</th><th>type</th><th>req</th><th>values / range</th></tr></thead><tbody><tr><td class="mono">anchor</td><td class="mono">enum</td><td>optional</td><td class="mono">v2_crisis</td></tr><tr><td class="mono">q_ctrl</td><td class="mono">num</td><td>optional</td><td class="mono"></td></tr><tr><td class="mono">beta</td><td class="mono">num</td><td>optional</td><td class="mono"></td></tr><tr><td class="mono">target</td><td class="mono">symbol</td><td>optional</td><td class="mono"></td></tr></tbody></table>
+<h2>Returns</h2>
+<div class="desc">method,theorem,control_target,control_target_gate,anchor,n,beta,q_ctrl,drift,rB_stress,rho_open,beta_rho2_open,open_loop_nonstationary,trace_P,F_norm2,rho_closed,closed_loop_stationary,certainty_equivalence_residual,d_C1,d_C2,J_optimal,J_threshold,J_open,rho_threshold,eta_safe,cost_ranking_holds,interpretation,gate,provenance</div>
+<h2>Paper</h2>
+<div>FRONTIERS V.2</div>
+<h2>Changelog</h2>
+<div class="kv">[object Object],[object Object]</div>
+<h2>Run it</h2>
+<pre>curl -s -X POST https://sys128-tower-1.tailac24de.ts.net/api/compute/run \
+  -H &quot;Content-Type: application/json&quot; \
+  -d '{&quot;method&quot;:&quot;lq_regulator&quot;,&quot;params&quot;:{}}'</pre>
+<div><a href="../research-engine.html#method=lq_regulator">▶ open in the Workbench with lq_regulator preselected</a></div>
+<div class="foot">Generated from <code>GET /api/compute/catalog</code> by <code>scripts/gen-man.mjs</code> —
+the catalog is the truth; no hand-written method docs. · <a href="../index.html">Econstellar</a> · SHSSM, IIT Bhubaneswar.</div>
+</div>
+<script>window.__manbase=1</script>
+<script src="../assets/os.js" defer></script>
+</body></html>

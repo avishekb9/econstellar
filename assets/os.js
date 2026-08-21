@@ -25,7 +25,7 @@
    ════════════════════════════════════════════════════════════════════════════ */
 (function () {
   "use strict";
-  var CE = "https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+  var CE = window.ECONSTELLAR_ENGINE||"https://sys128-tower-1.tailac24de.ts.net";
   var LS_KEY = "os_strip_v1";
   /* pages under man/ set window.__manbase=1 before this script loads (defer):
      all same-site links + the evals.json fetch get a ../ prefix there */

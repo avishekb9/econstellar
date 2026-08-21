@@ -209,8 +209,9 @@ section{margin:2.4rem 0}
   </div>
 </div>
 
+<script src="assets/engine-config.js"></script>
 <script>
-const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const CE=window.ECONSTELLAR_ENGINE||"https://sys128-tower-1.tailac24de.ts.net";
 try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"portal"}));}catch(e){} /* privacy-respecting aggregate beacon (T3.2) */
 const $=id=>document.getElementById(id);
 $("celink").href=CE; $("celink").textContent=CE.replace("https://","");

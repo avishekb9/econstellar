@@ -293,7 +293,7 @@ body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /*
             <a href="observatory.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Observatory</span></a>
             <a href="evals.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Evals</span></a>
             <a href="man/index.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Methods</span></a>
-            <a href="https://neuricx-intel-672903689767.asia-south1.run.app/combined.html" target="_blank" rel="noopener" class="cosmic-nav-link mcp-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">News × Social BI</span></a>
+            <span class="cosmic-nav-link" title="NEURICX retired with the Cloud Run deployment"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">News × Social BI</span> (retired)</span>
             <a href="dashboard.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Command Center</span></a>
             <a href="mission-control.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Mission Control</span></a>
             <a href="rock-universe.html" class="cosmic-nav-link"><span class="cosmic-nav-icon"></span><span class="cosmic-nav-text">Rock Universe</span></a>
@@ -311,8 +311,8 @@ body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /*
       <span class="badge" id="catbadge">live compute engine</span>
     </div>
     <div class="enginelinks">
-      <a href="https://shssm-compute-b7ui3oxaqq-el.a.run.app" target="_blank" rel="noopener">Compute API ↗</a> ·
-      <a href="https://neuricx-intel-672903689767.asia-south1.run.app" target="_blank" rel="noopener">NEURICX ↗</a> ·
+      <a href="https://sys128-tower-1.tailac24de.ts.net" target="_blank" rel="noopener">Compute API ↗</a> ·
+      <span class="cosmic-nav-link" title="NEURICX retired with the Cloud Run deployment">NEURICX ↗ (retired)</span> ·
       <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">Source ↗</a>
     </div>
     <a href="reproduce.html" style="display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;font-family:var(--mono);font-size:.84rem;font-weight:600;color:#000;background:linear-gradient(90deg,var(--cyan),var(--green));padding:.6rem 1rem;border-radius:8px;text-decoration:none">▶ Reproduce the paper, live <span style="opacity:.78;font-weight:400">— watch the engine re-run a published result on real data</span></a>
@@ -522,10 +522,11 @@ body.nbview-ro #nb-publish,body.nbview-ro #nb-runall{display:none}            /*
     --df-messenger-chat-window-height:560px;--df-messenger-chat-window-width:400px;}
 </style>
 
+<script src="assets/engine-config.js"></script>
 <script>
-const CE="https://shssm-compute-b7ui3oxaqq-el.a.run.app";
+const CE=window.ECONSTELLAR_ENGINE||"https://sys128-tower-1.tailac24de.ts.net";
 try{navigator.sendBeacon(CE+"/api/event",JSON.stringify({name:"workbench"}));}catch(e){} /* aggregate beacon (T3.2) */
-const NX="https://neuricx-intel-672903689767.asia-south1.run.app";
+// NEURICX endpoint retired with the Cloud Run deployment (unused const removed).
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const $=id=>document.getElementById(id);
 const SVGNS="http://www.w3.org/2000/svg";

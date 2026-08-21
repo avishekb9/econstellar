@@ -76,7 +76,7 @@
     var input = document.getElementById('ask-input');
     var out   = document.getElementById('ask-out');
     var btn   = form.querySelector('button[type=submit]');
-    var ENGINE = 'https://shssm-compute-b7ui3oxaqq-el.a.run.app';   // called ONLY on user submit
+    var ENGINE = window.ECONSTELLAR_ENGINE||"https://sys128-tower-1.tailac24de.ts.net";   // called ONLY on user submit
     var DORMANT = 'The grounded assistant is being switched on. Meanwhile, use the search and theme filters below, or open any paper to read it in full.';
     function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
     function show(html){ out.hidden = false; out.innerHTML = html; }
