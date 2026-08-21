@@ -1,16 +1,316 @@
 {
-  "generated_at": "2026-06-14T00:30:00.000Z",
-  "count": 2,
+  "generated_at": "2026-08-21T02:27:43.100Z",
+  "count": 32,
   "reports": [
     {
-      "file": "reports/compute_run_commodity_2026-06-14.pdf",
-      "title": "A Reproducible CPU-to-GPU Pipeline for Transfer-Entropy Networks: The Econstellar Compute Run behind the Commodity Study",
-      "date_iso": "2026-06-14T00:00:00.000Z",
-      "date": "2026-06-14",
+      "file": "reports/run_report_2026-08-21_0227.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-08-21",
+      "date_iso": "2026-08-21T02:27:38.262Z",
+      "date": "2026-08-21",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-08-21_0227.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-08-17_0216.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-08-17",
+      "date_iso": "2026-08-17T02:16:47.265Z",
+      "date": "2026-08-17",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-08-17_0216.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-08-16_0227.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-08-16",
+      "date_iso": "2026-08-16T02:27:47.504Z",
+      "date": "2026-08-16",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-08-16_0227.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-08-13_0225.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-08-13",
+      "date_iso": "2026-08-13T02:25:57.148Z",
+      "date": "2026-08-13",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-08-13_0225.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-23_0351.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-23",
+      "date_iso": "2026-07-23T03:51:40.991Z",
+      "date": "2026-07-23",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-23_0351.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-22_0233.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-22",
+      "date_iso": "2026-07-22T02:33:47.666Z",
+      "date": "2026-07-22",
+      "pages": 9,
+      "size_kb": 198,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-22_0233.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-21_0224.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-21",
+      "date_iso": "2026-07-21T02:24:42.373Z",
+      "date": "2026-07-21",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-21_0224.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-19_0330.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-19",
+      "date_iso": "2026-07-19T03:30:07.827Z",
+      "date": "2026-07-19",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-19_0330.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-18_0226.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-18",
+      "date_iso": "2026-07-18T02:26:47.148Z",
+      "date": "2026-07-18",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-18_0226.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-16_0229.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-16",
+      "date_iso": "2026-07-16T02:29:54.484Z",
+      "date": "2026-07-16",
+      "pages": 9,
+      "size_kb": 199,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-16_0229.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-14_0250.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-14",
+      "date_iso": "2026-07-14T02:50:49.567Z",
+      "date": "2026-07-14",
+      "pages": 8,
+      "size_kb": 197,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-14_0250.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-13_0231.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-13",
+      "date_iso": "2026-07-13T02:31:59.439Z",
+      "date": "2026-07-13",
       "pages": 7,
-      "size_kb": 294,
-      "summary": "An authored compute-run companion to the commodity transfer-entropy study. It documents how the Econstellar engine estimated directed information-flow networks for 23 commodity futures across eight crisis windows, and what migrating the bottleneck k-nearest-neighbour search from 22 CPU cores to a single GPU bought: bit-identical results (agreeing to within 9e-16), an honest crossover — the CPU wins on the bare estimate, and the GPU only repays its fixed overhead once B=99 surrogate testing inflates the work, by 1.3x to 2.1x as the window lengthens — and two reusable cautions, on JIT compilation cost and on why a block bootstrap silently breaks a k-NN estimator.",
-      "thumb": "reports/compute_run_commodity_2026-06-14.thumb.png"
+      "size_kb": 192,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-13_0231.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-11_0225.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-11",
+      "date_iso": "2026-07-11T02:25:40.988Z",
+      "date": "2026-07-11",
+      "pages": 6,
+      "size_kb": 181,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-11_0225.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-10_0230.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-10",
+      "date_iso": "2026-07-10T02:30:50.882Z",
+      "date": "2026-07-10",
+      "pages": 6,
+      "size_kb": 181,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-10_0230.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-09_0229.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-09",
+      "date_iso": "2026-07-09T02:29:39.569Z",
+      "date": "2026-07-09",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-09_0229.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-08_0230.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-08",
+      "date_iso": "2026-07-08T02:30:22.256Z",
+      "date": "2026-07-08",
+      "pages": 6,
+      "size_kb": 181,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-08_0230.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-06_0233.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-06",
+      "date_iso": "2026-07-06T02:33:06.776Z",
+      "date": "2026-07-06",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-06_0233.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-05_0227.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-05",
+      "date_iso": "2026-07-05T02:27:13.067Z",
+      "date": "2026-07-05",
+      "pages": 6,
+      "size_kb": 181,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 32 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-05_0227.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-04_0230.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-04",
+      "date_iso": "2026-07-04T02:30:36.554Z",
+      "date": "2026-07-04",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-04_0230.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-03_0325.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-03",
+      "date_iso": "2026-07-03T03:25:37.161Z",
+      "date": "2026-07-03",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-03_0325.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-07-01_0223.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-07-01",
+      "date_iso": "2026-07-01T02:23:17.113Z",
+      "date": "2026-07-01",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-07-01_0223.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-29_0222.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-29",
+      "date_iso": "2026-06-29T02:22:38.078Z",
+      "date": "2026-06-29",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-29_0222.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-27_0228.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-27",
+      "date_iso": "2026-06-27T02:28:35.446Z",
+      "date": "2026-06-27",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-27_0228.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-26_0220.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-26",
+      "date_iso": "2026-06-26T02:20:30.604Z",
+      "date": "2026-06-26",
+      "pages": 6,
+      "size_kb": 179,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-26_0220.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-25_0231.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-25",
+      "date_iso": "2026-06-25T02:31:02.184Z",
+      "date": "2026-06-25",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-25_0231.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-24_0230.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-24",
+      "date_iso": "2026-06-24T02:30:32.806Z",
+      "date": "2026-06-24",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-24_0230.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-23_0229.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-23",
+      "date_iso": "2026-06-23T02:29:41.824Z",
+      "date": "2026-06-23",
+      "pages": 6,
+      "size_kb": 191,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-23_0229.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-21_0226.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-21",
+      "date_iso": "2026-06-21T02:26:44.069Z",
+      "date": "2026-06-21",
+      "pages": 6,
+      "size_kb": 180,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-21_0226.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-20_0220.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-20",
+      "date_iso": "2026-06-20T02:20:06.556Z",
+      "date": "2026-06-20",
+      "pages": 6,
+      "size_kb": 179,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 31 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-20_0220.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-18_0219.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-18",
+      "date_iso": "2026-06-18T02:19:07.974Z",
+      "date": "2026-06-18",
+      "pages": 6,
+      "size_kb": 178,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 26 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-18_0219.thumb.png"
+    },
+    {
+      "file": "reports/run_report_2026-06-17_0219.pdf",
+      "title": "Econstellar Compute Engine: Verification Run Report, 2026-06-17",
+      "date_iso": "2026-06-17T02:19:03.164Z",
+      "date": "2026-06-17",
+      "pages": 6,
+      "size_kb": 178,
+      "summary": "We report a complete verification run of the Econstellar compute engine, a continuously deployed econometric service for financial-market analysis in which every public method ships with a pre-registered, failable evaluation. The suite executed 26 method rows — spanning stationarity, unit roots and…",
+      "thumb": "reports/run_report_2026-06-17_0219.thumb.png"
     },
     {
       "file": "reports/run_report_2026-06-12_1741.pdf",

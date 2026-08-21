@@ -1,10 +1,10 @@
 {
- "run_at": "2026-06-12T02:33:17.620Z",
+ "run_at": "2026-08-21T02:27:38.262Z",
  "engine": {
   "url": "https://shssm-compute-b7ui3oxaqq-el.a.run.app",
-  "ok": true,
-  "methods": 23,
-  "revision": "shssm-compute-00032-c8q"
+  "ok": false,
+  "methods": null,
+  "revision": null
  },
  "suite": "evals/run-evals.mjs v1 — bands from documented verified values (ARCHITECTURE.md A2 / golden suite); never hand-edited (K5)",
  "results": [
@@ -18,11 +18,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": -49.17960762,
-   "ms": 4414,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 60
   },
   {
    "method": "var_irf",
@@ -36,11 +34,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 0.70532304,
-   "ms": 3164,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 96
   },
   {
    "method": "dfa_hurst",
@@ -52,11 +48,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 0.54197024,
-   "ms": 2295,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 67
   },
   {
    "method": "garch",
@@ -68,11 +62,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 0.99102203,
-   "ms": 2258,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 60
   },
   {
    "method": "wavelet",
@@ -84,11 +76,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 47.07,
-   "ms": 1944,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 60
   },
   {
    "method": "wqte",
@@ -102,11 +92,9 @@
     "tau": 0.05
    },
    "async": false,
-   "status": "pass",
-   "value": 0.03910699,
-   "ms": 4859,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 67
   },
   {
    "method": "soch_profile",
@@ -120,11 +108,9 @@
     "tau": 0.05
    },
    "async": false,
-   "status": "pass",
-   "value": 0.03910699,
-   "ms": 4287,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 60
   },
   {
    "method": "channel_attribution",
@@ -136,11 +122,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 27.9,
-   "ms": 46100,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 62
   },
   {
    "method": "namh_hurst",
@@ -148,11 +132,9 @@
    "source": "A2 #45",
    "params": {},
    "async": false,
-   "status": "pass",
-   "value": 0.48990576,
-   "ms": 15298,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 60
   },
   {
    "method": "namh_te",
@@ -162,11 +144,9 @@
     "window_index": 1
    },
    "async": false,
-   "status": "pass",
-   "value": -0.22322165,
-   "ms": 26536,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 59
   },
   {
    "method": "vecm",
@@ -180,11 +160,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 3,
-   "ms": 1870,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 77
   },
   {
    "method": "granger",
@@ -199,11 +177,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 6,
-   "ms": 4188,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 53
   },
   {
    "method": "panel_unit_root",
@@ -219,11 +195,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": -77.25938898,
-   "ms": 3357,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 55
   },
   {
    "method": "connectedness",
@@ -237,11 +211,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 30.25,
-   "ms": 2501,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 75
   },
   {
    "method": "network",
@@ -258,11 +230,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 0.5667,
-   "ms": 6750,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 53
   },
   {
    "method": "rolling_dcc",
@@ -275,11 +245,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 0.2295,
-   "ms": 17681,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 70
   },
   {
    "method": "wavelet_coherence",
@@ -292,11 +260,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 0.24851479666666665,
-   "ms": 1657,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 60
   },
   {
    "method": "spillover_rolling",
@@ -310,11 +276,9 @@
     ]
    },
    "async": false,
-   "status": "pass",
-   "value": 28.39,
-   "ms": 2786,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 52
   },
   {
    "method": "quantile_var",
@@ -329,11 +293,9 @@
     "tau": 0.05
    },
    "async": false,
-   "status": "pass",
-   "value": 0.7006,
-   "ms": 3775,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 58
   },
   {
    "method": "live_unit_root",
@@ -344,11 +306,9 @@
     "transform": "both"
    },
    "async": false,
-   "status": "pass",
-   "value": null,
-   "ms": 2271,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 86
   },
   {
    "method": "sri_daily",
@@ -356,11 +316,9 @@
    "source": "A2 Phase 30",
    "params": {},
    "async": false,
-   "status": "pass",
-   "value": 0.00849,
-   "ms": 24573,
-   "cached": false,
-   "note": ""
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 56
   },
   {
    "method": "ksg_te",
@@ -375,9 +333,9 @@
    "async": true,
    "status": "pass",
    "value": 0.154234,
-   "ms": 120097,
+   "ms": 10039,
    "cached": false,
-   "note": " job job_20260612_625dad02"
+   "note": " job job_20260821_710287a0"
   },
   {
    "method": "ksg_robustness",
@@ -387,15 +345,142 @@
    "async": true,
    "status": "pass",
    "value": 0.7282,
-   "ms": 1407083,
+   "ms": 165162,
    "cached": false,
-   "note": " job job_20260612_9638fee2"
+   "note": " job job_20260821_76f1ac7d"
+  },
+  {
+   "method": "namh_reproduce",
+   "expected": "hurst GREEN: max|Δ| ≤ 1e-8 over ≥400 finite cells, 0 finite/NA mismatches; te GREEN ≤ 1e-8; fdr_network AMBER with 0/552 retained (D1: never green)",
+   "source": "M1 Step 5 — measured 2026-06-12: same-machine 5.0e-16 (440 cells) / 1.7e-16; live-vs-cache ≈4.9e-9 cross-BLAS (#45/#46)",
+   "params": {},
+   "async": false,
+   "status": "fail",
+   "note": "engine HTTP 500: no body",
+   "ms": 173
+  },
+  {
+   "method": "namh_pipeline",
+   "expected": "seeded end-to-end run (seed 42, L'Ecuyer-CMRG): FDR retains 0/552 under the paper's own gate (degenerate network, honest amber); raw te_mean in [-0.2242,-0.2222]",
+   "source": "M1 Step 4 — determinism verified 2026-06-12 (same seed → identical surrogate p-values; different seed → different); FDR-empty = the published result (#46)",
+   "params": {
+    "n_surrogates": 200,
+    "window_index": 1,
+    "seed": 42,
+    "n_cores": 2
+   },
+   "async": true,
+   "status": "pass",
+   "value": -0.22322165,
+   "ms": 1561407,
+   "cached": false,
+   "note": " job job_20260821_7b9b1bab"
+  },
+  {
+   "method": "soch_robustness",
+   "expected": "SOCH-B badge, seeded tuple {seed 42 L'Ecuyer-CMRG, B=200, la8, advanced-8 = 28 pairs, grid tau{0.05,0.10}xJ{4,5} = 112 points}: baseline tau=0.05/J=4 holds 28/28 (paper ground truth reproduced) + pass_rate 0.9911 exact (111/112, matches Phase-31 0.991) -> badge robust",
+   "source": "Phase 31 closure board + seeded anchor run job_20260612_fe0c4f06 (2026-06-12; an unseeded run flipped the baseline pair once, 27/28 — driver got the namh_pipeline seed pin, band never widened)",
+   "params": {},
+   "async": true,
+   "status": "pass",
+   "value": 0.9911,
+   "ms": 1010928,
+   "cached": false,
+   "note": " job job_20260821_bcbef556"
+  },
+  {
+   "method": "turnpike",
+   "expected": "turnpike eta-bar == 0.9675 == V.1 interior optimum; saddle with 1-D stable manifold (V.2 T3)",
+   "source": "v5-control.test.mjs GOLD.tp + V.2 results.json",
+   "params": {
+    "series": []
+   },
+   "async": false,
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 254
+  },
+  {
+   "method": "fragility_barrier",
+   "expected": "feasibility barrier beta*r(B)=1 (barrier 1.25); flip onset analytic==numeric (2.745); positive-Lyapunov chaotic band (V.2 T4)",
+   "source": "v5-control.test.mjs GOLD.fb + V.2 results.json",
+   "params": {
+    "series": []
+   },
+   "async": false,
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 66
+  },
+  {
+   "method": "lq_regulator",
+   "expected": "uncontrolled non-stationary (rho_open 1.207); optimal feedback stabilises (rho_closed 0.42376); cost ranking holds; certainty-equivalence residual 0 (V.2 T1)",
+   "source": "v5-control.test.mjs GOLD.lq + V.2 results.json",
+   "params": {
+    "series": []
+   },
+   "async": false,
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 65
+  },
+  {
+   "method": "bellman_value",
+   "expected": "Bellman contraction modulus == beta (0.95) in 406 iters; policy rest point == turnpike 0.9675 (V.2 T2)",
+   "source": "v5-control.test.mjs GOLD.vi + V.2 results.json",
+   "params": {
+    "series": []
+   },
+   "async": false,
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 88
+  },
+  {
+   "method": "regime_conditioned_te",
+   "expected": "crisis/D1 anchor tuple: 535 regime days, 12 pairs, top edge S&P 500 -> Nikkei 225 with te in [0.0995,0.1015] (observed TE deterministic; significance not banded)",
+   "source": "anchor run job_20260704_63f7a48f (tower, mstcontagion pkg) 2026-07-04",
+   "params": {
+    "dataset": "crisis_regime_panel",
+    "series": [
+     "S&P 500",
+     "Nikkei 225",
+     "CAC 40",
+     "FTSE MIB"
+    ],
+    "regime": "crisis",
+    "scale": "D1",
+    "k": 4,
+    "lag": 1,
+    "n_surrogates": 99
+   },
+   "async": true,
+   "status": "pass",
+   "value": 0.100481,
+   "ms": 15025,
+   "cached": false,
+   "note": " job job_20260821_29a4acea"
+  },
+  {
+   "method": "news_attention_te",
+   "expected": "TE(inflation→election) = 0.065781 (6dp exact; deterministic CPU reproduces the published GPU TE_matrix)",
+   "source": "A2 + news_attention_te.R method desc (FRONTIERS III)",
+   "params": {
+    "series": [
+     "inflation",
+     "election"
+    ]
+   },
+   "async": false,
+   "status": "fail",
+   "note": "engine HTTP 503: no body",
+   "ms": 198
   }
  ],
  "summary": {
-  "pass": 23,
-  "fail": 0,
+  "pass": 5,
+  "fail": 27,
   "async_pending": 0,
-  "total": 23
+  "total": 32
  }
 }

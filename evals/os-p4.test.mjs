@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// os-p4.test.mjs — OS-P4 eval (K1): 23 man pages generated from the catalog;
+// os-p4.test.mjs — OS-P4 eval (K1): 31 man pages generated from the catalog;
 // ksg_te shows paper: none (honest hole); soch_profile links arXiv:2606.04113
 // (title verified against the arXiv record this session); pages carry identity
 // fields + params + a copy-paste curl; composes_with is honest-pending, never
@@ -15,7 +15,7 @@ let pass = 0, fail = 0;
 const ok = (cond, name) => { console.log(`${cond ? "PASS" : "FAIL"}  ${name}`); cond ? pass++ : fail++; };
 
 const pages = readdirSync(MAN).filter(f => f.endsWith(".html") && f !== "index.html");
-ok(pages.length === 23, `23 method pages generated (got ${pages.length})`);
+ok(pages.length === 31, `31 method pages generated (got ${pages.length})`);
 
 const ksg = readFileSync(join(MAN, "ksg_te.html"), "utf8");
 ok(/none — honest/.test(ksg), "ksg_te page shows paper: none — honest (the documented hole)");
@@ -40,7 +40,7 @@ ok(allDeep, "every page deep-links the Workbench with the method preselected");
 
 const idx = readFileSync(join(MAN, "index.html"), "utf8");
 const linked = pages.filter(f => idx.includes(`href="${f}"`)).length;
-ok(linked === 23, `index links all 23 pages (got ${linked})`);
+ok(linked === 31, `index links all 31 pages (got ${linked})`);
 ok(/generated from/i.test(idx) && /catalog/i.test(idx), "index declares its generated-from-catalog provenance (K5)");
 
 console.log(`\n${pass}/${pass + fail} OS-P4 checks passed`);

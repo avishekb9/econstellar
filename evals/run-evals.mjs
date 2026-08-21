@@ -76,6 +76,39 @@ const SUITE = [
     check: r => { const e = (r.edges || r.pairs || []).find(x => /usa/i.test(x.from) && /japan/i.test(x.to)) || {}; const v = num(e.te ?? e.TE); return { value: v, pass: inBand(v, 0.150, 0.158) }; } },
   { m: "ksg_robustness", p: {}, async: true, expected: "USA→Japan rank-1 in 8/8 (k,lag) configs; mean Spearman in [0.6,0.85] (verified 0.728)", src: "A2 G.3",
     check: r => { const ranks = (r.stability && r.stability.headline_edge && r.stability.headline_edge.ranks_across_grid) || []; const rk = ranks.filter(x => x === 1).length; const sp = num(r.mean_spearman ?? (r.stability && r.stability.mean_spearman)); return { value: sp, pass: rk === 8 && inBand(sp, 0.6, 0.85) }; } },
+  { m: "namh_reproduce", p: {}, expected: "hurst GREEN: max|Δ| ≤ 1e-8 over ≥400 finite cells, 0 finite/NA mismatches; te GREEN ≤ 1e-8; fdr_network AMBER with 0/552 retained (D1: never green)", src: "M1 Step 5 — measured 2026-06-12: same-machine 5.0e-16 (440 cells) / 1.7e-16; live-vs-cache ≈4.9e-9 cross-BLAS (#45/#46)",
+    check: r => { const q = Object.fromEntries((r.quantities || []).map(x => [x.quantity, x])); const h = q.hurst_panel || {}, t = q.te_window || {}, f = q.fdr_network || {}; return { value: num(h.max_abs_delta), pass: h.status === "green" && num(h.max_abs_delta) <= 1e-8 && num(h.n_compared) >= 400 && num(h.n_finite_na_mismatch) === 0 && t.status === "green" && num(t.max_abs_delta) <= 1e-8 && f.status === "amber" && num(f.edges_retained_total) === 0 }; } },
+  { m: "namh_pipeline", p: { n_surrogates: 200, window_index: 1, seed: 42, n_cores: 2 }, async: true, expected: "seeded end-to-end run (seed 42, L'Ecuyer-CMRG): FDR retains 0/552 under the paper's own gate (degenerate network, honest amber); raw te_mean in [-0.2242,-0.2222]", src: "M1 Step 4 — determinism verified 2026-06-12 (same seed → identical surrogate p-values; different seed → different); FDR-empty = the published result (#46)",
+    check: r => { const w = (r.per_window || [])[0] || {}; const f = w.fdr || {}; const c = r.config || {}; return { value: num(w.te_raw && w.te_raw.mean), pass: num(f.n_edges) === 0 && num(f.n_possible) === 552 && w.degenerate === true && inBand(num(w.te_raw && w.te_raw.mean), -0.2242, -0.2222) && c.seed === 42 && c.rng === "L'Ecuyer-CMRG" }; } },
+  { m: "soch_robustness", p: {}, async: true, expected: "SOCH-B badge, seeded tuple {seed 42 L'Ecuyer-CMRG, B=200, la8, advanced-8 = 28 pairs, grid tau{0.05,0.10}xJ{4,5} = 112 points}: baseline tau=0.05/J=4 holds 28/28 (paper ground truth reproduced) + pass_rate 0.9911 exact (111/112, matches Phase-31 0.991) -> badge robust", src: "Phase 31 closure board + seeded anchor run job_20260612_fe0c4f06 (2026-06-12; an unseeded run flipped the baseline pair once, 27/28 — driver got the namh_pipeline seed pin, band never widened)",
+    check: r => { const b = r.baseline || {}; return { value: num(r.pass_rate), pass: num(b.holds) === 28 && num(b.n_pairs) === 28 && num(b.tau) === 0.05 && num(r.pass_rate) === 0.9911 && num(r.seed) === 42 && r.badge === "robust" }; } },
+  // ── v5 control layer (FRONTIERS V.2) — bands transcribed from the committed
+  //    pre-registration test/v5-control.test.mjs GOLD (itself from
+  //    papers/frontiers-v/V2-recursive-control/sim/results.json). Param-only,
+  //    sync, sub-second to ~8s; reproduce the M3-faithful plant to 1e-9. ──
+  { m: "turnpike", p: { series: [] }, expected: "turnpike eta-bar == 0.9675 == V.1 interior optimum; saddle with 1-D stable manifold (V.2 T3)", src: "v5-control.test.mjs GOLD.tp + V.2 results.json",
+    check: r => ({ value: num(r.eta_bar), pass: num(r.eta_bar) === 0.9675 && r.turnpike_matches_v1 === true && r.is_saddle === true && num(r.stable_manifold_dim) === 1 }) },
+  { m: "fragility_barrier", p: { series: [] }, expected: "feasibility barrier beta*r(B)=1 (barrier 1.25); flip onset analytic==numeric (2.745); positive-Lyapunov chaotic band (V.2 T4)", src: "v5-control.test.mjs GOLD.fb + V.2 results.json",
+    check: r => { const v = num(r.barrier); return { value: v, pass: Math.abs(v - 1.25) <= 1e-9 && r.onset_analytic_matches_numeric === true && r.chaotic_band_present === true && inBand(num(r.largest_lyapunov_max), 0.3, 1.0) }; } },
+  { m: "lq_regulator", p: { series: [] }, expected: "uncontrolled non-stationary (rho_open 1.207); optimal feedback stabilises (rho_closed 0.42376); cost ranking holds; certainty-equivalence residual 0 (V.2 T1)", src: "v5-control.test.mjs GOLD.lq + V.2 results.json",
+    check: r => { const v = num(r.rho_closed); return { value: v, pass: Math.abs(v - 0.42375765930954945) <= 1e-9 && r.closed_loop_stationary === true && r.open_loop_nonstationary === true && r.cost_ranking_holds === true && Math.abs(num(r.certainty_equivalence_residual)) <= 1e-9 }; } },
+  { m: "bellman_value", p: { series: [] }, expected: "Bellman contraction modulus == beta (0.95) in 406 iters; policy rest point == turnpike 0.9675 (V.2 T2)", src: "v5-control.test.mjs GOLD.vi + V.2 results.json",
+    check: r => { const v = num(r.policy_rest_eta); return { value: v, pass: v === 0.9675 && r.contraction_matches_beta === true && num(r.iters) === 406 && Math.abs(num(r.contraction_ratio) - 0.95) <= 1e-6 }; } },
+  // ── MST-contagion regime-conditioned TE (method 32) — async tower job. dataset MUST be
+  //    passed explicitly: the tower job-server has no method registry and defaults to g20
+  //    (job-server.mjs:207). Bands are the DETERMINISTIC parts of the 2026-07-04 anchor run
+  //    (job_20260704_63f7a48f: crisis/D1/k4/lag1, 4 markets, 535 regime days, 1 episode,
+  //    12 pairs, top edge S&P 500 -> Nikkei 225 te=0.100481). p-values/significance are
+  //    unseeded-surrogate draws and are deliberately NOT banded. ──
+  { m: "regime_conditioned_te", async: true,
+    p: { dataset: "crisis_regime_panel", series: ["S&P 500", "Nikkei 225", "CAC 40", "FTSE MIB"], regime: "crisis", scale: "D1", k: 4, lag: 1, n_surrogates: 99 },
+    expected: "crisis/D1 anchor tuple: 535 regime days, 12 pairs, top edge S&P 500 -> Nikkei 225 with te in [0.0995,0.1015] (observed TE deterministic; significance not banded)",
+    src: "anchor run job_20260704_63f7a48f (tower, mstcontagion pkg) 2026-07-04",
+    check: r => { const es = (r.edges || []).slice().sort((a, b) => num(b.te) - num(a.te)); const t = es[0] || {}; const v = num(t.te);
+      return { value: v, pass: inBand(v, 0.0995, 0.1015) && /S&P 500/.test(String(t.from)) && /Nikkei/.test(String(t.to)) && num(r.n_regime_days) === 535 && num(r.n_pairs) === 12 }; } },
+  // ── FRONTIERS III news-attention TE — documented deterministic anchor (no surrogates) ──
+  { m: "news_attention_te", p: { series: ["inflation", "election"] }, expected: "TE(inflation→election) = 0.065781 (6dp exact; deterministic CPU reproduces the published GPU TE_matrix)", src: "A2 + news_attention_te.R method desc (FRONTIERS III)",
+    check: r => { const tm = r.te_matrix || []; const v = num(tm[0] && tm[0][1]); const se = r.strongest_edge || {}; return { value: v, pass: Math.abs(v - 0.065781) <= 1e-6 && r.deterministic === true && /inflation/i.test(String(se.from)) && /election/i.test(String(se.to)) }; } },
 ];
 
 async function postJSON(url, body, timeoutMs) {
@@ -124,7 +157,9 @@ async function runAsync(t) {
 
 const results = [];
 let health = null;
-try { health = await fetch(`${ENGINE}/health`, { signal: AbortSignal.timeout(15000) }).then(r => r.json()); } catch (e) { }
+for (const ms of [15000, 60000]) {  // second attempt rides out a Cloud Run cold start (a 15s one-shot once misreported a live engine as down while all 26 rows passed)
+  try { health = await fetch(`${ENGINE}/health`, { signal: AbortSignal.timeout(ms) }).then(r => r.json()); break; } catch (e) { }
+}
 
 for (const t of SUITE) {
   if (ONLY.length && !ONLY.includes(t.m)) continue;
