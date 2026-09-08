@@ -28,24 +28,34 @@
       only parses the URL you paste.
 
    4. Paste, commit, done. Until then the game runs fine and simply tells
-      students their result is not being sent to anyone.
+      students to copy their result into a Classroom private comment instead.
+
+   ── THE ONE THAT WILL CATCH YOU ───────────────────────────────────────────────
+   A new Google Form is NOT publicly reachable until you press "Publish" (the
+   button beside Send) and set responder access to "Anyone with the link".
+   Before that, both GET /viewform and POST /formResponse return HTTP 401 to
+   anyone not signed in — and because the game posts cross-origin it CANNOT see
+   that rejection, so students would be told it worked while nothing arrived.
+   Verify with:
+     curl -s -o /dev/null -w "%{http_code}" -L <the /viewform URL>
+   200 = published. 401 = still restricted, whatever the Settings tab claims.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 window.MM_CONFIG = {
 
   /* ── submission ─────────────────────────────────────────────────────────── */
   // The Form's POST endpoint. Ends in /formResponse (NOT /viewform).
-  formAction: "",
+  formAction: "https://docs.google.com/forms/d/e/1FAIpQLSdgCzpC3o_7A1XIkHZ8z1VjgQynKSlBD9ig1ijb6GMDbRprdw/formResponse",
 
   // Field ids from the pre-filled link, e.g. "entry.1234567890".
   entries: {
-    id:      "",   // roll number or institute email the student typed
-    handle:  "",   // self-chosen display name
-    score:   "",   // final score for the run
-    correct: "",   // "9/12"
-    streak:  "",   // longest streak in the run
-    weak:    "",   // concepts they lost the most points on
-    detail:  ""    // compact JSON: per-question outcomes, timings, config
+    id:      "entry.1127529271",   // roll number or institute email the student typed
+    handle:  "entry.736541677",    // self-chosen display name
+    score:   "entry.1760178404",   // final score for the run
+    correct: "entry.543283316",    // "9/12"
+    streak:  "entry.1684560969",   // longest streak in the run
+    weak:    "entry.1654102714",   // concepts they lost the most points on
+    detail:  "entry.599661456"     // compact JSON: per-question outcomes, timings, config
   },
 
   /* ── entry gate ─────────────────────────────────────────────────────────── */
