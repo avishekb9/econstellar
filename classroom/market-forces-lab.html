@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market Forces Lab — Econstellar Classroom</title>
+<meta name="description" content="Eight interactive rooms covering demand, supply, equilibrium, elasticity, consumer and producer surplus, and deadweight loss. Ungraded, nothing collected, runs entirely in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Market Forces Lab — Econstellar Classroom">
+<meta property="og:description" content="Play with demand, supply, elasticity and surplus instead of reading about them. Built for introductory microeconomics and managerial economics courses.">
+<meta property="og:url" content="https://econstellars.com/classroom/market-forces-lab.html">
+<meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
+<link rel="canonical" href="https://econstellars.com/classroom/market-forces-lab.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* host reset (the page below assumes it) */
+html{color-scheme:light dark}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* site chrome bar, in Econstellar's own type */
+.site-bar{
+  display:flex;gap:1rem;align-items:center;flex-wrap:wrap;
+  padding:.75rem 20px;border-bottom:1px solid rgba(255,255,255,.08);
+  background:#000;color:#6b7280;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.76rem;
+}
+.site-bar .brand{color:#00ff88;font-weight:600;letter-spacing:.5px}
+.site-bar .sp{flex:1}
+.site-bar a{color:#6b7280;text-decoration:none}
+.site-bar a:hover{color:#00d4ff}
+.site-bar a[aria-current="page"]{color:#00d4ff}
+</style>
+<style>
+:root{
+  --paper:#EBEFE9;
+  --surface:#F6F8F3;
+  --surface-2:#DFE5DC;
+  --line:#C6D0C5;
+  --line-soft:#D8DFD6;
+  --ink:#131A1B;
+  --ink-2:#3F4E50;
+  --ink-3:#6E7D7C;
+  --demand:#0D6E6A;
+  --supply:#B05615;
+  --loss:#9E2A40;
+  --signal:#B98908;
+  --good:#2E7A4C;
+  --demand-fill:rgba(13,110,106,.14);
+  --supply-fill:rgba(176,86,21,.15);
+  --loss-fill:rgba(158,42,64,.18);
+  --signal-fill:rgba(185,137,8,.16);
+  --grid:#D6DED4;
+  --focus:#0D6E6A;
+  --lift:0 10px 26px -20px rgba(15,43,42,.55);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#05080A;
+    --surface:#0C1315;
+    --surface-2:#151E21;
+    --line:#2B3639;
+    --line-soft:#232D30;
+    --ink:#E7ECE5;
+    --ink-2:#AEBAB4;
+    --ink-3:#7E8C89;
+    --demand:#41BDB2;
+    --supply:#E8893D;
+    --loss:#E86A7C;
+    --signal:#E7C155;
+    --good:#5EC088;
+    --demand-fill:rgba(65,189,178,.16);
+    --supply-fill:rgba(232,137,61,.16);
+    --loss-fill:rgba(232,106,124,.20);
+    --signal-fill:rgba(231,193,85,.16);
+    --grid:#232E31;
+    --focus:#41BDB2;
+    --lift:0 10px 26px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#05080A;
+  --surface:#0C1315;
+  --surface-2:#151E21;
+  --line:#2B3639;
+  --line-soft:#232D30;
+  --ink:#E7ECE5;
+  --ink-2:#AEBAB4;
+  --ink-3:#7E8C89;
+  --demand:#41BDB2;
+  --supply:#E8893D;
+  --loss:#E86A7C;
+  --signal:#E7C155;
+  --good:#5EC088;
+  --demand-fill:rgba(65,189,178,.16);
+  --supply-fill:rgba(232,137,61,.16);
+  --loss-fill:rgba(232,106,124,.20);
+  --signal-fill:rgba(231,193,85,.16);
+  --grid:#232E31;
+  --focus:#41BDB2;
+  --lift:0 10px 26px -20px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
+
+/* ---------- masthead ---------- */
+.masthead{
+  display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 28px;
+  padding:26px 0 16px;border-bottom:2px solid var(--ink);
+}
+.brand h1{
+  font-family:"Archivo",system-ui,sans-serif;
+  font-weight:800;font-size:clamp(28px,4.4vw,44px);
+  letter-spacing:-.025em;line-height:.98;margin:0;text-wrap:balance;
+}
+.brand .sub{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:8px;
+}
+.masthead-note{
+  flex:1 1 260px;max-width:44ch;color:var(--ink-2);
+  font-size:15.5px;line-height:1.5;margin:0 0 3px;
+}
+.masthead-note em{color:var(--ink);font-style:italic}
+.theme-btn{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;color:var(--ink-3);
+  border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;cursor:pointer;margin-bottom:4px;
+}
+.theme-btn:hover{color:var(--ink);border-color:var(--ink-3)}
+
+/* ---------- tabs ---------- */
+.tabs{
+  display:flex;gap:0;overflow-x:auto;overflow-y:hidden;
+  border-bottom:1px solid var(--line);
+  scrollbar-width:thin;
+}
+.tab{
+  flex:0 0 auto;position:relative;
+  background:transparent;border:0;border-bottom:3px solid transparent;
+  padding:13px 17px 11px;cursor:pointer;text-align:left;
+  color:var(--ink-3);font-family:"Archivo",system-ui,sans-serif;
+  display:flex;align-items:baseline;gap:9px;
+}
+.tab .n{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;font-weight:500;opacity:.75;
+}
+.tab .t{font-size:14px;font-weight:600;letter-spacing:-.005em;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--demand)}
+.tab[data-seen="1"] .n::after{content:"•";margin-left:5px;color:var(--good)}
+
+/* ---------- module shell ---------- */
+.module{display:none;padding-top:26px;animation:fade .28s ease both}
+.module.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.mod-head{max-width:70ch;margin-bottom:22px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--supply);
+  display:block;margin-bottom:9px;
+}
+.mod-head h2{
+  font-family:"Archivo",system-ui,sans-serif;font-weight:700;
+  font-size:clamp(22px,3vw,31px);letter-spacing:-.02em;line-height:1.08;
+  margin:0 0 10px;text-wrap:balance;
+}
+.lede{margin:0;color:var(--ink-2);font-size:17px}
+
+.mod-body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.88fr);gap:24px;align-items:start}
+@media (max-width:900px){.mod-body{grid-template-columns:1fr}}
+
+.stage{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:14px 14px 8px;box-shadow:var(--lift);
+}
+.stage svg{display:block;width:100%;height:auto}
+.stage-cap{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  color:var(--ink-3);letter-spacing:.04em;padding:2px 4px 6px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.side{display:flex;flex-direction:column;gap:14px}
+
+/* svg classes */
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--ink-2);stroke-width:1.4}
+.tick{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;fill:var(--ink-3)}
+.axlab{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;fill:var(--ink-3);letter-spacing:.09em;text-transform:uppercase}
+.cD{fill:none;stroke:var(--demand);stroke-width:2.6;stroke-linejoin:round}
+.cS{fill:none;stroke:var(--supply);stroke-width:2.6;stroke-linejoin:round}
+.cD.ghost,.cS.ghost{stroke-width:1.6;stroke-dasharray:5 4;opacity:.5}
+.aCS{fill:var(--demand-fill);stroke:none}
+.aPS{fill:var(--supply-fill);stroke:none}
+.aDWL{fill:var(--loss-fill);stroke:var(--loss);stroke-width:1;stroke-dasharray:3 3}
+.aRev{fill:var(--signal-fill);stroke:var(--signal);stroke-width:1.2}
+.gain{fill:rgba(46,122,76,.30);stroke:var(--good);stroke-width:1}
+.drop{fill:var(--loss-fill);stroke:var(--loss);stroke-width:1}
+.guide{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 4}
+.eqdot{fill:var(--signal);stroke:var(--paper);stroke-width:2}
+.lbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;font-weight:500}
+.lbl.d{fill:var(--demand)}
+.lbl.s{fill:var(--supply)}
+.lbl.k{fill:var(--ink-2)}
+.lbl.l{fill:var(--loss)}
+.lbl.g{fill:var(--signal)}
+.step{fill:none;stroke-width:2.4;stroke-linejoin:round}
+
+/* ---------- controls ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:16px 16px 17px;
+}
+.card.flat{background:transparent;border:0;padding:0}
+.card h3{
+  font-family:"Archivo",system-ui,sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;margin:0 0 11px;color:var(--ink-2);
+}
+.scenario{
+  border-left:3px solid var(--supply);padding-left:14px;margin:0 0 4px;
+}
+.scenario .mkt{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px;
+}
+.scenario p{margin:0;font-size:18.5px;line-height:1.42}
+
+.choices{display:grid;gap:7px;margin-top:14px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choice{
+  font-family:"Archivo",system-ui,sans-serif;font-size:13.5px;font-weight:600;
+  text-align:left;padding:10px 12px;cursor:pointer;
+  background:var(--surface-2);color:var(--ink);
+  border:1px solid var(--line);border-radius:2px;
+  transition:transform .12s ease,border-color .12s ease;
+}
+.choice:hover:not(:disabled){border-color:var(--ink-3);transform:translateX(2px)}
+.choice:disabled{cursor:default;opacity:.55}
+.choice.right{background:rgba(46,122,76,.16);border-color:var(--good);color:var(--ink);opacity:1}
+.choice.wrong{background:var(--loss-fill);border-color:var(--loss);opacity:1}
+.choice .k{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--ink-3);margin-right:7px}
+
+.verdict{margin-top:13px;padding:13px 14px;border-radius:2px;font-size:16px;line-height:1.45;border:1px solid var(--line);background:var(--surface-2)}
+.verdict.ok{border-color:var(--good);background:rgba(46,122,76,.10)}
+.verdict.no{border-color:var(--loss);background:var(--loss-fill)}
+.verdict strong{font-family:"Archivo",system-ui,sans-serif;font-size:13px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:5px}
+.verdict.ok strong{color:var(--good)}
+.verdict.no strong{color:var(--loss)}
+
+.rowbtn{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;align-items:center}
+.btn{
+  font-family:"Archivo",system-ui,sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.04em;padding:9px 16px;cursor:pointer;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+}
+.btn:hover{opacity:.85}
+.btn.ghost{background:transparent;color:var(--ink-2);border-color:var(--line)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--ink-3)}
+
+.tally{
+  display:flex;gap:18px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:12px;color:var(--ink-3);letter-spacing:.05em;
+}
+.tally b{display:block;font-size:22px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+/* sliders */
+.slider{margin:0 0 15px}
+.slider:last-child{margin-bottom:0}
+.slider label{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px;
+}
+.slider label .v{font-size:15px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;text-transform:none;letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--demand);height:22px;cursor:pointer}
+input[type=range].s2{accent-color:var(--supply)}
+input[type=range].s3{accent-color:var(--signal)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  font-family:"Archivo",system-ui,sans-serif;font-size:12.5px;font-weight:600;
+  padding:7px 11px;cursor:pointer;text-align:left;
+  background:transparent;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:999px;
+}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--demand);border-color:var(--demand);color:var(--surface)}
+.chip.sup[aria-pressed="true"]{background:var(--supply);border-color:var(--supply);color:var(--surface)}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+:root[data-theme="dark"] .chip.sup[aria-pressed="true"]{color:#05080A}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .chip[aria-pressed="true"],
+  :root:not([data-theme="light"]) .chip.sup[aria-pressed="true"]{color:#05080A}
+}
+.chip-head{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 8px;
+}
+.chip-head.two{margin-top:16px}
+
+/* readouts */
+.readout{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.readout div{background:var(--surface);padding:11px 13px}
+.readout span{
+  display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;
+}
+.readout b{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.readout .up{color:var(--good)}
+.readout .down{color:var(--loss)}
+
+.note{font-size:16px;color:var(--ink-2);margin:12px 0 0;line-height:1.5}
+.note strong{color:var(--ink);font-weight:600}
+
+/* ledger table */
+.ledger{width:100%;border-collapse:collapse;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px}
+.ledger th{
+  text-align:left;font-weight:500;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);padding:0 8px 7px 0;border-bottom:1px solid var(--line);
+}
+.ledger td{padding:6px 8px 6px 0;border-bottom:1px solid var(--line-soft);font-variant-numeric:tabular-nums}
+.ledger tr.out td{color:var(--ink-3);opacity:.6}
+.ledger tr.marg td{color:var(--signal)}
+.ledger td.num{text-align:right}
+.tbl-scroll{overflow-x:auto}
+
+/* insight strip */
+.insight{
+  margin-top:26px;padding:20px 0 0;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:26px;
+}
+@media (max-width:760px){.insight{grid-template-columns:1fr;gap:16px}}
+.insight p{margin:0;max-width:68ch;font-size:17px;line-height:1.55}
+.insight .try{
+  border-left:3px solid var(--demand);padding-left:14px;
+  font-size:16px;color:var(--ink-2);
+}
+.insight .try b{
+  display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--demand);margin-bottom:5px;font-weight:600;
+}
+
+/* prompt deck */
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:6px}
+.prompt{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:16px 17px 17px;display:flex;flex-direction:column;gap:9px;
+}
+.prompt .tagline{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--supply);
+}
+.prompt p{margin:0;font-size:16.5px;line-height:1.45}
+.prompt .hint{font-size:14.5px;color:var(--ink-3);font-style:italic;margin-top:auto;padding-top:4px}
+
+/* mini legend */
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--ink-3)}
+.legend i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px}
+.legend .d i{background:var(--demand)}
+.legend .s i{background:var(--supply)}
+.legend .w i{background:var(--loss)}
+
+footer{
+  margin-top:54px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.06em;color:var(--ink-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+</head>
+<body>
+<div class="site-bar">
+  <span class="brand">◆ ECONSTELLAR</span>
+  <a href="../classroom.html">Classroom</a>
+  <a href="market-forces-lab.html" aria-current="page">Market Forces Lab</a>
+  <span class="sp"></span>
+  <a href="../index.html">econstellars.com</a>
+</div>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <h1>Market Forces Lab</h1>
+      <div class="sub">Eight rooms · demand · supply · elasticity · surplus</div>
+    </div>
+    <p class="masthead-note">Nothing here is graded and nothing is submitted. Every room is a claim you can break by playing with it — <em>so break it.</em></p>
+    <button class="theme-btn" id="themeBtn" type="button">Theme</button>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Lab rooms"></nav>
+  <main id="panels"></main>
+
+  <footer>
+    <span>Market Forces Lab · built for the pre-mid portion of Managerial Economics</span>
+    <span id="progress">0 / 8 rooms opened</span>
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* ============ tiny helpers ============ */
+const $ = (s, r) => (r || document).querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const inrK = n => "₹" + (Math.round(n * 10) / 10).toLocaleString("en-IN") + "k";
+const n1 = n => (Math.round(n * 10) / 10).toLocaleString("en-IN");
+const n2 = n => (Math.round(n * 100) / 100).toFixed(2);
+
+function store(k, v) {
+  try {
+    if (v === undefined) return localStorage.getItem("mfl_" + k);
+    localStorage.setItem("mfl_" + k, v);
+  } catch (e) { /* private window, blocked storage — the lab works without it */ }
+  return null;
+}
+
+/* ============ plot scaffolding ============ */
+const GEO = { w: 570, h: 402, l: 60, r: 30, t: 26, b: 50 };
+
+function scale(qmax, pmax) {
+  const iw = GEO.w - GEO.l - GEO.r, ih = GEO.h - GEO.t - GEO.b;
+  return {
+    qmax, pmax, iw, ih,
+    l: GEO.l, t: GEO.t, w: GEO.w, h: GEO.h,
+    x0: GEO.l, y0: GEO.t + ih,
+    x: q => GEO.l + (clamp(q, 0, qmax) / qmax) * iw,
+    y: p => GEO.t + (1 - clamp(p, 0, pmax) / pmax) * ih,
+    xr: q => GEO.l + (q / qmax) * iw,
+    yr: p => GEO.t + (1 - p / pmax) * ih
+  };
+}
+
+function frame(s, o) {
+  o = o || {};
+  const xt = o.xticks || 5, yt = o.yticks || 5, bare = !!o.bare;
+  let g = "";
+  for (let i = 0; i <= xt; i++) {
+    const q = s.qmax * i / xt, X = s.x(q);
+    g += `<line class="grid" x1="${X}" y1="${s.t}" x2="${X}" y2="${s.y0}"/>`;
+    if (!bare && i > 0) g += `<text class="tick" x="${X}" y="${s.y0 + 17}" text-anchor="middle">${o.xf ? o.xf(q) : n1(q)}</text>`;
+  }
+  for (let i = 0; i <= yt; i++) {
+    const p = s.pmax * i / yt, Y = s.y(p);
+    g += `<line class="grid" x1="${s.x0}" y1="${Y}" x2="${s.x(s.qmax)}" y2="${Y}"/>`;
+    if (!bare && i > 0) g += `<text class="tick" x="${s.x0 - 9}" y="${Y + 4}" text-anchor="end">${o.yf ? o.yf(p) : n1(p)}</text>`;
+  }
+  g += `<line class="axis" x1="${s.x0}" y1="${s.t - 6}" x2="${s.x0}" y2="${s.y0}"/>`;
+  g += `<line class="axis" x1="${s.x0}" y1="${s.y0}" x2="${s.x(s.qmax) + 6}" y2="${s.y0}"/>`;
+  g += `<text class="axlab" x="${s.x(s.qmax) + 6}" y="${s.y0 + 38}" text-anchor="end">${o.xlab || "Quantity"}</text>`;
+  g += `<text class="axlab" x="${s.x0 - 12}" y="${s.t - 12}" text-anchor="start">${o.ylab || "Price"}</text>`;
+  return g;
+}
+
+/* sample a curve Q = f(P) across the visible box */
+function curve(fn, s, cls) {
+  const pts = [];
+  for (let i = 0; i <= 90; i++) {
+    const p = s.pmax * i / 90, q = fn(p);
+    if (q >= -1e-6 && q <= s.qmax + 1e-6) pts.push(s.x(q).toFixed(1) + "," + s.y(p).toFixed(1));
+  }
+  return pts.length > 1 ? `<polyline class="${cls}" points="${pts.join(" ")}"/>` : "";
+}
+
+function dot(s, q, p, label, cls) {
+  let g = `<circle class="eqdot" cx="${s.x(q)}" cy="${s.y(p)}" r="5.5"/>`;
+  if (label) g += `<text class="lbl ${cls || "g"}" x="${s.x(q) + 10}" y="${s.y(p) - 9}">${label}</text>`;
+  return g;
+}
+
+function guides(s, q, p) {
+  return `<line class="guide" x1="${s.x0}" y1="${s.y(p)}" x2="${s.x(q)}" y2="${s.y(p)}"/>` +
+         `<line class="guide" x1="${s.x(q)}" y1="${s.y(p)}" x2="${s.x(q)}" y2="${s.y0}"/>`;
+}
+
+function svg(inner) {
+  return `<svg viewBox="0 0 ${GEO.w} ${GEO.h}" role="img" aria-label="Price and quantity diagram">${inner}</svg>`;
+}
+
+/* ============ module shell ============ */
+function shell(m) {
+  return `
+  <section class="module" id="pan-${m.id}" role="tabpanel" aria-labelledby="tab-${m.id}">
+    <div class="mod-head">
+      <span class="eyebrow">Room ${m.num} · ${m.topic}</span>
+      <h2>${m.title}</h2>
+      <p class="lede">${m.lede}</p>
+    </div>
+    <div class="mod-body">
+      <div>
+        <div class="stage"><div class="stage-cap"><span class="legend">${m.legend || '<span class="d"><i></i>Demand</span> <span class="s"><i></i>Supply</span>'}</span><span id="cap-${m.id}"></span></div><div id="viz-${m.id}"></div></div>
+      </div>
+      <div class="side" id="side-${m.id}"></div>
+    </div>
+    <div class="insight">
+      <p>${m.insight}</p>
+      <div class="try"><b>Try to break it</b>${m.tryit}</div>
+    </div>
+  </section>`;
+}
+
+/* ==================================================================
+   ROOM 1 — Shift or Slide
+   ================================================================== */
+const CARDS = [
+  { mkt: "Charging sessions at public EV chargers, Bengaluru",
+    text: "The state waives road tax on electric two-wheelers. Scooter sales jump for six months straight.",
+    a: "DR", why: "Chargers and electric scooters are <strong>complements</strong>. Cheaper scooters means more scooters on the road, and every one of them needs charging — so at any given price per session, more sessions are wanted." },
+  { mkt: "Room air conditioners",
+    text: "A brutal April pushes the city past 47 °C for nine consecutive days.",
+    a: "DR", why: "This is a shift in <strong>tastes and circumstances</strong>, not a price change. At every price, more households now want an AC." },
+  { mkt: "Instant coffee",
+    text: "A bumper Assam harvest sends the wholesale price of tea leaves tumbling.",
+    a: "DL", why: "Tea is a <strong>substitute</strong>. When the substitute gets cheaper, some coffee drinkers switch — demand for coffee falls at every price. Notice the coffee price never changed; the curve moved." },
+  { mkt: "Assembled smartphones",
+    text: "A new semiconductor plant comes online and the chips inside every handset get 18% cheaper.",
+    a: "SR", why: "Chips are an <strong>input</strong>. Cheaper inputs make production more profitable at any output price, so firms are willing to supply more at each price." },
+  { mkt: "Cloud GPU hours",
+    text: "Three new data-centre operators open capacity in the country this quarter.",
+    a: "SR", why: "A rise in the <strong>number of sellers</strong> adds every newcomer's quantity at each price to the market supply curve." },
+  { mkt: "Cloud GPU hours",
+    text: "Providers cut the hourly rate. Startups promptly rent more GPUs.",
+    a: "MOVE", why: "Nothing about buyers changed — only the price did. This is a <strong>change in quantity demanded</strong>: we slide down a fixed demand curve. Reserve the word 'demand' for the whole curve." },
+  { mkt: "Onions in the wholesale mandi",
+    text: "Traders become convinced prices will spike next month, and hold stock back from today's auctions.",
+    a: "SL", why: "Sellers' <strong>expectations</strong> about future prices change what they release today. Storable goods let sellers move supply across time; this is why onion politics is really inventory politics." },
+  { mkt: "Multiplex tickets",
+    text: "A streaming service drops its monthly plan to ₹99 and adds same-week releases.",
+    a: "DL", why: "Streaming is a <strong>substitute</strong> for a night at the multiplex. Cheaper substitute, lower demand for tickets at every ticket price." },
+  { mkt: "Paneer",
+    text: "A high-protein eating trend sweeps hostel messes and gym groups.",
+    a: "DR", why: "A pure <strong>taste</strong> shift. No price moved, no income moved — people simply want more paneer at any price." },
+  { mkt: "Domestic flight seats",
+    text: "Jet fuel prices climb 30% over two months.",
+    a: "SL", why: "Fuel is the airline's biggest <strong>input</strong>. Costlier inputs mean fewer seats offered at each fare — the supply curve shifts left and fares rise." },
+  { mkt: "Second-hand textbooks",
+    text: "Placement season looks weak. Students start worrying about money.",
+    a: "DR", why: "Careful — used textbooks are an <strong>inferior good</strong>. Expected income falls, so demand for the cheap alternative <em>rises</em>. The income shifter does not always push the curve right." },
+  { mkt: "Gym memberships",
+    text: "Gyms cut their January monthly fee. Sign-ups surge.",
+    a: "MOVE", why: "The seller changed the price and buyers responded along the existing curve. A <strong>movement along</strong>, not a shift — the classic trap." },
+  { mkt: "Rooftop solar installation",
+    text: "A better panel lamination process cuts manufacturing cost by a fifth.",
+    a: "SR", why: "<strong>Technology</strong> changes how much input it takes to make one unit. Same effect as a fall in input prices: supply shifts right, price falls, quantity rises." },
+  { mkt: "Hostel rooms near campus",
+    text: "The institute admits 500 more students than last year.",
+    a: "DR", why: "More <strong>buyers</strong>. Market demand is the horizontal sum of individual demands, so adding buyers adds quantity at every price." },
+  { mkt: "Bottled water inside a music festival",
+    text: "Organisers double the number of stalls allowed inside the venue.",
+    a: "SR", why: "More <strong>sellers</strong> inside the fence. This is also why festival water is expensive in the first place — entry restrictions are a supply curve decision." },
+  { mkt: "Exam coaching classes",
+    text: "Household incomes rise steadily across tier-2 cities.",
+    a: "DR", why: "Coaching is a <strong>normal good</strong>: higher income, higher demand at every price. Hold on to this one — Room 5 is built on this market." },
+  { mkt: "Wheat flour",
+    text: "Government announces it will release buffer stocks into the open market next week.",
+    a: "SR", why: "A change in the <strong>number of sellers</strong>, with the state as the extra seller. Note the announcement alone can move private sellers' expectations too — real markets often move before the wheat does." },
+  { mkt: "Air-purifier filters",
+    text: "The price of air purifiers themselves falls sharply after a price war.",
+    a: "DR", why: "Filters and purifiers are <strong>complements</strong>. Cheaper purifiers put more machines in homes, and each machine eats filters." }
+];
+
+const OPTS = [
+  { k: "DR", label: "Demand shifts right", key: "1" },
+  { k: "DL", label: "Demand shifts left", key: "2" },
+  { k: "SR", label: "Supply shifts right", key: "3" },
+  { k: "SL", label: "Supply shifts left", key: "4" },
+  { k: "MOVE", label: "No shift — we move along a curve", key: "5" }
+];
+
+const EFFECT = {
+  DR: "Price <b>rises</b>, quantity <b>rises</b>.",
+  DL: "Price <b>falls</b>, quantity <b>falls</b>.",
+  SR: "Price <b>falls</b>, quantity <b>rises</b>.",
+  SL: "Price <b>rises</b>, quantity <b>falls</b>.",
+  MOVE: "No new equilibrium — the curves stayed exactly where they were."
+};
+
+const R1 = {
+  id: "shift", num: 1, topic: "Shift vs. movement",
+  title: "Shift or Slide?",
+  lede: "Eighteen scenarios. For each one, decide whether a curve moves — and which one — or whether we simply travel along a curve that never moved. This single distinction causes more wrong answers in this course than anything else.",
+  insight: "The three-step method is really a discipline for not fooling yourself. <em>Step one</em> asks which side of the market the event touches: does it change what buyers want at a given price, or what sellers will offer at a given price? <em>Step two</em> asks the direction. Only then, in <em>step three</em>, do you read off price and quantity. Skip step one and you will confidently explain a price rise with the price rise itself.",
+  tryit: "Find a scenario where you could argue for two different answers depending on what you assume is held constant. There is at least one. That ambiguity is not a flaw in the method — it is the method telling you your assumption is doing the real work.",
+  mount(root) {
+    let i = 0, score = 0, streak = 0, best = +(store("r1best") || 0), answered = null;
+    const order = CARDS.map((_, k) => k).sort(() => Math.random() - 0.5);
+    const side = $("#side-shift", root), viz = $("#viz-shift", root), cap = $("#cap-shift", root);
+
+    side.innerHTML = `
+      <div class="card">
+        <div class="scenario"><span class="mkt" id="r1mkt"></span><p id="r1txt"></p></div>
+        <div class="choices" id="r1opts"></div>
+        <div id="r1verdict"></div>
+        <div class="rowbtn"><button class="btn" id="r1next" hidden>Next scenario →</button></div>
+      </div>
+      <div class="card">
+        <div class="tally">
+          <div><b id="r1score">0</b>correct</div>
+          <div><b id="r1streak">0</b>streak</div>
+          <div><b id="r1best">${best}</b>best streak</div>
+        </div>
+      </div>`;
+
+    const optsEl = $("#r1opts", side);
+    optsEl.innerHTML = OPTS.map(o => `<button class="choice" data-k="${o.k}"><span class="k">${o.key}</span>${o.label}</button>`).join("");
+
+    function draw(reveal) {
+      const s = scale(100, 50);
+      const D0 = 100, b = 2, Sk = -10, d = 2;
+      const qd = p => D0 - b * p, qs = p => d * p + Sk;
+      const eqP = (D0 - Sk) / (b + d), eqQ = qd(eqP);
+      let g = frame(s, { bare: true, xlab: "Quantity", ylab: "Price" });
+      let g2 = "", newP = eqP, newQ = eqQ;
+
+      if (reveal && reveal !== "MOVE") {
+        const dd = reveal === "DR" ? 34 : reveal === "DL" ? -34 : 0;
+        const ss = reveal === "SR" ? 30 : reveal === "SL" ? -30 : 0;
+        const qd2 = p => D0 + dd - b * p, qs2 = p => d * p + Sk + ss;
+        newP = (D0 + dd - Sk - ss) / (b + d); newQ = qd2(newP);
+        g += curve(qd, s, "cD ghost") + curve(qs, s, "cS ghost");
+        g2 = curve(qd2, s, "cD") + curve(qs2, s, "cS") + guides(s, eqQ, eqP) +
+             `<circle cx="${s.x(eqQ)}" cy="${s.y(eqP)}" r="4" fill="var(--ink-3)"/>` +
+             `<text class="lbl k" x="${s.x(eqQ) + 9}" y="${s.y(eqP) + 16}">old</text>` +
+             guides(s, newQ, newP) + dot(s, newQ, newP, "new");
+      } else {
+        g += curve(qd, s, "cD") + curve(qs, s, "cS");
+        if (reveal === "MOVE") {
+          g2 = guides(s, eqQ, eqP) + dot(s, eqQ, eqP, "same curves") +
+               `<circle cx="${s.x(qd(eqP - 9))}" cy="${s.y(eqP - 9)}" r="4.5" fill="var(--demand)"/>` +
+               `<text class="lbl d" x="${s.x(qd(eqP - 9)) + 9}" y="${s.y(eqP - 9) + 16}">slide along D</text>`;
+        } else {
+          g2 = guides(s, eqQ, eqP) + dot(s, eqQ, eqP, "");
+        }
+      }
+      const lp = 0.82 * s.pmax;
+      g += `<text class="lbl d" x="${s.x(qd(lp)) - 6}" y="${s.y(lp) - 6}" text-anchor="end">D</text>`;
+      g += `<text class="lbl s" x="${s.x(qs(lp)) + 8}" y="${s.y(lp) - 6}">S</text>`;
+      viz.innerHTML = svg(g + g2);
+      cap.textContent = "Scenario " + (i + 1) + " of " + CARDS.length;
+    }
+
+    function load() {
+      const c = CARDS[order[i]];
+      answered = null;
+      $("#r1mkt", side).textContent = c.mkt;
+      $("#r1txt", side).textContent = c.text;
+      $("#r1verdict", side).innerHTML = "";
+      $("#r1next", side).hidden = true;
+      optsEl.querySelectorAll(".choice").forEach(b => { b.disabled = false; b.className = "choice"; });
+      draw(null);
+    }
+
+    function answer(k) {
+      if (answered) return;
+      answered = k;
+      const c = CARDS[order[i]], ok = k === c.a;
+      optsEl.querySelectorAll(".choice").forEach(b => {
+        b.disabled = true;
+        if (b.dataset.k === c.a) b.classList.add("right");
+        else if (b.dataset.k === k) b.classList.add("wrong");
+      });
+      if (ok) { score++; streak++; if (streak > best) { best = streak; store("r1best", best); } }
+      else streak = 0;
+      $("#r1score", side).textContent = score;
+      $("#r1streak", side).textContent = streak;
+      $("#r1best", side).textContent = best;
+      $("#r1verdict", side).innerHTML =
+        `<div class="verdict ${ok ? "ok" : "no"}"><strong>${ok ? "Right" : "Not quite"}</strong>${c.why}<br><br>${EFFECT[c.a]}</div>`;
+      $("#r1next", side).hidden = false;
+      draw(c.a);
+    }
+
+    optsEl.addEventListener("click", e => {
+      const b = e.target.closest(".choice"); if (b) answer(b.dataset.k);
+    });
+    $("#r1next", side).addEventListener("click", () => { i = (i + 1) % CARDS.length; load(); });
+    document.addEventListener("keydown", e => {
+      if (!$("#pan-shift").classList.contains("on")) return;
+      const o = OPTS.find(x => x.key === e.key);
+      if (o) answer(o.k);
+      else if (e.key === "Enter" && answered) { i = (i + 1) % CARDS.length; load(); }
+    });
+    load();
+  }
+};
+
+/* ==================================================================
+   ROOM 2 — Equilibrium sandbox (rooftop solar)
+   ================================================================== */
+const SHIFTERS = [
+  { g: "d", id: "tariff", label: "Grid electricity tariff rises 20%", dq: 50,
+    why: "Grid power is the <strong>substitute</strong>. Costlier substitute → demand for solar rises at every price." },
+  { g: "d", id: "income", label: "Household incomes rise", dq: 30,
+    why: "Rooftop solar is a <strong>normal good</strong> — higher income shifts demand right." },
+  { g: "d", id: "buyers", label: "The city adds 40,000 new households", dq: 40,
+    why: "More <strong>buyers</strong>. Market demand is the horizontal sum of individual demands." },
+  { g: "d", id: "battery", label: "Home battery prices fall sharply", dq: 28,
+    why: "Batteries are a <strong>complement</strong>. Cheaper complement → more solar demanded at every price." },
+  { g: "d", id: "wait", label: "A bigger subsidy is announced for next year", dq: -60,
+    why: "<strong>Expectations</strong> cut both ways. If buyers expect a better deal later, demand <em>today</em> falls. Announcing a future subsidy can freeze the current market." },
+  { g: "s", id: "panel", label: "Panel and inverter prices rise", dq: -70,
+    why: "<strong>Input prices</strong> up → less supplied at every price → supply shifts left." },
+  { g: "s", id: "tech", label: "A faster mounting rig halves install time", dq: 65,
+    why: "<strong>Technology</strong> reduces inputs per unit — the same effect as cheaper inputs." },
+  { g: "s", id: "sellers", label: "Twenty new installer firms enter", dq: 80,
+    why: "More <strong>sellers</strong> means more quantity offered at each price." },
+  { g: "s", id: "hold", label: "Installers expect to charge more next quarter", dq: -50,
+    why: "Sellers' <strong>expectations</strong>: crews get booked for later, higher-priced jobs, so less is supplied now." }
+];
+
+const R2 = {
+  id: "sand", num: 2, topic: "Equilibrium",
+  title: "The Rooftop Solar Sandbox",
+  lede: "One market: rooftop solar installations in a mid-size Indian city. Nine switches, one for each non-price determinant from the lecture. Flip them in combinations and watch the equilibrium move — then post a price of your own and see what the market does to it.",
+  insight: "Equilibrium is not a place the market <em>is</em>. It is the only price at which nobody is being forced to change their mind. Post a price above it and unsold inventory piles up until sellers cut; post one below it and buyers who are willing to pay more find nothing to buy, so the price gets bid up. The curves do not clear the market — <em>the disappointment does.</em>",
+  tryit: "Turn on ‘a bigger subsidy next year’ together with ‘twenty new installers enter’. Demand falls and supply rises, so price drops hard — but what happens to quantity, and can you say for sure? Find two switch combinations where the direction of one variable is genuinely ambiguous.",
+  mount(root) {
+    const side = $("#side-sand", root), viz = $("#viz-sand", root), cap = $("#cap-sand", root);
+    const on = {};
+    const D0 = 360, b = 4, d = 4, Sk = -60;
+    let probe = null;
+
+    side.innerHTML = `
+      <div class="card">
+        <h3>Shift the curves</h3>
+        <p class="chip-head">Buyers’ side</p>
+        <div class="chips" id="chD"></div>
+        <p class="chip-head two">Sellers’ side</p>
+        <div class="chips" id="chS"></div>
+        <div class="rowbtn"><button class="btn ghost" id="r2reset">Reset to baseline</button></div>
+      </div>
+      <div class="readout" id="r2read"></div>
+      <div class="card">
+        <h3>Post a price yourself</h3>
+        <div class="slider">
+          <label for="r2p">Posted price per installation <span class="v" id="r2pv">—</span></label>
+          <input type="range" class="s3" id="r2p" min="20" max="88" step="1" value="53">
+        </div>
+        <p class="note" id="r2note"></p>
+      </div>
+      <div class="card" id="r2why"></div>`;
+
+    $("#chD", side).innerHTML = SHIFTERS.filter(s => s.g === "d")
+      .map(s => `<button class="chip" data-id="${s.id}" aria-pressed="false">${s.label}</button>`).join("");
+    $("#chS", side).innerHTML = SHIFTERS.filter(s => s.g === "s")
+      .map(s => `<button class="chip sup" data-id="${s.id}" aria-pressed="false">${s.label}</button>`).join("");
+
+    function totals() {
+      let dd = 0, ss = 0;
+      SHIFTERS.forEach(s => { if (on[s.id]) { if (s.g === "d") dd += s.dq; else ss += s.dq; } });
+      return { dd, ss };
+    }
+
+    function render() {
+      const { dd, ss } = totals();
+      const s = scale(560, 100);
+      const qd = p => D0 + dd - b * p, qs = p => d * p + Sk + ss;
+      const eqP0 = (D0 - Sk) / (b + d), eqQ0 = D0 - b * eqP0;
+      const eqP = (D0 + dd - Sk - ss) / (b + d), eqQ = qd(eqP);
+      const moved = dd !== 0 || ss !== 0;
+
+      let g = frame(s, {
+        xlab: "Installations / month", ylab: "Price (₹ ’000)",
+        xf: v => n1(v), yf: v => n1(v)
+      });
+      if (moved) {
+        g += curve(p => D0 - b * p, s, "cD ghost") + curve(p => d * p + Sk, s, "cS ghost");
+      }
+      g += curve(qd, s, "cD") + curve(qs, s, "cS");
+
+      const P = probe === null ? eqP : probe;
+      if (probe !== null && Math.abs(probe - eqP) > 0.4) {
+        const a = clamp(qd(P), 0, s.qmax), c = clamp(qs(P), 0, s.qmax);
+        const lo = Math.min(a, c), hi = Math.max(a, c);
+        g += `<rect x="${s.x(lo)}" y="${s.y(P) - 7}" width="${s.x(hi) - s.x(lo)}" height="14" fill="${a > c ? "var(--demand-fill)" : "var(--supply-fill)"}" stroke="${a > c ? "var(--demand)" : "var(--supply)"}" stroke-width="1"/>`;
+        g += `<line class="guide" x1="${s.x0}" y1="${s.y(P)}" x2="${s.x(hi)}" y2="${s.y(P)}"/>`;
+        g += `<text class="lbl ${a > c ? "d" : "s"}" x="${s.x((lo + hi) / 2)}" y="${s.y(P) - 14}" text-anchor="middle">${a > c ? "shortage" : "surplus"} ${n1(hi - lo)}</text>`;
+      }
+      g += guides(s, eqQ, eqP) + dot(s, eqQ, eqP, "equilibrium");
+      const lp = 0.86 * s.pmax;
+      g += `<text class="lbl d" x="${s.x(qd(lp)) - 6}" y="${s.y(lp) - 6}" text-anchor="end">D</text>`;
+      g += `<text class="lbl s" x="${s.x(qs(lp)) + 8}" y="${s.y(lp) - 6}">S</text>`;
+      viz.innerHTML = svg(g);
+      cap.textContent = moved ? "dashed = baseline market" : "baseline market";
+
+      const dP = eqP - eqP0, dQ = eqQ - eqQ0;
+      const arrow = v => Math.abs(v) < 0.05 ? "" : (v > 0 ? ` <span class="up">▲ ${n1(Math.abs(v))}</span>` : ` <span class="down">▼ ${n1(Math.abs(v))}</span>`);
+      $("#r2read", side).innerHTML =
+        `<div><span>Equilibrium price</span><b>${inrK(eqP)}${arrow(dP)}</b></div>
+         <div><span>Equilibrium quantity</span><b>${n1(eqQ)}${arrow(dQ)}</b></div>`;
+
+      const sl = $("#r2p", side);
+      $("#r2pv", side).textContent = inrK(+sl.value);
+      const Pp = +sl.value, a = qd(Pp), c = qs(Pp), gap = a - c;
+      let note;
+      if (Math.abs(Pp - eqP) <= 0.4) {
+        note = `At <strong>${inrK(Pp)}</strong> buyers want ${n1(a)} and installers will do ${n1(c)}. Nothing is left over and nobody is turned away — this is the equilibrium, and it is the only price that stays put.`;
+      } else if (gap > 0) {
+        note = `At <strong>${inrK(Pp)}</strong> buyers want ${n1(a)} installations but installers will only do ${n1(c)}. That is a <strong>shortage of ${n1(gap)}</strong>. Disappointed buyers offer more; installers raise quotes; price climbs toward ${inrK(eqP)}.`;
+      } else {
+        note = `At <strong>${inrK(Pp)}</strong> installers would happily do ${n1(c)} jobs but buyers only want ${n1(a)}. That is a <strong>surplus of ${n1(-gap)}</strong> — idle crews. Installers cut quotes to win work; price falls toward ${inrK(eqP)}.`;
+      }
+      $("#r2note", side).innerHTML = note;
+
+      const active = SHIFTERS.filter(x => on[x.id]);
+      $("#r2why", side).innerHTML = active.length
+        ? `<h3>Why those curves moved</h3>` + active.map(x =>
+            `<p class="note" style="margin-top:0;margin-bottom:10px"><strong>${x.label}.</strong> ${x.why}</p>`).join("")
+        : `<h3>Why those curves moved</h3><p class="note" style="margin-top:0">No switches on. Both curves sit at baseline: demand <span style="font-family:'IBM Plex Mono',monospace">Q = 360 − 4P</span>, supply <span style="font-family:'IBM Plex Mono',monospace">Q = 4P − 60</span>, with price in thousands of rupees. Setting them equal gives the equilibrium the diagram marks in gold.</p>`;
+    }
+
+    side.addEventListener("click", e => {
+      const c = e.target.closest(".chip");
+      if (c) { on[c.dataset.id] = !on[c.dataset.id]; c.setAttribute("aria-pressed", on[c.dataset.id] ? "true" : "false"); render(); }
+      if (e.target.id === "r2reset") {
+        Object.keys(on).forEach(k => delete on[k]);
+        side.querySelectorAll(".chip").forEach(c2 => c2.setAttribute("aria-pressed", "false"));
+        render();
+      }
+    });
+    $("#r2p", side).addEventListener("input", e => { probe = +e.target.value; render(); });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 3 — Elasticity Duel
+   ================================================================== */
+const DETS = [
+  { k: "sub", label: "Close substitutes available" },
+  { k: "lux", label: "Luxury vs. necessity" },
+  { k: "def", label: "Narrowly vs. broadly defined" },
+  { k: "time", label: "Short run vs. long run" }
+];
+
+const DUELS = [
+  { a: "A particular brand of butter", b: "Table salt", win: "a", det: "sub", ea: 2.4, eb: 0.1,
+    why: "Butter has a shelf full of near-perfect replacements — another brand, ghee, oil, or nothing at all on the toast. Salt has none, and it is a tiny share of the grocery bill besides. <strong>Elasticity is higher when close substitutes exist.</strong>" },
+  { a: "One brand of two-minute noodles", b: "All packaged food", win: "a", det: "def", ea: 3.1, eb: 0.4,
+    why: "Widen the definition of a good and you swallow its own substitutes. Every replacement for that noodle brand is still packaged food, so the broad category has almost nowhere to run. <strong>Narrowly defined goods are more elastic.</strong>" },
+  { a: "Tickets to a music festival", b: "Prescription spectacles", win: "a", det: "lux", ea: 2.0, eb: 0.3,
+    why: "You can skip the festival and feel only regret. Skipping the spectacles means you cannot read the board. <strong>Luxuries are more elastic than necessities</strong> — and note that the same physical good can be either, depending on who is buying." },
+  { a: "Cooking gas, four years after a price rise", b: "Cooking gas, one month after the same rise", win: "a", det: "time", ea: 1.4, eb: 0.15,
+    why: "In a month, you own the stove you own. In four years you can buy an induction hob, insulate the pressure cooker habit, or move to a piped connection. <strong>Elasticity is higher in the long run</strong>, which is why a two-week pricing experiment systematically understates how much you will eventually lose." },
+  { a: "One streaming subscription", b: "The broadband line it runs on", win: "a", det: "sub", ea: 2.7, eb: 0.25,
+    why: "Cancel one service and four rivals are one tap away. Cancel broadband and every one of those rivals goes dark with it. The gateway good inherits the inelasticity of everything that depends on it — <strong>which is exactly why owning the pipe is worth more than owning the content.</strong>" }
+];
+
+const R3 = {
+  id: "duel", num: 3, topic: "What makes demand elastic",
+  legend: '<span class="d"><i></i>Good A</span> <span class="s"><i></i>Good B</span>',
+  title: "Elasticity Duel",
+  lede: "Two goods enter. Both prices rise by exactly 20%. Quantity demanded falls for both — but for one it falls much harder. Call the winner, then name the reason. Five rounds, four determinants.",
+  insight: "Elasticity is a <em>unit-free</em> number, and that is the whole point of it. A slope depends on whether you measured in rupees or paise, kilos or grams; the ratio of two percentage changes does not, so you can put butter and broadband on the same scale. Formally it is <span style=\"font-family:'IBM Plex Mono',monospace\">E = (dQ/dP) × (P/Q)</span> — the slope of the curve times where you happen to be standing on it. Both halves matter, which is why Room 4 exists.",
+  tryit: "Every determinant here is secretly the same question: <em>how easily can the buyer walk away?</em> Substitutes, breadth of definition, luxury status and time all just change the number of exits available. Try to construct a good with no exits at all — then explain why its seller does not charge infinity.",
+  mount(root) {
+    const side = $("#side-duel", root), viz = $("#viz-duel", root), cap = $("#cap-duel", root);
+    let i = 0, stage = 0, pick = null, sc = 0;
+
+    function draw(reveal) {
+      const s = scale(100, 100);
+      const d = DUELS[i];
+      const mk = (E, x0) => {
+        // demand through (60, 50) with elasticity E at that point => slope b = E*Q/P
+        const b = E * 60 / 50;
+        return p => 60 + b * (50 - p);
+      };
+      const fA = mk(d.ea), fB = mk(d.eb);
+      let g = frame(s, { bare: true, xlab: "Quantity demanded", ylab: "Price" });
+      const P1 = 50, P2 = 60;
+      g += curve(fB, s, "cS") + curve(fA, s, "cD");
+      g += `<line class="guide" x1="${s.x0}" y1="${s.y(P1)}" x2="${s.x(s.qmax)}" y2="${s.y(P1)}"/>`;
+      g += `<line class="guide" x1="${s.x0}" y1="${s.y(P2)}" x2="${s.x(s.qmax)}" y2="${s.y(P2)}"/>`;
+      g += `<text class="lbl k" x="${s.x0 + 6}" y="${s.y(P1) - 6}">price before</text>`;
+      g += `<text class="lbl k" x="${s.x0 + 6}" y="${s.y(P2) - 6}">after +20%</text>`;
+      g += `<circle cx="${s.x(60)}" cy="${s.y(P1)}" r="4.5" fill="var(--ink-3)"/>`;
+      if (reveal) {
+        const qa = fA(P2), qb = fB(P2);
+        g += `<line class="guide" x1="${s.x(qa)}" y1="${s.y(P2)}" x2="${s.x(qa)}" y2="${s.y0}"/>`;
+        g += `<line class="guide" x1="${s.x(qb)}" y1="${s.y(P2)}" x2="${s.x(qb)}" y2="${s.y0}"/>`;
+        g += `<circle cx="${s.x(qa)}" cy="${s.y(P2)}" r="4.5" fill="var(--demand)"/>`;
+        g += `<circle cx="${s.x(qb)}" cy="${s.y(P2)}" r="4.5" fill="var(--supply)"/>`;
+        g += `<text class="lbl d" x="${s.x(qa)}" y="${s.y0 + 32}" text-anchor="middle">E ≈ ${n1(d.ea)}</text>`;
+        g += `<text class="lbl s" x="${s.x(qb)}" y="${s.y0 + 32}" text-anchor="middle">E ≈ ${n1(d.eb)}</text>`;
+      }
+      g += `<text class="lbl d" x="${s.x(fA(88)) - 8}" y="${s.y(88)}" text-anchor="end">A</text>`;
+      g += `<text class="lbl s" x="${s.x(fB(88)) + 8}" y="${s.y(88)}">B</text>`;
+      viz.innerHTML = svg(g);
+      cap.textContent = "Round " + (i + 1) + " of " + DUELS.length + " · " + sc + " clean";
+    }
+
+    function load() {
+      const d = DUELS[i];
+      stage = 0; pick = null;
+      side.innerHTML = `
+        <div class="card">
+          <p class="chip-head" style="margin-bottom:12px">Both prices rise 20%. Whose quantity demanded falls more?</p>
+          <div class="choices">
+            <button class="choice" data-p="a"><span class="k">A</span>${d.a}</button>
+            <button class="choice" data-p="b"><span class="k">B</span>${d.b}</button>
+          </div>
+          <div id="d3v"></div>
+        </div>
+        <div class="card" id="d3det" hidden>
+          <h3>And the reason is —</h3>
+          <div class="choices">${DETS.map(x => `<button class="choice" data-d="${x.k}">${x.label}</button>`).join("")}</div>
+          <div id="d3v2"></div>
+        </div>
+        <div class="rowbtn" id="d3nav"></div>`;
+      draw(false);
+    }
+
+    side.addEventListener("click", e => {
+      const p = e.target.closest("[data-p]"), dd = e.target.closest("[data-d]");
+      const d = DUELS[i];
+      if (p && stage === 0) {
+        stage = 1; pick = p.dataset.p;
+        const ok = pick === d.win;
+        side.querySelectorAll("[data-p]").forEach(b => {
+          b.disabled = true;
+          if (b.dataset.p === d.win) b.classList.add("right");
+          else if (b.dataset.p === pick) b.classList.add("wrong");
+        });
+        $("#d3v", side).innerHTML = `<div class="verdict ${ok ? "ok" : "no"}"><strong>${ok ? "Correct" : "The other one"}</strong>${ok ? "Good." : "Look again at how easy it is to walk away."} <b>${d.win === "a" ? d.a : d.b}</b> is the elastic one — E ≈ ${n1(d.ea)} against ≈ ${n1(d.eb)}.</div>`;
+        $("#d3det", side).hidden = false;
+        draw(true);
+      }
+      if (dd && stage === 1) {
+        stage = 2;
+        const ok = dd.dataset.d === d.det;
+        side.querySelectorAll("[data-d]").forEach(b => {
+          b.disabled = true;
+          if (b.dataset.d === d.det) b.classList.add("right");
+          else if (b === dd) b.classList.add("wrong");
+        });
+        if (ok && pick === d.win) sc++;
+        $("#d3v2", side).innerHTML = `<div class="verdict ${ok ? "ok" : "no"}"><strong>${DETS.find(x => x.k === d.det).label}</strong>${d.why}</div>`;
+        $("#d3nav", side).innerHTML = i < DUELS.length - 1
+          ? `<button class="btn" id="d3next">Next round →</button>`
+          : `<button class="btn" id="d3next">Run the five again</button>`;
+        draw(true);
+      }
+      if (e.target.id === "d3next") { i = (i + 1) % DUELS.length; load(); }
+    });
+    load();
+  }
+};
+
+/* ==================================================================
+   ROOM 4 — The Pricing Room
+   ================================================================== */
+const R4 = {
+  id: "price", num: 4, topic: "Elasticity and revenue",
+  legend: '<span class="d"><i></i>Demand</span>',
+  title: "The Pricing Room",
+  lede: "You run a two-person drone photography studio. Demand is <span style=\"font-family:'IBM Plex Mono',monospace\">Q = 40 − P/50</span> shoots a month. Move the two handles to test a price change the way the lecture does it — midpoint method, then revenue. There is exactly one price that maximises revenue, and the elasticity at that point is not a coincidence.",
+  insight: "A price rise pulls revenue in two directions at once: more rupees on every unit you still sell, fewer units sold. Elasticity is the exchange rate between those two effects, and it is <em>not constant along a straight demand curve</em> — the slope never changes but <span style=\"font-family:'IBM Plex Mono',monospace\">P/Q</span> does, so the top of the curve is elastic and the bottom is inelastic. Revenue peaks exactly where E = 1, because that is the one point where the two effects cancel.",
+  tryit: "Set both handles in the inelastic zone and raise your price — revenue goes up. Now ask the uncomfortable question the diagram will not answer: your <em>costs</em> also fell, because you are doing fewer shoots. So is the revenue-maximising price the profit-maximising price? Which side of ₹1,000 should the answer sit on?",
+  mount(root) {
+    const side = $("#side-price", root), viz = $("#viz-price", root), cap = $("#cap-price", root);
+    const b = 1 / 50, D0 = 40, PMAX = 2000;
+    const q = p => D0 - b * p;
+    let p1 = 600, p2 = 1000;
+
+    side.innerHTML = `
+      <div class="card">
+        <h3>Your price test</h3>
+        <div class="slider">
+          <label for="r4a">Price before <span class="v" id="r4av"></span></label>
+          <input type="range" id="r4a" min="100" max="1900" step="50" value="600">
+        </div>
+        <div class="slider">
+          <label for="r4b">Price after <span class="v" id="r4bv"></span></label>
+          <input type="range" class="s2" id="r4b" min="100" max="1900" step="50" value="1000">
+        </div>
+      </div>
+      <div class="readout" id="r4read"></div>
+      <div class="card" id="r4mid"></div>
+      <div class="card" id="r4verd"></div>`;
+
+    function render() {
+      const s = scale(40, PMAX);
+      const q1 = q(p1), q2 = q(p2);
+      const r1 = p1 * q1, r2 = p2 * q2;
+      // midpoint method
+      const mP = (p1 + p2) / 2, mQ = (q1 + q2) / 2;
+      const pctP = (p2 - p1) / mP * 100, pctQ = (q2 - q1) / mQ * 100;
+      const E = Math.abs(pctP) < 1e-9 ? NaN : Math.abs(pctQ / pctP);
+      const Epoint = p2 === 0 ? 0 : b * p2 / q2;
+
+      let g = frame(s, {
+        xlab: "Shoots per month", ylab: "Price per shoot (₹)",
+        xf: v => n1(v), yf: v => Math.round(v).toLocaleString("en-IN")
+      });
+      // revenue rectangle at "after" price
+      g += `<rect class="aRev" x="${s.x(0)}" y="${s.y(p2)}" width="${s.x(q2) - s.x(0)}" height="${s.y0 - s.y(p2)}"/>`;
+      // gained / lost slivers relative to "before"
+      if (p2 > p1) {
+        g += `<rect class="gain" x="${s.x(0)}" y="${s.y(p2)}" width="${s.x(q2) - s.x(0)}" height="${s.y(p1) - s.y(p2)}"/>`;
+        g += `<rect class="drop" x="${s.x(q2)}" y="${s.y(p1)}" width="${s.x(q1) - s.x(q2)}" height="${s.y0 - s.y(p1)}"/>`;
+      } else if (p2 < p1) {
+        g += `<rect class="drop" x="${s.x(0)}" y="${s.y(p1)}" width="${s.x(q1) - s.x(0)}" height="${s.y(p2) - s.y(p1)}"/>`;
+        g += `<rect class="gain" x="${s.x(q1)}" y="${s.y(p2)}" width="${s.x(q2) - s.x(q1)}" height="${s.y0 - s.y(p2)}"/>`;
+      }
+      g += curve(q, s, "cD");
+      g += `<line class="guide" x1="${s.x0}" y1="${s.y(1000)}" x2="${s.x(20)}" y2="${s.y(1000)}"/>`;
+      g += `<circle cx="${s.x(20)}" cy="${s.y(1000)}" r="4" fill="none" stroke="var(--signal)" stroke-width="1.6"/>`;
+      g += `<text class="lbl g" x="${s.x(20) + 9}" y="${s.y(1000) - 8}">E = 1</text>`;
+      g += `<circle cx="${s.x(q1)}" cy="${s.y(p1)}" r="5" fill="var(--ink-3)"/>`;
+      g += `<circle cx="${s.x(q2)}" cy="${s.y(p2)}" r="5.5" fill="var(--supply)"/>`;
+      g += `<text class="lbl k" x="${s.x(q1)}" y="${s.y(p1) - 11}" text-anchor="middle">before</text>`;
+      g += `<text class="lbl s" x="${s.x(q2)}" y="${s.y(p2) - 11}" text-anchor="middle">after</text>`;
+      g += `<text class="lbl d" x="${s.x(q(1750)) + 10}" y="${s.y(1750)}">D</text>`;
+      viz.innerHTML = svg(g);
+      cap.innerHTML = "gold box = revenue after · green = gained · red = lost";
+
+      $("#r4av", side).textContent = inr(p1);
+      $("#r4bv", side).textContent = inr(p2);
+      const dr = r2 - r1;
+      $("#r4read", side).innerHTML =
+        `<div><span>Revenue before</span><b>${inr(r1)}</b></div>
+         <div><span>Revenue after</span><b class="${dr > 0 ? "up" : dr < 0 ? "down" : ""}">${inr(r2)}</b></div>`;
+
+      $("#r4mid", side).innerHTML = `
+        <h3>Midpoint method</h3>
+        <div class="tbl-scroll"><table class="ledger">
+          <tr><th>Quantity</th><td class="num">${n1(q1)} → ${n1(q2)}</td></tr>
+          <tr><th>% change in Q</th><td class="num">(${n1(q2)} − ${n1(q1)}) ÷ ${n1(mQ)} = <b>${n1(pctQ)}%</b></td></tr>
+          <tr><th>% change in P</th><td class="num">(${inr(p2)} − ${inr(p1)}) ÷ ${inr(mP)} = <b>${n1(pctP)}%</b></td></tr>
+          <tr><th>Elasticity</th><td class="num"><b>${isNaN(E) ? "—" : n2(E)}</b></td></tr>
+        </table></div>
+        <p class="note">Using the midpoint keeps the answer the same whichever end you start from — the ordinary percentage formula would give you two different elasticities for the same pair of points.</p>`;
+
+      let cls, head, body;
+      if (isNaN(E)) { cls = ""; head = "Move a handle"; body = "Set two different prices to run the test."; }
+      else if (E > 1.05) {
+        cls = p2 > p1 ? "no" : "ok";
+        head = "Elastic stretch · E > 1";
+        body = `Quantity moved <b>${n1(Math.abs(pctQ))}%</b> against a price move of <b>${n1(Math.abs(pctP))}%</b>. Buyers are more price-sensitive than your price is aggressive, so ${p2 > p1 ? "the units you lost outweigh the rupees you gained — <b>revenue fell " + inr(-dr) + "</b>." : "the units you won outweigh the rupees you gave up — <b>revenue rose " + inr(dr) + "</b>."}`;
+      } else if (E < 0.95) {
+        cls = p2 > p1 ? "ok" : "no";
+        head = "Inelastic stretch · E < 1";
+        body = `Quantity barely flinched — <b>${n1(Math.abs(pctQ))}%</b> against <b>${n1(Math.abs(pctP))}%</b>. ${p2 > p1 ? "The extra rupees per shoot swamp the shoots you lost: <b>revenue rose " + inr(dr) + "</b>." : "You gave away rupees to win customers who would mostly have paid anyway: <b>revenue fell " + inr(-dr) + "</b>."}`;
+      } else {
+        cls = "ok"; head = "Unit elastic · E ≈ 1";
+        body = `The two effects cancel almost exactly — revenue moved only ${inr(Math.abs(dr))}. You are standing on the crest. At the ‘after’ price the point elasticity is ${n2(Epoint)}, and the revenue-maximising price for this curve is <b>${inr(1000)}</b>, precisely half the choke price of ${inr(2000)}.`;
+      }
+      $("#r4verd", side).innerHTML = `<div class="verdict ${cls}" style="margin-top:0"><strong>${head}</strong>${body}</div>`;
+    }
+
+    $("#r4a", side).addEventListener("input", e => { p1 = +e.target.value; render(); });
+    $("#r4b", side).addEventListener("input", e => { p2 = +e.target.value; render(); });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 5 — Policy Lab: two ways to shrink a market
+   ================================================================== */
+const R5 = {
+  id: "policy", num: 5, topic: "Elasticity in policy",
+  title: "Two Ways to Shrink a Market",
+  lede: "A state decides that households are spending too much on exam coaching and wants that number down. Two levers are on the table. <b>Cap the centres</b> — licensing raids, seat limits, hour restrictions — which pushes supply left. Or <b>change the exam</b> so that drilling adds almost nothing to a score, which pushes demand left. Both shrink the number of students coached. Only one shrinks the bill.",
+  insight: "The gold rectangle is total household spending — price times quantity, the thing the policy claims to care about. When demand is <em>inelastic</em>, squeezing supply raises price by proportionally more than it cuts quantity, so the rectangle gets <strong>taller faster than it gets narrower</strong> and families end up paying more for less. Attacking demand moves price and quantity in the same direction, so the rectangle shrinks on both sides at once. Same goal, opposite results — and the entire difference is one number.",
+  tryit: "Now drag the elasticity slider toward the elastic end and re-run the crackdown. At some point the verdict flips and supply restriction starts working. Find that point, then argue about which real markets sit on which side of it — and what a government would have to know before choosing a lever.",
+  mount(root) {
+    const side = $("#side-policy", root), viz = $("#viz-policy", root), cap = $("#cap-policy", root);
+    let enforce = 0, educate = 0, bE = 0.18;
+    const A0 = 130, d = 0.9, Sk0 = -18;
+
+    side.innerHTML = `
+      <div class="card">
+        <h3>The two levers</h3>
+        <div class="slider">
+          <label for="r5e">Crackdown on centres <span class="v" id="r5ev">off</span></label>
+          <input type="range" class="s2" id="r5e" min="0" max="45" step="1" value="0">
+        </div>
+        <div class="slider">
+          <label for="r5d">Exam reform reaching families <span class="v" id="r5dv">off</span></label>
+          <input type="range" id="r5d" min="0" max="45" step="1" value="0">
+        </div>
+        <div class="rowbtn">
+          <button class="btn ghost" id="r5only1">Crackdown only</button>
+          <button class="btn ghost" id="r5only2">Reform only</button>
+          <button class="btn ghost" id="r5off">Reset</button>
+        </div>
+      </div>
+      <div class="readout" id="r5read"></div>
+      <div class="card">
+        <h3>How trapped are the families?</h3>
+        <div class="slider">
+          <label for="r5b">Price elasticity of demand <span class="v" id="r5bv"></span></label>
+          <input type="range" class="s3" id="r5b" min="4" max="150" step="2" value="18">
+        </div>
+        <p class="note" id="r5bn"></p>
+      </div>
+      <div class="card" id="r5verd"></div>`;
+
+    function eqm(A, Sk, b) {
+      const P = (A - Sk) / (b + d);
+      return { P, Q: A - b * P };
+    }
+
+    function render() {
+      const b = bE;
+      const s = scale(140, 220);
+      const base = eqm(A0, Sk0, b);
+      const A = A0 - educate * 1.1, Sk = Sk0 - enforce * 0.95;
+      const now = eqm(A, Sk, b);
+      const qd0 = p => A0 - b * p, qs0 = p => d * p + Sk0;
+      const qd = p => A - b * p, qs = p => d * p + Sk;
+
+      let g = frame(s, {
+        xlab: "Students coached (’000)", ylab: "Fee (₹ ’000)",
+        xf: v => n1(v), yf: v => n1(v)
+      });
+      g += `<rect class="aRev" x="${s.x(0)}" y="${s.y(now.P)}" width="${s.x(now.Q) - s.x(0)}" height="${s.y0 - s.y(now.P)}"/>`;
+      if (enforce || educate) g += curve(qd0, s, "cD ghost") + curve(qs0, s, "cS ghost");
+      g += curve(qd, s, "cD") + curve(qs, s, "cS");
+      g += guides(s, now.Q, now.P) + dot(s, now.Q, now.P, "");
+      g += `<text class="lbl g" x="${s.x(now.Q / 2)}" y="${s.y(now.P / 2)}" text-anchor="middle">household spend</text>`;
+      const lp = 0.9 * s.pmax;
+      g += `<text class="lbl d" x="${s.x(qd(lp)) - 6}" y="${s.y(lp) - 6}" text-anchor="end">D</text>`;
+      g += `<text class="lbl s" x="${s.x(qs(lp)) + 8}" y="${s.y(lp) - 6}">S</text>`;
+      viz.innerHTML = svg(g);
+      cap.textContent = (enforce || educate) ? "dashed = before the policy" : "before any policy";
+
+      const spend0 = base.P * base.Q, spend = now.P * now.Q;
+      const pct = (spend - spend0) / spend0 * 100;
+      $("#r5read", side).innerHTML =
+        `<div><span>Fee per student</span><b>${inrK(now.P)}</b></div>
+         <div><span>Students coached</span><b>${n1(now.Q)}k</b></div>
+         <div><span>Total household spend</span><b class="${pct > 0.5 ? "down" : pct < -0.5 ? "up" : ""}">₹${n1(spend / 10)} cr</b></div>
+         <div><span>Change vs. no policy</span><b class="${pct > 0.5 ? "down" : pct < -0.5 ? "up" : ""}">${pct > 0 ? "+" : ""}${n1(pct)}%</b></div>`;
+
+      $("#r5ev", side).textContent = enforce ? enforce + " / 45" : "off";
+      $("#r5dv", side).textContent = educate ? educate + " / 45" : "off";
+      const Ebase = b * base.P / base.Q;
+      $("#r5bv", side).textContent = "E = " + n2(Ebase);
+      $("#r5bn", side).innerHTML = Ebase < 0.9
+        ? `At <strong>E = ${n2(Ebase)}</strong> demand is <strong>inelastic</strong>: families will find the money almost regardless of the fee, because the exam is a gate and there is no substitute for passing it.`
+        : Ebase > 1.1
+          ? `At <strong>E = ${n2(Ebase)}</strong> demand is <strong>elastic</strong>: free video lectures, peer groups and self-study are close enough that a fee rise sends families elsewhere.`
+          : `At <strong>E = ${n2(Ebase)}</strong> demand is roughly <strong>unit elastic</strong> — the knife edge where a price change leaves total spending untouched.`;
+
+      let head, body, cls;
+      if (!enforce && !educate) {
+        cls = ""; head = "No policy running";
+        body = `The market sits at a fee of ${inrK(base.P)} and ${n1(base.Q)} thousand students coached, for a total household bill of ₹${n1(spend0 / 10)} crore. Pull one lever at a time first.`;
+      } else if (enforce && !educate) {
+        const worse = pct > 0.5;
+        cls = worse ? "no" : "ok";
+        head = worse ? "The crackdown backfired" : "The crackdown worked";
+        body = worse
+          ? `Fewer students are being coached — quantity fell to ${n1(now.Q)}k — and yet the bill <strong>rose ${n1(pct)}%</strong>. With demand this inelastic the surviving centres can raise fees faster than they lose students, so the families who stay simply pay more. The policy hit the number it was measuring and missed the number it cared about.`
+          : `Quantity fell to ${n1(now.Q)}k and the bill fell <strong>${n1(-pct)}%</strong> with it. At this elasticity buyers can walk away, so squeezing supply no longer hands pricing power to the survivors.`;
+      } else if (educate && !enforce) {
+        cls = pct < -0.5 ? "ok" : "no";
+        head = "Reform moved the demand curve";
+        body = `Fee fell to ${inrK(now.P)} <em>and</em> quantity fell to ${n1(now.Q)}k. Price and quantity moved the same way, so the spending rectangle shrank on both sides: <strong>${n1(-pct)}% off the household bill</strong>. Note that this works whatever the elasticity — attacking demand does not depend on knowing E.`;
+      } else {
+        cls = pct < -0.5 ? "ok" : "no";
+        head = "Both levers at once";
+        body = `Total spend is ${pct > 0 ? "<strong>up " + n1(pct) + "%</strong>" : "<strong>down " + n1(-pct) + "%</strong>"}. Demand shifting left pushes the fee down; supply shifting left pushes it up. Which wins depends on the relative size of the two shifts — and unless you know that, <em>you cannot sign the effect on price</em>. Quantity, at least, unambiguously falls.`;
+      }
+      $("#r5verd", side).innerHTML = `<div class="verdict ${cls}" style="margin-top:0"><strong>${head}</strong>${body}</div>`;
+    }
+
+    $("#r5e", side).addEventListener("input", e => { enforce = +e.target.value; render(); });
+    $("#r5d", side).addEventListener("input", e => { educate = +e.target.value; render(); });
+    $("#r5b", side).addEventListener("input", e => { bE = +e.target.value / 100; render(); });
+    side.addEventListener("click", e => {
+      const set = (a, b2) => {
+        enforce = a; educate = b2;
+        $("#r5e", side).value = a; $("#r5d", side).value = b2; render();
+      };
+      if (e.target.id === "r5only1") set(34, 0);
+      if (e.target.id === "r5only2") set(0, 34);
+      if (e.target.id === "r5off") set(0, 0);
+    });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 6 — Surplus floor
+   ================================================================== */
+const BUYERS = [
+  { n: "Meera", wtp: 38 }, { n: "Ananya", wtp: 32 }, { n: "Rohit", wtp: 24 }, { n: "Vikram", wtp: 19 }
+];
+const SELLERS = [
+  { n: "Devika", c: 17 }, { n: "Faiz", c: 23 }, { n: "Nikhil", c: 31 }, { n: "Tara", c: 36 }
+];
+
+const R6 = {
+  id: "surplus", num: 6, topic: "Consumer & producer surplus",
+  legend: '<span class="d"><i></i>Willingness to pay</span> <span class="s"><i></i>Sellers\u2019 cost</span>',
+  title: "The Refurbished Laptop Floor",
+  lede: "Four buyers with four different willingnesses to pay. Four sellers with four different costs. Set a price and watch exactly who trades, what each of them pockets, and whether the market found the arrangement that leaves the most value on the table for everyone put together.",
+  insight: "The demand curve is a queue of buyers sorted by what the good is worth to them, and the supply curve is a queue of sellers sorted by what it costs them to give it up. The height of each step is a person. That is why consumer surplus is an <em>area</em> — you are stacking one buyer's gain on the next — and why the market equilibrium is efficient: every trade whose value exceeds its cost happens, and no trade whose cost exceeds its value does.",
+  tryit: "Push the price to ₹28,000 and total surplus is at its maximum of ₹30,000. Now push it to ₹20,000. Total surplus <em>falls</em> — but look at who lost it and who gained. Then answer the harder question: the same ₹30,000 could be split many ways between buyers and sellers. Does efficiency have anything at all to say about which split is right?",
+  mount(root) {
+    const side = $("#side-surplus", root), viz = $("#viz-surplus", root), cap = $("#cap-surplus", root);
+    let P = 28;
+
+    side.innerHTML = `
+      <div class="card">
+        <div class="slider" style="margin-bottom:0">
+          <label for="r6p">Market price <span class="v" id="r6pv"></span></label>
+          <input type="range" class="s3" id="r6p" min="14" max="41" step="1" value="28">
+        </div>
+      </div>
+      <div class="readout" id="r6read"></div>
+      <div class="card"><h3>Buyers</h3><div class="tbl-scroll"><table class="ledger" id="r6b"></table></div></div>
+      <div class="card"><h3>Sellers</h3><div class="tbl-scroll"><table class="ledger" id="r6s"></table></div></div>
+      <div class="card" id="r6v"></div>`;
+
+    function steps(vals, s, up) {
+      // build a staircase polyline: unit i spans x in [i, i+1] at height vals[i]
+      let pts = [];
+      vals.forEach((v, i) => {
+        pts.push(s.xr(i) + "," + s.yr(v));
+        pts.push(s.xr(i + 1) + "," + s.yr(v));
+      });
+      return `<polyline class="step" stroke="${up ? "var(--supply)" : "var(--demand)"}" points="${pts.join(" ")}"/>`;
+    }
+
+    function render() {
+      const s = scale(4.6, 46);
+      const buy = BUYERS.filter(x => x.wtp >= P);
+      const sell = SELLERS.filter(x => x.c <= P);
+      const traded = Math.min(buy.length, sell.length);
+      const CS = buy.slice(0, traded).reduce((a, x) => a + (x.wtp - P), 0);
+      const PS = sell.slice(0, traded).reduce((a, x) => a + (P - x.c), 0);
+      const TS = CS + PS;
+      const MAXTS = 30;
+
+      let g = frame(s, {
+        xlab: "Laptops", ylab: "₹ ’000",
+        xticks: 4, yticks: 4,
+        xf: v => Math.round(v), yf: v => Math.round(v)
+      });
+      // surplus areas per traded unit
+      for (let i = 0; i < traded; i++) {
+        const w = BUYERS[i].wtp, c = SELLERS[i].c;
+        g += `<rect class="aCS" x="${s.xr(i) + 2}" y="${s.yr(w)}" width="${s.xr(1) - s.xr(0) - 4}" height="${s.yr(P) - s.yr(w)}"/>`;
+        g += `<rect class="aPS" x="${s.xr(i) + 2}" y="${s.yr(P)}" width="${s.xr(1) - s.xr(0) - 4}" height="${s.yr(c) - s.yr(P)}"/>`;
+      }
+      g += steps(BUYERS.map(x => x.wtp), s, false);
+      g += steps(SELLERS.map(x => x.c), s, true);
+      g += `<line x1="${s.x0}" y1="${s.yr(P)}" x2="${s.xr(4.4)}" y2="${s.yr(P)}" stroke="var(--signal)" stroke-width="2"/>`;
+      g += `<text class="lbl g" x="${s.xr(4.42)}" y="${s.yr(P) - 7}" text-anchor="end">price ${inrK(P)}</text>`;
+      BUYERS.forEach((x, i) => {
+        g += `<text class="lbl ${x.wtp >= P && i < traded ? "d" : "k"}" x="${s.xr(i + .5)}" y="${s.yr(x.wtp) - 8}" text-anchor="middle" opacity="${x.wtp >= P ? 1 : .45}">${x.n}</text>`;
+      });
+      SELLERS.forEach((x, i) => {
+        g += `<text class="lbl ${x.c <= P && i < traded ? "s" : "k"}" x="${s.xr(i + .5)}" y="${s.yr(x.c) + 17}" text-anchor="middle" opacity="${x.c <= P ? 1 : .45}">${x.n}</text>`;
+      });
+      viz.innerHTML = svg(g);
+      cap.textContent = "teal = consumer surplus · ochre = producer surplus";
+
+      $("#r6pv", side).textContent = inr(P * 1000);
+      $("#r6read", side).innerHTML =
+        `<div><span>Consumer surplus</span><b>${inr(CS * 1000)}</b></div>
+         <div><span>Producer surplus</span><b>${inr(PS * 1000)}</b></div>
+         <div><span>Laptops traded</span><b>${traded}</b></div>
+         <div><span>Total surplus</span><b class="${TS >= MAXTS ? "up" : "down"}">${inr(TS * 1000)}</b></div>`;
+
+      $("#r6b", side).innerHTML = `<tr><th>Buyer</th><th class="num">Willing to pay</th><th class="num">Surplus</th></tr>` +
+        BUYERS.map((x, i) => {
+          const inTrade = x.wtp >= P && i < traded;
+          return `<tr class="${inTrade ? (i === traded - 1 ? "marg" : "") : "out"}"><td>${x.n}</td><td class="num">${inrK(x.wtp)}</td><td class="num">${inTrade ? inr((x.wtp - P) * 1000) : "—"}</td></tr>`;
+        }).join("");
+      $("#r6s", side).innerHTML = `<tr><th>Seller</th><th class="num">Cost</th><th class="num">Surplus</th></tr>` +
+        SELLERS.map((x, i) => {
+          const inTrade = x.c <= P && i < traded;
+          return `<tr class="${inTrade ? (i === traded - 1 ? "marg" : "") : "out"}"><td>${x.n}</td><td class="num">${inrK(x.c)}</td><td class="num">${inTrade ? inr((P - x.c) * 1000) : "—"}</td></tr>`;
+        }).join("");
+
+      const wantBuy = buy.length, wantSell = sell.length;
+      let head, body, cls;
+      if (wantBuy > wantSell) {
+        cls = "no"; head = "Shortage · " + (wantBuy - wantSell) + " buyer(s) turned away";
+        body = `At ${inrK(P)}, ${wantBuy} people want a laptop but only ${wantSell} seller(s) will part with one. Somebody who is willing to pay more than ${inrK(P)} is walking away empty-handed — so this price cannot last. Total surplus is ${inr(TS * 1000)}, against a possible ${inr(MAXTS * 1000)}.`;
+      } else if (wantSell > wantBuy) {
+        cls = "no"; head = "Surplus · " + (wantSell - wantBuy) + " unsold laptop(s)";
+        body = `At ${inrK(P)}, ${wantSell} sellers want to sell but only ${wantBuy} buyer(s) will pay. Sellers with idle stock start undercutting. Total surplus is ${inr(TS * 1000)}, against a possible ${inr(MAXTS * 1000)}.`;
+      } else {
+        cls = "ok"; head = "The market clears · total surplus maximised";
+        body = `Meera and Ananya value a laptop more than Devika and Faiz value keeping one, so those two trades create ${inr(MAXTS * 1000)} of value between them. Rohit will not pay what Nikhil needs — and that trade <em>should not</em> happen; forcing it would destroy ${inr((31 - 24) * 1000)} of value. Any price between ${inrK(25)} and ${inrK(30)} produces exactly this allocation, and only the split of the ${inr(MAXTS * 1000)} changes.`;
+      }
+      $("#r6v", side).innerHTML = `<div class="verdict ${cls}" style="margin-top:0"><strong>${head}</strong>${body}</div>`;
+    }
+
+    $("#r6p", side).addEventListener("input", e => { P = +e.target.value; render(); });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 7 — Deadweight loss dial
+   ================================================================== */
+const R7 = {
+  id: "dwl", num: 7, topic: "Efficiency & deadweight loss",
+  legend: '<span class="d"><i></i>Demand</span> <span class="s"><i></i>Supply</span> <span class="w"><i></i>Lost value</span>',
+  title: "The Quantity Dial",
+  lede: "Same market, now with thousands of buyers and sellers so the staircase smooths into a curve. Ignore the price for a moment and simply dial the <em>quantity traded</em> up and down by hand. Every setting other than one destroys value — and the diagram will tell you exactly how much, and exactly who was denied.",
+  insight: "Deadweight loss is the answer to a very concrete question: for the units that did not get traded, how much did buyers value them <em>over and above</em> what they would have cost to produce? Stack that gap over all the missing units and you get the triangle. It is not money that went somewhere else — it is value that simply never came into existence, which is what makes it so easy for a policy to destroy without anyone noticing it on a balance sheet.",
+  tryit: "Dial past the equilibrium instead of short of it. The triangle reappears — but now it is measuring the opposite crime: units being made whose cost exceeds what anyone thinks they are worth. Both a shortage and a glut are inefficient, and for symmetric reasons. Name a real policy that produces each.",
+  mount(root) {
+    const side = $("#side-dwl", root), viz = $("#viz-dwl", root), cap = $("#cap-dwl", root);
+    let Q = 15;
+    const Pd = q => 60 - 2 * q;          // inverse demand,  Q = 30 - 0.5P
+    const Ps = q => (q + 3) / 0.6;       // inverse supply,  Q = 0.6P - 3
+    const qd = p => 30 - 0.5 * p, qs = p => 0.6 * p - 3;
+    const QE = 15, PE = 30;
+
+    side.innerHTML = `
+      <div class="card">
+        <div class="slider" style="margin-bottom:0">
+          <label for="r7q">Quantity actually traded <span class="v" id="r7qv"></span></label>
+          <input type="range" class="s3" id="r7q" min="0" max="26" step="0.5" value="15">
+        </div>
+        <div class="rowbtn"><button class="btn ghost" id="r7eq">Snap to equilibrium</button></div>
+      </div>
+      <div class="readout" id="r7read"></div>
+      <div class="card" id="r7marg"></div>
+      <div class="card" id="r7v"></div>`;
+
+    function render() {
+      const s = scale(30, 60);
+      let g = frame(s, {
+        xlab: "Laptops (’000)", ylab: "₹ ’000",
+        xf: v => Math.round(v), yf: v => Math.round(v)
+      });
+
+      const qq = clamp(Q, 0, 26);
+      // realised gains from trade: the band between demand and supply, out to the units actually traded
+      const qs2 = Math.min(qq, QE);
+      g += `<polygon class="aCS" points="${s.xr(0)},${s.yr(60)} ${s.xr(qs2)},${s.yr(Pd(qs2))} ${s.xr(qs2)},${s.yr(Ps(qs2))} ${s.xr(0)},${s.yr(5)}"/>`;
+
+      // deadweight loss wedge between Q and QE
+      if (Math.abs(qq - QE) > 0.05) {
+        const a = Math.min(qq, QE), bq = Math.max(qq, QE);
+        g += `<polygon class="aDWL" points="${s.xr(a)},${s.yr(Pd(a))} ${s.xr(bq)},${s.yr(Pd(bq))} ${s.xr(bq)},${s.yr(Ps(bq))} ${s.xr(a)},${s.yr(Ps(a))}"/>`;
+      }
+
+      g += curve(qd, s, "cD") + curve(qs, s, "cS");
+      g += `<line class="guide" x1="${s.xr(qq)}" y1="${s.t}" x2="${s.xr(qq)}" y2="${s.y0}"/>`;
+      g += `<circle cx="${s.xr(qq)}" cy="${s.yr(Pd(qq))}" r="5" fill="var(--demand)"/>`;
+      g += `<circle cx="${s.xr(qq)}" cy="${s.yr(Ps(qq))}" r="5" fill="var(--supply)"/>`;
+      g += `<circle class="eqdot" cx="${s.xr(QE)}" cy="${s.yr(PE)}" r="5"/>`;
+      g += `<text class="lbl g" x="${s.xr(QE) + 9}" y="${s.yr(PE) - 9}">efficient point</text>`;
+      g += `<text class="lbl d" x="${s.xr(27.5)}" y="${s.yr(Pd(27.5)) - 8}" text-anchor="end">D</text>`;
+      g += `<text class="lbl s" x="${s.xr(27.5)}" y="${s.yr(Ps(27.5)) - 8}" text-anchor="end">S</text>`;
+      viz.innerHTML = svg(g);
+      cap.textContent = Math.abs(qq - QE) > 0.05 ? "hatched = deadweight loss" : "no deadweight loss";
+
+      const tsMax = 0.5 * QE * (60 - 5);
+      const gap = Math.abs(qq - QE);
+      const dwl = 0.5 * gap * Math.abs(Pd(Math.max(qq, QE)) - Ps(Math.max(qq, QE)));
+      const ts = tsMax - dwl;
+
+      $("#r7qv", side).textContent = n1(qq) + "k";
+      $("#r7read", side).innerHTML =
+        `<div><span>Total surplus</span><b>₹${n1(ts / 10)} cr</b></div>
+         <div><span>Deadweight loss</span><b class="${dwl > 0.05 ? "down" : "up"}">₹${n1(dwl / 10)} cr</b></div>
+         <div><span>Value of last unit</span><b>${inrK(Pd(qq))}</b></div>
+         <div><span>Cost of last unit</span><b>${inrK(Ps(qq))}</b></div>`;
+
+      const v = Pd(qq), c = Ps(qq);
+      $("#r7marg", side).innerHTML = `<h3>The marginal unit</h3><p class="note" style="margin-top:0">${
+        qq < QE - 0.05
+          ? `The next laptop after this one is worth <strong>${inrK(v)}</strong> to the buyer at the front of the queue, and costs the cheapest remaining seller only <strong>${inrK(c)}</strong>. There is <strong>${inrK(v - c)}</strong> of value sitting there that nobody is picking up. Every such unit until ${n1(QE)}k adds to the triangle.`
+          : qq > QE + 0.05
+            ? `This laptop costs a seller <strong>${inrK(c)}</strong> to produce, and the buyer who ends up with it values it at only <strong>${inrK(v)}</strong>. Making it burns <strong>${inrK(c - v)}</strong> of real resources. Producing more is not the same as producing well.`
+            : `Value and cost meet exactly here at <strong>${inrK(v)}</strong>. There is no unproduced laptop worth more than it costs, and no produced laptop costing more than it is worth. That is the whole definition of efficiency, in one sentence.`
+      }</p>`;
+
+      const pct = dwl / tsMax * 100;
+      $("#r7v", side).innerHTML = `<div class="verdict ${dwl < 0.05 ? "ok" : "no"}" style="margin-top:0"><strong>${
+        dwl < 0.05 ? "Nothing is being wasted" : n1(pct) + "% of the possible gains are gone"
+      }</strong>${
+        dwl < 0.05
+          ? `Total surplus is at its ceiling of ₹${n1(tsMax / 10)} crore. Three things are true at once here: the laptops go to the buyers who value them most, they are made by the sellers who can make them cheapest, and changing the quantity in either direction would lower the total.`
+          : `Total surplus has fallen from ₹${n1(tsMax / 10)} crore to ₹${n1(ts / 10)} crore. The missing ₹${n1(dwl / 10)} crore did not move to the government, to sellers, or to anyone else — <em>it was never created</em>. That is what makes deadweight loss so politically survivable: it has no constituency, because the people who lost it never knew what they were missing.`
+      }</div>`;
+    }
+
+    $("#r7q", side).addEventListener("input", e => { Q = +e.target.value; render(); });
+    $("#r7eq", side).addEventListener("click", () => { Q = 15; $("#r7q", side).value = 15; render(); });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 8 — Arguments worth having
+   ================================================================== */
+const PROMPTS = [
+  { t: "Movement, shift, or neither", q: "Surge pricing doubles the fare on a rainy Friday evening. Is that a movement along the supply curve, a shift of it, or something the two-curve diagram cannot represent?", h: "Ask what is being held constant when it rains." },
+  { t: "Elasticity you have personally paid", q: "Your hostel raises the mess fee 15% and mess revenue goes up. What does that tell you about the elasticity of demand for mess food — and what single change to campus would flip the sign of that result?", h: "The answer is not about food." },
+  { t: "Who captured it", q: "A digital payment rail makes small transfers free at the point of use. Draw what that did to the demand curve for ₹20 transactions, then say who ended up with the surplus: users, merchants, banks, or nobody in particular.", h: "Free to the user is not free." },
+  { t: "Fair versus efficient", q: "A concert sells out in forty seconds and tickets resell at six times face value. Where did the consumer surplus go? Was the original sale efficient? Was it fair? Argue that these are two different questions, then argue that they are not.", h: "Resale markets are surplus-reallocation machines." },
+  { t: "Supply curve of nothing", q: "Your app has essentially zero marginal cost — one more user costs you nothing. Draw the supply curve. Now explain what producer surplus even means here, and why the price is not zero.", h: "Where did the cost go, if not into the marginal unit?" },
+  { t: "The capped surge", q: "A regulator caps surge pricing at 1.5×. Predict the shortage on a rainy Friday. Identify precisely who is worse off than under free surge, and who is better off. Do not say ‘consumers’.", h: "Some riders get a cheap ride. Others get no ride." },
+  { t: "The export ban", q: "Onion prices spike and exports are banned overnight. Draw the domestic market before and after. Trace consumer surplus, producer surplus and total surplus — and then say which of those three numbers the newspaper reported.", h: "Farmers are producers too." },
+  { t: "The two-week experiment", q: "If elasticity is higher in the long run, why does almost every real pricing experiment run for two weeks? What is the systematic direction of the error, and which way does it bias a company's pricing?", h: "Companies discover the long run after they have already raised prices." },
+  { t: "Upward-sloping demand", q: "Name a good you personally would buy <em>more</em> of if its price rose. Now explain what is actually varying that the law of demand assumes constant. Does the law survive?", h: "Price is doing a second job here." },
+  { t: "Free wifi, crowded pipe", q: "Campus wifi is free at the point of use. Total surplus goes up, but so does congestion. Where does the deadweight loss show up, given that there is no price to distort?", h: "Time spent waiting is a cost that goes to nobody." },
+  { t: "Both curves at once", q: "Find a news story from this week in which both curves plausibly shifted. Work out which variable is ambiguous. Then say what one extra piece of information would settle it — and whether anyone actually collects that information.", h: "Ambiguity is a research agenda, not a failure." },
+  { t: "Design the lever", q: "Pick any market a government wants to shrink — groundwater extraction, private diesel gensets, single-use plastic. Decide whether to attack supply or demand, and defend the choice using only the elasticity of demand.", h: "Room 5, with different nouns." }
+];
+
+const R8 = {
+  id: "argue", num: 8, topic: "Open questions",
+  title: "Arguments Worth Having",
+  lede: "Twelve questions with no answer key, in rough order of how badly they break if you answer them carelessly. None of them are collected, graded, or checked. Take the ones that annoy you.",
+  insight: "", tryit: "",
+  mount(root) { /* replaced below */ }
+};
+
+/* ============ boot ============ */
+const ROOMS = [R1, R2, R3, R4, R5, R6, R7, R8];
+
+const panels = $("#panels"), tabsEl = $("#tabs");
+
+tabsEl.innerHTML = ROOMS.map((m, k) =>
+  `<button class="tab" role="tab" id="tab-${m.id}" aria-controls="pan-${m.id}" aria-selected="${k === 0}" data-id="${m.id}">
+     <span class="n">${m.num}</span><span class="t">${m.title}</span></button>`).join("");
+
+panels.innerHTML = ROOMS.slice(0, 7).map(shell).join("") + `
+  <section class="module" id="pan-argue" role="tabpanel" aria-labelledby="tab-argue">
+    <div class="mod-head">
+      <span class="eyebrow">Room 8 · ${R8.topic}</span>
+      <h2>${R8.title}</h2>
+      <p class="lede">${R8.lede}</p>
+    </div>
+    <div class="deck">${PROMPTS.map(p => `
+      <article class="prompt">
+        <span class="tagline">${p.t}</span>
+        <p>${p.q}</p>
+        <p class="hint">${p.h}</p>
+      </article>`).join("")}</div>
+  </section>`;
+
+let seen = {};
+try { seen = JSON.parse(store("seen") || "{}") || {}; } catch (e) { seen = {}; }
+
+function markSeen(id) {
+  seen[id] = 1;
+  store("seen", JSON.stringify(seen));
+  ROOMS.forEach(m => { const t = $("#tab-" + m.id); if (t) t.dataset.seen = seen[m.id] ? "1" : "0"; });
+  $("#progress").textContent = Object.keys(seen).length + " / 8 rooms opened";
+}
+
+const mounted = {};
+function show(id) {
+  ROOMS.forEach(m => {
+    const p = $("#pan-" + m.id), t = $("#tab-" + m.id);
+    const on = m.id === id;
+    p.classList.toggle("on", on);
+    t.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  if (!mounted[id]) {
+    const m = ROOMS.find(x => x.id === id);
+    if (m && m.mount && id !== "argue") { m.mount(document); }
+    mounted[id] = true;
+  }
+  markSeen(id);
+}
+
+tabsEl.addEventListener("click", e => {
+  const t = e.target.closest(".tab");
+  if (t) show(t.dataset.id);
+});
+
+/* theme toggle: cycles system → light → dark */
+const tb = $("#themeBtn");
+const saved = store("theme");
+if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved);
+tb.addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "light" ? "dark" : cur === "dark" ? null : "light";
+  if (next) { document.documentElement.setAttribute("data-theme", next); store("theme", next); }
+  else { document.documentElement.removeAttribute("data-theme"); store("theme", "system"); }
+});
+
+show("shift");
+markSeen("shift");
+</script>
+
+</body>
+</html>

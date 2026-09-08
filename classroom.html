@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classroom — Econstellar · teaching instruments for economics courses</title>
+<meta name="description" content="Interactive teaching instruments for university economics courses. Students play with the model instead of reading about it. Free, ungraded, nothing to install.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Econstellar Classroom — teaching instruments for economics">
+<meta property="og:description" content="Interactive labs where students break the model to understand it. Built for the Managerial Economics course at SHSSM, IIT Bhubaneswar.">
+<meta property="og:url" content="https://econstellars.com/classroom.html">
+<link rel="canonical" href="https://econstellars.com/classroom.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15); --hot:rgba(0,255,136,.32); --rule:rgba(255,255,255,.06);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444;
+  --sans:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace; --disp:'Orbitron',sans-serif;
+  --clip:polygon(0 12px,12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 15% 8%,rgba(0,212,255,.07),transparent 40%),radial-gradient(circle at 85% 70%,rgba(0,255,136,.06),transparent 45%)}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+nav{display:flex;gap:1rem;align-items:center;padding:.9rem 20px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:.78rem;position:sticky;top:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:10;flex-wrap:wrap}
+nav .brand{color:var(--green);font-weight:600;letter-spacing:.5px} nav .sp{flex:1} nav a{color:var(--dim)}
+nav a[aria-current="page"]{color:var(--green)}
+header{padding:3rem 0 1rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+h1{font-family:var(--disp);font-size:clamp(1.9rem,4.4vw,3rem);margin:.6rem 0 .5rem;line-height:1.06;max-width:20ch}
+.lede{font-size:1.12rem;color:var(--mid);max-width:64ch;margin:0}
+.btn{font-family:var(--mono);font-size:.86rem;font-weight:600;padding:.7rem 1.2rem;border-radius:9px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);display:inline-flex;align-items:center;gap:.45rem}
+.btn.primary{color:#000;background:linear-gradient(90deg,var(--cyan),var(--green));border:none}
+.btn:hover{text-decoration:none;filter:brightness(1.08)}
+.paths{display:flex;gap:.7rem;flex-wrap:wrap;margin:1.6rem 0 .4rem}
+
+section{margin:3rem 0}
+h2{font-family:var(--disp);font-size:1.25rem;margin:0 0 .2rem;letter-spacing:.5px}
+.sechint{font-family:var(--mono);font-size:.74rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--dim);margin:0 0 1.2rem}
+
+/* course card */
+.course{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.8rem}
+.course .tagrow{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem}
+.tag{font-family:var(--mono);font-size:.68rem;letter-spacing:1.2px;text-transform:uppercase;color:var(--cyan);border:1px solid var(--border);border-radius:999px;padding:.28rem .7rem}
+.tag.live{color:var(--green);border-color:var(--hot)}
+.course h3{font-family:var(--disp);font-size:1.5rem;margin:0 0 .5rem;line-height:1.12}
+.course p{color:var(--mid);max-width:66ch;margin:0 0 1rem}
+.course .meta{font-family:var(--mono);font-size:.76rem;color:var(--dim);margin:0 0 1.3rem}
+
+/* room grid */
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:1.5rem 0}
+.room{background:rgba(6,9,13,.9);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.35rem}
+.room .n{font-family:var(--mono);font-size:.7rem;color:var(--green);letter-spacing:1.5px}
+.room .t{font-weight:600;font-size:.98rem;line-height:1.25}
+.room .d{font-size:.86rem;color:var(--dim);line-height:1.45}
+
+.note{color:var(--mid);font-size:.95rem;max-width:66ch}
+.note strong{color:var(--text)}
+
+ul.plain{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.75rem}
+ul.plain li{padding-left:1.2rem;position:relative;color:var(--mid);max-width:66ch}
+ul.plain li::before{content:"▸";position:absolute;left:0;color:var(--cyan)}
+
+footer{border-top:1px solid var(--rule);margin-top:4rem;padding:1.6rem 0 3rem;font-family:var(--mono);font-size:.76rem;color:var(--dim)}
+footer a{color:var(--dim)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<nav class="wrap" style="max-width:none">
+  <span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
+  <a href="index.html">Home</a><a href="engine.html">The Engine</a><a href="research-engine.html">Workbench</a><a href="observatory.html">Observatory</a><a href="research-station.html">Research Station</a><a href="research-papers.html">Research Papers</a><a href="classroom.html" aria-current="page">Classroom</a>
+</nav>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">SHSSM · IIT Bhubaneswar · Teaching</div>
+    <h1>Classroom</h1>
+    <p class="lede">The research side of this site is about getting an answer you can trust.
+      This side is about something harder: getting a room full of people to <em>believe</em> a
+      result they could have derived themselves. Every instrument here is built so a student
+      can attack the model directly — move the curve, flip the sign, break the conclusion —
+      instead of watching it be asserted on a slide.</p>
+    <div class="paths">
+      <a class="btn primary" href="classroom/market-forces-lab.html">▶ Open Market Forces Lab</a>
+      <a class="btn" href="#how">How to use these in a course</a>
+    </div>
+  </header>
+
+  <section>
+    <h2>Instruments</h2>
+    <p class="sechint">Open in a browser · nothing to install · no account · no data leaves the machine</p>
+
+    <article class="course">
+      <div class="tagrow">
+        <span class="tag live">Live</span>
+        <span class="tag">Managerial Economics</span>
+        <span class="tag">Intro microeconomics</span>
+        <span class="tag">Pre-midsemester</span>
+      </div>
+      <h3>Market Forces Lab</h3>
+      <p>Eight rooms covering the first arc of any introductory microeconomics course:
+        demand and supply, what shifts a curve versus what merely moves along one, equilibrium
+        and how it repairs itself, elasticity and its determinants, the elasticity–revenue
+        relationship, consumer and producer surplus, and deadweight loss. Students play; the
+        diagrams respond; every claim in the lecture becomes something they can falsify in
+        about four seconds.</p>
+      <p class="meta">Built against Mankiw's <em>Principles of Microeconomics</em> (Ch. 4–7) and
+        Baye &amp; Prince's <em>Managerial Economics and Business Strategy</em> (Ch. 2–3) ·
+        basic calculus only · ungraded, nothing is submitted or collected</p>
+
+      <div class="rooms">
+        <div class="room"><span class="n">01</span><span class="t">Shift or Slide?</span><span class="d">Eighteen scenarios. Does a curve move, or do we travel along one that didn't? Timed, scored, keyboard-playable.</span></div>
+        <div class="room"><span class="n">02</span><span class="t">Rooftop Solar Sandbox</span><span class="d">Nine switches, one per non-price determinant. Post your own price and watch the shortage or glut appear.</span></div>
+        <div class="room"><span class="n">03</span><span class="t">Elasticity Duel</span><span class="d">Two goods, both prices up 20%. Call the more elastic one, then name which determinant explains it.</span></div>
+        <div class="room"><span class="n">04</span><span class="t">The Pricing Room</span><span class="d">Run a price test on a real revenue curve. Midpoint method computed live; gained and lost revenue shaded.</span></div>
+        <div class="room"><span class="n">05</span><span class="t">Two Ways to Shrink a Market</span><span class="d">Squeeze supply or squeeze demand. With inelastic demand only one of them works — find where the verdict flips.</span></div>
+        <div class="room"><span class="n">06</span><span class="t">The Trading Floor</span><span class="d">Four named buyers, four named sellers. Per-person surplus, marginal trader highlighted.</span></div>
+        <div class="room"><span class="n">07</span><span class="t">The Quantity Dial</span><span class="d">Dial output by hand and watch value that never got created. Deadweight loss in both directions.</span></div>
+        <div class="room"><span class="n">08</span><span class="t">Arguments Worth Having</span><span class="d">Twelve open questions with no answer key. Surge caps, export bans, zero-marginal-cost supply curves.</span></div>
+      </div>
+
+      <div class="paths" style="margin-bottom:0">
+        <a class="btn primary" href="classroom/market-forces-lab.html">▶ Open the lab</a>
+      </div>
+    </article>
+  </section>
+
+  <section id="how">
+    <h2>How to use these in a course</h2>
+    <p class="sechint">Three patterns that work · pick one, they are not cumulative</p>
+    <ul class="plain">
+      <li><strong>Cold open.</strong> Put Room 1 on the projector before you have taught anything and let the class shout answers. The scenarios they get wrong tell you exactly which half of your lecture to spend the time on.</li>
+      <li><strong>Post the link, say nothing.</strong> Drop the URL into your LMS as optional practice. Nothing is graded or collected, so the only students who open it are the ones who want to — which is precisely the signal you cannot get from an assignment.</li>
+      <li><strong>Argue from a diagram.</strong> Room 5 produces a result most students refuse to believe: a crackdown that reduces quantity and <em>raises</em> total spending. Project it, let them dispute it, then hand them the elasticity slider and let them find the condition under which they are right.</li>
+    </ul>
+    <p class="note" style="margin-top:1.6rem">Everything runs client-side in the browser. There is no
+      backend, no login, no analytics on the lab pages and no student data of any kind — progress is
+      remembered only in that browser's own storage and never leaves the machine. Instructors elsewhere
+      are welcome to link to these directly.</p>
+  </section>
+</div>
+
+<footer class="wrap">
+  <a href="index.html">Econstellar</a> · <a href="research-papers.html">Research Papers</a> · <a href="classroom.html">Classroom</a> ·
+  <a href="privacy.html">Privacy</a><br><br>
+  SHSSM, IIT Bhubaneswar · teaching instruments are free to use and free to link to.
+</footer>
+</body>
+</html>
