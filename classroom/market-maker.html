@@ -346,11 +346,14 @@ footer a{color:var(--dim)}
     <h3 id="sub-sub">Your instructor sees this · no other student does</h3>
     <p style="color:var(--mid);font-size:.96rem;margin-top:0" id="sub-note"></p>
     <div class="row">
-      <button class="btn primary big" id="submit-run">Submit my score</button>
-      <button class="btn" id="copy-run">Copy my result</button>
+      <button class="btn primary big" id="copy-run">📋 Copy my result</button>
+      <button class="btn primary big" id="submit-run" hidden>Submit my score</button>
       <button class="btn" id="again">Play again ↻</button>
       <button class="btn" id="to-lobby">Back to my floor</button>
     </div>
+    <pre id="result-card" style="background:#05080a;border:1px solid var(--rule);border-radius:8px;
+      padding:1rem;margin-top:1rem;font-family:var(--mono);font-size:.84rem;color:var(--mid);
+      white-space:pre-wrap;line-height:1.5"></pre>
     <p class="sub-state" id="sub-state"></p>
   </div>
 
@@ -821,14 +824,24 @@ function finish(){
 
   var st = $("#sub-state"); st.textContent = ""; st.className = "sub-state";
   var btn = $("#submit-run"); btn.disabled = false; btn.textContent = "Submit my score";
+  btn.hidden = !WIRED;
+  var copyBtn = $("#copy-run");
+  $("#result-card").textContent = resultCard();
   if (WIRED) {
+    copyBtn.className = "btn";
+    copyBtn.textContent = "Copy my result";
+    $("#sub-sub").textContent = "Your instructor sees this · no other student does";
     $("#sub-note").innerHTML = "This sends your ID, display name, score, correct count, longest "+
       "streak and weakest concepts to your instructor. It is <b>not</b> a graded submission and "+
       "does not go to any other student. You can submit as many runs as you like.";
   } else {
-    $("#sub-note").innerHTML = "Submission is <b>not connected on this page yet</b>. Pressing "+
-      "Submit will not send anything anywhere. Use <b>Copy my result</b> if you want to share it yourself.";
-    $("#sub-sub").textContent = "Not connected yet";
+    copyBtn.className = "btn primary big";
+    copyBtn.textContent = "📋 Copy my result";
+    $("#sub-sub").textContent = "Paste it as a private comment in Google Classroom";
+    $("#sub-note").innerHTML = "Copy the card below and paste it into the <b>private comment</b> box "+
+      "on the Level 1 post in Google Classroom. A private comment goes only to your instructor — "+
+      "no other student can see it. Still <b>not graded</b>; it is just how your instructor knows "+
+      "who played and which concepts the class is finding hard.";
   }
   show("result");
 }
@@ -867,7 +880,7 @@ $("#submit-run").addEventListener("click", function(){
     if (done) return; done = true;
     sink.removeEventListener("load", onLoad);
     st.className = "sub-state ok";
-    st.textContent = "✓ Sent. Your instructor has it. Nothing about this affects your marks.";
+    st.textContent = "✓ Sent to your instructor. Nothing about this affects your marks.";
     btn.textContent = "Submitted";
     d.submitted = true;
     if (runs[0]) { runs[0].submitted = true; save(K.runs, runs); }
@@ -885,14 +898,24 @@ $("#submit-run").addEventListener("click", function(){
   f.submit();
 });
 
-$("#copy-run").addEventListener("click", function(){
+function resultCard(){
   var d = lastRun;
-  var txt = "Market Maker — " + ident.handle + " (" + ident.id + ")\n" +
-            "Score " + d.score + " · " + d.correct + "/" + d.total + " correct · streak " + d.streak +
-            " · " + Math.floor(d.secs/60) + "m" + (d.secs%60) + "s\n" +
-            "Weak: " + (d.weak.length ? d.weak.join(", ") : "none");
+  return "MARKET MAKER · LEVEL 1\n" +
+         "ID      " + ident.id + "\n" +
+         "Handle  " + ident.handle + "\n" +
+         "Score   " + d.score + "\n" +
+         "Correct " + d.correct + "/" + d.total + "\n" +
+         "Streak  " + d.streak + "\n" +
+         "Time    " + Math.floor(d.secs/60) + "m " + (d.secs%60) + "s\n" +
+         "Weak    " + (d.weak.length ? d.weak.join(", ") : "none");
+}
+
+$("#copy-run").addEventListener("click", function(){
+  var txt = resultCard();
   var st = $("#sub-state");
-  var ok = function(){ st.className = "sub-state ok"; st.textContent = "Copied to clipboard."; };
+  var ok = function(){ st.className = "sub-state ok";
+    st.textContent = WIRED ? "Copied to clipboard."
+      : "✓ Copied. Now paste it into the private comment box on the Level 1 post in Classroom."; };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt).then(ok, function(){ fallback(txt, ok, st); });
   } else fallback(txt, ok, st);
