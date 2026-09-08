@@ -1,0 +1,636 @@
+/* ════════════════════════════════════════════════════════════════════════════
+   classroom/mm-questions.js — the Market Maker question pool.
+
+   Content lives here, engine lives in market-maker.html, so adding questions
+   never means touching game logic.
+
+   Shape of a question:
+     id    unique string
+     cat   category key (see MM_CATS below) — drives the mastery diagnostics
+     tier  1 recognition · 2 application · 3 judgement
+     type  "mcq" | "num" | "pick"
+     q     the prompt (may contain inline HTML)
+     o     mcq: array of options
+     a     mcq: index of correct option · num: the number · pick: region letter
+     tol   num only: absolute tolerance
+     pre   num only: text shown above the input (units, hint)
+     scene pick only: which diagram to draw ("eqm" | "ceiling" | "tax")
+     why   the teaching line shown after answering — the actual payload
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+window.MM_CATS = {
+  ds:    "Demand & supply",
+  shift: "Shifts vs. movements",
+  eq:    "Equilibrium",
+  elas:  "Measuring elasticity",
+  det:   "What makes demand elastic",
+  rev:   "Elasticity & revenue",
+  surp:  "Consumer & producer surplus",
+  dwl:   "Efficiency & deadweight loss",
+  ctrl:  "Price ceilings & floors",
+  tax:   "Taxes & who bears them",
+  opp:   "Opportunity & sunk cost"
+};
+
+window.MM_QUESTIONS = [
+
+/* ─────────────────────────── DEMAND & SUPPLY ─────────────────────────────── */
+{id:"ds1",cat:"ds",tier:1,type:"mcq",
+ q:"“Quantity demanded” means:",
+ o:["The amount buyers actually bought last month",
+    "The amount buyers are willing <em>and able</em> to buy at a given price",
+    "The amount buyers wish they could afford",
+    "The amount sellers put on the shelf"],
+ a:1,
+ why:"Willing <em>and able</em>. Desire without purchasing power never reaches the market, which is why demand curves are about money, not wanting."},
+
+{id:"ds2",cat:"ds",tier:1,type:"mcq",
+ q:"In a perfectly competitive market, an individual seller is a “price taker”. That means:",
+ o:["They must charge whatever the government sets",
+    "They are too small for their own output decision to move the market price",
+    "They can charge anything they like",
+    "They take the price from the largest firm in the industry"],
+ a:1,
+ why:"Price taking is about <em>size</em>, not obedience. One farmer flooding the market with wheat still doesn't move the world price — which is exactly why the assumption breaks the moment you study a monopoly."},
+
+{id:"ds3",cat:"ds",tier:1,type:"mcq",
+ q:"Market demand is built from individual demands by:",
+ o:["Adding quantities at each price",
+    "Adding prices at each quantity",
+    "Averaging the individual curves",
+    "Taking the highest willingness to pay"],
+ a:0,
+ why:"Horizontal summation: fix a price, add up everyone's quantity. Adding <em>prices</em> would be a vertical sum, which is a different animal entirely — it shows up later in public goods."},
+
+{id:"ds4",cat:"ds",tier:2,type:"num",
+ q:"At ₹40 Ananya wants 6 units, Bilal wants 4, and Chen wants 9. They are the only buyers. What is market quantity demanded at ₹40?",
+ pre:"units",a:19,tol:0.01,
+ why:"19. Trivial arithmetic, but it is the entire content of “market demand” — the curve is just a lot of people's private decisions stacked sideways."},
+
+{id:"ds5",cat:"ds",tier:2,type:"mcq",
+ q:"The law of supply says quantity supplied rises with price, <em>other things equal</em>. Which of these is one of the “other things”?",
+ o:["The price of the good itself","The wage the firm pays its workers",
+    "The quantity the firm chooses to produce","The revenue the firm earns"],
+ a:1,
+ why:"Wages are an input price — a non-price determinant. The good's own price is the variable on the axis, and quantity and revenue are consequences, not causes."},
+
+{id:"ds6",cat:"ds",tier:3,type:"mcq",
+ q:"A student says: “The demand curve slopes down because when people buy more, the price falls.” The clearest problem with this is:",
+ o:["It is right, just badly worded",
+    "It reverses the causation the curve describes",
+    "Demand curves actually slope upward",
+    "It confuses demand with supply"],
+ a:1,
+ why:"The demand curve answers “if the price were P, how much would be bought?” — price is the hypothetical, quantity the response. The sentence runs the arrow backwards, which is how people end up explaining a price change with the price change."},
+
+{id:"ds7",cat:"ds",tier:3,type:"mcq",
+ q:"A ride-hailing app shows a fare of ₹340 and you decline. An hour later it shows ₹190 and you book. Over that hour, your demand curve:",
+ o:["Shifted right","Shifted left","Did not move — you moved along it",
+    "Became more elastic"],
+ a:2,
+ why:"Nothing about you changed; only the price did. This is the single most common error in the course, and it survives because “demand went up” is ordinary English for something economics reserves a different phrase for."},
+
+/* ────────────────────────────── SHIFTERS ─────────────────────────────────── */
+{id:"sh1",cat:"shift",tier:1,type:"mcq",
+ q:"Coffee and tea are substitutes. The price of tea falls. The demand curve for coffee:",
+ o:["Shifts right","Shifts left","Does not move","Becomes vertical"],
+ a:1,
+ why:"Cheaper substitute pulls buyers away, so at every coffee price fewer cups are wanted. Note the price of coffee never changed — the curve moved underneath it."},
+
+{id:"sh2",cat:"shift",tier:1,type:"mcq",
+ q:"Printers and ink cartridges are complements. Printer prices collapse. Demand for cartridges:",
+ o:["Shifts right","Shifts left","Does not move","Becomes perfectly elastic"],
+ a:0,
+ why:"More printers in the world means more cartridges wanted at any cartridge price. This is also the whole business model: sell the complement cheap, earn on the consumable."},
+
+{id:"sh3",cat:"shift",tier:1,type:"mcq",
+ q:"Which of these shifts the SUPPLY curve for bread?",
+ o:["Consumer incomes rise","A bakery-wide wage settlement raises pay 15%",
+    "Bread becomes fashionable","The number of bread buyers rises"],
+ a:1,
+ why:"Wages are an input price. The other three are all demand-side shifters — a common trap is to see “bread” and stop reading."},
+
+{id:"sh4",cat:"shift",tier:2,type:"mcq",
+ q:"Incomes rise across a city and demand for intercity bus tickets <em>falls</em>. This tells you bus travel is:",
+ o:["A normal good","An inferior good","A complement to income","A luxury"],
+ a:1,
+ why:"Inferior goods are the ones you buy less of as you get richer — you upgrade to the train or a flight. “Inferior” is a statement about income response, not about quality."},
+
+{id:"sh5",cat:"shift",tier:2,type:"mcq",
+ q:"Farmers hear a credible forecast that onion prices will spike next month. Today's supply curve:",
+ o:["Shifts right — they harvest more","Shifts left — they hold stock back",
+    "Does not move until next month","Becomes perfectly inelastic"],
+ a:1,
+ why:"Sellers' expectations move supply <em>today</em> whenever the good is storable. Storable goods let sellers arbitrage across time, which is why onion politics is really inventory politics."},
+
+{id:"sh6",cat:"shift",tier:2,type:"mcq",
+ q:"A subsidy on electric cars is announced today but only starts in April. What happens to EV demand <em>right now</em>?",
+ o:["It rises — the news is good","It falls — buyers wait for April",
+    "Nothing until April","Supply falls instead"],
+ a:1,
+ why:"Buyers' expectations cut both ways. Announcing a future discount is one of the reliable ways to freeze a market in the present — an effect governments rediscover regularly."},
+
+{id:"sh7",cat:"shift",tier:2,type:"mcq",
+ q:"New warehouse robotics cut a retailer's handling cost per parcel. The supply curve for delivery:",
+ o:["Shifts right, price falls, quantity rises","Shifts left, price rises, quantity falls",
+    "Does not move — cost is not price","Shifts right, price rises, quantity rises"],
+ a:0,
+ why:"Technology reduces inputs per unit — identical in effect to cheaper inputs. Supply right means the new equilibrium sits down and to the right along the demand curve."},
+
+{id:"sh8",cat:"shift",tier:2,type:"mcq",
+ q:"A hostel adds 300 students. In the market for late-night food near campus, which curve moves and how?",
+ o:["Supply right","Supply left","Demand right","Demand left"],
+ a:2,
+ why:"More buyers. Market demand is the horizontal sum of individual demands, so adding people adds quantity at every price."},
+
+{id:"sh9",cat:"shift",tier:3,type:"mcq",
+ q:"“The price of petrol rose, so demand for petrol fell.” The precise correction is:",
+ o:["Demand rose, not fell","Quantity demanded fell; demand did not change",
+    "Supply fell, not demand","Nothing — the sentence is correct"],
+ a:1,
+ why:"Demand is the whole curve; quantity demanded is one point on it. If a price change could shift the curve it sits on, the diagram would be circular and could predict nothing."},
+
+{id:"sh10",cat:"shift",tier:3,type:"mcq",
+ q:"Jet fuel gets 30% cheaper AND a recession hits household incomes. For air tickets:",
+ o:["Price definitely falls; quantity ambiguous","Price ambiguous; quantity definitely falls",
+    "Both definitely fall","Both are ambiguous"],
+ a:0,
+ why:"Supply shifts right (price down, quantity up), demand shifts left (price down, quantity down). Price gets two votes in the same direction; quantity gets one each way and cannot be signed without knowing the relative sizes."},
+
+{id:"sh11",cat:"shift",tier:3,type:"mcq",
+ q:"Demand for a good rises AND supply rises. Which statement is safe?",
+ o:["Price rises","Price falls","Quantity rises","Quantity is unchanged"],
+ a:2,
+ why:"Both shifts push quantity up, so quantity is unambiguous. Price is pulled in opposite directions and cannot be signed. Learning which variable is <em>determined</em> is more useful than memorising four cases."},
+
+{id:"sh12",cat:"shift",tier:3,type:"mcq",
+ q:"A viral video makes a small café famous. It raises prices AND sells more than before. The correct reading is:",
+ o:["The law of demand failed here",
+    "Demand shifted right; the higher price is a movement along the NEW curve",
+    "Supply shifted right",
+    "The café is now a monopoly"],
+ a:1,
+ why:"Whenever price and quantity rise together, look for a demand shift. The law of demand was never violated — you are reading two points on two different curves."},
+
+/* ───────────────────────────── EQUILIBRIUM ───────────────────────────────── */
+{id:"eq1",cat:"eq",tier:1,type:"mcq",
+ q:"At a price ABOVE equilibrium you get:",
+ o:["A shortage; price rises","A surplus; price falls",
+    "A shortage; price falls","Equilibrium restores instantly"],
+ a:1,
+ why:"Above equilibrium, sellers want to sell more than buyers want to buy. Unsold stock is what forces the price down — the adjustment is driven by disappointment, not by arithmetic."},
+
+{id:"eq2",cat:"eq",tier:1,type:"mcq",
+ q:"“Equilibrium price” is best described as:",
+ o:["The fair price","The average price over the year",
+    "The price at which quantity supplied equals quantity demanded",
+    "The lowest price sellers will accept"],
+ a:2,
+ why:"It is a <em>market-clearing</em> condition, with no claim about fairness attached. Efficiency and fairness are separate questions, and confusing them is how welfare economics gets misused."},
+
+{id:"eq3",cat:"eq",tier:2,type:"num",
+ q:"Demand: Qd = 120 − 3P.  Supply: Qs = 2P − 30.  Find the equilibrium price.",
+ pre:"₹",a:30,tol:0.01,
+ why:"120 − 3P = 2P − 30 → 150 = 5P → P = 30. Then Q = 30. Setting the two schedules equal is all “equilibrium” ever means algebraically."},
+
+{id:"eq4",cat:"eq",tier:2,type:"num",
+ q:"Demand: Qd = 120 − 3P.  Supply: Qs = 2P − 30.  If the price is stuck at ₹20, how large is the shortage?",
+ pre:"units",a:50,tol:0.01,
+ why:"Qd = 60, Qs = 10, shortage = 50. Below equilibrium the gap is excess demand: buyers who are willing to pay more than ₹20 are walking away with nothing, which is what pushes the price up."},
+
+{id:"eq5",cat:"eq",tier:2,type:"mcq",
+ q:"A market has a persistent surplus year after year and the price never falls. The most likely explanation is:",
+ o:["The demand curve is vertical","Something is preventing the price from adjusting",
+    "Supply is perfectly elastic","Buyers are irrational"],
+ a:1,
+ why:"Equilibrium is a claim about what happens <em>when prices are free to move</em>. A durable surplus is the signature of a price floor, a support price, or a contract — look for the constraint, not for irrationality."},
+
+{id:"eq6",cat:"eq",tier:3,type:"mcq",
+ q:"Supply of beachfront plots is highly inelastic; supply of new laptops is elastic. Demand doubles for both. Compared with laptops, for beachfront plots:",
+ o:["Price moves more, quantity moves less","Quantity moves more, price moves less",
+    "Both move more","Both move less"],
+ a:0,
+ why:"When supply cannot respond, the entire adjustment has to happen through price. This one line explains most of what happens to housing in a booming city."},
+
+{id:"eq7",cat:"eq",tier:3,type:"mcq",
+ q:"Which observation would most cleanly falsify “this market is in equilibrium”?",
+ o:["The price changed last week","Some buyers say the price is too high",
+    "Sellers are sitting on unsold stock they would happily sell at the posted price",
+    "Profits are high"],
+ a:2,
+ why:"Equilibrium means nobody is left frustrated at the posted price. Willing sellers with unsold stock is exactly that frustration; complaints about price and healthy profits are consistent with equilibrium."},
+
+{id:"eq8",cat:"eq",tier:3,type:"mcq",
+ q:"Prices are often called “signals”. In this framework a rising price signals:",
+ o:["That sellers have become greedy","That the good is scarcer relative to what buyers want",
+    "That inflation is coming","That quality has improved"],
+ a:1,
+ why:"The signal is about relative scarcity, and it travels without anyone needing to know why. That is Hayek's point: the price carries the information that no single planner could assemble."},
+
+/* ────────────────────── MEASURING ELASTICITY ─────────────────────────────── */
+{id:"el1",cat:"elas",tier:1,type:"mcq",
+ q:"Price elasticity of demand equals:",
+ o:["Change in Q ÷ change in P","% change in Q ÷ % change in P",
+    "Change in P ÷ change in Q","% change in P ÷ % change in Q"],
+ a:1,
+ why:"Percentages, and in that order. Using raw changes would make the answer depend on whether you measured in kilos or grams — the ratio of percentages is unit-free, which is the entire point."},
+
+{id:"el2",cat:"elas",tier:1,type:"mcq",
+ q:"Demand is called “inelastic” when:",
+ o:["E > 1","E < 1","E = 0 only","The curve slopes down"],
+ a:1,
+ why:"E &lt; 1 means quantity moves proportionally less than price. E = 0 is the extreme case (perfectly inelastic), not the definition."},
+
+{id:"el3",cat:"elas",tier:2,type:"num",
+ q:"Price rises from ₹80 to ₹120. Quantity falls from 300 to 200. Using the MIDPOINT method, what is the price elasticity of demand? (Report as a positive number.)",
+ pre:"E =",a:1,tol:0.06,
+ why:"%ΔQ = −100/250 = −40%. %ΔP = 40/100 = 40%. E = 1.0 — unit elastic. Check: revenue was 80×300 = 24,000 and is now 120×200 = 24,000. Unchanged, exactly as unit elasticity predicts."},
+
+{id:"el4",cat:"elas",tier:2,type:"num",
+ q:"Hotel rooms: at ₹6,000, 800 are booked; at ₹9,000, 400 are booked. Midpoint elasticity? (Positive number.)",
+ pre:"E =",a:1.667,tol:0.08,
+ why:"%ΔQ = −400/600 = −66.7%; %ΔP = 3000/7500 = 40%. E ≈ 1.67 — elastic, so that price rise cost the hotel revenue: 4.8m down to 3.6m."},
+
+{id:"el5",cat:"elas",tier:2,type:"mcq",
+ q:"Why does the course insist on the midpoint method rather than ordinary percentage change?",
+ o:["It is more accurate for large changes only",
+    "It gives the same answer whichever point you start from",
+    "It avoids negative numbers","It is easier to compute"],
+ a:1,
+ why:"The ordinary formula gives two different elasticities for the same pair of points depending on direction of travel. The midpoint divides by the average, so A→B and B→A agree — it is harder to compute, not easier."},
+
+{id:"el6",cat:"elas",tier:2,type:"mcq",
+ q:"A perfectly inelastic demand curve is:",
+ o:["Horizontal, E = ∞","Vertical, E = 0","Downward sloping, E = 1","Upward sloping"],
+ a:1,
+ why:"Vertical: quantity does not budge whatever the price. Horizontal is the other extreme, perfectly elastic, where any price above the going rate loses every customer."},
+
+{id:"el7",cat:"elas",tier:3,type:"mcq",
+ q:"Along a straight-line demand curve, as you slide DOWN toward the quantity axis, elasticity:",
+ o:["Stays constant — the slope is constant","Falls toward zero",
+    "Rises toward infinity","Equals 1 everywhere"],
+ a:1,
+ why:"E = (dQ/dP)(P/Q). The slope term is fixed but P/Q collapses as you move down. Slope and elasticity are different things, and a straight line is the cleanest demonstration of that."},
+
+{id:"el8",cat:"elas",tier:3,type:"num",
+ q:"Income rises 10% and your quantity demanded of instant noodles falls 4%. What is the income elasticity of demand? (Include the sign.)",
+ pre:"E =",a:-0.4,tol:0.02,
+ why:"−4/10 = −0.4. Negative income elasticity is the formal definition of an inferior good — and notice how the sign, not the size, carries the classification."},
+
+{id:"el9",cat:"elas",tier:3,type:"num",
+ q:"The price of coffee rises 20% and quantity of tea demanded rises 8%. Cross-price elasticity? (Include the sign.)",
+ pre:"E =",a:0.4,tol:0.02,
+ why:"+8/20 = +0.4. Positive cross-price elasticity means substitutes. Negative would mean complements — the sign does the classifying, which is why firms estimate it before pricing a product line."},
+
+{id:"el10",cat:"elas",tier:3,type:"mcq",
+ q:"Two goods have identical demand curves drawn on the same axes, but one graph is in rupees and the other in paise. Comparing their slopes tells you:",
+ o:["Which is more elastic","Nothing about relative elasticity",
+    "Both are equally elastic","The paise one is more elastic"],
+ a:1,
+ why:"Slope depends on units; elasticity does not. This is precisely why economists compare elasticities rather than slopes, and why “flatter means more elastic” is only a rule of thumb on shared axes."},
+
+/* ──────────────── DETERMINANTS OF ELASTICITY ─────────────────────────────── */
+{id:"dt1",cat:"det",tier:1,type:"mcq",
+ q:"Which good has the MOST elastic demand?",
+ o:["Table salt","One particular brand of shampoo","Electricity","Insulin"],
+ a:1,
+ why:"A single brand sits on a shelf beside a dozen near-perfect replacements. The other three have few or no substitutes, which is what pins their elasticity down."},
+
+{id:"dt2",cat:"det",tier:1,type:"mcq",
+ q:"Demand for “restaurant meals” compared with demand for “food”:",
+ o:["More elastic — narrower definition","Less elastic — narrower definition",
+    "The same","More elastic — food is a luxury"],
+ a:0,
+ why:"Widen a definition and you swallow its own substitutes. Every substitute for a restaurant meal is still food, so the broad category has nowhere to run."},
+
+{id:"dt3",cat:"det",tier:2,type:"mcq",
+ q:"Cooking gas prices jump 25%. Demand is MOST elastic:",
+ o:["In the first week","After three years",
+    "Elasticity does not change with time","Only if incomes change"],
+ a:1,
+ why:"In a week you own the stove you own. In three years you can switch to induction, get a piped connection, or move. Adjustment takes time, so long-run elasticity always exceeds short-run."},
+
+{id:"dt4",cat:"det",tier:2,type:"mcq",
+ q:"Which pairing is the WEAKEST evidence that a good is price-inelastic?",
+ o:["It has no close substitutes","It is a small share of the buyer's budget",
+    "It is habit-forming","Its producers are very profitable"],
+ a:3,
+ why:"Profitability is a consequence of many things — costs, scale, market power — and tells you little about buyer responsiveness on its own. The other three are genuine drivers of inelasticity."},
+
+{id:"dt5",cat:"det",tier:2,type:"mcq",
+ q:"A firm wants demand for its product to become LESS elastic. Which strategy fits?",
+ o:["Emphasise how similar it is to rivals","Build a brand and a switching cost",
+    "Broaden the product category","Publish a price-comparison tool"],
+ a:1,
+ why:"Every determinant reduces to one question: how easily can the buyer walk away? Brands, ecosystems, lock-in and loyalty programmes are all machines for removing exits — and inelastic demand is what pricing power actually is."},
+
+{id:"dt6",cat:"det",tier:3,type:"mcq",
+ q:"Broadband is inelastic; any single streaming service is elastic. The strategic lesson is:",
+ o:["Content is more valuable than infrastructure",
+    "The gateway good inherits the inelasticity of everything that depends on it",
+    "Streaming firms should raise prices","Broadband should be free"],
+ a:1,
+ why:"Cancel one streaming service and four rivals are one tap away. Cancel broadband and all four go dark with it. Owning the chokepoint is worth more than owning any one thing that passes through it."},
+
+{id:"dt7",cat:"det",tier:3,type:"mcq",
+ q:"Salt has no close substitutes AND is a tiny share of any budget. These two facts:",
+ o:["Push elasticity in opposite directions","Both push elasticity down",
+    "Both push elasticity up","Are irrelevant to elasticity"],
+ a:1,
+ why:"No exits, and too small to bother economising on. They reinforce, which is why salt sits near the bottom of every published elasticity table."},
+
+{id:"dt8",cat:"det",tier:3,type:"mcq",
+ q:"“Necessity” and “luxury” are slippery labels because:",
+ o:["They are not real economic terms",
+    "The same physical good can be either, depending on the buyer and the context",
+    "They only apply to food","Elasticity does not depend on them"],
+ a:1,
+ why:"A scooter is a luxury to one household and the means of earning a living to another. Elasticity is a property of a buyer's situation, not of the object — which is why market-level elasticities hide enormous variation."},
+
+/* ───────────────────── ELASTICITY & REVENUE ──────────────────────────────── */
+{id:"rv1",cat:"rev",tier:1,type:"mcq",
+ q:"Demand is inelastic. You raise the price. Total revenue:",
+ o:["Rises","Falls","Is unchanged","Cannot be determined"],
+ a:0,
+ why:"Inelastic means quantity falls proportionally less than price rises, so the extra rupees per unit outweigh the lost units."},
+
+{id:"rv2",cat:"rev",tier:1,type:"mcq",
+ q:"Demand is elastic. You CUT the price. Total revenue:",
+ o:["Rises","Falls","Is unchanged","Depends on cost"],
+ a:0,
+ why:"Elastic means the volume gain beats the price giveaway. Note revenue is not profit — the extra units also cost something to produce, which the demand curve alone cannot tell you."},
+
+{id:"rv3",cat:"rev",tier:2,type:"num",
+ q:"You sell 40 units at ₹500. You raise the price to ₹600 and sell 30. What is the change in total revenue? (Negative if it fell.)",
+ pre:"₹",a:-2000,tol:1,
+ why:"20,000 → 18,000, so −₹2,000. Midpoint E = (10/35)/(100/550) ≈ 1.57, elastic — and elastic demand always punishes a price rise."},
+
+{id:"rv4",cat:"rev",tier:2,type:"mcq",
+ q:"A metro raises fares 10% and fare revenue rises 6%. Demand for metro rides is:",
+ o:["Elastic","Inelastic","Unit elastic","Perfectly elastic"],
+ a:1,
+ why:"Revenue moved in the same direction as price, which only happens when E &lt; 1. You can back out the elasticity roughly: quantity fell about 4%, so E ≈ 0.4."},
+
+{id:"rv5",cat:"rev",tier:2,type:"num",
+ q:"Demand is Q = 60 − P/10. At what price is total revenue maximised?",
+ pre:"₹",a:300,tol:1,
+ why:"The choke price is ₹600 (where Q = 0), and for a straight-line demand curve revenue peaks at half the choke price: ₹300, with Q = 30 and E = 1. Revenue always peaks where E = 1, because that is the one point where the two opposing effects cancel."},
+
+{id:"rv6",cat:"rev",tier:3,type:"mcq",
+ q:"A subscription business finds it is on the INELASTIC part of its demand curve. Purely for revenue, it should:",
+ o:["Cut price","Raise price","Hold price","Advertise instead"],
+ a:1,
+ why:"On the inelastic stretch, raising price raises revenue — and every price rise also moves you up the curve toward E = 1. A firm sitting deep in the inelastic region is leaving money on the table, which is a good reason to suspect it is not really there."},
+
+{id:"rv7",cat:"rev",tier:3,type:"mcq",
+ q:"The revenue-maximising price and the PROFIT-maximising price differ because:",
+ o:["Revenue maximisation ignores costs","They are actually always the same",
+    "Profit maximisation ignores demand","Elasticity does not affect profit"],
+ a:0,
+ why:"At the revenue peak, selling one more unit adds nothing to revenue but still costs something to make. So the profit-maximising price is <em>above</em> the revenue-maximising one whenever marginal cost is positive."},
+
+{id:"rv8",cat:"rev",tier:3,type:"mcq",
+ q:"A firm's pricing test runs for two weeks and shows demand is quite inelastic, so it raises prices permanently. The most serious flaw is:",
+ o:["Two weeks is too short to measure long-run elasticity",
+    "Elasticity cannot be measured experimentally",
+    "The midpoint method was not used",
+    "Revenue is the wrong objective"],
+ a:0,
+ why:"Elasticity is higher in the long run, so short tests systematically understate how many customers eventually leave. The bias always runs the same way: it makes price rises look safer than they are."},
+
+/* ─────────────────── CONSUMER & PRODUCER SURPLUS ─────────────────────────── */
+{id:"su1",cat:"surp",tier:1,type:"mcq",
+ q:"Consumer surplus is:",
+ o:["What the buyer pays","Willingness to pay minus what the buyer actually pays",
+    "The seller's profit","Total spending in the market"],
+ a:1,
+ why:"The gap between what a thing was worth to you and what you handed over. Summed across buyers it becomes the area under demand and above price."},
+
+{id:"su2",cat:"surp",tier:1,type:"mcq",
+ q:"The HEIGHT of the supply curve at a given quantity is:",
+ o:["The seller's profit","The cost of the marginal seller",
+    "The market price","The buyer's willingness to pay"],
+ a:1,
+ why:"Supply is a queue of sellers sorted by cost. Its height is what it takes to persuade the next one in — which is why producer surplus is the area <em>above</em> it."},
+
+{id:"su3",cat:"surp",tier:2,type:"num",
+ q:"Demand is a straight line from a choke price of ₹100 down to 50 units at ₹0. The market price is ₹60. What is consumer surplus?",
+ pre:"₹",a:400,tol:1,
+ why:"At ₹60, Q = 20. CS = ½ × 20 × (100 − 60) = ₹400. Consumer surplus is a definite integral you can do with a triangle — the area under demand, above price."},
+
+{id:"su4",cat:"surp",tier:2,type:"num",
+ q:"Supply runs from a minimum price of ₹20 up through (20 units, ₹60). At a price of ₹60, what is producer surplus?",
+ pre:"₹",a:400,tol:1,
+ why:"PS = ½ × 20 × (60 − 20) = ₹400. Same triangle logic, mirrored: the area above supply and below price."},
+
+{id:"su5",cat:"surp",tier:2,type:"pick",scene:"eqm",
+ q:"Click the region that is CONSUMER surplus at the equilibrium price.",
+ a:"A",
+ why:"Above the price line, under the demand curve. Every buyer in that region paid less than the good was worth to them, and the triangle stacks those private gains."},
+
+{id:"su6",cat:"surp",tier:2,type:"pick",scene:"eqm",
+ q:"Click the region that is PRODUCER surplus at the equilibrium price.",
+ a:"B",
+ why:"Below the price line, above the supply curve. Each seller there was paid more than it cost them — note this is a gain over cost, not accounting profit."},
+
+{id:"su7",cat:"surp",tier:3,type:"mcq",
+ q:"A price rise reduces consumer surplus for two distinct reasons. They are:",
+ o:["Buyers leave the market; remaining buyers pay more",
+    "Sellers leave; costs rise",
+    "Demand shifts; supply shifts",
+    "Quantity rises; price rises"],
+ a:0,
+ why:"One rectangle (remaining buyers paying more) and one triangle (buyers priced out entirely). Splitting the loss this way is exactly how tax incidence and deadweight loss get derived later."},
+
+{id:"su8",cat:"surp",tier:3,type:"mcq",
+ q:"Total surplus is maximised at the market equilibrium. The cleanest reason is:",
+ o:["Prices are lowest there",
+    "Every trade worth more than it costs happens, and no trade costing more than it is worth does",
+    "Firms make the most profit there",
+    "Consumers are happiest there"],
+ a:1,
+ why:"Efficiency is a statement about which trades occur, not about who is happy. Note it says nothing about how the surplus is <em>split</em> — a market can be perfectly efficient and still strike most people as unfair."},
+
+/* ──────────────────────── DEADWEIGHT LOSS ────────────────────────────────── */
+{id:"dw1",cat:"dwl",tier:1,type:"mcq",
+ q:"Deadweight loss is:",
+ o:["Money the government collects","Value that was never created because trades did not happen",
+    "Losses transferred from buyers to sellers","The cost of producing a good"],
+ a:1,
+ why:"It is not money that moved somewhere else — it is value that never came into existence. That is what makes it so easy to inflict: it appears on nobody's balance sheet."},
+
+{id:"dw2",cat:"dwl",tier:2,type:"mcq",
+ q:"Quantity traded is held BELOW the efficient level. For the units that go untraded:",
+ o:["Cost exceeds value","Value exceeds cost","Value equals cost","Neither can be measured"],
+ a:1,
+ why:"That gap — value minus cost, stacked over every missing unit — is the deadweight-loss triangle. Somewhere a buyer and a seller would both have gained and were prevented."},
+
+{id:"dw3",cat:"dwl",tier:2,type:"num",
+ q:"Efficient quantity is 500 units. A policy cuts it to 400. At 400 units, buyers value the marginal unit at ₹90 and it costs ₹50 to produce. Estimate the deadweight loss.",
+ pre:"₹",a:2000,tol:20,
+ why:"½ × 100 missing units × ₹40 wedge = ₹2,000. The triangle formula works because the value–cost gap shrinks linearly back to zero at the efficient quantity."},
+
+{id:"dw4",cat:"dwl",tier:3,type:"mcq",
+ q:"Producing MORE than the efficient quantity also creates deadweight loss, because:",
+ o:["Prices fall too far","Resources are used to make units worth less than they cost",
+    "Firms lose money","Consumers get too much surplus"],
+ a:1,
+ why:"Inefficiency is symmetric. Too little output wastes gains that were available; too much burns real resources on things nobody values enough — which is the economics of an overbuilt subsidy programme."},
+
+{id:"dw5",cat:"dwl",tier:3,type:"mcq",
+ q:"Deadweight loss is politically easy to inflict mainly because:",
+ o:["It is usually small","Nobody experiences it as a visible loss",
+    "It is illegal to measure it","It only affects producers"],
+ a:1,
+ why:"A transfer creates a loser who complains. Deadweight loss creates people whose trade simply never happened — they never knew what they were missing, so it has no constituency."},
+
+{id:"dw6",cat:"dwl",tier:3,type:"pick",scene:"tax",
+ q:"A tax has been imposed. Click the DEADWEIGHT LOSS.",
+ a:"D",
+ why:"The wedge between demand and supply over the units the tax destroyed. Notice it sits to the right of the new quantity — those are trades that both sides wanted and the tax prevented."},
+
+/* ─────────────────── PRICE CEILINGS & FLOORS ─────────────────────────────── */
+{id:"pc1",cat:"ctrl",tier:1,type:"mcq",
+ q:"A price ceiling is BINDING when it is set:",
+ o:["Above the equilibrium price","Below the equilibrium price",
+    "Exactly at equilibrium","Anywhere — it always binds"],
+ a:1,
+ why:"A ceiling above the market price is a law against something nobody was doing. Only a ceiling below equilibrium changes behaviour — and creates a shortage."},
+
+{id:"pc2",cat:"ctrl",tier:1,type:"mcq",
+ q:"A binding price ceiling on rent produces:",
+ o:["A surplus of flats","A shortage of flats","No change in quantity","Higher rents"],
+ a:1,
+ why:"At the capped rent more people want flats than landlords will supply. The rent you see is lower; the rent-plus-waiting-plus-searching-plus-key-money that tenants actually pay often is not."},
+
+{id:"pc3",cat:"ctrl",tier:2,type:"mcq",
+ q:"A minimum support price for wheat, set above equilibrium, causes:",
+ o:["A shortage the government must import to fill",
+    "A surplus the government must buy or store",
+    "No effect on quantity","Lower prices for farmers"],
+ a:1,
+ why:"A binding floor creates excess supply. The grain mountains, the storage bill and the disposal problem are not administrative failures — they are the mechanical consequence of the floor."},
+
+{id:"pc4",cat:"ctrl",tier:2,type:"pick",scene:"ceiling",
+ q:"A binding price ceiling is in force. Click the area TRANSFERRED from producers to consumers.",
+ a:"B",
+ why:"The rectangle between the old price and the capped price, over the units still traded. This is a transfer, not a loss — it is also precisely why price controls are politically popular: the winners are visible and organised."},
+
+{id:"pc5",cat:"ctrl",tier:3,type:"mcq",
+ q:"Under a binding price ceiling, goods get allocated by something other than price. Typical replacements include queues, favouritism and black markets. From an efficiency view, the problem is:",
+ o:["These methods are illegal",
+    "They do not reliably give the good to the buyers who value it most",
+    "They are slower","They raise the price"],
+ a:1,
+ why:"Price rationing at least routes goods to whoever values them most. Queue rationing routes them to whoever has the most spare time — and the hours spent queuing are burnt, not transferred to anyone."},
+
+{id:"pc6",cat:"ctrl",tier:3,type:"mcq",
+ q:"A minimum wage set above the market wage, in a competitive labour market, predicts:",
+ o:["More people employed","Unemployment among the least-experienced workers",
+    "No effect on employment","Higher labour demand"],
+ a:1,
+ why:"It is a price floor in the market for labour, so it produces excess supply of workers. Whether real labour markets are competitive enough for this prediction to hold is one of the most-tested questions in economics — the model gives you the hypothesis, not the verdict."},
+
+{id:"pc7",cat:"ctrl",tier:3,type:"mcq",
+ q:"A government caps surge pricing at 1.5×. Which group is UNAMBIGUOUSLY worse off than under free surge?",
+ o:["All riders","Riders who now cannot get a car at all",
+    "Riders who get a cheap ride","The government"],
+ a:1,
+ why:"Caps split riders into winners (cheap ride) and losers (no ride). “Consumers” is not a group with a single interest, and any policy analysis that treats it as one is hiding the actual distributional fight."},
+
+/* ──────────────────── TAXES & INCIDENCE ──────────────────────────────────── */
+{id:"tx1",cat:"tax",tier:1,type:"mcq",
+ q:"A tax is legally collected from sellers. Who actually bears it?",
+ o:["Sellers, always","Buyers, always",
+    "Split according to relative elasticities","Split 50-50 by law"],
+ a:2,
+ why:"Legal incidence and economic incidence are different things. The tax lands on whichever side is less able to walk away — the statute cannot legislate that."},
+
+{id:"tx2",cat:"tax",tier:2,type:"mcq",
+ q:"Demand is very inelastic and supply is very elastic. A per-unit tax is borne mostly by:",
+ o:["Buyers","Sellers","Split evenly","The government"],
+ a:0,
+ why:"The inelastic side cannot escape, so it pays. This is why taxes on cigarettes, fuel and salt raise revenue reliably — and why they are also regressive."},
+
+{id:"tx3",cat:"tax",tier:2,type:"num",
+ q:"Before a tax, price is ₹100. After a ₹20 per-unit tax, buyers pay ₹115. How much of the tax do sellers bear?",
+ pre:"₹",a:5,tol:0.5,
+ why:"Buyers pay ₹15 more, so sellers receive ₹95 and bear ₹5. The tax wedge always splits into what buyers pay above and what sellers receive below the old price."},
+
+{id:"tx4",cat:"tax",tier:2,type:"pick",scene:"tax",
+ q:"Click the part of the tax revenue borne by BUYERS.",
+ a:"B",
+ why:"The band between the old equilibrium price and the higher price buyers now pay, over the units still traded. Its height is the buyers' share of the wedge."},
+
+{id:"tx5",cat:"tax",tier:3,type:"mcq",
+ q:"A tax raises revenue AND creates deadweight loss. The deadweight loss is larger when:",
+ o:["Demand and supply are inelastic","Demand and supply are elastic",
+    "The tax is collected from sellers","The market is small"],
+ a:1,
+ why:"Deadweight loss comes from trades destroyed. Elastic curves mean people flee readily, so more trades die — which is the case for taxing things people cannot easily avoid, and the case against it on fairness grounds."},
+
+{id:"tx6",cat:"tax",tier:3,type:"mcq",
+ q:"A politician promises a tax “only on companies, so households pay nothing.” The economic objection is:",
+ o:["Companies do not pay taxes at all",
+    "Statutory incidence does not determine who ultimately bears the burden",
+    "Taxes never create deadweight loss",
+    "Companies always pass on 100%"],
+ a:1,
+ why:"The burden is distributed by elasticities, through prices, wages and returns — not by whose name is on the cheque. Neither “companies pay it all” nor “consumers pay it all” is generally true."},
+
+/* ────────────────── OPPORTUNITY & SUNK COST ──────────────────────────────── */
+{id:"op1",cat:"opp",tier:1,type:"mcq",
+ q:"The opportunity cost of an action is:",
+ o:["The money you spend on it","The value of the next-best alternative you gave up",
+    "The total of all alternatives you gave up","Always zero if the action is free"],
+ a:1,
+ why:"Next-best, singular. Costs are about foregone alternatives, not about cash — which is why an unpaid internship is expensive and a free afternoon is not."},
+
+{id:"op2",cat:"opp",tier:1,type:"mcq",
+ q:"A sunk cost is one that:",
+ o:["Is very large","Has already been incurred and cannot be recovered",
+    "Will be incurred in future","Is paid in cash"],
+ a:1,
+ why:"Already spent, unrecoverable — and therefore irrelevant to every decision you make from now on. The word people use for ignoring it correctly is usually “wasteful”."},
+
+{id:"op3",cat:"opp",tier:2,type:"mcq",
+ q:"You paid ₹800 for a concert ticket, non-refundable. On the night you feel awful and would rather sleep. The correct reasoning is:",
+ o:["Go — otherwise the ₹800 is wasted",
+    "Compare only tonight's enjoyment against sleeping; the ₹800 is gone either way",
+    "Go, because you already committed",
+    "Sell the ticket at any price above ₹800"],
+ a:1,
+ why:"The ₹800 is sunk whichever you choose, so it cannot break the tie. “Otherwise it's wasted” is the sunk cost fallacy in its purest and most persuasive form."},
+
+{id:"op4",cat:"opp",tier:2,type:"mcq",
+ q:"A firm has spent ₹4 crore on a project needing ₹1 crore more to finish. Completing it will yield ₹1.2 crore in total value. It should:",
+ o:["Abandon it — ₹4 crore is already lost","Finish it — ₹1.2 crore beats ₹1 crore going forward",
+    "Finish it to recover the ₹4 crore","Abandon it because total cost exceeds value"],
+ a:1,
+ why:"Forward-looking only: spend 1, get 1.2. The ₹4 crore is gone in both branches. The project was a mistake and finishing it is still correct — two facts people find very hard to hold simultaneously."},
+
+{id:"op5",cat:"opp",tier:2,type:"mcq",
+ q:"You skip a ₹9 lakh-a-year job to do a degree costing ₹3 lakh a year in fees. The annual economic cost is closest to:",
+ o:["₹3 lakh","₹9 lakh","₹12 lakh","₹6 lakh"],
+ a:2,
+ why:"Fees plus foregone earnings. Ignoring the foregone salary is why education looks cheaper than it is — and why the calculation changes completely in a weak job market."},
+
+{id:"op6",cat:"opp",tier:3,type:"mcq",
+ q:"“The land is already ours, so building here costs us nothing.” The error is:",
+ o:["Land always has maintenance costs",
+    "The land could have been sold or leased — that foregone value is a real cost",
+    "Land is not a factor of production",
+    "There is no error"],
+ a:1,
+ why:"Owning a resource does not make using it free; it makes the cost invisible. Opportunity cost is precisely the discipline of pricing the alternatives you own and did not take."},
+
+{id:"op7",cat:"opp",tier:3,type:"mcq",
+ q:"Marginal thinking says a decision should compare:",
+ o:["Total benefit against total cost",
+    "The extra benefit against the extra cost of one more unit",
+    "Average benefit against average cost",
+    "This year's cost against last year's"],
+ a:1,
+ why:"Decisions happen at the margin, not in totals. Airlines sell a last-minute seat below average cost for exactly this reason — the relevant cost of one more passenger is nearly nothing."}
+
+];

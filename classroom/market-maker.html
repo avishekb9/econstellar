@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Market Maker — Econstellar Classroom</title>
+<meta name="description" content="A timed microeconomics challenge: demand and supply, elasticity, surplus, price controls, tax incidence and opportunity cost. Ungraded. Runs entirely in your browser.">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Market Maker — Econstellar Classroom">
+<meta property="og:description" content="Twelve questions, three tiers, a streak multiplier and a clock. Ungraded practice for introductory microeconomics.">
+<meta property="og:url" content="https://econstellars.com/classroom/market-maker.html">
+<meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
+<link rel="canonical" href="https://econstellars.com/classroom/market-maker.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92); --raise:rgba(18,26,38,.95);
+  --border:rgba(0,212,255,.15); --hot:rgba(0,255,136,.32); --rule:rgba(255,255,255,.07);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444; --violet:#a78bfa;
+  --sans:'Space Grotesk',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace; --disp:'Orbitron',var(--sans);
+  --clip:polygon(0 12px,12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 12% 6%,rgba(0,212,255,.08),transparent 42%),radial-gradient(circle at 88% 74%,rgba(0,255,136,.06),transparent 46%)}
+img{max-width:100%}
+[hidden]{display:none!important}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+/* chrome */
+.site-bar{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;padding:.75rem 20px;
+  border-bottom:1px solid var(--rule);background:#000;color:var(--dim);font-family:var(--mono);font-size:.76rem}
+.site-bar .brand{color:var(--green);font-weight:600;letter-spacing:.5px}
+.site-bar .sp{flex:1}
+.site-bar a{color:var(--dim)} .site-bar a:hover{color:var(--cyan)}
+.site-bar a[aria-current="page"]{color:var(--cyan)}
+
+/* type */
+h1{font-family:var(--disp);font-size:clamp(1.8rem,4.4vw,2.9rem);margin:.5rem 0 .4rem;line-height:1.05}
+h2{font-family:var(--disp);font-size:1.2rem;margin:0 0 .15rem;letter-spacing:.4px}
+h3{font-family:var(--mono);font-size:.72rem;letter-spacing:1.8px;text-transform:uppercase;color:var(--dim);margin:0 0 .9rem;font-weight:500}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--cyan)}
+.lede{font-size:1.08rem;color:var(--mid);max-width:64ch;margin:0}
+p{max-width:66ch}
+
+/* buttons */
+.btn{font-family:var(--mono);font-size:.86rem;font-weight:600;padding:.72rem 1.25rem;border-radius:9px;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface2);color:var(--text);display:inline-flex;align-items:center;gap:.5rem}
+.btn.primary{color:#000;background:linear-gradient(90deg,var(--cyan),var(--green));border:none}
+.btn.big{font-size:1rem;padding:.95rem 1.8rem}
+.btn:hover:not(:disabled){filter:brightness(1.1);text-decoration:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
+
+/* panels */
+.panel{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.5rem}
+.panel + .panel{margin-top:1.1rem}
+.soft{background:var(--surface2);border:1px solid var(--rule);border-radius:10px;padding:1.1rem 1.2rem}
+
+/* gate */
+#gate{padding:2.4rem 0 4rem}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:1.6rem 0}
+.rule{background:rgba(6,9,13,.92);padding:1.05rem 1.15rem}
+.rule .k{font-family:var(--mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--cyan);display:block;margin-bottom:.4rem}
+.rule .v{font-size:.95rem;color:var(--mid);line-height:1.45}
+.rule .v b{color:var(--text)}
+.field{margin:0 0 1.1rem;max-width:420px}
+.field label{display:block;font-family:var(--mono);font-size:.72rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim);margin-bottom:.45rem}
+.field input{width:100%;background:#05080a;border:1px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:var(--mono);font-size:1rem;padding:.75rem .9rem}
+.field input:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.field .hint{font-size:.84rem;color:var(--dim);margin-top:.4rem;font-family:var(--sans)}
+.err{color:var(--red);font-family:var(--mono);font-size:.82rem;margin:.6rem 0 0;min-height:1.2em}
+.disclose{border-left:2px solid var(--amber);padding-left:1rem;margin:1.4rem 0 0;color:var(--mid);font-size:.95rem}
+.disclose b{color:var(--amber);font-family:var(--mono);font-size:.7rem;letter-spacing:1.5px;text-transform:uppercase;display:block;margin-bottom:.4rem}
+.disclose ul{margin:.5rem 0 0;padding-left:1.1rem} .disclose li{margin:.25rem 0}
+
+/* lobby */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.stat{background:rgba(6,9,13,.92);padding:1rem 1.1rem}
+.stat .k{font-family:var(--mono);font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.35rem}
+.stat .v{font-family:var(--disp);font-size:1.75rem;line-height:1;color:var(--text)}
+.stat .v.cy{color:var(--cyan)} .stat .v.gr{color:var(--green)} .stat .v.am{color:var(--amber)}
+.stat .s{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.3rem}
+
+.mastery{display:grid;gap:.55rem}
+.mrow{display:grid;grid-template-columns:minmax(120px,1.4fr) 1fr auto;gap:.8rem;align-items:center}
+.mrow .nm{font-size:.9rem;color:var(--mid)}
+.bar{height:7px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--green))}
+.bar i.warn{background:linear-gradient(90deg,#b45309,var(--amber))}
+.bar i.cold{background:rgba(255,255,255,.16)}
+.mrow .pc{font-family:var(--mono);font-size:.78rem;color:var(--dim);min-width:3.4em;text-align:right}
+
+/* run */
+.hud{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;padding:.9rem 0 1.1rem;border-bottom:1px solid var(--rule)}
+.hud .cell{font-family:var(--mono);font-size:.7rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim)}
+.hud .cell b{display:block;font-family:var(--disp);font-size:1.4rem;color:var(--text);letter-spacing:0}
+.hud .cell b.gr{color:var(--green)} .hud .cell b.am{color:var(--amber)}
+.hud .sp{flex:1}
+.ring{width:56px;height:56px;flex:0 0 auto}
+.ring circle{fill:none;stroke-width:5}
+.ring .track{stroke:rgba(255,255,255,.09)}
+.ring .prog{stroke:var(--cyan);stroke-linecap:round;transition:stroke-dashoffset .25s linear,stroke .3s}
+.ring .prog.warn{stroke:var(--amber)} .ring .prog.crit{stroke:var(--red)}
+.ring text{font-family:var(--mono);font-size:15px;fill:var(--mid);text-anchor:middle}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots i{width:9px;height:9px;border-radius:2px;background:rgba(255,255,255,.14);display:block}
+.dots i.ok{background:var(--green)} .dots i.no{background:var(--red)} .dots i.now{background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+
+.qhead{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin:1.4rem 0 .8rem}
+.pill{font-family:var(--mono);font-size:.66rem;letter-spacing:1.4px;text-transform:uppercase;
+  border:1px solid var(--border);border-radius:99px;padding:.26rem .7rem;color:var(--cyan)}
+.pill.t1{color:var(--green);border-color:var(--hot)}
+.pill.t2{color:var(--cyan)}
+.pill.t3{color:var(--violet);border-color:rgba(167,139,250,.35)}
+.qtext{font-size:1.22rem;line-height:1.45;margin:0 0 1.2rem;max-width:62ch}
+.qtext em{color:var(--cyan);font-style:italic}
+
+.opts{display:grid;gap:.6rem;max-width:640px}
+.opt{text-align:left;font-family:var(--sans);font-size:1rem;padding:.85rem 1rem;cursor:pointer;
+  background:var(--surface2);color:var(--text);border:1px solid var(--rule);border-radius:9px;display:flex;gap:.75rem;align-items:baseline;
+  transition:transform .12s ease,border-color .12s ease}
+.opt:hover:not(:disabled){border-color:var(--cyan);transform:translateX(3px)}
+.opt:disabled{cursor:default}
+.opt .k{font-family:var(--mono);font-size:.76rem;color:var(--dim);flex:0 0 auto}
+.opt.right{border-color:var(--green);background:rgba(0,255,136,.10)}
+.opt.wrong{border-color:var(--red);background:rgba(239,68,68,.10)}
+.opt.dim{opacity:.42}
+
+.numwrap{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.numwrap .pre{font-family:var(--mono);color:var(--dim);font-size:.95rem}
+.numwrap input{background:#05080a;border:1px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:var(--mono);font-size:1.15rem;padding:.6rem .8rem;width:170px}
+.numwrap input:focus{outline:2px solid var(--cyan);outline-offset:1px}
+
+.diagram{background:#05080a;border:1px solid var(--rule);border-radius:10px;padding:.6rem;max-width:520px}
+.diagram svg{display:block;width:100%;height:auto}
+.rg{cursor:pointer;transition:opacity .15s}
+.rg:hover{opacity:.85}
+.rg-fill{stroke:rgba(255,255,255,.22);stroke-width:1}
+.rg-let{font-family:var(--mono);font-size:13px;font-weight:600;fill:#fff;text-anchor:middle;pointer-events:none}
+.dx{stroke:var(--cyan);stroke-width:2.2;fill:none}
+.sx{stroke:var(--amber);stroke-width:2.2;fill:none}
+.ax{stroke:rgba(255,255,255,.3);stroke-width:1.2}
+.gl{stroke:rgba(255,255,255,.25);stroke-width:1;stroke-dasharray:3 3}
+.axlbl{font-family:var(--mono);font-size:10.5px;fill:var(--dim)}
+
+.feedback{margin-top:1.2rem;border-radius:10px;padding:1.05rem 1.15rem;border:1px solid var(--rule);background:var(--surface2);max-width:660px}
+.feedback.ok{border-color:var(--green);background:rgba(0,255,136,.07)}
+.feedback.no{border-color:var(--red);background:rgba(239,68,68,.07)}
+.feedback .vt{font-family:var(--disp);font-size:1rem;letter-spacing:.5px;margin-bottom:.5rem;display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap}
+.feedback.ok .vt{color:var(--green)} .feedback.no .vt{color:var(--red)}
+.feedback .pts{font-family:var(--mono);font-size:.8rem;color:var(--dim);letter-spacing:.5px}
+.feedback .why{color:var(--mid);font-size:1rem;line-height:1.5;margin:0}
+.feedback .why b,.feedback .why strong{color:var(--text)}
+
+/* result */
+.big-score{font-family:var(--disp);font-size:clamp(3rem,11vw,5.4rem);line-height:1;
+  background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brk{display:grid;gap:.4rem;font-family:var(--mono);font-size:.88rem;color:var(--mid);margin-top:1rem}
+.brk div{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--rule);padding-bottom:.35rem}
+.brk b{color:var(--text)}
+.tag{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:1px;border:1px solid var(--border);
+  border-radius:99px;padding:.24rem .68rem;color:var(--mid);margin:.2rem .3rem .2rem 0}
+.tag.warn{color:var(--amber);border-color:rgba(245,158,11,.4)}
+.tag.good{color:var(--green);border-color:var(--hot)}
+
+.sub-state{font-family:var(--mono);font-size:.82rem;margin-top:.8rem}
+.sub-state.ok{color:var(--green)} .sub-state.no{color:var(--amber)} .sub-state.err{color:var(--red)}
+
+footer{border-top:1px solid var(--rule);margin-top:3.4rem;padding:1.5rem 0 3rem;font-family:var(--mono);font-size:.74rem;color:var(--dim)}
+footer a{color:var(--dim)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:620px){.hud{gap:.9rem}.hud .cell b{font-size:1.15rem}}
+</style>
+</head>
+<body>
+
+<div class="site-bar">
+  <span class="brand">◆ ECONSTELLAR</span>
+  <a href="../classroom.html">Classroom</a>
+  <a href="market-forces-lab.html">Market Forces Lab</a>
+  <a href="market-maker.html" aria-current="page">Market Maker</a>
+  <span class="sp"></span>
+  <a href="../index.html">econstellars.com</a>
+</div>
+
+<!-- ══════════════════════════ GATE ══════════════════════════ -->
+<section id="gate" class="wrap">
+  <div class="eyebrow">Managerial Economics · ungraded practice</div>
+  <h1>Market Maker</h1>
+  <p class="lede">Twelve questions. Three tiers. A clock on every one of them and a streak
+    multiplier that rewards not breaking. It covers the whole pre-midsemester arc — demand and
+    supply, elasticity, surplus, price controls, tax incidence, opportunity cost — and it is
+    designed to be replayed, because the questions rotate and the explanations are the point.</p>
+
+  <div class="rules">
+    <div class="rule"><span class="k">Scoring</span><span class="v">Tier 1 <b>100</b>, Tier 2 <b>200</b>, Tier 3 <b>350</b> base points. Answer faster, keep more.</span></div>
+    <div class="rule"><span class="k">Speed bonus</span><span class="v">Up to <b>+50%</b> of the base, decaying as the clock runs down.</span></div>
+    <div class="rule"><span class="k">Streak</span><span class="v">3 in a row <b>×1.2</b> · 5 <b>×1.5</b> · 8 <b>×2</b>. One wrong answer resets it to zero.</span></div>
+    <div class="rule"><span class="k">No elimination</span><span class="v">A wrong answer costs you points, never the run. Everybody finishes all twelve.</span></div>
+    <div class="rule"><span class="k">Diagnostics</span><span class="v">Your accuracy is tracked per concept, so you can see <b>which idea</b> is leaking points.</span></div>
+    <div class="rule"><span class="k">Grades</span><span class="v"><b>None.</b> This carries no marks and affects nothing on your transcript.</span></div>
+  </div>
+
+  <div class="panel">
+    <h2>Enter the floor</h2>
+    <h3>Roll number or institute email · then pick a display name</h3>
+    <form id="gate-form" autocomplete="off">
+      <div class="field">
+        <label for="g-id">Roll number or institute email</label>
+        <input id="g-id" type="text" inputmode="text" placeholder="21EE01023  ·  or  name@iitbbs.ac.in" required>
+        <div class="hint">Used to identify your run when it reaches your instructor. Nothing else.</div>
+      </div>
+      <div class="field" id="code-field" hidden>
+        <label for="g-code">Class code</label>
+        <input id="g-code" type="text" placeholder="posted in your Google Classroom">
+      </div>
+      <div class="field">
+        <label for="g-handle">Display name</label>
+        <input id="g-handle" type="text" maxlength="16" placeholder="marginal_rev" required>
+        <div class="hint">2–16 characters. Letters, digits, dot, dash, underscore.</div>
+      </div>
+      <p class="err" id="g-err" role="alert"></p>
+      <div class="row"><button class="btn primary big" type="submit">Enter the floor →</button></div>
+    </form>
+
+    <div class="disclose">
+      <b>Be clear about what this is</b>
+      <p style="margin:0 0 .5rem">This page is public and there is no login. Typing a roll number
+        identifies you to your instructor; it does not verify you, and nothing here checks that
+        the ID you enter is really yours. Treat it as a name tag, not a password.</p>
+      <p style="margin:0 0 .4rem">What happens to your data:</p>
+      <ul>
+        <li>Your scores, streaks and per-concept accuracy live <b>only in this browser</b>. Clear your site data and they are gone.</li>
+        <li>Nothing is sent anywhere while you play.</li>
+        <li>At the end of a run, <b>you</b> decide whether to press Submit. Only then does anything leave your device.</li>
+        <li id="dis-target">If you submit, your instructor receives the ID and display name you entered, your score, how many you got right, your longest streak, and which concepts you lost points on. No other student sees any of it.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <a href="../classroom.html">Classroom</a> · <a href="market-forces-lab.html">Market Forces Lab</a> ·
+    <a href="../index.html">Econstellar</a> · SHSSM, IIT Bhubaneswar
+  </footer>
+</section>
+
+<!-- ══════════════════════════ LOBBY ══════════════════════════ -->
+<section id="lobby" class="wrap" hidden style="padding:2.2rem 0 3rem">
+  <div class="eyebrow">Signed in as <span id="who"></span> · <a href="#" id="signout">not you?</a></div>
+  <h1 style="margin-bottom:.9rem">Your floor</h1>
+
+  <div class="stats" id="lobby-stats"></div>
+
+  <div class="panel" style="margin-top:1.4rem">
+    <h2>Start a run</h2>
+    <h3 id="run-hint">Twelve questions · roughly six minutes</h3>
+    <div class="row">
+      <button class="btn primary big" id="start">▶ Start a run</button>
+      <a class="btn" href="market-forces-lab.html">Open the Market Forces Lab</a>
+    </div>
+    <p style="color:var(--dim);font-size:.92rem;margin:1rem 0 0">Questions rotate: the engine
+      prefers ones you have not seen recently, so a second run is a genuinely different twelve.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Where you are losing points</h2>
+    <h3>Accuracy by concept · builds up as you play</h3>
+    <div class="mastery" id="mastery"></div>
+  </div>
+
+  <div class="panel" id="pulse-panel" hidden>
+    <h2>Class pulse</h2>
+    <h3 id="pulse-sub">Live from the class response sheet</h3>
+    <div id="pulse-body"></div>
+  </div>
+
+  <div class="panel" id="history-panel" hidden>
+    <h2>Your runs</h2>
+    <h3>Most recent first</h3>
+    <div class="brk" id="history"></div>
+  </div>
+
+  <footer>
+    Nothing here is graded. <a href="../classroom.html">Classroom</a> · <a href="../index.html">Econstellar</a>
+  </footer>
+</section>
+
+<!-- ══════════════════════════ RUN ══════════════════════════ -->
+<section id="run" class="wrap" hidden style="padding:1.2rem 0 3rem">
+  <div class="hud">
+    <div class="cell">Score<b class="gr" id="h-score">0</b></div>
+    <div class="cell">Streak<b class="am" id="h-streak">0</b></div>
+    <div class="cell">Question<b id="h-q">1/12</b></div>
+    <span class="sp"></span>
+    <div class="dots" id="h-dots"></div>
+    <svg class="ring" viewBox="0 0 60 60" aria-hidden="true">
+      <circle class="track" cx="30" cy="30" r="25"></circle>
+      <circle class="prog" id="h-ring" cx="30" cy="30" r="25" transform="rotate(-90 30 30)"></circle>
+      <text id="h-time" x="30" y="35">25</text>
+    </svg>
+  </div>
+
+  <div class="qhead">
+    <span class="pill" id="q-tier">Tier 1</span>
+    <span class="pill" id="q-cat">Demand &amp; supply</span>
+  </div>
+  <p class="qtext" id="q-text"></p>
+  <div id="q-body"></div>
+  <div id="q-feedback"></div>
+  <div class="row" style="margin-top:1.3rem">
+    <button class="btn primary" id="next" hidden>Next →</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════ RESULT ══════════════════════════ -->
+<section id="result" class="wrap" hidden style="padding:2.2rem 0 3rem">
+  <div class="eyebrow">Run complete</div>
+  <div class="big-score" id="r-score">0</div>
+  <p class="lede" id="r-verdict" style="margin-top:.6rem"></p>
+
+  <div class="panel" style="margin-top:1.5rem">
+    <h2>The run</h2>
+    <h3>What happened</h3>
+    <div class="brk" id="r-brk"></div>
+    <div style="margin-top:1.1rem">
+      <h3 style="margin-bottom:.5rem">Concepts this run</h3>
+      <div id="r-tags"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Send it in</h2>
+    <h3 id="sub-sub">Your instructor sees this · no other student does</h3>
+    <p style="color:var(--mid);font-size:.96rem;margin-top:0" id="sub-note"></p>
+    <div class="row">
+      <button class="btn primary big" id="submit-run">Submit my score</button>
+      <button class="btn" id="copy-run">Copy my result</button>
+      <button class="btn" id="again">Play again ↻</button>
+      <button class="btn" id="to-lobby">Back to my floor</button>
+    </div>
+    <p class="sub-state" id="sub-state"></p>
+  </div>
+
+  <footer>
+    Ungraded practice · <a href="../classroom.html">Classroom</a> · <a href="market-forces-lab.html">Market Forces Lab</a>
+  </footer>
+</section>
+
+<iframe name="mm-sink" id="mm-sink" style="display:none" title="submission sink"></iframe>
+
+<script src="game-config.js"></script>
+<script src="mm-questions.js"></script>
+<script>
+"use strict";
+(function(){
+
+/* ── config, with safe defaults if game-config.js is missing ─────────────── */
+var CFG = Object.assign({
+  formAction:"", entries:{}, classCode:"", idPattern:"", classPulseCsv:"",
+  runLength:12, timers:{1:25,2:35,3:50}, base:{1:100,2:200,3:350}
+}, window.MM_CONFIG || {});
+var QS   = window.MM_QUESTIONS || [];
+var CATS = window.MM_CATS || {};
+var WIRED = !!(CFG.formAction && CFG.entries && CFG.entries.score);
+
+var $ = function(s){ return document.querySelector(s); };
+var esc = function(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); };
+
+/* ── storage (never throws; the game works with storage blocked) ─────────── */
+var K = {id:"mm_identity_v1", stats:"mm_stats_v1", runs:"mm_runs_v1", seen:"mm_seen_v1"};
+function load(k,d){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+var ident = load(K.id,null);
+var stats = load(K.stats,{runs:0,best:0,answered:0,correct:0,bestStreak:0,cat:{}});
+var runs  = load(K.runs,[]);
+var seen  = load(K.seen,[]);
+
+/* ── screens ─────────────────────────────────────────────────────────────── */
+function show(id){
+  ["gate","lobby","run","result"].forEach(function(s){ $("#"+s).hidden = (s!==id); });
+  window.scrollTo(0,0);
+}
+
+/* ══ GATE ═══════════════════════════════════════════════════════════════ */
+if (CFG.classCode) $("#code-field").hidden = false;
+if (!WIRED) $("#dis-target").innerHTML =
+  "Submission is <b>not connected yet</b> on this page, so pressing Submit sends nothing anywhere. " +
+  "You can still copy your result and post it yourself if you want to.";
+
+$("#gate-form").addEventListener("submit", function(e){
+  e.preventDefault();
+  var id = $("#g-id").value.trim();
+  var handle = $("#g-handle").value.trim();
+  var code = $("#g-code").value.trim();
+  var err = $("#g-err");
+  err.textContent = "";
+
+  if (!id) { err.textContent = "Enter your roll number or institute email."; return; }
+  if (CFG.idPattern) {
+    var re; try { re = new RegExp(CFG.idPattern); } catch(x){ re = null; }
+    if (re && !re.test(id)) { err.textContent = "That does not look like a roll number or institute email for this class."; return; }
+  }
+  if (CFG.classCode && code.toLowerCase() !== String(CFG.classCode).toLowerCase()) {
+    err.textContent = "Wrong class code. It is posted in your Google Classroom."; return;
+  }
+  if (!/^[A-Za-z0-9._-]{2,16}$/.test(handle)) {
+    err.textContent = "Display name: 2–16 characters, letters/digits/dot/dash/underscore."; return;
+  }
+  ident = {id:id, handle:handle, joined:new Date().toISOString()};
+  save(K.id, ident);
+  enterLobby();
+});
+
+$("#signout").addEventListener("click", function(e){
+  e.preventDefault();
+  try{ localStorage.removeItem(K.id); }catch(x){}
+  ident = null;
+  stats = {runs:0,best:0,answered:0,correct:0,bestStreak:0,cat:{}};
+  runs = []; seen = [];
+  try{ localStorage.removeItem(K.stats); localStorage.removeItem(K.runs); localStorage.removeItem(K.seen); }catch(x){}
+  $("#g-id").value = ""; $("#g-handle").value = ""; $("#g-err").textContent = "";
+  show("gate");
+});
+
+/* ══ LOBBY ══════════════════════════════════════════════════════════════ */
+function pct(c,s){ return s ? Math.round(c/s*100) : 0; }
+
+function enterLobby(){
+  $("#who").textContent = ident.handle + " (" + ident.id + ")";
+  var acc = pct(stats.correct, stats.answered);
+  var mastered = 0, tracked = 0;
+  Object.keys(CATS).forEach(function(k){
+    var c = stats.cat[k]; if (c && c.seen >= 4) { tracked++; if (c.correct/c.seen >= .8) mastered++; }
+  });
+  $("#lobby-stats").innerHTML =
+    tile("Best score", stats.best, "gr", stats.runs ? stats.runs + (stats.runs===1?" run":" runs") : "not played yet") +
+    tile("Accuracy", stats.answered ? acc + "%" : "—", "cy", stats.correct + " of " + stats.answered) +
+    tile("Longest streak", stats.bestStreak, "am", "all time") +
+    tile("Concepts solid", mastered + "/" + Object.keys(CATS).length, "", tracked ? "≥80% over 4+ questions" : "play to find out");
+
+  renderMastery();
+  renderHistory();
+  if (CFG.classPulseCsv) loadPulse();
+  show("lobby");
+}
+function tile(k,v,cls,s){
+  return '<div class="stat"><span class="k">'+esc(k)+'</span><span class="v '+(cls||"")+'">'+esc(v)+
+         '</span><span class="s">'+esc(s||"")+'</span></div>';
+}
+
+function renderMastery(){
+  var rows = Object.keys(CATS).map(function(k){
+    var c = stats.cat[k] || {seen:0,correct:0};
+    return {k:k, name:CATS[k], seen:c.seen, correct:c.correct, p:c.seen?c.correct/c.seen:-1};
+  }).sort(function(a,b){ return a.p - b.p; });
+  $("#mastery").innerHTML = rows.map(function(r){
+    var w = r.seen ? Math.round(r.p*100) : 0;
+    var cls = r.seen===0 ? "cold" : (r.p < .6 ? "warn" : "");
+    return '<div class="mrow"><span class="nm">'+esc(r.name)+'</span>'+
+           '<span class="bar"><i class="'+cls+'" style="width:'+(r.seen?Math.max(w,3):100)+'%"></i></span>'+
+           '<span class="pc">'+(r.seen ? w+"%" : "—")+'</span></div>';
+  }).join("");
+}
+
+function renderHistory(){
+  $("#history-panel").hidden = !runs.length;
+  if (!runs.length) return;
+  $("#history").innerHTML = runs.slice(0,8).map(function(r){
+    return '<div><span>'+esc(new Date(r.at).toLocaleString())+' · '+r.correct+'/'+r.total+
+           (r.submitted?' · <span style="color:var(--green)">sent</span>':'')+
+           '</span><b>'+r.score+'</b></div>';
+  }).join("");
+}
+
+/* optional read-only class pulse from a published Form response sheet */
+function loadPulse(){
+  $("#pulse-panel").hidden = false;
+  $("#pulse-body").innerHTML = '<p style="color:var(--dim);margin:0">Loading…</p>';
+  fetch(CFG.classPulseCsv, {cache:"no-store"}).then(function(r){
+    if (!r.ok) throw new Error("HTTP "+r.status); return r.text();
+  }).then(function(txt){
+    var rows = parseCSV(txt);
+    if (rows.length < 2) throw new Error("empty");
+    var head = rows[0].map(function(h){ return h.toLowerCase(); });
+    var hi = head.findIndex(function(h){ return h.indexOf("handle")>=0; });
+    var si = head.findIndex(function(h){ return h.indexOf("score")>=0; });
+    if (hi<0 || si<0) throw new Error("columns");
+    var best = {};
+    rows.slice(1).forEach(function(r){
+      var h = (r[hi]||"").trim(), s = parseInt(r[si],10);
+      if (!h || isNaN(s)) return;
+      if (!best[h] || s > best[h]) best[h] = s;
+    });
+    var list = Object.keys(best).map(function(h){ return {h:h,s:best[h]}; })
+                     .sort(function(a,b){ return b.s-a.s; });
+    var mine = list.findIndex(function(x){ return x.h === ident.handle; });
+    $("#pulse-sub").textContent = list.length + (list.length===1?" player":" players") + " have submitted a run";
+    $("#pulse-body").innerHTML =
+      '<div class="brk">' + list.slice(0,10).map(function(x,i){
+        var me = x.h === ident.handle;
+        return '<div><span>'+(i+1)+'. '+esc(x.h)+(me?' <span style="color:var(--cyan)">← you</span>':'')+
+               '</span><b>'+x.s+'</b></div>';
+      }).join("") + '</div>' +
+      (mine >= 10 ? '<p style="color:var(--dim);font-size:.88rem;margin:.8rem 0 0">You are #'+(mine+1)+' of '+list.length+'.</p>' : "");
+  }).catch(function(){
+    $("#pulse-body").innerHTML = '<p style="color:var(--dim);margin:0">Class numbers are not available right now. Your own results are unaffected.</p>';
+  });
+}
+function parseCSV(t){
+  var rows=[], row=[], cur="", q=false;
+  for (var i=0;i<t.length;i++){
+    var c=t[i];
+    if (q){ if (c==='"'){ if (t[i+1]==='"'){ cur+='"'; i++; } else q=false; } else cur+=c; }
+    else if (c==='"') q=true;
+    else if (c===","){ row.push(cur); cur=""; }
+    else if (c==="\n"){ row.push(cur); rows.push(row); row=[]; cur=""; }
+    else if (c!=="\r") cur+=c;
+  }
+  if (cur.length||row.length){ row.push(cur); rows.push(row); }
+  return rows;
+}
+
+/* ══ RUN ════════════════════════════════════════════════════════════════ */
+var R = null, tick = null;
+
+function buildRun(){
+  var perTier = Math.max(1, Math.round(CFG.runLength/3));
+  var picked = [];
+  [1,2,3].forEach(function(t){
+    var pool = QS.filter(function(q){ return q.tier===t; });
+    var fresh = pool.filter(function(q){ return seen.indexOf(q.id) < 0; });
+    var use = fresh.length >= perTier ? fresh : pool;
+    picked = picked.concat(shuffle(use.slice()).slice(0, perTier));
+  });
+  // top up if rounding left us short
+  while (picked.length < CFG.runLength) {
+    var extra = shuffle(QS.filter(function(q){ return picked.indexOf(q) < 0; }))[0];
+    if (!extra) break; picked.push(extra);
+  }
+  return picked.slice(0, CFG.runLength);
+}
+function shuffle(a){ for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+function startRun(){
+  R = {qs:buildRun(), i:0, score:0, streak:0, best:0, correct:0, log:[], started:Date.now()};
+  if (!R.qs.length) { alert("No questions are loaded."); return; }
+  show("run"); renderQ();
+}
+
+function mult(s){ return s>=8 ? 2 : s>=5 ? 1.5 : s>=3 ? 1.2 : 1; }
+
+function renderQ(){
+  var q = R.qs[R.i];
+  var T = CFG.timers[q.tier] || 30;
+  R.t = T; R.tMax = T; R.locked = false;
+
+  $("#h-score").textContent = R.score;
+  $("#h-streak").textContent = R.streak + (R.streak>=3 ? " ×"+mult(R.streak) : "");
+  $("#h-q").textContent = (R.i+1) + "/" + R.qs.length;
+  $("#h-dots").innerHTML = R.qs.map(function(_,k){
+    var c = k < R.i ? (R.log[k] && R.log[k].ok ? "ok" : "no") : (k===R.i ? "now" : "");
+    return '<i class="'+c+'"></i>';
+  }).join("");
+
+  $("#q-tier").className = "pill t"+q.tier;
+  $("#q-tier").textContent = ["","Tier 1 · recognise","Tier 2 · apply","Tier 3 · judge"][q.tier];
+  $("#q-cat").textContent = CATS[q.cat] || q.cat;
+  $("#q-text").innerHTML = q.q;
+  $("#q-feedback").innerHTML = "";
+  $("#next").hidden = true;
+
+  var body = $("#q-body");
+  if (q.type === "mcq") {
+    body.innerHTML = '<div class="opts">' + q.o.map(function(o,k){
+      return '<button class="opt" data-k="'+k+'"><span class="k">'+"ABCD"[k]+'</span><span>'+o+'</span></button>';
+    }).join("") + '</div>';
+  } else if (q.type === "num") {
+    body.innerHTML = '<div class="numwrap"><span class="pre">'+esc(q.pre||"")+'</span>'+
+      '<input id="numin" type="text" inputmode="decimal" autocomplete="off" placeholder="your answer">'+
+      '<button class="btn primary" id="numgo">Lock it in</button></div>';
+    setTimeout(function(){ var n=$("#numin"); if(n) n.focus(); }, 60);
+  } else if (q.type === "pick") {
+    body.innerHTML = '<div class="diagram">' + scene(q.scene) + '</div>' +
+      '<p style="color:var(--dim);font-size:.88rem;margin:.6rem 0 0">Click a shaded region.</p>';
+  }
+  startTimer();
+}
+
+function startTimer(){
+  stopTimer(); paintRing();
+  tick = setInterval(function(){
+    R.t -= 0.1;
+    if (R.t <= 0) { R.t = 0; paintRing(); stopTimer(); answer(null); }
+    else paintRing();
+  }, 100);
+}
+function stopTimer(){ if (tick) { clearInterval(tick); tick = null; } }
+function paintRing(){
+  var C = 2*Math.PI*25, f = Math.max(0, R.t/R.tMax);
+  var el = $("#h-ring");
+  el.setAttribute("stroke-dasharray", C);
+  el.setAttribute("stroke-dashoffset", C*(1-f));
+  el.setAttribute("class", "prog" + (f<.2 ? " crit" : f<.45 ? " warn" : ""));
+  $("#h-time").textContent = Math.ceil(R.t);
+}
+
+/* answer: v is index (mcq) | string (num) | letter (pick) | null (timeout) */
+function answer(v){
+  if (R.locked) return;
+  R.locked = true; stopTimer();
+  var q = R.qs[R.i], ok = false, shown = "";
+
+  if (v === null) { ok = false; shown = "ran out of time"; }
+  else if (q.type === "mcq") { ok = (v === q.a); }
+  else if (q.type === "num") {
+    var n = parseFloat(String(v).replace(/[^0-9eE.+-]/g, ""));
+    ok = !isNaN(n) && Math.abs(n - q.a) <= (q.tol != null ? q.tol : 0.01);
+  }
+  else if (q.type === "pick") { ok = (v === q.a); }
+
+  var pts = 0, sb = 0, m = 1;
+  if (ok) {
+    R.streak++; if (R.streak > R.best) R.best = R.streak;
+    R.correct++;
+    var base = CFG.base[q.tier] || 100;
+    sb = Math.round(base * 0.5 * (R.t / R.tMax));
+    m = mult(R.streak);
+    pts = Math.round((base + sb) * m);
+    R.score += pts;
+  } else { R.streak = 0; }
+
+  R.log.push({id:q.id, cat:q.cat, tier:q.tier, ok:ok, pts:pts, ms:Math.round((R.tMax-R.t)*1000)});
+  if (seen.indexOf(q.id) < 0) seen.push(q.id);
+  if (seen.length > 60) seen = seen.slice(-45);
+
+  stats.answered++; if (ok) stats.correct++;
+  var c = stats.cat[q.cat] || {seen:0,correct:0};
+  c.seen++; if (ok) c.correct++; stats.cat[q.cat] = c;
+  if (R.best > stats.bestStreak) stats.bestStreak = R.best;
+
+  // lock the UI and mark it up
+  if (q.type === "mcq") {
+    document.querySelectorAll(".opt").forEach(function(b){
+      b.disabled = true;
+      var k = +b.dataset.k;
+      if (k === q.a) b.classList.add("right");
+      else if (k === v) b.classList.add("wrong");
+      else b.classList.add("dim");
+    });
+  } else if (q.type === "num") {
+    var inp = $("#numin"); if (inp) inp.disabled = true;
+    var go = $("#numgo"); if (go) go.disabled = true;
+  } else if (q.type === "pick") {
+    document.querySelectorAll(".rg").forEach(function(g){
+      g.style.pointerEvents = "none";
+      var L = g.dataset.let, poly = g.querySelector("polygon");
+      if (L === q.a) { poly.setAttribute("fill","rgba(0,255,136,.42)"); poly.setAttribute("stroke","var(--green)"); }
+      else if (L === v) { poly.setAttribute("fill","rgba(239,68,68,.38)"); poly.setAttribute("stroke","var(--red)"); }
+    });
+  }
+
+  var head = ok
+    ? '<span>Correct</span><span class="pts">+'+pts+'  ('+(CFG.base[q.tier]||100)+' base + '+sb+' speed'+(m>1?' , ×'+m+' streak':'')+')</span>'
+    : '<span>'+(v===null ? "Time" : "Not this time")+'</span><span class="pts">+0 · streak reset</span>';
+  var extra = "";
+  if (!ok && q.type === "num") extra = '<p class="why" style="margin-bottom:.5rem"><b>Answer: '+(q.pre||"")+" "+q.a+'</b></p>';
+  if (!ok && q.type === "pick") extra = '<p class="why" style="margin-bottom:.5rem"><b>It was region '+q.a+'.</b></p>';
+  $("#q-feedback").innerHTML = '<div class="feedback '+(ok?"ok":"no")+'"><div class="vt">'+head+'</div>'+
+    extra + '<p class="why">'+q.why+'</p></div>';
+
+  $("#h-score").textContent = R.score;
+  $("#h-streak").textContent = R.streak + (R.streak>=3 ? " ×"+mult(R.streak) : "");
+  $("#h-dots").innerHTML = R.qs.map(function(_,k){
+    var cl = k <= R.i ? (R.log[k] && R.log[k].ok ? "ok" : "no") : "";
+    return '<i class="'+cl+'"></i>';
+  }).join("");
+
+  var nx = $("#next");
+  nx.hidden = false;
+  nx.textContent = (R.i === R.qs.length-1) ? "See my result →" : "Next →";
+  nx.focus();
+}
+
+$("#q-body").addEventListener("click", function(e){
+  var o = e.target.closest(".opt");
+  if (o && !o.disabled) { answer(+o.dataset.k); return; }
+  if (e.target.id === "numgo") { answer($("#numin").value); return; }
+  var g = e.target.closest(".rg");
+  if (g) answer(g.dataset.let);
+});
+$("#q-body").addEventListener("keydown", function(e){
+  if (e.target.id === "numin" && e.key === "Enter") { e.preventDefault(); answer(e.target.value); }
+});
+$("#next").addEventListener("click", function(){
+  R.i++;
+  if (R.i >= R.qs.length) finish(); else renderQ();
+});
+
+/* ══ DIAGRAM SCENES (P = 100 − 2Q demand, P = 20 + 2Q supply) ═══════════ */
+var GQ = 35, GP = 110, GL = 46, GT = 18, GW = 394, GH = 282;
+function gx(q){ return GL + q/GQ*GW; }
+function gy(p){ return GT + (1 - p/GP)*GH; }
+function poly(pts,let_,fill){
+  var d = pts.map(function(p){ return gx(p[0]).toFixed(1)+","+gy(p[1]).toFixed(1); }).join(" ");
+  var cx = pts.reduce(function(a,p){ return a+gx(p[0]); },0)/pts.length;
+  var cy = pts.reduce(function(a,p){ return a+gy(p[1]); },0)/pts.length;
+  return '<g class="rg" data-let="'+let_+'"><polygon class="rg-fill" points="'+d+'" fill="'+fill+'"/>'+
+         '<text class="rg-let" x="'+cx.toFixed(1)+'" y="'+(cy+4).toFixed(1)+'">'+let_+'</text></g>';
+}
+function grid(){
+  var g = '<line class="ax" x1="'+gx(0)+'" y1="'+gy(GP)+'" x2="'+gx(0)+'" y2="'+gy(0)+'"/>'+
+          '<line class="ax" x1="'+gx(0)+'" y1="'+gy(0)+'" x2="'+gx(GQ)+'" y2="'+gy(0)+'"/>'+
+          '<text class="axlbl" x="'+gx(GQ)+'" y="'+(gy(0)+22)+'" text-anchor="end">QUANTITY</text>'+
+          '<text class="axlbl" x="'+(gx(0)-34)+'" y="'+(gy(GP)+2)+'">PRICE ₹</text>';
+  [20,40,60,80,100].forEach(function(p){
+    g += '<text class="axlbl" x="'+(gx(0)-7)+'" y="'+(gy(p)+4)+'" text-anchor="end">'+p+'</text>';
+  });
+  return g;
+}
+function curves(){
+  return '<polyline class="dx" points="'+gx(0)+','+gy(100)+' '+gx(35)+','+gy(30)+'"/>'+
+         '<polyline class="sx" points="'+gx(0)+','+gy(20)+' '+gx(35)+','+gy(90)+'"/>'+
+         '<text class="axlbl" x="'+(gx(33)-4)+'" y="'+(gy(34)-6)+'" fill="var(--cyan)" text-anchor="end">D</text>'+
+         '<text class="axlbl" x="'+(gx(33)-4)+'" y="'+(gy(86)+2)+'" fill="var(--amber)" text-anchor="end">S</text>';
+}
+function scene(name){
+  var body = "", note = "";
+  var F = ["rgba(0,212,255,.30)","rgba(167,139,250,.34)","rgba(245,158,11,.32)","rgba(239,68,68,.30)","rgba(0,255,136,.26)"];
+  if (name === "ceiling") {
+    body = poly([[0,100],[10,80],[10,60],[0,60]],"A",F[0]) +
+           poly([[0,60],[10,60],[10,40],[0,40]],"B",F[1]) +
+           poly([[10,80],[20,60],[10,60]],"C",F[2]) +
+           poly([[10,60],[20,60],[10,40]],"D",F[3]) +
+           poly([[0,20],[10,40],[0,40]],"E",F[4]) +
+           '<line class="gl" x1="'+gx(0)+'" y1="'+gy(40)+'" x2="'+gx(24)+'" y2="'+gy(40)+'"/>'+
+           '<text class="axlbl" x="'+gx(24.5)+'" y="'+(gy(40)+4)+'" fill="var(--red)">ceiling ₹40</text>';
+    note = "Free-market equilibrium ₹60 · ceiling ₹40 · only 10 units now trade";
+  } else if (name === "tax") {
+    body = poly([[0,100],[15,70],[0,70]],"A",F[0]) +
+           poly([[0,70],[15,70],[15,60],[0,60]],"B",F[1]) +
+           poly([[0,60],[15,60],[15,50],[0,50]],"C",F[2]) +
+           poly([[15,70],[20,60],[15,50]],"D",F[3]) +
+           poly([[0,20],[15,50],[0,50]],"E",F[4]) +
+           '<line class="gl" x1="'+gx(0)+'" y1="'+gy(60)+'" x2="'+gx(22)+'" y2="'+gy(60)+'"/>'+
+           '<text class="axlbl" x="'+gx(22.5)+'" y="'+(gy(60)+4)+'">old price ₹60</text>';
+    note = "₹20 per-unit tax · buyers pay ₹70, sellers keep ₹50 · quantity falls 20 → 15";
+  } else {
+    body = poly([[0,100],[20,60],[0,60]],"A",F[0]) +
+           poly([[0,20],[20,60],[0,60]],"B",F[4]) +
+           '<line class="gl" x1="'+gx(0)+'" y1="'+gy(60)+'" x2="'+gx(22)+'" y2="'+gy(60)+'"/>'+
+           '<text class="axlbl" x="'+gx(22.5)+'" y="'+(gy(60)+4)+'">price ₹60</text>';
+    note = "Equilibrium: ₹60, 20 units";
+  }
+  return '<svg viewBox="0 0 460 340" role="img" aria-label="'+esc(note)+'">'+
+         grid() + body + curves() + '</svg>'+
+         '<p style="font-family:var(--mono);font-size:.72rem;color:var(--dim);margin:.4rem .2rem 0">'+esc(note)+'</p>';
+}
+
+/* ══ RESULT ═════════════════════════════════════════════════════════════ */
+var lastRun = null;
+
+function finish(){
+  stopTimer();
+  var total = R.qs.length, secs = Math.round((Date.now()-R.started)/1000);
+  var byCat = {};
+  R.log.forEach(function(l){
+    var c = byCat[l.cat] || {seen:0,ok:0}; c.seen++; if (l.ok) c.ok++; byCat[l.cat] = c;
+  });
+  var weak = Object.keys(byCat).filter(function(k){ return byCat[k].ok / byCat[k].seen < .6; })
+                   .map(function(k){ return CATS[k] || k; });
+
+  stats.runs++; if (R.score > stats.best) stats.best = R.score;
+  save(K.stats, stats); save(K.seen, seen);
+
+  lastRun = {
+    at:new Date().toISOString(), score:R.score, correct:R.correct, total:total,
+    streak:R.best, secs:secs, weak:weak, submitted:false,
+    detail:{ v:1, id:ident.id, handle:ident.handle, score:R.score, correct:R.correct,
+             total:total, streak:R.best, secs:secs,
+             cats:Object.keys(byCat).map(function(k){ return k+":"+byCat[k].ok+"/"+byCat[k].seen; }).join(" "),
+             qs:R.log.map(function(l){ return l.id+(l.ok?"+":"-"); }).join(" ") }
+  };
+  runs.unshift({at:lastRun.at, score:R.score, correct:R.correct, total:total, submitted:false});
+  runs = runs.slice(0,20); save(K.runs, runs);
+
+  $("#r-score").textContent = R.score;
+  var a = R.correct/total;
+  $("#r-verdict").textContent =
+    a === 1     ? "Twelve from twelve. Go and argue with someone about question three." :
+    a >= .75    ? "Solid. The concepts below are where the remaining points went." :
+    a >= .5     ? "Middle of the curve — and the explanations you just read are worth more than the score." :
+                  "Rough run. That is genuinely fine: the questions rotate, and the second attempt is where this thing actually teaches.";
+
+  $("#r-brk").innerHTML =
+    '<div><span>Correct</span><b>'+R.correct+' / '+total+'</b></div>' +
+    '<div><span>Longest streak</span><b>'+R.best+'</b></div>' +
+    '<div><span>Time taken</span><b>'+Math.floor(secs/60)+'m '+(secs%60)+'s</b></div>' +
+    '<div><span>Your best ever</span><b>'+stats.best+(R.score>=stats.best?' · new':'')+'</b></div>' +
+    '<div><span>Runs played</span><b>'+stats.runs+'</b></div>';
+
+  $("#r-tags").innerHTML = Object.keys(byCat).map(function(k){
+    var c = byCat[k], p = c.ok/c.seen;
+    var cls = p >= .8 ? "good" : p < .6 ? "warn" : "";
+    return '<span class="tag '+cls+'">'+esc(CATS[k]||k)+' '+c.ok+'/'+c.seen+'</span>';
+  }).join("");
+
+  var st = $("#sub-state"); st.textContent = ""; st.className = "sub-state";
+  var btn = $("#submit-run"); btn.disabled = false; btn.textContent = "Submit my score";
+  if (WIRED) {
+    $("#sub-note").innerHTML = "This sends your ID, display name, score, correct count, longest "+
+      "streak and weakest concepts to your instructor. It is <b>not</b> a graded submission and "+
+      "does not go to any other student. You can submit as many runs as you like.";
+  } else {
+    $("#sub-note").innerHTML = "Submission is <b>not connected on this page yet</b>. Pressing "+
+      "Submit will not send anything anywhere. Use <b>Copy my result</b> if you want to share it yourself.";
+    $("#sub-sub").textContent = "Not connected yet";
+  }
+  show("result");
+}
+
+/* Google Form submission: a real form POST into a hidden iframe.
+   Form posts are not subject to CORS, which is what makes this work from a
+   static page with no backend. We cannot read the response cross-origin, so
+   success here means "the browser sent it", not "Google stored it". */
+$("#submit-run").addEventListener("click", function(){
+  var st = $("#sub-state");
+  if (!WIRED) {
+    st.className = "sub-state no";
+    st.textContent = "Nothing sent — no Form is configured for this page yet.";
+    return;
+  }
+  var btn = this; btn.disabled = true; btn.textContent = "Sending…";
+  var E = CFG.entries, d = lastRun;
+  var map = [
+    [E.id, ident.id], [E.handle, ident.handle], [E.score, d.score],
+    [E.correct, d.correct + "/" + d.total], [E.streak, d.streak],
+    [E.weak, d.weak.length ? d.weak.join(", ") : "none"],
+    [E.detail, JSON.stringify(d.detail)]
+  ];
+  var f = document.createElement("form");
+  f.action = CFG.formAction; f.method = "POST"; f.target = "mm-sink"; f.style.display = "none";
+  map.forEach(function(kv){
+    if (!kv[0]) return;
+    var i = document.createElement("input");
+    i.type = "hidden"; i.name = kv[0]; i.value = String(kv[1]); f.appendChild(i);
+  });
+  document.body.appendChild(f);
+
+  var done = false;
+  var sink = $("#mm-sink");
+  var onLoad = function(){
+    if (done) return; done = true;
+    sink.removeEventListener("load", onLoad);
+    st.className = "sub-state ok";
+    st.textContent = "✓ Sent. Your instructor has it. Nothing about this affects your marks.";
+    btn.textContent = "Submitted";
+    d.submitted = true;
+    if (runs[0]) { runs[0].submitted = true; save(K.runs, runs); }
+    try { document.body.removeChild(f); } catch(e){}
+  };
+  sink.addEventListener("load", onLoad);
+  setTimeout(function(){
+    if (done) return; done = true;
+    st.className = "sub-state no";
+    st.textContent = "Sent, but the browser could not confirm delivery. If in doubt, copy your result and post it in Classroom.";
+    btn.textContent = "Submitted";
+    try { document.body.removeChild(f); } catch(e){}
+  }, 8000);
+
+  f.submit();
+});
+
+$("#copy-run").addEventListener("click", function(){
+  var d = lastRun;
+  var txt = "Market Maker — " + ident.handle + " (" + ident.id + ")\n" +
+            "Score " + d.score + " · " + d.correct + "/" + d.total + " correct · streak " + d.streak +
+            " · " + Math.floor(d.secs/60) + "m" + (d.secs%60) + "s\n" +
+            "Weak: " + (d.weak.length ? d.weak.join(", ") : "none");
+  var st = $("#sub-state");
+  var ok = function(){ st.className = "sub-state ok"; st.textContent = "Copied to clipboard."; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(ok, function(){ fallback(txt, ok, st); });
+  } else fallback(txt, ok, st);
+});
+function fallback(txt, ok, st){
+  try {
+    var ta = document.createElement("textarea");
+    ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy");
+    document.body.removeChild(ta); ok();
+  } catch(e){ st.className = "sub-state err"; st.textContent = "Could not copy automatically."; }
+}
+
+$("#again").addEventListener("click", startRun);
+$("#to-lobby").addEventListener("click", enterLobby);
+$("#start").addEventListener("click", startRun);
+
+/* ══ boot ═══════════════════════════════════════════════════════════════ */
+$("#run-hint").textContent = CFG.runLength + " questions · roughly " +
+  Math.round(CFG.runLength * 30 / 60) + " minutes · " + QS.length + " in the pool";
+if (ident && ident.id && ident.handle) enterLobby(); else show("gate");
+
+})();
+</script>
+</body>
+</html>

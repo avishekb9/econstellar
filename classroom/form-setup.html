@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form Setup — Econstellar Classroom</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Instructor tool: turn a Google Form pre-filled link into the config block for the Market Maker game.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700&display=swap');
+:root{--bg:#000;--surface:rgba(8,10,14,.92);--surface2:rgba(12,18,28,.92);
+  --border:rgba(0,212,255,.15);--rule:rgba(255,255,255,.07);--text:#fff;--mid:#c9d1d9;--dim:#6b7280;
+  --cyan:#00d4ff;--green:#00ff88;--amber:#f59e0b;--red:#ef4444;
+  --sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;--disp:'Orbitron',sans-serif}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 12% 6%,rgba(0,212,255,.07),transparent 42%)}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px 4rem}
+.site-bar{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;padding:.75rem 20px;border-bottom:1px solid var(--rule);
+  background:#000;color:var(--dim);font-family:var(--mono);font-size:.76rem}
+.site-bar .brand{color:var(--green);font-weight:600} .site-bar a{color:var(--dim)} .site-bar .sp{flex:1}
+h1{font-family:var(--disp);font-size:clamp(1.6rem,4vw,2.3rem);margin:2rem 0 .4rem}
+h2{font-family:var(--disp);font-size:1.05rem;margin:0 0 .8rem}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--amber);margin-top:2rem}
+p{color:var(--mid);max-width:68ch}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.4rem;margin:1.4rem 0}
+ol{color:var(--mid);max-width:68ch;padding-left:1.3rem} ol li{margin:.55rem 0}
+code,kbd{font-family:var(--mono);font-size:.88em;background:rgba(255,255,255,.07);padding:.12em .4em;border-radius:4px;color:var(--cyan)}
+textarea{width:100%;min-height:90px;background:#05080a;border:1px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:var(--mono);font-size:.86rem;padding:.8rem;resize:vertical}
+textarea:focus{outline:2px solid var(--cyan);outline-offset:1px}
+.btn{font-family:var(--mono);font-size:.86rem;font-weight:600;padding:.7rem 1.2rem;border-radius:9px;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface2);color:var(--text);margin-top:.8rem}
+.btn.primary{color:#000;background:linear-gradient(90deg,var(--cyan),var(--green));border:none}
+pre{background:#05080a;border:1px solid var(--rule);border-radius:8px;padding:1rem;overflow-x:auto;
+  font-family:var(--mono);font-size:.82rem;color:var(--mid);line-height:1.5}
+pre b{color:var(--green);font-weight:400}
+.msg{font-family:var(--mono);font-size:.84rem;margin-top:.8rem}
+.msg.ok{color:var(--green)} .msg.err{color:var(--red)}
+.fields{font-family:var(--mono);font-size:.82rem;color:var(--mid);margin-top:1rem;display:grid;gap:.35rem}
+.fields div{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--rule);padding-bottom:.3rem}
+.fields b{color:var(--cyan);font-weight:500}
+.warn{border-left:2px solid var(--amber);padding-left:1rem;color:var(--mid)}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="site-bar">
+  <span class="brand">◆ ECONSTELLAR</span>
+  <a href="../classroom.html">Classroom</a>
+  <a href="market-maker.html">Market Maker</a>
+  <span class="sp"></span><span>instructor tool</span>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow">Instructor only · nothing here is sent anywhere</div>
+  <h1>Wire the game to your Google Form</h1>
+  <p>The Market Maker game is a static page with no backend. The one thing it can do is POST a
+    finished run into a Google Form you own, so results land in your response sheet like any quiz
+    submission. This page turns your Form's pre-filled link into the config block to paste into
+    <code>classroom/game-config.js</code>. It runs entirely in your browser and transmits nothing.</p>
+
+  <div class="panel">
+    <h2>1 · Build the Form</h2>
+    <p style="margin-top:0">Create a Google Form with <b>seven short-answer questions in this exact
+      order</b>. The titles are yours to choose; only the order matters.</p>
+    <ol>
+      <li>Student ID</li>
+      <li>Display handle</li>
+      <li>Score</li>
+      <li>Correct out of total</li>
+      <li>Best streak</li>
+      <li>Weakest concepts</li>
+      <li>Run detail</li>
+    </ol>
+    <div class="warn">
+      <p style="margin:.4rem 0"><b>Leave every question NOT required.</b> A required question makes
+      Google reject the submission silently, and the page has no way to see the rejection.</p>
+      <p style="margin:.4rem 0">Also turn <b>off</b> "Collect email addresses" and any "Limit to 1
+      response" / sign-in requirement — those force a Google login the game cannot perform.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2 · Get the pre-filled link</h2>
+    <p style="margin-top:0">In the Form: <kbd>⋮</kbd> → <b>Get pre-filled link</b> → type any junk
+      into all seven boxes → <b>Get link</b> → <b>Copy link</b>. Paste it here.</p>
+    <textarea id="in" placeholder="https://docs.google.com/forms/d/e/1FAIpQLSc.../viewform?usp=pp_url&amp;entry.123456789=x&amp;entry.987654321=y&amp;..."></textarea>
+    <button class="btn primary" id="go" type="button">Generate config</button>
+    <p class="msg" id="msg"></p>
+    <div class="fields" id="fields"></div>
+  </div>
+
+  <div class="panel" id="outpanel" hidden>
+    <h2>3 · Paste this into game-config.js</h2>
+    <p style="margin-top:0">Replace the <code>formAction</code> and <code>entries</code> block. Then
+      commit and push — the game picks it up with no other change.</p>
+    <pre id="out"></pre>
+    <button class="btn" id="copy" type="button">Copy the block</button>
+    <p class="msg" id="msg2"></p>
+  </div>
+
+  <div class="panel">
+    <h2>Optional · let students see class numbers</h2>
+    <p style="margin-top:0">By default each student sees only their own results. If you later want
+      them to see how many people are playing and the top scores, open the Form's response
+      spreadsheet → <b>File → Share → Publish to web</b> → pick the responses sheet →
+      <b>Comma-separated values (.csv)</b> → Publish, and put that URL in
+      <code>classPulseCsv</code>. Reads are public and read-only; writes still go only through the
+      Form. The published sheet must contain a column with <code>handle</code> in its name and one
+      with <code>score</code>.</p>
+    <p class="warn" style="padding-left:1rem">Publishing that sheet makes every submitted handle and
+      score visible to anyone with the link. Student IDs stay out of the game's view either way, but
+      check the published columns before you turn this on.</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+var KEYS = ["id","handle","score","correct","streak","weak","detail"];
+var LABEL = {id:"Student ID",handle:"Display handle",score:"Score",correct:"Correct out of total",
+             streak:"Best streak",weak:"Weakest concepts",detail:"Run detail"};
+
+document.getElementById("go").addEventListener("click", function(){
+  var msg = document.getElementById("msg");
+  var raw = document.getElementById("in").value.trim();
+  msg.className = "msg"; msg.textContent = "";
+  document.getElementById("fields").innerHTML = "";
+  document.getElementById("outpanel").hidden = true;
+  if (!raw) { msg.className = "msg err"; msg.textContent = "Paste the pre-filled link first."; return; }
+
+  var u;
+  try { u = new URL(raw); } catch(e){ msg.className="msg err"; msg.textContent="That is not a URL."; return; }
+  if (u.hostname.indexOf("docs.google.com") < 0 || u.pathname.indexOf("/forms/") < 0) {
+    msg.className="msg err"; msg.textContent="That does not look like a Google Forms link."; return;
+  }
+
+  var ents = [];
+  u.searchParams.forEach(function(v,k){ if (/^entry\.\d+$/.test(k) && ents.indexOf(k)<0) ents.push(k); });
+  if (ents.length < KEYS.length) {
+    msg.className="msg err";
+    msg.textContent = "Found only " + ents.length + " field(s). Fill in all seven boxes before copying the pre-filled link.";
+    return;
+  }
+  ents = ents.slice(0, KEYS.length);
+
+  var action = u.origin + u.pathname.replace(/\/viewform.*$/, "/formResponse");
+  msg.className = "msg ok";
+  msg.textContent = "Matched " + ents.length + " fields, in order.";
+  document.getElementById("fields").innerHTML = KEYS.map(function(k,i){
+    return '<div><span>'+ (i+1) + '. ' + LABEL[k] + '</span><b>' + ents[i] + '</b></div>';
+  }).join("");
+
+  var block =
+'  formAction: "' + action + '",\n\n' +
+'  entries: {\n' +
+KEYS.map(function(k,i){
+  var pad = "       ".slice(0, 8 - k.length);
+  return '    ' + k + ':' + pad + '"' + ents[i] + '",   // ' + LABEL[k];
+}).join("\n").replace(/,(\s+\/\/ Run detail)$/, "$1") + "\n  },";
+
+  document.getElementById("out").textContent = block;
+  document.getElementById("outpanel").hidden = false;
+});
+
+document.getElementById("copy").addEventListener("click", function(){
+  var t = document.getElementById("out").textContent, m = document.getElementById("msg2");
+  var ok = function(){ m.className="msg ok"; m.textContent="Copied."; };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(t).then(ok, function(){ m.className="msg err"; m.textContent="Select and copy manually."; });
+  } else { m.className="msg err"; m.textContent="Select and copy manually."; }
+});
+</script>
+</body>
+</html>
