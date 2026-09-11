@@ -86,8 +86,12 @@ code{font-family:var(--mono);font-size:.85em;color:var(--green);background:rgba(
   LinkedIn API Terms of Use and the LinkedIn Platform Guidelines.</p>
 
   <h2>5. Third-party services</h2>
-  <p>The website is hosted on GitHub Pages. Computation and AI-assisted features use Google Cloud
-  services (Vertex AI / Gemini). Publishing uses the LinkedIn API. Each of these providers processes
+  <p>The website is hosted on GitHub Pages. Computation runs on the laboratory's own self-hosted
+  engine rather than on a cloud provider, and the AI analyst is an open-weights model served from that
+  same machine, so the text of a question is not sent to a third-party model provider unless a hosted-model
+  fallback is explicitly configured on the engine. To answer a question the engine may also query public
+  data and scholarly services: Yahoo Finance for market prices, and Crossref, OpenAlex, arXiv and FRED for
+  references and published series. Publishing uses the LinkedIn API. Each third party named here processes
   requests under its own privacy policy.</p>
 
   <h2>6. Your choices and rights</h2>
