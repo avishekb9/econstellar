@@ -77,8 +77,13 @@ footer a{color:var(--dim)}
 </head>
 <body>
 <nav class="wrap" style="max-width:none">
-  <span class="brand">◆ ECONSTELLAR</span><span class="sp"></span>
-  <a href="index.html">Home</a><a href="engine.html">The Engine</a><a href="research-engine.html">Workbench</a><a href="observatory.html">Observatory</a><a href="research-station.html">Research Station</a><a href="research-papers.html">Research Papers</a><a href="classroom.html" aria-current="page">Classroom</a>
+  <span class="brand">◆ CLASSROOM</span>
+  <a href="classroom.html" aria-current="page">Overview</a>
+  <a href="classroom/market-forces-lab.html">Market Forces Lab</a>
+  <a href="classroom/market-maker.html">Market Maker · L1</a>
+  <a href="#how">For instructors</a>
+  <span class="sp"></span>
+  <a href="index.html">econstellars.com</a>
 </nav>
 
 <div class="wrap">
@@ -125,7 +130,7 @@ footer a{color:var(--dim)}
         <div class="room"><span class="n">03</span><span class="t">Elasticity Duel</span><span class="d">Two goods, both prices up 20%. Call the more elastic one, then name which determinant explains it.</span></div>
         <div class="room"><span class="n">04</span><span class="t">The Pricing Room</span><span class="d">Run a price test on a real revenue curve. Midpoint method computed live; gained and lost revenue shaded.</span></div>
         <div class="room"><span class="n">05</span><span class="t">Two Ways to Shrink a Market</span><span class="d">Squeeze supply or squeeze demand. With inelastic demand only one of them works — find where the verdict flips.</span></div>
-        <div class="room"><span class="n">06</span><span class="t">The Trading Floor</span><span class="d">Four named buyers, four named sellers. Per-person surplus, marginal trader highlighted.</span></div>
+        <div class="room"><span class="n">06</span><span class="t">The Refurbished Laptop Floor</span><span class="d">Four named buyers, four named sellers. Per-person surplus, marginal trader highlighted.</span></div>
         <div class="room"><span class="n">07</span><span class="t">The Quantity Dial</span><span class="d">Dial output by hand and watch value that never got created. Deadweight loss in both directions.</span></div>
         <div class="room"><span class="n">08</span><span class="t">Arguments Worth Having</span><span class="d">Twelve open questions with no answer key. Surge caps, export bans, zero-marginal-cost supply curves.</span></div>
       </div>
@@ -188,16 +193,25 @@ footer a{color:var(--dim)}
       <li><strong>Argue from a diagram.</strong> Room 5 produces a result most students refuse to believe: a crackdown that reduces quantity and <em>raises</em> total spending. Project it, let them dispute it, then hand them the elasticity slider and let them find the condition under which they are right.</li>
     </ul>
     <p class="note" style="margin-top:1.6rem">Everything runs client-side in the browser. There is no
-      backend, no login, no analytics on the lab pages and no student data of any kind — progress is
-      remembered only in that browser's own storage and never leaves the machine. Instructors elsewhere
-      are welcome to link to these directly.</p>
+      backend and no login anywhere here. <strong>The Market Forces Lab collects nothing at all</strong> —
+      no analytics, no student data of any kind, and progress is remembered only in that browser's own
+      storage. <strong>Market Maker is the one exception, and only by the student's own action</strong>:
+      a run stays in the browser unless the student presses Submit at the end, which sends that one
+      result to the instructor's own Google Form and nowhere else. Details on the
+      <a href="privacy.html">privacy page</a>.</p>
+    <p class="note" style="margin-top:1rem"><strong>Adopting these elsewhere.</strong> Instructors at any
+      institution are welcome to link to these directly, or to take the source and retarget it. The pages
+      are plain HTML with no build step: the question bank lives in its own file, so the subject matter
+      can be swapped without touching the game engine, and a single config file sets the run length,
+      timers, points and where submissions go. Nothing in them is specific to this institute.</p>
   </section>
 </div>
 
 <footer class="wrap">
-  <a href="index.html">Econstellar</a> · <a href="research-papers.html">Research Papers</a> · <a href="classroom.html">Classroom</a> ·
-  <a href="privacy.html">Privacy</a><br><br>
-  SHSSM, IIT Bhubaneswar · teaching instruments are free to use and free to link to.
+  <a href="classroom.html">Classroom</a> · <a href="classroom/market-forces-lab.html">Market Forces Lab</a> ·
+  <a href="classroom/market-maker.html">Market Maker</a> · <a href="privacy.html">Privacy</a><br><br>
+  Built by Avishek Bhandari, SHSSM, IIT Bhubaneswar · free to use, free to link to, free to adapt ·
+  hosted on <a href="index.html">econstellars.com</a>.
 </footer>
 </body>
 </html>
