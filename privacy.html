@@ -61,8 +61,11 @@ code{font-family:var(--mono);font-size:.85em;color:var(--green);background:rgba(
   result and are not linked to you. The one place on this site where a visitor is asked to type an
   identifier is the Classroom's <em>Market Maker</em> exercise, described next.</p>
   <p><strong>Classroom teaching pages.</strong> The <a href="classroom.html">Classroom</a> instruments run
-  entirely in the visitor's own browser and have no backend. The <em>Market Forces Lab</em> collects
-  nothing whatsoever. <em>Market Maker</em> asks the student to type a roll number or institute email and
+  entirely in the visitor's own browser and have no backend. The <em>Market Forces Lab</em> and the
+  <em>Signal Room</em> collect nothing whatsoever: they ask for no identifier, make no network request of
+  any kind, and have no submission step. The Signal Room keeps a running score and per-concept accuracy in
+  that browser's own local storage, where it stays; clearing the browser's site data removes it.
+  <em>Market Maker</em> asks the student to type a roll number or institute email and
   a display name; these, along with scores, streaks and per-concept accuracy, are held <strong>only in
   that browser's own local storage</strong> and are transmitted nowhere while the student plays. At the
   end of a run the student may choose to press <em>Submit</em>. Only then, and only for that one run, is

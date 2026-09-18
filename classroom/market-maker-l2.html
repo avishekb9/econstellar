@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signal Room · Market Maker Level 2 — Econstellar Classroom</title>
+<meta name="description" content="Case-based microeconomics practice. Read a real-world brief, work three linked steps, and stake how sure you are. Ungraded, no sign-in, runs entirely in your browser.">
+<meta name="robots" content="noindex">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Signal Room — Econstellar Classroom">
+<meta property="og:description" content="Eleven briefs from AI, tech, geopolitics and entertainment. Three linked steps each. Stake your conviction.">
+<meta property="og:url" content="https://econstellars.com/classroom/market-maker-l2.html">
+<meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
+<link rel="canonical" href="https://econstellars.com/classroom/market-maker-l2.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap');
+:root{
+  --bg:#000; --surface:rgba(8,10,14,.92); --surface2:rgba(12,18,28,.92); --raise:rgba(18,26,38,.95);
+  --border:rgba(0,212,255,.15); --hot:rgba(0,255,136,.32); --rule:rgba(255,255,255,.07);
+  --text:#fff; --mid:#c9d1d9; --dim:#6b7280;
+  --cyan:#00d4ff; --green:#00ff88; --amber:#f59e0b; --red:#ef4444; --violet:#a78bfa;
+  --sans:'Space Grotesk',system-ui,sans-serif; --mono:'JetBrains Mono',ui-monospace,monospace; --disp:'Orbitron',var(--sans);
+  --clip:polygon(0 12px,12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%);
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.55;
+  background-image:radial-gradient(circle at 10% 5%,rgba(167,139,250,.08),transparent 42%),radial-gradient(circle at 90% 72%,rgba(0,212,255,.07),transparent 46%)}
+img{max-width:100%}
+[hidden]{display:none!important}
+a{color:var(--cyan);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+
+.site-bar{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;padding:.75rem 20px;
+  border-bottom:1px solid var(--rule);background:#000;color:var(--dim);font-family:var(--mono);font-size:.76rem}
+.site-bar .brand{color:var(--green);font-weight:600;letter-spacing:.5px}
+.site-bar .sp{flex:1}
+.site-bar a{color:var(--dim)} .site-bar a:hover{color:var(--cyan)}
+.site-bar a[aria-current="page"]{color:var(--violet)}
+
+h1{font-family:var(--disp);font-size:clamp(1.8rem,4.4vw,2.9rem);margin:.5rem 0 .4rem;line-height:1.05}
+h2{font-family:var(--disp);font-size:1.2rem;margin:0 0 .15rem;letter-spacing:.4px}
+h3{font-family:var(--mono);font-size:.72rem;letter-spacing:1.8px;text-transform:uppercase;color:var(--dim);margin:0 0 .9rem;font-weight:500}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--violet)}
+.lede{font-size:1.08rem;color:var(--mid);max-width:66ch;margin:0}
+p{max-width:68ch}
+
+.btn{font-family:var(--mono);font-size:.86rem;font-weight:600;padding:.72rem 1.25rem;border-radius:9px;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface2);color:var(--text);display:inline-flex;align-items:center;gap:.5rem}
+.btn.primary{color:#000;background:linear-gradient(90deg,var(--violet),var(--cyan));border:none}
+.btn.big{font-size:1rem;padding:.95rem 1.8rem}
+.btn:hover:not(:disabled){filter:brightness(1.1);text-decoration:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
+
+.panel{background:var(--surface);border:1px solid var(--border);clip-path:var(--clip);padding:1.5rem}
+.panel + .panel{margin-top:1.1rem}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:1.6rem 0}
+.rule{background:rgba(6,9,13,.92);padding:1.05rem 1.15rem}
+.rule .k{font-family:var(--mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--violet);display:block;margin-bottom:.4rem}
+.rule .v{font-size:.95rem;color:var(--mid);line-height:1.45}
+.rule .v b{color:var(--text)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.stat{background:rgba(6,9,13,.92);padding:1rem 1.1rem}
+.stat .k{font-family:var(--mono);font-size:.66rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.35rem}
+.stat .v{font-family:var(--disp);font-size:1.75rem;line-height:1;color:var(--text)}
+.stat .v.cy{color:var(--cyan)} .stat .v.gr{color:var(--green)} .stat .v.am{color:var(--amber)} .stat .v.vi{color:var(--violet)}
+.stat .s{font-family:var(--mono);font-size:.72rem;color:var(--dim);margin-top:.3rem}
+
+.mastery{display:grid;gap:.55rem}
+.mrow{display:grid;grid-template-columns:minmax(130px,1.4fr) 1fr auto;gap:.8rem;align-items:center}
+.mrow .nm{font-size:.9rem;color:var(--mid)}
+.bar{height:7px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--violet),var(--cyan))}
+.bar i.warn{background:linear-gradient(90deg,#b45309,var(--amber))}
+.bar i.cold{background:rgba(255,255,255,.16)}
+.mrow .pc{font-family:var(--mono);font-size:.78rem;color:var(--dim);min-width:3.6em;text-align:right}
+
+/* run chrome */
+.hud{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;padding:.9rem 0 1.1rem;border-bottom:1px solid var(--rule)}
+.hud .cell{font-family:var(--mono);font-size:.7rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--dim)}
+.hud .cell b{display:block;font-family:var(--disp);font-size:1.4rem;color:var(--text);letter-spacing:0}
+.hud .cell b.gr{color:var(--green)} .hud .cell b.vi{color:var(--violet)}
+.hud .sp{flex:1}
+.ring{width:56px;height:56px;flex:0 0 auto}
+.ring circle{fill:none;stroke-width:5}
+.ring .track{stroke:rgba(255,255,255,.09)}
+.ring .prog{stroke:var(--violet);stroke-linecap:round;transition:stroke-dashoffset .25s linear,stroke .3s}
+.ring .prog.warn{stroke:var(--amber)} .ring .prog.crit{stroke:var(--red)}
+.ring text{font-family:var(--mono);font-size:15px;fill:var(--mid);text-anchor:middle}
+.chain{display:flex;gap:6px;flex-wrap:wrap}
+.chain .grp{display:flex;gap:3px;padding:3px 5px;border:1px solid var(--rule);border-radius:6px}
+.chain .grp.live{border-color:var(--violet)}
+.chain .grp.clean{border-color:var(--green);background:rgba(0,255,136,.08)}
+.chain i{width:9px;height:9px;border-radius:2px;background:rgba(255,255,255,.14);display:block}
+.chain i.ok{background:var(--green)} .chain i.no{background:var(--red)} .chain i.now{background:var(--violet);box-shadow:0 0 8px var(--violet)}
+
+/* dossier */
+.dossier{background:var(--surface2);border:1px solid var(--rule);border-left:3px solid var(--violet);
+  border-radius:0 10px 10px 0;padding:1.1rem 1.25rem;margin:1.3rem 0 0}
+.dossier .tag{font-family:var(--mono);font-size:.66rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--violet)}
+.dossier .ttl{font-family:var(--disp);font-size:1.22rem;margin:.3rem 0 .5rem;letter-spacing:.3px}
+.dossier .bf{color:var(--mid);font-size:1rem;line-height:1.55;margin:0;max-width:70ch}
+.dossier .bf em{color:var(--cyan);font-style:italic}
+
+.qhead{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin:1.5rem 0 .7rem}
+.pill{font-family:var(--mono);font-size:.66rem;letter-spacing:1.4px;text-transform:uppercase;
+  border:1px solid var(--border);border-radius:99px;padding:.26rem .7rem;color:var(--cyan)}
+.pill.step{color:var(--violet);border-color:rgba(167,139,250,.4)}
+.qtext{font-size:1.16rem;line-height:1.5;margin:0 0 1.1rem;max-width:64ch}
+.qtext em{color:var(--cyan);font-style:italic}
+.qtext b{color:#fff}
+
+/* conviction */
+.conv{border:1px dashed rgba(167,139,250,.35);border-radius:10px;padding:.85rem 1rem;margin:0 0 1.2rem;max-width:640px}
+.conv .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--violet);margin-bottom:.55rem}
+.convbtns{display:flex;gap:.5rem;flex-wrap:wrap}
+.cv{font-family:var(--mono);font-size:.8rem;padding:.5rem .9rem;border-radius:8px;cursor:pointer;
+  background:rgba(6,9,13,.9);color:var(--mid);border:1px solid var(--rule);display:flex;flex-direction:column;gap:.15rem;align-items:flex-start}
+.cv small{font-size:.68rem;color:var(--dim)}
+.cv:hover:not(:disabled){border-color:var(--violet)}
+.cv.on{border-color:var(--violet);background:rgba(167,139,250,.14);color:#fff}
+.cv:disabled{cursor:default;opacity:.5}
+.cv.on:disabled{opacity:1}
+
+/* answer surfaces */
+.opts{display:grid;gap:.6rem;max-width:660px}
+.opt{text-align:left;font-family:var(--sans);font-size:1rem;padding:.85rem 1rem;cursor:pointer;
+  background:var(--surface2);color:var(--text);border:1px solid var(--rule);border-radius:9px;display:flex;gap:.75rem;align-items:baseline;
+  transition:transform .12s ease,border-color .12s ease}
+.opt:hover:not(:disabled){border-color:var(--violet);transform:translateX(3px)}
+.opt:disabled{cursor:default}
+.opt .k{font-family:var(--mono);font-size:.76rem;color:var(--dim);flex:0 0 auto}
+.opt.right{border-color:var(--green);background:rgba(0,255,136,.10)}
+.opt.wrong{border-color:var(--red);background:rgba(239,68,68,.10)}
+.opt.dim{opacity:.42}
+
+.numwrap{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+.numwrap .pre{font-family:var(--mono);color:var(--dim);font-size:.95rem}
+.numwrap input{background:#05080a;border:1px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:var(--mono);font-size:1.15rem;padding:.6rem .8rem;width:180px}
+.numwrap input:focus{outline:2px solid var(--violet);outline-offset:1px}
+
+/* sign grid */
+.sgwrap{max-width:560px}
+.sgrid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:5px;align-items:stretch}
+.sgh{font-family:var(--mono);font-size:.66rem;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);
+  display:flex;align-items:center;justify-content:center;padding:.3rem;text-align:center}
+.sgh.rw{justify-content:flex-end;padding-right:.55rem}
+.sg{font-family:var(--mono);font-size:.74rem;padding:.7rem .3rem;border-radius:8px;cursor:pointer;
+  background:rgba(6,9,13,.9);color:var(--mid);border:1px solid var(--rule);line-height:1.25}
+.sg:hover:not(:disabled){border-color:var(--violet);color:#fff}
+.sg:disabled{cursor:default}
+.sg.right{border-color:var(--green);background:rgba(0,255,136,.14);color:#fff}
+.sg.wrong{border-color:var(--red);background:rgba(239,68,68,.14);color:#fff}
+.sg.dim{opacity:.3}
+.sgcap{font-family:var(--mono);font-size:.68rem;color:var(--dim);letter-spacing:1.3px;text-transform:uppercase;margin:.1rem 0 .5rem}
+
+/* audit list */
+.audit{display:grid;gap:.5rem;max-width:680px;counter-reset:ax}
+.ax{text-align:left;font-family:var(--sans);font-size:.99rem;padding:.8rem 1rem;cursor:pointer;
+  background:var(--surface2);color:var(--text);border:1px solid var(--rule);border-radius:9px;display:flex;gap:.8rem;align-items:baseline;
+  transition:border-color .12s ease,transform .12s ease}
+.ax:hover:not(:disabled){border-color:var(--violet);transform:translateX(3px)}
+.ax:disabled{cursor:default}
+.ax .n{font-family:var(--mono);font-size:.74rem;color:var(--violet);flex:0 0 auto;font-weight:600}
+.ax.right{border-color:var(--green);background:rgba(0,255,136,.10)}
+.ax.wrong{border-color:var(--red);background:rgba(239,68,68,.10)}
+.ax.dim{opacity:.45}
+
+.feedback{margin-top:1.2rem;border-radius:10px;padding:1.05rem 1.15rem;border:1px solid var(--rule);background:var(--surface2);max-width:700px}
+.feedback.ok{border-color:var(--green);background:rgba(0,255,136,.07)}
+.feedback.no{border-color:var(--red);background:rgba(239,68,68,.07)}
+.feedback .vt{font-family:var(--disp);font-size:1rem;letter-spacing:.5px;margin-bottom:.5rem;display:flex;gap:.7rem;align-items:baseline;flex-wrap:wrap}
+.feedback.ok .vt{color:var(--green)} .feedback.no .vt{color:var(--red)}
+.feedback .pts{font-family:var(--mono);font-size:.8rem;color:var(--dim);letter-spacing:.5px}
+.feedback .why{color:var(--mid);font-size:1rem;line-height:1.55;margin:0}
+.feedback .why b,.feedback .why strong{color:var(--text)}
+.chainban{margin-top:.9rem;border-radius:9px;padding:.7rem 1rem;border:1px solid var(--hot);
+  background:rgba(0,255,136,.09);font-family:var(--mono);font-size:.84rem;color:var(--green);max-width:700px}
+.chainban.miss{border-color:var(--rule);background:rgba(255,255,255,.03);color:var(--dim)}
+
+.big-score{font-family:var(--disp);font-size:clamp(3rem,11vw,5.4rem);line-height:1;
+  background:linear-gradient(90deg,var(--violet),var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+.brk{display:grid;gap:.4rem;font-family:var(--mono);font-size:.88rem;color:var(--mid);margin-top:1rem}
+.brk div{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--rule);padding-bottom:.35rem}
+.brk b{color:var(--text)}
+.tag2{display:inline-block;font-family:var(--mono);font-size:.72rem;letter-spacing:1px;border:1px solid var(--border);
+  border-radius:99px;padding:.24rem .68rem;color:var(--mid);margin:.2rem .3rem .2rem 0}
+.tag2.warn{color:var(--amber);border-color:rgba(245,158,11,.4)}
+.tag2.good{color:var(--green);border-color:var(--hot)}
+
+.caltab{display:grid;gap:.45rem;font-family:var(--mono);font-size:.85rem;margin-top:.4rem}
+.calrow{display:grid;grid-template-columns:minmax(90px,1fr) 1fr auto;gap:.8rem;align-items:center}
+.calrow .cn{color:var(--mid)}
+.calrow .cp{color:var(--dim);min-width:5.5em;text-align:right}
+
+.note{color:var(--mid);font-size:.95rem;max-width:68ch}
+.note b{color:var(--text)}
+footer{border-top:1px solid var(--rule);margin-top:3.4rem;padding:1.5rem 0 3rem;font-family:var(--mono);font-size:.74rem;color:var(--dim)}
+footer a{color:var(--dim)}
+:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:620px){.hud{gap:.9rem}.hud .cell b{font-size:1.15rem}.sg{font-size:.68rem;padding:.6rem .2rem}.sgh{font-size:.6rem}}
+</style>
+</head>
+<body>
+
+<div class="site-bar">
+  <span class="brand">◆ ECONSTELLAR</span>
+  <a href="../classroom.html">Classroom</a>
+  <a href="market-forces-lab.html">Market Forces Lab</a>
+  <a href="market-maker.html">Market Maker · L1</a>
+  <a href="market-maker-l2.html" aria-current="page">Signal Room · L2</a>
+  <span class="sp"></span>
+  <a href="../index.html">econstellars.com</a>
+</div>
+
+<!-- ══════════════════════════ BRIEFING ══════════════════════════ -->
+<section id="brief" class="wrap" style="padding:2.4rem 0 4rem">
+  <div class="eyebrow">Level 2 · ungraded · nothing to sign in to</div>
+  <h1>Signal Room</h1>
+  <p style="font-family:var(--mono);font-size:.8rem;color:var(--dim);letter-spacing:1px;margin:.2rem 0 .9rem">
+    LEVEL 1 IS <a href="market-maker.html">MARKET MAKER</a>. THE TUTORIAL ROUND IS <a href="market-forces-lab.html">THE MARKET FORCES LAB</a>.</p>
+  <p class="lede">Level 1 asks whether you know the idea. This one asks whether you can use it on
+    something messy. Every round is a <b>brief</b> drawn from what is actually happening right now &mdash;
+    model pricing, export controls, a reunion tour, a grid under strain &mdash; and three linked steps that
+    build on each other. You also stake how sure you are before each answer, which turns out to be the
+    hardest part.</p>
+
+  <div class="rules">
+    <div class="rule"><span class="k">The unit is a case</span><span class="v">Four briefs per run, <b>three linked steps</b> each. Step two assumes you understood step one.</span></div>
+    <div class="rule"><span class="k">Conviction</span><span class="v">Stake <b>Low ×0.6</b>, <b>Medium ×1.0</b> or <b>High ×1.8</b> before you answer. High pays nearly double &mdash; and costs you if you are wrong.</span></div>
+    <div class="rule"><span class="k">Clean sweep</span><span class="v">All three steps of a brief correct earns a <b>+250</b> chain bonus. Sustained reasoning, not lucky guesses.</span></div>
+    <div class="rule"><span class="k">No speed bonus</span><span class="v">Unlike Level 1, rushing earns you <b>nothing</b>. The clock is only a limit. Think.</span></div>
+    <div class="rule"><span class="k">Ambiguous is an answer</span><span class="v">Some cases genuinely cannot be signed. Saying so is <b>correct</b>, not a hedge &mdash; and calling it confidently pays.</span></div>
+    <div class="rule"><span class="k">Nothing is collected</span><span class="v">No sign-in, no roll number, <b>nothing is submitted anywhere</b>. Progress lives in this browser only.</span></div>
+  </div>
+
+  <div class="stats" id="lobby-stats"></div>
+
+  <div class="panel" style="margin-top:1.4rem">
+    <h2>Open a run</h2>
+    <h3 id="run-hint">Four briefs · twelve steps · roughly twelve minutes</h3>
+    <div class="row">
+      <button class="btn primary big" id="start">▶ Open the first brief</button>
+      <a class="btn" href="market-maker.html">Play Level 1 instead</a>
+    </div>
+    <p style="color:var(--dim);font-size:.92rem;margin:1rem 0 0">Briefs rotate: the engine prefers cases
+      you have not seen recently, so a second run is genuinely different material.</p>
+  </div>
+
+  <div class="panel" id="mastery-panel" hidden>
+    <h2>Where you are losing points</h2>
+    <h3>Accuracy by concept · builds up as you play</h3>
+    <div class="mastery" id="mastery"></div>
+  </div>
+
+  <div class="panel" id="cal-panel" hidden>
+    <h2>Are you well calibrated?</h2>
+    <h3>How often you were right, at each conviction level</h3>
+    <div class="caltab" id="calibration"></div>
+    <p class="note" style="margin-top:1rem;font-size:.9rem">Being well calibrated means your High stakes
+      land far more often than your Low ones. If they do not, the problem is not the economics &mdash; it is that
+      you cannot yet tell which of your answers to trust, and that is worth knowing.</p>
+  </div>
+
+  <footer>
+    <a href="../classroom.html">Classroom</a> · <a href="market-forces-lab.html">Market Forces Lab</a> ·
+    <a href="market-maker.html">Market Maker</a> · SHSSM, IIT Bhubaneswar
+  </footer>
+</section>
+
+<!-- ══════════════════════════ RUN ══════════════════════════ -->
+<section id="run" class="wrap" hidden style="padding:1.2rem 0 3rem">
+  <div class="hud">
+    <div class="cell">Score<b id="h-score">0</b></div>
+    <div class="cell">Brief<b class="vi" id="h-brief">1/4</b></div>
+    <div class="cell">Chains<b class="gr" id="h-chains">0</b></div>
+    <div class="sp"></div>
+    <div class="chain" id="h-chain"></div>
+    <svg class="ring" viewBox="0 0 56 56" aria-hidden="true">
+      <circle class="track" cx="28" cy="28" r="25"></circle>
+      <circle class="prog" id="h-ring" cx="28" cy="28" r="25" transform="rotate(-90 28 28)"></circle>
+      <text x="28" y="33" id="h-time">0</text>
+    </svg>
+  </div>
+
+  <div class="dossier">
+    <div class="tag" id="d-tag"></div>
+    <div class="ttl" id="d-title"></div>
+    <p class="bf" id="d-brief"></p>
+  </div>
+
+  <div class="qhead">
+    <span class="pill step" id="q-step"></span>
+    <span class="pill" id="q-cat"></span>
+  </div>
+  <p class="qtext" id="q-text"></p>
+
+  <div class="conv" id="conv-box">
+    <div class="lbl">Before you answer — how sure are you?</div>
+    <div class="convbtns" id="conv-btns">
+      <button class="cv" data-c="low">Low <small>×0.6 · no penalty</small></button>
+      <button class="cv on" data-c="med">Medium <small>×1.0 · no penalty</small></button>
+      <button class="cv" data-c="high">High <small>×1.8 · costs you if wrong</small></button>
+    </div>
+  </div>
+
+  <div id="q-body"></div>
+  <div id="q-feedback"></div>
+  <div class="row" style="margin-top:1.3rem"><button class="btn primary" id="next" hidden>Next →</button></div>
+
+  <footer>Nothing here is graded and nothing is submitted. <a href="../classroom.html">Classroom</a></footer>
+</section>
+
+<!-- ══════════════════════════ RESULT ══════════════════════════ -->
+<section id="result" class="wrap" hidden style="padding:2.2rem 0 3rem">
+  <div class="eyebrow">Run complete</div>
+  <div class="big-score" id="r-score">0</div>
+  <p class="lede" id="r-line"></p>
+
+  <div class="panel" style="margin-top:1.5rem">
+    <h2>How it broke down</h2>
+    <h3>This run only</h3>
+    <div class="brk" id="r-brk"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Your calibration this run</h2>
+    <h3>Right answers as a share of what you staked</h3>
+    <div class="caltab" id="r-cal"></div>
+    <p class="note" id="r-caltip" style="margin-top:1rem;font-size:.92rem"></p>
+  </div>
+
+  <div class="panel">
+    <h2>Concepts to go back to</h2>
+    <h3>Based on what you missed</h3>
+    <div id="r-weak"></div>
+  </div>
+
+  <div class="row" style="margin-top:1.5rem">
+    <button class="btn primary big" id="again">▶ Open another four briefs</button>
+    <a class="btn" href="market-forces-lab.html">Back to the Lab</a>
+    <a class="btn" href="../classroom.html">Classroom</a>
+  </div>
+
+  <footer>Ungraded · nothing submitted · <a href="../classroom.html">Classroom</a></footer>
+</section>
+
+<script src="l2-dossiers.js"></script>
+<script>
+"use strict";
+(function(){
+
+var POOL = window.L2_DOSSIERS || [];
+var CATS = window.L2_CATS || {};
+var PER_RUN = 4;
+var BASE = [150, 220, 300];                 // by step position inside a brief
+var CONV = {low:{m:0.6,pen:0,label:"Low"}, med:{m:1.0,pen:0,label:"Medium"}, high:{m:1.8,pen:0.4,label:"High"}};
+var CHAIN_BONUS = 250;
+
+var $ = function(s){ return document.querySelector(s); };
+function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){
+  return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+
+var K = {stats:"l2_stats_v1", seen:"l2_seen_v1"};
+function load(k,d){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+var stats = load(K.stats, {runs:0, best:0, answered:0, correct:0, chains:0, cat:{}, conv:{}});
+var seen  = load(K.seen, []);
+
+function show(id){
+  ["brief","run","result"].forEach(function(s){ $("#"+s).hidden = (s!==id); });
+  window.scrollTo(0,0);
+}
+function shuffle(a){ for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+/* ══ LOBBY ══════════════════════════════════════════════════════════════ */
+function paintLobby(){
+  var acc = stats.answered ? Math.round(100*stats.correct/stats.answered) : 0;
+  function tile(k,v,cls,s){ return '<div class="stat"><span class="k">'+k+'</span>'+
+    '<div class="v '+(cls||"")+'">'+v+'</div>'+(s?'<div class="s">'+s+'</div>':'')+'</div>'; }
+  $("#lobby-stats").innerHTML =
+    tile("Runs", stats.runs, "") +
+    tile("Best score", stats.best, "vi") +
+    tile("Accuracy", stats.answered ? acc+"%" : "—", "cy", stats.answered+" steps") +
+    tile("Clean briefs", stats.chains, "gr", "all three right");
+
+  var keys = Object.keys(CATS).filter(function(c){ return stats.cat[c] && stats.cat[c].seen; });
+  if (keys.length) {
+    $("#mastery-panel").hidden = false;
+    keys.sort(function(a,b){
+      return (stats.cat[a].correct/stats.cat[a].seen) - (stats.cat[b].correct/stats.cat[b].seen); });
+    $("#mastery").innerHTML = keys.map(function(c){
+      var r = stats.cat[c], p = Math.round(100*r.correct/r.seen);
+      var cls = r.seen < 3 ? "cold" : p < 60 ? "warn" : "";
+      return '<div class="mrow"><span class="nm">'+esc(CATS[c])+'</span>'+
+        '<span class="bar"><i class="'+cls+'" style="width:'+p+'%"></i></span>'+
+        '<span class="pc">'+p+'% · '+r.seen+'</span></div>'; }).join("");
+  }
+
+  var cks = ["high","med","low"].filter(function(c){ return stats.conv[c] && stats.conv[c].n; });
+  if (cks.length) {
+    $("#cal-panel").hidden = false;
+    $("#calibration").innerHTML = cks.map(function(c){
+      var r = stats.conv[c], p = Math.round(100*r.ok/r.n);
+      return '<div class="calrow"><span class="cn">'+CONV[c].label+' conviction</span>'+
+        '<span class="bar"><i class="'+(p<50?"warn":"")+'" style="width:'+p+'%"></i></span>'+
+        '<span class="cp">'+p+'% of '+r.n+'</span></div>'; }).join("");
+  }
+}
+
+/* ══ RUN ════════════════════════════════════════════════════════════════ */
+var R = null, tick = null;
+
+function buildRun(){
+  var fresh = POOL.filter(function(d){ return seen.indexOf(d.id) < 0; });
+  var use = fresh.length >= PER_RUN ? fresh : POOL;
+  var picked = shuffle(use.slice()).slice(0, PER_RUN);
+  if (picked.length < PER_RUN) {
+    var rest = shuffle(POOL.filter(function(d){ return picked.indexOf(d) < 0; }));
+    picked = picked.concat(rest.slice(0, PER_RUN - picked.length));
+  }
+  return picked;
+}
+
+function startRun(){
+  var ds = buildRun();
+  if (!ds.length) { $("#run-hint").textContent = "No briefs are loaded."; return; }
+  R = {ds:ds, d:0, s:0, score:0, correct:0, answered:0, chains:0, log:[], conv:"med",
+       cleanSoFar:true, byConv:{low:{n:0,ok:0}, med:{n:0,ok:0}, high:{n:0,ok:0}}};
+  show("run"); renderStep();
+}
+
+function curD(){ return R.ds[R.d]; }
+function curS(){ return curD().steps[R.s]; }
+
+function renderStep(){
+  var d = curD(), q = curS();
+  R.locked = false; R.conv = "med";
+  R.t = q.secs || 60; R.tMax = R.t;
+
+  $("#h-score").textContent = R.score;
+  $("#h-brief").textContent = (R.d+1) + "/" + R.ds.length;
+  $("#h-chains").textContent = R.chains;
+  paintChain();
+
+  $("#d-tag").textContent = d.tag || "";
+  $("#d-title").textContent = d.title;
+  $("#d-brief").innerHTML = d.brief;
+
+  $("#q-step").textContent = "Step " + (R.s+1) + " of " + d.steps.length;
+  $("#q-cat").textContent = CATS[q.cat] || q.cat;
+  $("#q-text").innerHTML = q.q;
+  $("#q-feedback").innerHTML = "";
+  $("#next").hidden = true;
+
+  $("#conv-box").hidden = false;
+  Array.prototype.forEach.call(document.querySelectorAll(".cv"), function(b){
+    b.disabled = false; b.classList.toggle("on", b.dataset.c === "med"); });
+
+  var body = $("#q-body");
+  if (q.type === "mcq") {
+    body.innerHTML = '<div class="opts">' + q.o.map(function(o,k){
+      return '<button class="opt" data-k="'+k+'"><span class="k">'+"ABCD"[k]+'</span><span>'+o+'</span></button>';
+    }).join("") + '</div>';
+  } else if (q.type === "num") {
+    body.innerHTML = '<div class="numwrap"><span class="pre">'+esc(q.pre||"")+'</span>'+
+      '<input id="numin" type="text" inputmode="decimal" autocomplete="off" placeholder="your answer">'+
+      '<button class="btn primary" id="numgo">Lock it in</button></div>';
+    setTimeout(function(){ var n=$("#numin"); if(n) n.focus(); }, 60);
+  } else if (q.type === "sign") {
+    var L = {up:"Rises", down:"Falls", amb:"Ambiguous"};
+    var cols = ["up","down","amb"], rows = ["up","down","amb"];
+    var h = '<div class="sgwrap"><div class="sgcap">Quantity →</div><div class="sgrid">';
+    h += '<div class="sgh"></div>' + cols.map(function(c){ return '<div class="sgh">Q '+L[c]+'</div>'; }).join("");
+    rows.forEach(function(r){
+      h += '<div class="sgh rw">P '+L[r]+'</div>';
+      cols.forEach(function(c){
+        h += '<button class="sg" data-p="'+r+'" data-q="'+c+'">P '+L[r]+'<br>Q '+L[c]+'</button>';
+      });
+    });
+    h += '</div><p style="color:var(--dim);font-size:.86rem;margin:.7rem 0 0">Commit to both at once. One cell.</p></div>';
+    body.innerHTML = h;
+  } else if (q.type === "audit") {
+    body.innerHTML = '<div class="audit">' + q.arg.map(function(a,k){
+      return '<button class="ax" data-k="'+k+'"><span class="n">'+(k+1)+'</span><span>'+a+'</span></button>';
+    }).join("") + '</div>';
+  }
+  startTimer();
+}
+
+function paintChain(){
+  $("#h-chain").innerHTML = R.ds.map(function(d,di){
+    var cls = di < R.d ? (chainClean(di) ? "clean" : "") : (di === R.d ? "live" : "");
+    var dots = d.steps.map(function(_,si){
+      var e = findLog(di,si);
+      var c = e ? (e.ok ? "ok" : "no") : (di===R.d && si===R.s ? "now" : "");
+      return '<i class="'+c+'"></i>';
+    }).join("");
+    return '<span class="grp '+cls+'">'+dots+'</span>';
+  }).join("");
+}
+function findLog(di,si){
+  for (var i=0;i<R.log.length;i++) if (R.log[i].di===di && R.log[i].si===si) return R.log[i];
+  return null;
+}
+function chainClean(di){
+  var n = R.ds[di].steps.length, c = 0;
+  for (var i=0;i<R.log.length;i++) if (R.log[i].di===di && R.log[i].ok) c++;
+  return c === n;
+}
+
+function startTimer(){
+  stopTimer(); paintRing();
+  tick = setInterval(function(){
+    R.t -= 0.1;
+    if (R.t <= 0) { R.t = 0; paintRing(); stopTimer(); answer(null); }
+    else paintRing();
+  }, 100);
+}
+function stopTimer(){ if (tick) { clearInterval(tick); tick = null; } }
+function paintRing(){
+  var C = 2*Math.PI*25, f = Math.max(0, R.t/R.tMax);
+  var el = $("#h-ring");
+  el.setAttribute("stroke-dasharray", C);
+  el.setAttribute("stroke-dashoffset", C*(1-f));
+  el.setAttribute("class", "prog" + (f<.2 ? " crit" : f<.45 ? " warn" : ""));
+  $("#h-time").textContent = Math.ceil(R.t);
+}
+
+/* v: index (mcq/audit) | string (num) | {p,q} (sign) | null (timeout) */
+function answer(v){
+  if (R.locked) return;
+  R.locked = true; stopTimer();
+  var d = curD(), q = curS(), ok = false;
+
+  if (v === null) ok = false;
+  else if (q.type === "mcq" || q.type === "audit") ok = (v === q.a);
+  else if (q.type === "num") {
+    var n = parseFloat(String(v).replace(/[^0-9eE.+-]/g, ""));
+    ok = !isNaN(n) && Math.abs(n - q.a) <= (q.tol != null ? q.tol : 0.01);
+  }
+  else if (q.type === "sign") ok = (v.p === q.a.p && v.q === q.a.q);
+
+  var cv = CONV[R.conv] || CONV.med;
+  var base = BASE[R.s] || 150;
+  var pts = 0;
+  if (ok) { pts = Math.round(base * cv.m); R.score += pts; R.correct++; }
+  else if (cv.pen) { pts = -Math.round(base * cv.pen); R.score = Math.max(0, R.score + pts); }
+  R.answered++;
+  if (!ok) R.cleanSoFar = false;
+
+  R.byConv[R.conv].n++; if (ok) R.byConv[R.conv].ok++;
+  R.log.push({di:R.d, si:R.s, cat:q.cat, ok:ok, pts:pts, conv:R.conv});
+
+  stats.answered++; if (ok) stats.correct++;
+  var c = stats.cat[q.cat] || {seen:0, correct:0};
+  c.seen++; if (ok) c.correct++; stats.cat[q.cat] = c;
+  var sc = stats.conv[R.conv] || {n:0, ok:0};
+  sc.n++; if (ok) sc.ok++; stats.conv[R.conv] = sc;
+
+  Array.prototype.forEach.call(document.querySelectorAll(".cv"), function(b){ b.disabled = true; });
+
+  if (q.type === "mcq") {
+    Array.prototype.forEach.call(document.querySelectorAll(".opt"), function(b){
+      b.disabled = true; var k = +b.dataset.k;
+      if (k === q.a) b.classList.add("right");
+      else if (k === v) b.classList.add("wrong");
+      else b.classList.add("dim"); });
+  } else if (q.type === "audit") {
+    Array.prototype.forEach.call(document.querySelectorAll(".ax"), function(b){
+      b.disabled = true; var k = +b.dataset.k;
+      if (k === q.a) b.classList.add("right");
+      else if (k === v) b.classList.add("wrong");
+      else b.classList.add("dim"); });
+  } else if (q.type === "num") {
+    var inp = $("#numin"); if (inp) inp.disabled = true;
+    var go = $("#numgo"); if (go) go.disabled = true;
+  } else if (q.type === "sign") {
+    Array.prototype.forEach.call(document.querySelectorAll(".sg"), function(b){
+      b.disabled = true;
+      var hit = (b.dataset.p === q.a.p && b.dataset.q === q.a.q);
+      var mine = v && (b.dataset.p === v.p && b.dataset.q === v.q);
+      if (hit) b.classList.add("right");
+      else if (mine) b.classList.add("wrong");
+      else b.classList.add("dim"); });
+  }
+
+  var ptxt = ok
+    ? '+'+pts+'  ('+base+' base × '+cv.m+' '+cv.label.toLowerCase()+')'
+    : (pts < 0 ? pts+'  (high conviction, wrong)' : '+0');
+  var head = ok
+    ? '<span>Correct</span><span class="pts">'+ptxt+'</span>'
+    : '<span>'+(v===null ? "Out of time" : "Not this time")+'</span><span class="pts">'+ptxt+'</span>';
+
+  var extra = "";
+  if (!ok && q.type === "num") extra = '<p class="why" style="margin-bottom:.55rem"><b>Answer: '+esc(q.pre||"")+' '+q.a+'</b></p>';
+  if (!ok && q.type === "sign") {
+    var L2 = {up:"rises", down:"falls", amb:"is ambiguous"};
+    extra = '<p class="why" style="margin-bottom:.55rem"><b>Answer: price '+L2[q.a.p]+', quantity '+L2[q.a.q]+'.</b></p>';
+  }
+  if (!ok && q.type === "audit") extra = '<p class="why" style="margin-bottom:.55rem"><b>Step '+(q.a+1)+' is where it first breaks.</b></p>';
+
+  $("#q-feedback").innerHTML = '<div class="feedback '+(ok?"ok":"no")+'"><div class="vt">'+head+'</div>'+
+    extra + '<p class="why">'+q.why+'</p></div>';
+
+  // end of a brief?
+  if (R.s === d.steps.length - 1) {
+    if (R.cleanSoFar) {
+      R.score += CHAIN_BONUS; R.chains++; stats.chains++;
+      $("#q-feedback").innerHTML += '<div class="chainban">◆ Clean sweep on “'+esc(d.title)+'” — all three steps. +'+CHAIN_BONUS+' chain bonus.</div>';
+    } else {
+      $("#q-feedback").innerHTML += '<div class="chainban miss">Chain broken on “'+esc(d.title)+'”. No bonus this time — the bonus is for getting all three of a brief right in one pass.</div>';
+    }
+  }
+
+  $("#h-score").textContent = R.score;
+  $("#h-chains").textContent = R.chains;
+  paintChain();
+
+  var last = (R.d === R.ds.length-1) && (R.s === d.steps.length-1);
+  var nx = $("#next");
+  nx.hidden = false;
+  nx.textContent = last ? "See my result →" : (R.s === d.steps.length-1 ? "Next brief →" : "Next step →");
+  nx.focus();
+}
+
+function advance(){
+  var d = curD();
+  if (R.s < d.steps.length - 1) { R.s++; renderStep(); return; }
+  if (seen.indexOf(d.id) < 0) seen.push(d.id);
+  if (seen.length > 8) seen = seen.slice(-6);
+  save(K.seen, seen);
+  if (R.d < R.ds.length - 1) { R.d++; R.s = 0; R.cleanSoFar = true; renderStep(); return; }
+  finish();
+}
+
+/* ══ RESULT ═════════════════════════════════════════════════════════════ */
+function finish(){
+  stopTimer();
+  stats.runs++;
+  if (R.score > stats.best) stats.best = R.score;
+  save(K.stats, stats);
+
+  var acc = R.answered ? Math.round(100*R.correct/R.answered) : 0;
+  $("#r-score").textContent = R.score;
+  $("#r-line").textContent = R.correct + " of " + R.answered + " steps, and " +
+    R.chains + " of " + R.ds.length + " briefs swept clean.";
+
+  $("#r-brk").innerHTML =
+    '<div><span>Steps correct</span><b>'+R.correct+'/'+R.answered+'  ('+acc+'%)</b></div>' +
+    '<div><span>Briefs swept clean</span><b>'+R.chains+'/'+R.ds.length+'</b></div>' +
+    '<div><span>Chain bonus earned</span><b>+'+(R.chains*CHAIN_BONUS)+'</b></div>' +
+    '<div><span>Best score so far</span><b>'+stats.best+'</b></div>';
+
+  var order = ["high","med","low"];
+  $("#r-cal").innerHTML = order.map(function(c){
+    var r = R.byConv[c];
+    if (!r.n) return '<div class="calrow"><span class="cn">'+CONV[c].label+'</span>'+
+      '<span class="bar"><i class="cold" style="width:0%"></i></span><span class="cp">not used</span></div>';
+    var p = Math.round(100*r.ok/r.n);
+    return '<div class="calrow"><span class="cn">'+CONV[c].label+'</span>'+
+      '<span class="bar"><i class="'+(p<50?"warn":"")+'" style="width:'+p+'%"></i></span>'+
+      '<span class="cp">'+p+'% of '+r.n+'</span></div>'; }).join("");
+
+  var hi = R.byConv.high, lo = R.byConv.low, tip;
+  if (!hi.n && !lo.n) tip = "You staked Medium on everything. That is safe, but it tells you nothing about which of your answers you can actually trust. Try committing next time.";
+  else if (hi.n && (hi.ok/hi.n) < 0.5) tip = "Your High stakes came in under half the time. That is overconfidence, and it is expensive here for the same reason it is expensive everywhere: you are treating a guess as knowledge.";
+  else if (hi.n && lo.n && (hi.ok/hi.n) <= (lo.ok/lo.n)) tip = "Your High stakes did no better than your Low ones. The economics may be fine; what is missing is the sense of which answers are solid, and that is the thing worth building.";
+  else if (hi.n && (hi.ok/hi.n) >= 0.8) tip = "Your High stakes landed. That is well calibrated: you know which of your answers to trust, which is a different and rarer skill than knowing the answers.";
+  else tip = "Reasonable calibration. Push more of your confident answers to High and see whether they hold up.";
+  $("#r-caltip").textContent = tip;
+
+  var miss = {};
+  R.log.forEach(function(e){ if (!e.ok) miss[e.cat] = (miss[e.cat]||0)+1; });
+  var mk = Object.keys(miss).sort(function(a,b){ return miss[b]-miss[a]; });
+  $("#r-weak").innerHTML = mk.length
+    ? mk.map(function(c){ return '<span class="tag2 warn">'+esc(CATS[c]||c)+' · '+miss[c]+'</span>'; }).join("") +
+      '<p class="note" style="margin-top:1rem">The Market Forces Lab has a room for most of these, and the explanation after each step above is the short version.</p>'
+    : '<span class="tag2 good">Nothing missed this run</span>' +
+      '<p class="note" style="margin-top:1rem">Clean run. Try staking High more often — the scoring rewards it, and it is the only way to find out how well you actually know what you know.</p>';
+
+  paintLobby();
+  show("result");
+}
+
+/* ══ WIRING ═════════════════════════════════════════════════════════════ */
+$("#start").addEventListener("click", startRun);
+$("#again").addEventListener("click", startRun);
+$("#next").addEventListener("click", advance);
+
+$("#conv-btns").addEventListener("click", function(e){
+  var b = e.target.closest(".cv");
+  if (!b || !R || R.locked || b.disabled) return;
+  R.conv = b.dataset.c;
+  Array.prototype.forEach.call(document.querySelectorAll(".cv"), function(x){
+    x.classList.toggle("on", x === b); });
+});
+
+$("#q-body").addEventListener("click", function(e){
+  if (!R || R.locked) return;
+  var o = e.target.closest(".opt");   if (o) { answer(+o.dataset.k); return; }
+  var a = e.target.closest(".ax");    if (a) { answer(+a.dataset.k); return; }
+  var s = e.target.closest(".sg");    if (s) { answer({p:s.dataset.p, q:s.dataset.q}); return; }
+  var g = e.target.closest("#numgo"); if (g) { answer($("#numin").value); return; }
+});
+$("#q-body").addEventListener("keydown", function(e){
+  if (e.key === "Enter" && e.target.id === "numin" && R && !R.locked) { e.preventDefault(); answer(e.target.value); }
+});
+document.addEventListener("keydown", function(e){
+  if ($("#run").hidden) return;
+  if (e.key === "Enter" && !$("#next").hidden) { e.preventDefault(); advance(); return; }
+  if (R && !R.locked) {
+    var q = curS();
+    if (q.type === "mcq" && /^[1-4a-dA-D]$/.test(e.key)) {
+      var i = /[1-4]/.test(e.key) ? (+e.key - 1) : "abcd".indexOf(e.key.toLowerCase());
+      var b = document.querySelector('.opt[data-k="'+i+'"]'); if (b) { e.preventDefault(); answer(i); }
+    } else if (q.type === "audit" && /^[1-4]$/.test(e.key)) {
+      e.preventDefault(); answer(+e.key - 1);
+    } else if (/^[lmh]$/i.test(e.key)) {
+      var map = {l:"low", m:"med", h:"high"}, c = map[e.key.toLowerCase()];
+      var cb = document.querySelector('.cv[data-c="'+c+'"]');
+      if (cb && !cb.disabled) { e.preventDefault(); cb.click(); }
+    }
+  }
+});
+
+paintLobby();
+})();
+</script>
+</body>
+</html>
