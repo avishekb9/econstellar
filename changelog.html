@@ -40,6 +40,7 @@ h1{font-family:var(--disp);font-size:clamp(1.8rem,4vw,2.6rem);margin:.5rem 0 .3r
 .msg{color:var(--dim);font-family:var(--mono);font-size:.82rem}
 .foot{font-family:var(--mono);font-size:.74rem;color:var(--dim);border-top:1px solid var(--rule);padding:1.3rem 0 2.4rem;line-height:1.8}
 </style>
+<link rel="license" href="LICENSING.md">
 </head>
 <body>
 <nav class="wrap" style="max-width:none">
@@ -72,4 +73,5 @@ fetch("changelog.json").then(r=>r.json()).then(items=>{
 }).catch(e=>{ document.getElementById("feed").innerHTML='<div class="msg">Could not load the changelog right now. <a href="https://github.com/avishekb9/compute-engine" target="_blank" rel="noopener">See the repo ↗</a></div>'; });
 </script>
 </body>
+<script src="assets/site-licence.js"></script>
 </html>
