@@ -1,0 +1,1628 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Macro Vitals Lab — Econstellar Classroom</title>
+<meta name="description" content="Eight interactive rooms covering GDP and its components, real versus nominal output, the productivity function, the catch-up effect, and the market for loanable funds. Ungraded, nothing collected, runs entirely in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Macro Vitals Lab — Econstellar Classroom">
+<meta property="og:description" content="Measure an economy instead of reading about how it is measured. GDP, growth, saving and investment, built for introductory macroeconomics.">
+<meta property="og:url" content="https://econstellars.com/classroom/macro-vitals-lab.html">
+<meta property="og:site_name" content="Econstellar · SHSSM IIT Bhubaneswar">
+<link rel="canonical" href="https://econstellars.com/classroom/macro-vitals-lab.html">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+/* host reset (the page below assumes it) */
+html{color-scheme:light dark}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* site chrome bar, in Econstellar's own type */
+.site-bar{
+  display:flex;gap:1rem;align-items:center;flex-wrap:wrap;
+  padding:.75rem 20px;border-bottom:1px solid rgba(255,255,255,.08);
+  background:#000;color:#6b7280;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.76rem;
+}
+.site-bar .brand{color:#00ff88;font-weight:600;letter-spacing:.5px}
+.site-bar .sp{flex:1}
+.site-bar a{color:#6b7280;text-decoration:none}
+.site-bar a:hover{color:#00d4ff}
+.site-bar a[aria-current="page"]{color:#00d4ff}
+</style>
+<style>
+:root{
+  --paper:#EBEFE9;
+  --surface:#F6F8F3;
+  --surface-2:#DFE5DC;
+  --line:#C6D0C5;
+  --line-soft:#D8DFD6;
+  --ink:#131A1B;
+  --ink-2:#3F4E50;
+  --ink-3:#6E7D7C;
+  --demand:#0D6E6A;
+  --supply:#B05615;
+  --loss:#9E2A40;
+  --signal:#B98908;
+  --good:#2E7A4C;
+  --demand-fill:rgba(13,110,106,.14);
+  --supply-fill:rgba(176,86,21,.15);
+  --loss-fill:rgba(158,42,64,.18);
+  --signal-fill:rgba(185,137,8,.16);
+  --grid:#D6DED4;
+  --focus:#0D6E6A;
+  --lift:0 10px 26px -20px rgba(15,43,42,.55);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#05080A;
+    --surface:#0C1315;
+    --surface-2:#151E21;
+    --line:#2B3639;
+    --line-soft:#232D30;
+    --ink:#E7ECE5;
+    --ink-2:#AEBAB4;
+    --ink-3:#7E8C89;
+    --demand:#41BDB2;
+    --supply:#E8893D;
+    --loss:#E86A7C;
+    --signal:#E7C155;
+    --good:#5EC088;
+    --demand-fill:rgba(65,189,178,.16);
+    --supply-fill:rgba(232,137,61,.16);
+    --loss-fill:rgba(232,106,124,.20);
+    --signal-fill:rgba(231,193,85,.16);
+    --grid:#232E31;
+    --focus:#41BDB2;
+    --lift:0 10px 26px -20px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#05080A;
+  --surface:#0C1315;
+  --surface-2:#151E21;
+  --line:#2B3639;
+  --line-soft:#232D30;
+  --ink:#E7ECE5;
+  --ink-2:#AEBAB4;
+  --ink-3:#7E8C89;
+  --demand:#41BDB2;
+  --supply:#E8893D;
+  --loss:#E86A7C;
+  --signal:#E7C155;
+  --good:#5EC088;
+  --demand-fill:rgba(65,189,178,.16);
+  --supply-fill:rgba(232,137,61,.16);
+  --loss-fill:rgba(232,106,124,.20);
+  --signal-fill:rgba(231,193,85,.16);
+  --grid:#232E31;
+  --focus:#41BDB2;
+  --lift:0 10px 26px -20px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,"Times New Roman",serif;
+  font-size:17px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 72px}
+
+/* ---------- masthead ---------- */
+.masthead{
+  display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 28px;
+  padding:26px 0 16px;border-bottom:2px solid var(--ink);
+}
+.brand h1{
+  font-family:"Archivo",system-ui,sans-serif;
+  font-weight:800;font-size:clamp(28px,4.4vw,44px);
+  letter-spacing:-.025em;line-height:.98;margin:0;text-wrap:balance;
+}
+.brand .sub{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:8px;
+}
+.masthead-note{
+  flex:1 1 260px;max-width:44ch;color:var(--ink-2);
+  font-size:15.5px;line-height:1.5;margin:0 0 3px;
+}
+.masthead-note em{color:var(--ink);font-style:italic}
+.theme-btn{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:transparent;color:var(--ink-3);
+  border:1px solid var(--line);border-radius:999px;
+  padding:6px 12px;cursor:pointer;margin-bottom:4px;
+}
+.theme-btn:hover{color:var(--ink);border-color:var(--ink-3)}
+
+/* ---------- tabs ---------- */
+.tabs{
+  display:flex;gap:0;overflow-x:auto;overflow-y:hidden;
+  border-bottom:1px solid var(--line);
+  scrollbar-width:thin;
+}
+.tab{
+  flex:0 0 auto;position:relative;
+  background:transparent;border:0;border-bottom:3px solid transparent;
+  padding:13px 17px 11px;cursor:pointer;text-align:left;
+  color:var(--ink-3);font-family:"Archivo",system-ui,sans-serif;
+  display:flex;align-items:baseline;gap:9px;
+}
+.tab .n{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;font-weight:500;opacity:.75;
+}
+.tab .t{font-size:14px;font-weight:600;letter-spacing:-.005em;white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--demand)}
+.tab[data-seen="1"] .n::after{content:"•";margin-left:5px;color:var(--good)}
+
+/* ---------- module shell ---------- */
+.module{display:none;padding-top:26px;animation:fade .28s ease both}
+.module.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.mod-head{max-width:70ch;margin-bottom:22px}
+.eyebrow{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--supply);
+  display:block;margin-bottom:9px;
+}
+.mod-head h2{
+  font-family:"Archivo",system-ui,sans-serif;font-weight:700;
+  font-size:clamp(22px,3vw,31px);letter-spacing:-.02em;line-height:1.08;
+  margin:0 0 10px;text-wrap:balance;
+}
+.lede{margin:0;color:var(--ink-2);font-size:17px}
+
+.mod-body{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.88fr);gap:24px;align-items:start}
+@media (max-width:900px){.mod-body{grid-template-columns:1fr}}
+
+.stage{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:14px 14px 8px;box-shadow:var(--lift);
+}
+.stage svg{display:block;width:100%;height:auto}
+.stage-cap{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  color:var(--ink-3);letter-spacing:.04em;padding:2px 4px 6px;
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.side{display:flex;flex-direction:column;gap:14px}
+
+/* svg classes */
+.grid{stroke:var(--grid);stroke-width:1}
+.axis{stroke:var(--ink-2);stroke-width:1.4}
+.tick{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;fill:var(--ink-3)}
+.axlab{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;fill:var(--ink-3);letter-spacing:.09em;text-transform:uppercase}
+.cD{fill:none;stroke:var(--demand);stroke-width:2.6;stroke-linejoin:round}
+.cS{fill:none;stroke:var(--supply);stroke-width:2.6;stroke-linejoin:round}
+.cD.ghost,.cS.ghost{stroke-width:1.6;stroke-dasharray:5 4;opacity:.5}
+.aCS{fill:var(--demand-fill);stroke:none}
+.aPS{fill:var(--supply-fill);stroke:none}
+.aDWL{fill:var(--loss-fill);stroke:var(--loss);stroke-width:1;stroke-dasharray:3 3}
+.aRev{fill:var(--signal-fill);stroke:var(--signal);stroke-width:1.2}
+.gain{fill:rgba(46,122,76,.30);stroke:var(--good);stroke-width:1}
+.drop{fill:var(--loss-fill);stroke:var(--loss);stroke-width:1}
+.guide{stroke:var(--ink-3);stroke-width:1;stroke-dasharray:3 4}
+.eqdot{fill:var(--signal);stroke:var(--paper);stroke-width:2}
+.lbl{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;font-weight:500}
+.lbl.d{fill:var(--demand)}
+.lbl.s{fill:var(--supply)}
+.lbl.k{fill:var(--ink-2)}
+.lbl.l{fill:var(--loss)}
+.lbl.g{fill:var(--signal)}
+.step{fill:none;stroke-width:2.4;stroke-linejoin:round}
+
+/* ---------- controls ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:16px 16px 17px;
+}
+.card.flat{background:transparent;border:0;padding:0}
+.card h3{
+  font-family:"Archivo",system-ui,sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;margin:0 0 11px;color:var(--ink-2);
+}
+.scenario{
+  border-left:3px solid var(--supply);padding-left:14px;margin:0 0 4px;
+}
+.scenario .mkt{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px;
+}
+.scenario p{margin:0;font-size:18.5px;line-height:1.42}
+
+.choices{display:grid;gap:7px;margin-top:14px}
+.choices.two{grid-template-columns:1fr 1fr}
+.choice{
+  font-family:"Archivo",system-ui,sans-serif;font-size:13.5px;font-weight:600;
+  text-align:left;padding:10px 12px;cursor:pointer;
+  background:var(--surface-2);color:var(--ink);
+  border:1px solid var(--line);border-radius:2px;
+  transition:transform .12s ease,border-color .12s ease;
+}
+.choice:hover:not(:disabled){border-color:var(--ink-3);transform:translateX(2px)}
+.choice:disabled{cursor:default;opacity:.55}
+.choice.right{background:rgba(46,122,76,.16);border-color:var(--good);color:var(--ink);opacity:1}
+.choice.wrong{background:var(--loss-fill);border-color:var(--loss);opacity:1}
+.choice .k{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--ink-3);margin-right:7px}
+
+.verdict{margin-top:13px;padding:13px 14px;border-radius:2px;font-size:16px;line-height:1.45;border:1px solid var(--line);background:var(--surface-2)}
+.verdict.ok{border-color:var(--good);background:rgba(46,122,76,.10)}
+.verdict.no{border-color:var(--loss);background:var(--loss-fill)}
+.verdict strong{font-family:"Archivo",system-ui,sans-serif;font-size:13px;letter-spacing:.07em;text-transform:uppercase;display:block;margin-bottom:5px}
+.verdict.ok strong{color:var(--good)}
+.verdict.no strong{color:var(--loss)}
+
+.rowbtn{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap;align-items:center}
+.btn{
+  font-family:"Archivo",system-ui,sans-serif;font-size:13px;font-weight:700;
+  letter-spacing:.04em;padding:9px 16px;cursor:pointer;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);border-radius:2px;
+}
+.btn:hover{opacity:.85}
+.btn.ghost{background:transparent;color:var(--ink-2);border-color:var(--line)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--ink-3)}
+
+.tally{
+  display:flex;gap:18px;font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:12px;color:var(--ink-3);letter-spacing:.05em;
+}
+.tally b{display:block;font-size:22px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+
+/* sliders */
+.slider{margin:0 0 15px}
+.slider:last-child{margin-bottom:0}
+.slider label{
+  display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11.5px;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px;
+}
+.slider label .v{font-size:15px;color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums;text-transform:none;letter-spacing:0}
+input[type=range]{width:100%;accent-color:var(--demand);height:22px;cursor:pointer}
+input[type=range].s2{accent-color:var(--supply)}
+input[type=range].s3{accent-color:var(--signal)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  font-family:"Archivo",system-ui,sans-serif;font-size:12.5px;font-weight:600;
+  padding:7px 11px;cursor:pointer;text-align:left;
+  background:transparent;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:999px;
+}
+.chip:hover{border-color:var(--ink-3);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--demand);border-color:var(--demand);color:var(--surface)}
+.chip.sup[aria-pressed="true"]{background:var(--supply);border-color:var(--supply);color:var(--surface)}
+:root[data-theme="dark"] .chip[aria-pressed="true"],
+:root[data-theme="dark"] .chip.sup[aria-pressed="true"]{color:#05080A}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .chip[aria-pressed="true"],
+  :root:not([data-theme="light"]) .chip.sup[aria-pressed="true"]{color:#05080A}
+}
+.chip-head{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);
+  margin:0 0 8px;
+}
+.chip-head.two{margin-top:16px}
+
+/* readouts */
+.readout{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.readout div{background:var(--surface);padding:11px 13px}
+.readout span{
+  display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;
+}
+.readout b{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.readout .up{color:var(--good)}
+.readout .down{color:var(--loss)}
+
+.note{font-size:16px;color:var(--ink-2);margin:12px 0 0;line-height:1.5}
+.note strong{color:var(--ink);font-weight:600}
+
+/* ledger table */
+.ledger{width:100%;border-collapse:collapse;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:12.5px}
+.ledger th{
+  text-align:left;font-weight:500;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);padding:0 8px 7px 0;border-bottom:1px solid var(--line);
+}
+.ledger td{padding:6px 8px 6px 0;border-bottom:1px solid var(--line-soft);font-variant-numeric:tabular-nums}
+.ledger tr.out td{color:var(--ink-3);opacity:.6}
+.ledger tr.marg td{color:var(--signal)}
+.ledger td.num{text-align:right}
+.tbl-scroll{overflow-x:auto}
+
+/* insight strip */
+.insight{
+  margin-top:26px;padding:20px 0 0;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:26px;
+}
+@media (max-width:760px){.insight{grid-template-columns:1fr;gap:16px}}
+.insight p{margin:0;max-width:68ch;font-size:17px;line-height:1.55}
+.insight .try{
+  border-left:3px solid var(--demand);padding-left:14px;
+  font-size:16px;color:var(--ink-2);
+}
+.insight .try b{
+  display:block;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--demand);margin-bottom:5px;font-weight:600;
+}
+
+/* prompt deck */
+.deck{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:6px}
+.prompt{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:16px 17px 17px;display:flex;flex-direction:column;gap:9px;
+}
+.prompt .tagline{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--supply);
+}
+.prompt p{margin:0;font-size:16.5px;line-height:1.45}
+.prompt .hint{font-size:14.5px;color:var(--ink-3);font-style:italic;margin-top:auto;padding-top:4px}
+
+/* mini legend */
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;color:var(--ink-3)}
+.legend i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px}
+.legend .d i{background:var(--demand)}
+.legend .s i{background:var(--supply)}
+.legend .w i{background:var(--loss)}
+
+footer{
+  margin-top:54px;padding-top:18px;border-top:1px solid var(--line);
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.06em;color:var(--ink-3);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+}
+
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+</style>
+<link rel="license" href="../LICENSING.md">
+</head>
+<body>
+<div class="site-bar">
+  <span class="brand">◆ ECONSTELLAR</span>
+  <a href="../classroom.html">Classroom</a>
+  <a href="market-forces-lab.html">Market Forces Lab</a>
+  <a href="macro-vitals-lab.html" aria-current="page">Macro Vitals Lab</a>
+  <a href="market-maker.html">Market Maker · L1</a>
+  <a href="market-maker-l2.html">Signal Room · L2</a>
+  <span class="sp"></span>
+  <a href="../index.html">econstellars.com</a>
+</div>
+<div class="wrap">
+  <header class="masthead">
+    <div class="brand">
+      <h1>Macro Vitals Lab</h1>
+      <div class="sub">Nine rooms · output · growth · work</div>
+    </div>
+    <p class="masthead-note">Every macro number you will be shown this term is the output of a <em>rule</em> somebody wrote down. Here you operate the rule yourself — and find the cases where it gives an answer the world does not deserve.</p>
+    <button class="theme-btn" id="themeBtn" type="button">Theme</button>
+  </header>
+
+  <nav class="tabs" id="tabs" role="tablist" aria-label="Lab rooms"></nav>
+  <main id="panels"></main>
+
+  <footer>
+    <span>Macro Vitals Lab · Mankiw <em>Principles of Macroeconomics</em> Ch. 10, 12, 13</span>
+    <span id="progress">0 / 9 rooms opened</span>
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+/* ============ tiny helpers ============ */
+const $ = (s, r) => (r || document).querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const inr = n => "₹" + Math.round(n).toLocaleString("en-IN");
+const inrK = n => "₹" + (Math.round(n * 10) / 10).toLocaleString("en-IN") + "k";
+const n1 = n => (Math.round(n * 10) / 10).toLocaleString("en-IN");
+const n2 = n => (Math.round(n * 100) / 100).toFixed(2);
+
+function store(k, v) {
+  try {
+    if (v === undefined) return localStorage.getItem("mvl_" + k);
+    localStorage.setItem("mvl_" + k, v);
+  } catch (e) { /* private window, blocked storage — the lab works without it */ }
+  return null;
+}
+
+/* ============ plot scaffolding ============ */
+const GEO = { w: 570, h: 402, l: 60, r: 30, t: 26, b: 50 };
+
+function scale(qmax, pmax) {
+  const iw = GEO.w - GEO.l - GEO.r, ih = GEO.h - GEO.t - GEO.b;
+  return {
+    qmax, pmax, iw, ih,
+    l: GEO.l, t: GEO.t, w: GEO.w, h: GEO.h,
+    x0: GEO.l, y0: GEO.t + ih,
+    x: q => GEO.l + (clamp(q, 0, qmax) / qmax) * iw,
+    y: p => GEO.t + (1 - clamp(p, 0, pmax) / pmax) * ih,
+    xr: q => GEO.l + (q / qmax) * iw,
+    yr: p => GEO.t + (1 - p / pmax) * ih
+  };
+}
+
+function frame(s, o) {
+  o = o || {};
+  const xt = o.xticks || 5, yt = o.yticks || 5, bare = !!o.bare;
+  let g = "";
+  for (let i = 0; i <= xt; i++) {
+    const q = s.qmax * i / xt, X = s.x(q);
+    g += `<line class="grid" x1="${X}" y1="${s.t}" x2="${X}" y2="${s.y0}"/>`;
+    if (!bare && i > 0) g += `<text class="tick" x="${X}" y="${s.y0 + 17}" text-anchor="middle">${o.xf ? o.xf(q) : n1(q)}</text>`;
+  }
+  for (let i = 0; i <= yt; i++) {
+    const p = s.pmax * i / yt, Y = s.y(p);
+    g += `<line class="grid" x1="${s.x0}" y1="${Y}" x2="${s.x(s.qmax)}" y2="${Y}"/>`;
+    if (!bare && i > 0) g += `<text class="tick" x="${s.x0 - 9}" y="${Y + 4}" text-anchor="end">${o.yf ? o.yf(p) : n1(p)}</text>`;
+  }
+  g += `<line class="axis" x1="${s.x0}" y1="${s.t - 6}" x2="${s.x0}" y2="${s.y0}"/>`;
+  g += `<line class="axis" x1="${s.x0}" y1="${s.y0}" x2="${s.x(s.qmax) + 6}" y2="${s.y0}"/>`;
+  g += `<text class="axlab" x="${s.x(s.qmax) + 6}" y="${s.y0 + 38}" text-anchor="end">${o.xlab || "Quantity"}</text>`;
+  g += `<text class="axlab" x="${s.x0 - 12}" y="${s.t - 12}" text-anchor="start">${o.ylab || "Price"}</text>`;
+  return g;
+}
+
+/* sample a curve Q = f(P) across the visible box */
+function curve(fn, s, cls) {
+  const pts = [];
+  for (let i = 0; i <= 90; i++) {
+    const p = s.pmax * i / 90, q = fn(p);
+    if (q >= -1e-6 && q <= s.qmax + 1e-6) pts.push(s.x(q).toFixed(1) + "," + s.y(p).toFixed(1));
+  }
+  return pts.length > 1 ? `<polyline class="${cls}" points="${pts.join(" ")}"/>` : "";
+}
+
+function dot(s, q, p, label, cls) {
+  let g = `<circle class="eqdot" cx="${s.x(q)}" cy="${s.y(p)}" r="5.5"/>`;
+  if (label) g += `<text class="lbl ${cls || "g"}" x="${s.x(q) + 10}" y="${s.y(p) - 9}">${label}</text>`;
+  return g;
+}
+
+function guides(s, q, p) {
+  return `<line class="guide" x1="${s.x0}" y1="${s.y(p)}" x2="${s.x(q)}" y2="${s.y(p)}"/>` +
+         `<line class="guide" x1="${s.x(q)}" y1="${s.y(p)}" x2="${s.x(q)}" y2="${s.y0}"/>`;
+}
+
+function svg(inner) {
+  return `<svg viewBox="0 0 ${GEO.w} ${GEO.h}" role="img" aria-label="Price and quantity diagram">${inner}</svg>`;
+}
+
+/* ============ module shell ============ */
+function shell(m) {
+  return `
+  <section class="module" id="pan-${m.id}" role="tabpanel" aria-labelledby="tab-${m.id}">
+    <div class="mod-head">
+      <span class="eyebrow">Room ${m.num} · ${m.topic}</span>
+      <h2>${m.title}</h2>
+      <p class="lede">${m.lede}</p>
+    </div>
+    <div class="mod-body">
+      <div>
+        <div class="stage"><div class="stage-cap"><span class="legend">${m.legend || '<span class="d"><i></i>Demand</span> <span class="s"><i></i>Supply</span>'}</span><span id="cap-${m.id}"></span></div><div id="viz-${m.id}"></div></div>
+      </div>
+      <div class="side" id="side-${m.id}"></div>
+    </div>
+    <div class="insight">
+      <p>${m.insight}</p>
+      <div class="try"><b>Try to break it</b>${m.tryit}</div>
+    </div>
+  </section>`;
+}
+
+
+/* ============ money, in the units an Indian reader actually uses ============ */
+function money(n) {
+  const a = Math.abs(n), sign = n < 0 ? "−" : "";
+  if (a >= 1e7) return sign + "₹" + n2(a / 1e7) + " cr";
+  if (a >= 1e5) return sign + "₹" + n2(a / 1e5) + " lakh";
+  return sign + "₹" + Math.round(a).toLocaleString("en-IN");
+}
+
+/* ============ a zero-line bar chart, for the accounting rooms ============ */
+function bars(rows, opt) {
+  opt = opt || {};
+  const W = 570, H = 300, L = 74, R = 26, T = 24, B = 46;
+  const iw = W - L - R, ih = H - T - B;
+  const span = Math.max(1, ...rows.map(r => Math.abs(r.v)));
+  const y0 = T + ih / 2, half = ih / 2 - 10;
+  const bw = iw / rows.length;
+  let g = `<line class="axis" x1="${L}" y1="${y0}" x2="${L + iw}" y2="${y0}"/>`;
+  rows.forEach((r, i) => {
+    const h = (Math.abs(r.v) / span) * half;
+    const x = L + i * bw + bw * 0.22, w = bw * 0.56;
+    const up = r.v >= 0;
+    const fill = r.v === 0 ? "var(--line)" : up ? "var(--good)" : "var(--loss)";
+    if (r.v !== 0) g += `<rect x="${x}" y="${up ? y0 - h : y0}" width="${w}" height="${h}" fill="${fill}" opacity=".82"/>`;
+    g += `<text class="tick" x="${x + w / 2}" y="${y0 + (up ? 20 : -10)}" text-anchor="middle">${r.k}</text>`;
+    g += `<text class="lbl ${r.v < 0 ? "l" : "g"}" x="${x + w / 2}" y="${up ? y0 - h - 8 : y0 + h + 18}" text-anchor="middle">${r.v === 0 ? "—" : money(r.v)}</text>`;
+  });
+  g += `<text class="axlab" x="${L - 12}" y="${T - 6}" text-anchor="start">${opt.ylab || "Change this year"}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.alt || "Change in each component of GDP"}">${g}</svg>`;
+}
+
+/* ==================================================================
+   ROOM 1 — Where Does It Land?
+   Y = C + I + G + NX, one transaction at a time.
+   ================================================================== */
+const LANDS = [
+  { mkt: "A family dinner in Bhubaneswar", amt: 2400,
+    text: "A family spends ₹2,400 on dinner at a restaurant.",
+    p: { C: 2400 }, a: "C", dy: "full",
+    why: "A household buying a service. <strong>Consumption</strong> rises by ₹2,400 and so does GDP. This is the easy one, and it is here so you have something to compare the hard ones against." },
+  { mkt: "A publishing firm re-equips", amt: 90000,
+    text: "A small publisher buys a ₹90,000 laptop for the business. The laptop was assembled in Vietnam.",
+    p: { I: 90000, NX: -90000 }, a: "I", dy: "none",
+    why: "The purchase is business equipment, so <strong>investment</strong> rises by ₹90,000. But nothing was produced here — the laptop arrived as an import, so <strong>net exports fall by exactly the same ₹90,000</strong> and GDP does not move. Imports are subtracted precisely because they were already added inside C, I or G." },
+  { mkt: "Last year's model, sold today", amt: 70000,
+    text: "An editing studio buys a ₹70,000 desktop from a dealer's unsold stock. The machine was built last year.",
+    p: {}, a: "none", dy: "none",
+    why: "GDP counts goods <strong>currently produced</strong>. That machine was counted last year, as inventory investment, in the year it was made. Counting it again now would be counting the same production twice. (The dealer's margin for the service of selling it <em>is</em> current output — but the ₹70,000 machine is not.)" },
+  { mkt: "A car plant in Chennai", amt: 5e9,
+    text: "A carmaker produces ₹500 crore of cars this year. Buyers take ₹470 crore of them; the rest sit on the lot.",
+    p: { C: 4.7e9, I: 3e8 }, a: "C", dy: "full",
+    why: "Consumption rises ₹470 cr, and the ₹30 cr of unsold cars count as <strong>inventory investment</strong> — a firm producing a good and holding it is treated as the firm buying it from itself. GDP rises by the full ₹500 crore, because GDP measures <em>production</em>, not sales." },
+  { mkt: "A new school block", amt: 1.2e8,
+    text: "A state government pays ₹12 crore to build new classrooms.",
+    p: { G: 1.2e8 }, a: "G", dy: "full",
+    why: "The state buying a currently produced good or service is <strong>government purchases</strong>. Note that G is defined by who buys, not by who benefits." },
+  { mkt: "A transfer, not a purchase", amt: 1.2e8,
+    text: "The same government pays out ₹12 crore in old-age pensions.",
+    p: {}, a: "none", dy: "none",
+    why: "A <strong>transfer payment</strong>. The government receives no good or service in return, so nothing was produced and G does not move. When the pensioners spend the money, <em>that</em> shows up — in C, later, and only for what they actually buy." },
+  { mkt: "Dinner, cooked at home", amt: 600,
+    text: "You cook your own dinner. The same meal would have cost ₹600 at a restaurant.",
+    p: {}, a: "none", dy: "none",
+    why: "No market transaction, so no market price, so nothing to add. This is the most-quoted hole in GDP: hire someone to cook that meal and GDP rises ₹600; cook it yourself and it does not. The cooking happened either way." },
+  { mkt: "The same dinner, hired out", amt: 8000,
+    text: "A household hires a cook at ₹8,000 a month.",
+    p: { C: 8000 }, a: "C", dy: "full",
+    why: "Identical work to the room above, now with a price attached, so now it counts. Put these two rooms side by side and you have the whole argument about unpaid domestic labour in national accounts — and notice that the measured economy grows when the work moves into the market, not when the work begins." },
+  { mkt: "Software, shipped from Pune", amt: 4e7,
+    text: "A Pune firm delivers ₹4 crore of software to a client in Chicago.",
+    p: { NX: 4e7 }, a: "NX", dy: "full",
+    why: "Produced here, bought by a foreigner: an <strong>export</strong>. It is domestic production, so it belongs in GDP, and net exports is the line that puts it there. GDP is about the borders inside which production happened, not the nationality of the buyer." },
+  { mkt: "Shares change hands", amt: 120000,
+    text: "A student buys ₹1.2 lakh of shares in a listed company.",
+    p: {}, a: "none", dy: "none",
+    why: "Buying a financial asset is not investment in the macroeconomic sense — nothing new was produced, ownership simply moved. <strong>Investment in GDP means newly produced capital</strong>: machines, structures, inventories. The broker's fee is a service and does count." },
+  { mkt: "A newly built flat", amt: 6e6,
+    text: "A family buys a just-completed flat for ₹60 lakh.",
+    p: { I: 6e6 }, a: "I", dy: "full",
+    why: "New residential structures are <strong>investment</strong>, even when a household buys them. This is the one place where a household purchase is not consumption, and it catches almost everybody." },
+  { mkt: "A twelve-year-old flat", amt: 6e6,
+    text: "Another family buys a twelve-year-old flat, also for ₹60 lakh.",
+    p: {}, a: "none", dy: "none",
+    why: "Same price, same asset class, no current production — the flat entered GDP in the year it was built. Only the estate agent's commission counts now, because that service was produced this year." },
+  { mkt: "Steel into cars", amt: 2e8,
+    text: "A steel plant sells ₹20 crore of steel to a car factory, which uses it to build cars.",
+    p: {}, a: "none", dy: "none",
+    why: "An <strong>intermediate good</strong>. Its value is already inside the price of the cars, and the cars are what gets counted. Add the steel separately and you have counted it twice — which is why GDP is defined over <em>final</em> goods." },
+  { mkt: "Living in your own house", amt: 18000,
+    text: "A homeowner lives in a house she owns. Similar houses nearby rent for ₹18,000 a month.",
+    p: { C: 18000 }, a: "C", dy: "full",
+    why: "The accounts impute a rent: she is treated as renting the house to herself, and that housing service is counted in <strong>consumption</strong>. Without the imputation, a country where people own their homes would look poorer than an identical one where everybody rents. Note the inconsistency with the home-cooked meal — the accounts impute here and refuse to impute there." },
+  { mkt: "A switch to imported appliances", amt: 2e9,
+    text: "Households move ₹200 crore of spending from Indian-made appliances to imported ones. Total spending is unchanged.",
+    p: { NX: -2e9 }, a: "NX", dy: "fall",
+    why: "Consumption is flat — the same rupees were spent. But ₹200 cr of it now leaves for goods produced abroad, so <strong>net exports fall</strong> and GDP falls with them. Domestic production really did drop; the accounts are right about this one." },
+  { mkt: "A retail chain's year", amt: 5e9,
+    text: "A retail chain sells ₹500 crore of goods to households. ₹120 crore of what it sold was imported.",
+    p: { C: 5e9, NX: -1.2e9 }, a: "C", dy: "part",
+    why: "Consumption rises by the full ₹500 cr, because that is what households bought. Then ₹120 cr is subtracted through net exports, because that part was not produced here. GDP rises ₹380 cr — the domestic share. This is the general case of which the imported laptop was the extreme one." }
+];
+
+const COMP = [
+  { k: "C", label: "Consumption (C)" },
+  { k: "I", label: "Investment (I)" },
+  { k: "G", label: "Government purchases (G)" },
+  { k: "NX", label: "Net exports (NX)" },
+  { k: "none", label: "Nowhere — not in this year's GDP" }
+];
+
+const DYOPT = [
+  { k: "full", label: "GDP rises by the full amount" },
+  { k: "part", label: "GDP rises, but by less than that" },
+  { k: "none", label: "GDP does not change" },
+  { k: "fall", label: "GDP falls" }
+];
+
+/* Pure: the change in GDP implied by a scenario's component entries, and the
+   qualitative verdict a student is asked for. Derived from the parts, never
+   stated twice — a hand-written verdict that disagreed with its own ledger is
+   exactly the bug an answer key must not have. */
+function landsDelta(p) {
+  return (p.C || 0) + (p.I || 0) + (p.G || 0) + (p.NX || 0);
+}
+function landsVerdict(sc) {
+  const d = landsDelta(sc.p);
+  if (d < 0) return "fall";
+  if (d === 0) return "none";
+  return d >= sc.amt ? "full" : "part";
+}
+
+const R1 = {
+  id: "land", num: 1, topic: "Ch. 10 · The components of GDP",
+  legend: '<span class="d"><i></i>Adds to GDP</span> <span class="s"><i></i>Subtracts</span>',
+  title: "Where Does It Land?",
+  lede: "Sixteen transactions, one national accountant: you. Say which component of Y = C + I + G + NX each one lands in, then say what happens to GDP itself. Half of them do nothing to GDP at all, and the half is not the half you expect.",
+  insight: "The identity <span style=\"font-family:'IBM Plex Mono',monospace\">Y = C + I + G + NX</span> is not a theory and cannot be falsified — it is a <em>definition</em> of how spending is sorted into four boxes. What can be wrong is the sorting rule, and every hard case in this room is a place where the rule was chosen rather than discovered: impute a rent but not a home-cooked meal, count a new flat as investment but an old one as nothing, subtract imports at the end rather than never adding them. Learn the rule as a rule and the arithmetic stops being surprising.",
+  tryit: "Find two transactions in this room that leave the country in an identical physical state but different measured GDP. There are at least three such pairs. Then decide which member of each pair the accounts are wrong about — and whether a national accountant could fix it without inventing a price that nobody paid.",
+  mount(root) {
+    const side = $("#side-land", root), viz = $("#viz-land", root), cap = $("#cap-land", root);
+    let i = 0, stage = 0, clean = 0, streakOk = true;
+
+    function draw(reveal) {
+      const sc = LANDS[i];
+      const rows = reveal
+        ? [{ k: "C", v: sc.p.C || 0 }, { k: "I", v: sc.p.I || 0 }, { k: "G", v: sc.p.G || 0 },
+           { k: "NX", v: sc.p.NX || 0 }, { k: "GDP", v: landsDelta(sc.p) }]
+        : [{ k: "C", v: 0 }, { k: "I", v: 0 }, { k: "G", v: 0 }, { k: "NX", v: 0 }, { k: "GDP", v: 0 }];
+      viz.innerHTML = bars(rows, { ylab: "Change this year", alt: "Change in C, I, G, NX and GDP" });
+      cap.textContent = "Transaction " + (i + 1) + " of " + LANDS.length + " · " + clean + " clean";
+    }
+
+    function load() {
+      const sc = LANDS[i];
+      stage = 0; streakOk = true;
+      side.innerHTML = `
+        <div class="scenario"><span class="mkt">${sc.mkt}</span><p>${sc.text}</p></div>
+        <div class="card">
+          <p class="chip-head" style="margin-bottom:12px">Which component does it land in?</p>
+          <div class="choices">${COMP.map(c => `<button class="choice" data-c="${c.k}">${c.label}</button>`).join("")}</div>
+        </div>
+        <div class="card" id="l1b" hidden>
+          <h3>And GDP itself?</h3>
+          <div class="choices">${DYOPT.map(d => `<button class="choice" data-y="${d.k}">${d.label}</button>`).join("")}</div>
+        </div>
+        <div id="l1v"></div>
+        <div class="rowbtn" id="l1nav"></div>`;
+      draw(false);
+    }
+
+    side.addEventListener("click", e => {
+      const c = e.target.closest("[data-c]"), y = e.target.closest("[data-y]");
+      const sc = LANDS[i];
+      if (c && stage === 0) {
+        stage = 1;
+        const ok = c.dataset.c === sc.a;
+        if (!ok) streakOk = false;
+        side.querySelectorAll("[data-c]").forEach(b => {
+          b.disabled = true;
+          if (b.dataset.c === sc.a) b.classList.add("right");
+          else if (b === c) b.classList.add("wrong");
+        });
+        $("#l1b", side).hidden = false;
+        return;
+      }
+      if (y && stage === 1) {
+        stage = 2;
+        const want = landsVerdict(sc);
+        const ok = y.dataset.y === want;
+        if (!ok) streakOk = false;
+        if (streakOk) clean += 1;
+        side.querySelectorAll("[data-y]").forEach(b => {
+          b.disabled = true;
+          if (b.dataset.y === want) b.classList.add("right");
+          else if (b === y) b.classList.add("wrong");
+        });
+        draw(true);
+        $("#l1v", side).innerHTML =
+          `<div class="verdict ${streakOk ? "ok" : "no"}"><strong>${streakOk ? "Both right." : "Read the ledger."}</strong> ${sc.why}</div>`;
+        $("#l1nav", side).innerHTML = i < LANDS.length - 1
+          ? `<button class="btn" data-next="1">Next transaction →</button>`
+          : `<button class="btn ghost" data-again="1">Run the sixteen again</button>`;
+        return;
+      }
+      if (e.target.closest("[data-next]")) { i += 1; load(); }
+      if (e.target.closest("[data-again]")) { i = 0; clean = 0; load(); }
+    });
+
+    load();
+  }
+};
+
+/* ============ a small multi-series line chart, for the time-series rooms ==== */
+function lines(series, opt) {
+  opt = opt || {};
+  const W = 570, H = 330, L = 78, R = 28, T = 26, B = 48;
+  const iw = W - L - R, ih = H - T - B;
+  const xs = opt.x, n = xs.length;
+  const all = series.reduce((a, s) => a.concat(s.v), []);
+  const hi = opt.max != null ? opt.max : Math.max(...all) * 1.08;
+  const lo = opt.min != null ? opt.min : 0;
+  const X = i => L + (n === 1 ? iw / 2 : (i / (n - 1)) * iw);
+  const Y = v => T + ih - ((clamp(v, lo, hi) - lo) / (hi - lo)) * ih;
+  let g = "";
+  for (let k = 0; k <= 4; k++) {
+    const yv = lo + (hi - lo) * k / 4, y = Y(yv);
+    g += `<line class="grid" x1="${L}" y1="${y}" x2="${L + iw}" y2="${y}"/>`;
+    g += `<text class="tick" x="${L - 9}" y="${y + 4}" text-anchor="end">${opt.yf ? opt.yf(yv) : n1(yv)}</text>`;
+  }
+  xs.forEach((x, i) => {
+    g += `<text class="tick" x="${X(i)}" y="${T + ih + 20}" text-anchor="middle">${x}</text>`;
+  });
+  g += `<line class="axis" x1="${L}" y1="${T - 6}" x2="${L}" y2="${T + ih}"/>`;
+  g += `<line class="axis" x1="${L}" y1="${T + ih}" x2="${L + iw + 6}" y2="${T + ih}"/>`;
+  series.forEach(s => {
+    const pts = s.v.map((v, i) => X(i).toFixed(1) + "," + Y(v).toFixed(1)).join(" ");
+    g += `<polyline class="${s.cls}" points="${pts}"/>`;
+    s.v.forEach((v, i) => { g += `<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="var(${s.col})"/>`; });
+    const last = s.v.length - 1;
+    g += `<text class="lbl ${s.lab}" x="${X(last) - 6}" y="${Y(s.v[last]) - 12}" text-anchor="end">${s.name}</text>`;
+  });
+  g += `<text class="axlab" x="${L - 12}" y="${T - 10}" text-anchor="start">${opt.ylab || ""}</text>`;
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${opt.alt || "Time series"}">${g}</svg>`;
+}
+
+/* ==================================================================
+   ROOM 2 — Nominal, Real, Deflator
+   ================================================================== */
+const YEARS = [2024, 2025, 2026];
+const GOODS = [
+  { name: "Masala dosa", unit: "plates", p0: 60, q0: 900 },
+  { name: "Mobile data", unit: "GB", p0: 12, q0: 4000 }
+];
+
+/* Pure: the whole national-accounts arithmetic for the sandbox. Everything the
+   room displays is read off this one function, so the table, the chart and the
+   growth rates cannot drift apart. */
+function gdpSeries(cfg) {
+  const rows = YEARS.map((yr, t) => {
+    const P = GOODS.map((g, k) => g.p0 * Math.pow(1 + cfg.pg[k] / 100, t));
+    const Q = GOODS.map((g, k) => g.q0 * Math.pow(1 + cfg.qg[k] / 100, t));
+    return { yr, P, Q };
+  });
+  const Pbase = rows[cfg.base].P;
+  return rows.map((r, t) => {
+    const nom = r.P.reduce((a, p, k) => a + p * r.Q[k], 0);
+    const real = Pbase.reduce((a, p, k) => a + p * r.Q[k], 0);
+    const prev = t > 0 ? rows[t - 1] : null;
+    const prevNom = prev ? prev.P.reduce((a, p, k) => a + p * prev.Q[k], 0) : null;
+    const prevReal = prev ? Pbase.reduce((a, p, k) => a + p * prev.Q[k], 0) : null;
+    const defl = real > 0 ? 100 * nom / real : 0;
+    const prevDefl = prevReal > 0 ? 100 * prevNom / prevReal : null;
+    return {
+      yr: r.yr, P: r.P, Q: r.Q, nom, real, defl,
+      gNom: prevNom ? 100 * (nom - prevNom) / prevNom : null,
+      gReal: prevReal ? 100 * (real - prevReal) / prevReal : null,
+      infl: prevDefl ? 100 * (defl - prevDefl) / prevDefl : null
+    };
+  });
+}
+
+const R2 = {
+  id: "real", num: 2, topic: "Ch. 10 · Correcting for inflation",
+  legend: '<span class="d"><i></i>Real GDP</span> <span class="s"><i></i>Nominal GDP</span>',
+  title: "Nominal, Real, Deflator",
+  lede: "A two-good economy: dosas and mobile data. Set how fast each price moves and how fast each quantity moves, then read the three numbers off the same table an actual statistical office would produce.",
+  insight: "Nominal GDP moves when prices move <em>or</em> when quantities move, which makes it useless for the question everybody actually asks — is the country producing more? Real GDP answers that by freezing prices at a base year, so only quantities can move it. The deflator is then the residual: <span style=\"font-family:'IBM Plex Mono',monospace\">100 × nominal / real</span>, the part of the change that was price rather than stuff. Three numbers, one identity, and the third is defined by the first two.",
+  tryit: "Set both price growths to 0 and watch nominal and real GDP lie exactly on top of each other, with the deflator pinned at 100 — that is the definition asserting itself. Then set both <em>quantity</em> growths negative while prices climb: nominal GDP rises through a year in which the economy produced less of everything. That combination is not a pathology, it is ordinary inflation, and it is the reason nobody quotes nominal GDP growth in public.",
+  mount(root) {
+    const side = $("#side-real", root), viz = $("#viz-real", root), cap = $("#cap-real", root);
+    const cfg = { pg: [8, -4], qg: [3, 22], base: 0 };
+
+    function render() {
+      const rows = gdpSeries(cfg);
+      viz.innerHTML = lines([
+        { name: "Nominal", v: rows.map(r => r.nom), cls: "cS", col: "--supply", lab: "s" },
+        { name: "Real", v: rows.map(r => r.real), cls: "cD", col: "--demand", lab: "d" }
+      ], { x: YEARS, ylab: "GDP", yf: v => "₹" + Math.round(v / 1000) + "k", alt: "Nominal and real GDP over three years" });
+      cap.textContent = "Base year " + YEARS[cfg.base] + " · deflator " + n1(rows[2].defl) + " in " + YEARS[2];
+
+      const last = rows[rows.length - 1];
+      side.innerHTML = `
+        <div class="card">
+          <h3>Prices</h3>
+          ${GOODS.map((g, k) => `
+            <div class="slider"><label>${g.name} price per year <span class="v">${cfg.pg[k] > 0 ? "+" : ""}${n1(cfg.pg[k])}%</span></label>
+            <input type="range" min="-10" max="20" step="0.5" value="${cfg.pg[k]}" data-pg="${k}"></div>`).join("")}
+          <h3 style="margin-top:14px">Quantities</h3>
+          ${GOODS.map((g, k) => `
+            <div class="slider"><label>${g.name} output per year <span class="v">${cfg.qg[k] > 0 ? "+" : ""}${n1(cfg.qg[k])}%</span></label>
+            <input type="range" min="-10" max="30" step="0.5" value="${cfg.qg[k]}" data-qg="${k}"></div>`).join("")}
+          <p class="chip-head two" style="margin:14px 0 8px">Base year for real GDP</p>
+          <div class="chips">${YEARS.map((y, k) => `<button class="chip" data-base="${k}" aria-pressed="${cfg.base === k}">${y}</button>`).join("")}</div>
+        </div>
+        <div class="card flat">
+          <div class="tbl-scroll"><table class="ledger">
+            <thead><tr><th>Year</th><th class="num">Nominal</th><th class="num">Real</th><th class="num">Deflator</th><th class="num">Real growth</th><th class="num">Inflation</th></tr></thead>
+            <tbody>${rows.map(r => `<tr${r.yr === YEARS[cfg.base] ? ' class="marg"' : ""}>
+              <td>${r.yr}</td>
+              <td class="num">${money(r.nom)}</td>
+              <td class="num">${money(r.real)}</td>
+              <td class="num">${n1(r.defl)}</td>
+              <td class="num">${r.gReal == null ? "—" : (r.gReal > 0 ? "+" : "") + n1(r.gReal) + "%"}</td>
+              <td class="num">${r.infl == null ? "—" : (r.infl > 0 ? "+" : "") + n1(r.infl) + "%"}</td>
+            </tr>`).join("")}</tbody>
+          </table></div>
+          <div class="readout">
+            <div><b>${YEARS[2]} nominal growth</b> ${(last.gNom > 0 ? "+" : "") + n1(last.gNom)}% <span class="${last.gNom >= 0 ? "up" : "down"}"></span></div>
+            <div><b>${YEARS[2]} real growth</b> ${(last.gReal > 0 ? "+" : "") + n1(last.gReal)}% <span class="${last.gReal >= 0 ? "up" : "down"}"></span></div>
+          </div>
+          <p class="note">The base-year row always has a deflator of exactly 100 and nominal equal to real — not a coincidence, but what "base year" means. Move the base year and every real figure changes while every <em>nominal</em> figure stays put.</p>
+        </div>`;
+    }
+
+    side.addEventListener("input", e => {
+      const pg = e.target.dataset.pg, qg = e.target.dataset.qg;
+      if (pg !== undefined) { cfg.pg[+pg] = +e.target.value; render(); }
+      else if (qg !== undefined) { cfg.qg[+qg] = +e.target.value; render(); }
+    });
+    side.addEventListener("click", e => {
+      const b = e.target.closest("[data-base]");
+      if (b) { cfg.base = +b.dataset.base; render(); }
+    });
+
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 3 — What the Number Misses
+   ================================================================== */
+const MISSES = [
+  { k: "creche", on: false, add: 4.2e9, label: "Childcare moves from homes to paid creches",
+    counted: "Creche fees are a purchased service, so consumption rises.",
+    missed: "The children are looked after either way. What changed is who is paid, not how much care exists." },
+  { k: "commute", on: false, add: 2.6e9, label: "The city sprawls; average commute doubles",
+    counted: "Fuel, tyres, cab fares and repairs are all bought and sold.",
+    missed: "Two hours a day per worker, gone. Nobody wanted longer commutes; GDP records them as output." },
+  { k: "cyclone", on: false, add: 9.5e9, label: "A cyclone flattens a coastal town, which is rebuilt",
+    counted: "Every rebuilt house and road is current production.",
+    missed: "The destroyed stock. The town ends the year roughly where it started and the accounts record a boom." },
+  { k: "pollute", on: false, add: 5.8e9, label: "A plant raises output by running its scrubbers less",
+    counted: "The extra output sells at market prices.",
+    missed: "The air. GDP has no line for the quality of the environment, so the cost lands on nobody's ledger." },
+  { k: "hours", on: false, add: 3.4e9, label: "Working hours rise; holidays are cut",
+    counted: "More hours, more output, more income.",
+    missed: "Leisure. An economy that works itself to exhaustion posts better numbers than one that rests." },
+  { k: "formal", on: false, add: 7.1e9, label: "Informal repair work moves onto invoiced platforms",
+    counted: "Once there is an invoice, there is a measurable transaction.",
+    missed: "Nothing about the repairs changed. The economy did not grow; the statistical net got finer." },
+  { k: "split", on: false, add: 0, label: "The same income is shared far more unequally",
+    counted: "Nothing. Distribution does not enter the formula at all.",
+    missed: "Who got it. GDP per capita is a mean, and a mean is silent about everyone it averages over." }
+];
+
+/* Pure: measured GDP given which arrangements are switched on. */
+function missTotal(base, flags) {
+  return MISSES.reduce((a, m) => a + (flags[m.k] ? m.add : 0), base);
+}
+
+const R3 = {
+  id: "miss", num: 3, topic: "Ch. 10 · GDP and well-being",
+  legend: '<span class="d"><i></i>Counted</span> <span class="s"><i></i>Not counted</span>',
+  title: "What the Number Misses",
+  lede: "Seven changes to the same economy. None of them makes the country better off, and several make it plainly worse. Switch them on and watch the headline figure climb anyway.",
+  insight: "Every omission here follows from one decision: GDP counts what has a market price. That rule is what makes the number comparable across a whole country and across decades — and it is the same rule that keeps clean air, unpaid care, leisure and distribution outside the total. The honest position is the chapter's own: real GDP per capita is still the best single predictor we have of life expectancy, literacy and access to almost everything, which is why it survives the criticism. It is a good instrument pointed at the wrong quantity.",
+  tryit: "Switch on <em>only</em> the last one — a sharply more unequal split of an unchanged income — and watch the headline not move at all. Then argue the opposite case: name three things GDP counts that genuinely did make people better off, and explain why a measure that ignored prices would have missed them.",
+  mount(root) {
+    const side = $("#side-miss", root), viz = $("#viz-miss", root), cap = $("#cap-miss", root);
+    const BASE = 2.1e11;
+    const flags = {};
+
+    function render() {
+      const total = missTotal(BASE, flags);
+      const on = MISSES.filter(m => flags[m.k]);
+      viz.innerHTML = bars([
+        { k: "Starting GDP", v: BASE },
+        { k: "Measured now", v: total }
+      ], { ylab: "Measured GDP", alt: "Measured GDP before and after the switches" });
+      cap.textContent = on.length + " of " + MISSES.length + " switched on · headline "
+        + (BASE > 0 ? "+" + n1(100 * (total - BASE) / BASE) + "%" : "");
+
+      side.innerHTML = `
+        <div class="card">
+          <p class="chip-head" style="margin-bottom:10px">Change the arrangement, not the accounting</p>
+          <div class="chips">${MISSES.map(m =>
+            `<button class="chip" data-m="${m.k}" aria-pressed="${!!flags[m.k]}">${m.label}</button>`).join("")}</div>
+        </div>
+        ${on.length ? `<div class="card flat">
+          <h3>What the accounts recorded</h3>
+          <table class="ledger"><tbody>
+            ${on.map(m => `<tr><td>${m.label}</td><td class="num">${m.add ? "+" + money(m.add) : "no change"}</td></tr>`).join("")}
+            <tr class="marg"><td>Measured GDP</td><td class="num">${money(total)}</td></tr>
+          </tbody></table>
+          <h3 style="margin-top:16px">What it did not record</h3>
+          <table class="ledger"><tbody>
+            ${on.map(m => `<tr class="out"><td colspan="2">${m.missed}</td></tr>`).join("")}
+          </tbody></table>
+        </div>` : `<div class="card flat"><p class="note">Switch something on. The left column is what a statistical office would publish; the right column is what a person living there would notice.</p></div>`}
+        <div class="card flat">
+          <p class="note"><strong>The defence, stated fairly.</strong> Across countries, real GDP per capita moves
+          together with life expectancy, adult literacy and the share of people online — the poorest countries in the
+          chapter's twelve-country comparison do worst on all three, the richest do best. A large GDP is what lets a
+          country afford schools, hospitals and cleaner production in the first place. The criticism is that GDP is
+          not welfare; it is not that GDP is irrelevant to welfare.</p>
+        </div>`;
+    }
+
+    side.addEventListener("click", e => {
+      const b = e.target.closest("[data-m]");
+      if (b) { flags[b.dataset.m] = !flags[b.dataset.m]; render(); }
+    });
+
+    render();
+  }
+};
+
+/* ============ plot y = f(x) directly, for the production-function rooms ===== */
+function fnXY(fn, s, cls) {
+  const pts = [];
+  for (let i = 0; i <= 120; i++) {
+    const x = s.qmax * i / 120, y = fn(x);
+    if (isFinite(y)) pts.push(s.x(x).toFixed(1) + "," + s.y(clamp(y, 0, s.pmax)).toFixed(1));
+  }
+  return pts.length > 1 ? `<polyline class="${cls}" points="${pts.join(" ")}"/>` : "";
+}
+
+/* ==================================================================
+   ROOM 4 — The Productivity Function
+   Y/L = A · F(1, K/L, H/L, N/L), with diminishing returns in each input.
+   ================================================================== */
+const EXP = { k: 0.35, h: 0.25, n: 0.10 };   // sum < 1 ⇒ diminishing returns in each
+
+/* Pure: output per worker. The exponents sum to less than one, which is what
+   makes each input's marginal product fall — the single fact Room 5 runs on. */
+function perWorker(A, kl, hl, nl) {
+  return A * Math.pow(Math.max(kl, 0), EXP.k) * Math.pow(Math.max(hl, 0), EXP.h) * Math.pow(Math.max(nl, 0), EXP.n);
+}
+/* Pure: what one more unit of capital per worker actually adds, here. */
+function mpk(A, kl, hl, nl) {
+  const step = 1e-3;
+  return (perWorker(A, kl + step, hl, nl) - perWorker(A, kl, hl, nl)) / step;
+}
+
+const R4 = {
+  id: "prod", num: 4, topic: "Ch. 12 · What determines productivity",
+  legend: '<span class="d"><i></i>Output per worker</span> <span class="s"><i></i>Where this economy stands</span>',
+  title: "The Productivity Function",
+  lede: "Four dials, one equation: Y/L = A · F(1, K/L, H/L, N/L). Move any of them and output per worker moves. Move the same one twice and the second push does less than the first — which is the whole of the next room.",
+  insight: "Living standards are not a policy choice; they are what a country's workers can produce. That is why this equation sits under every growth policy in the chapter: each one is an attempt to raise <em>one of these four terms</em>. Physical capital and human capital can be built, natural resources mostly cannot, and technology — the <span style=\"font-family:'IBM Plex Mono',monospace\">A</span> that multiplies everything — is the only term that does not run into diminishing returns at all. Notice which term the rich world actually competes on.",
+  tryit: "Drag capital per worker from the far left to the far right and watch the curve flatten under your hand: the same increment of machines buys a great deal at the start and almost nothing at the end. Then drop natural resources to near zero and see whether you can still reach a high standard of living by raising the other three. You can — which is the formal version of the observation that Japan imports nearly everything it digs out of the ground.",
+  mount(root) {
+    const side = $("#side-prod", root), viz = $("#viz-prod", root), cap = $("#cap-prod", root);
+    const st = { A: 1.0, kl: 30, hl: 40, nl: 50 };
+
+    function render() {
+      const s = scale(100, 26);
+      const y = perWorker(st.A, st.kl, st.hl, st.nl);
+      const m = mpk(st.A, st.kl, st.hl, st.nl);
+      let g = frame(s, { xlab: "Capital per worker (K/L)", ylab: "Output per worker (Y/L)", xticks: 5, yticks: 4 });
+      g += fnXY(x => perWorker(st.A, x, st.hl, st.nl), s, "cD");
+      g += guides(s, st.kl, clamp(y, 0, s.pmax));
+      g += dot(s, st.kl, clamp(y, 0, s.pmax), "Y/L = " + n2(y), "d");
+      // the next ten units of capital, drawn as the step it actually buys
+      const k2 = Math.min(100, st.kl + 10), y2 = perWorker(st.A, k2, st.hl, st.nl);
+      g += `<line class="guide" x1="${s.x(st.kl)}" y1="${s.y(clamp(y, 0, s.pmax))}" x2="${s.x(k2)}" y2="${s.y(clamp(y, 0, s.pmax))}"/>`;
+      g += `<line class="guide" x1="${s.x(k2)}" y1="${s.y(clamp(y, 0, s.pmax))}" x2="${s.x(k2)}" y2="${s.y(clamp(y2, 0, s.pmax))}"/>`;
+      g += `<text class="lbl s" x="${s.x(k2) + 8}" y="${s.y(clamp((y + y2) / 2, 0, s.pmax))}">+${n2(y2 - y)}</text>`;
+      viz.innerHTML = svg(g);
+      cap.textContent = "Next 10 units of K/L buy " + n2(y2 - y) + " of output per worker";
+
+      const dials = [
+        { k: "A", label: "Technological knowledge (A)", min: 0.4, max: 2.4, step: 0.05, v: st.A, fmt: n2,
+          note: "Society's understanding of how to produce. It multiplies everything else." },
+        { k: "kl", label: "Physical capital per worker (K/L)", min: 1, max: 100, step: 1, v: st.kl, fmt: n1,
+          note: "Machines, tools, structures. Built by saving and investment." },
+        { k: "hl", label: "Human capital per worker (H/L)", min: 1, max: 100, step: 1, v: st.hl, fmt: n1,
+          note: "Knowledge and skills from education, training and experience." },
+        { k: "nl", label: "Natural resources per worker (N/L)", min: 1, max: 100, step: 1, v: st.nl, fmt: n1,
+          note: "What nature provides. Helpful, and demonstrably not required." }
+      ];
+      side.innerHTML = `
+        <div class="card">
+          ${dials.map(d => `<div class="slider">
+            <label>${d.label} <span class="v">${d.fmt(d.v)}</span></label>
+            <input type="range" min="${d.min}" max="${d.max}" step="${d.step}" value="${d.v}" data-d="${d.k}">
+            <p class="note" style="margin:.35rem 0 0">${d.note}</p></div>`).join("")}
+        </div>
+        <div class="card flat">
+          <div class="readout">
+            <div><b>Output per worker</b> ${n2(y)}</div>
+            <div><b>Marginal product of capital</b> ${n2(m)}</div>
+          </div>
+          <p class="note">Constant returns to scale means doubling <em>every</em> input doubles output. Doubling
+          only one of them does not — and the marginal product above is exactly how much the next unit of that
+          one input is still worth. Watch it fall as you push K/L right.</p>
+        </div>`;
+    }
+
+    side.addEventListener("input", e => {
+      const d = e.target.dataset.d;
+      if (d) { st[d] = +e.target.value; render(); }
+    });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 5 — Catch-Up
+   Same saving rate, different starting capital. Who grows faster?
+   ================================================================== */
+/* Pure: capital accumulates, output follows, and diminishing returns do the
+   rest. k' = k + s·y − δ·k, with y from the same production function as Room 4. */
+function growPath(cfg) {
+  let k = cfg.k0;
+  const y = [], g = [];
+  for (let t = 0; t <= cfg.years; t++) {
+    const yt = perWorker(cfg.A, k, cfg.hl, cfg.nl);
+    y.push(yt);
+    if (t > 0) g.push(100 * (yt - y[t - 1]) / y[t - 1]);
+    k = k + (cfg.s / 100) * yt - (cfg.d / 100) * k;
+  }
+  return { y, g };
+}
+/* Pure: average annual growth over the first `n` years of a path. */
+function avgGrowth(g, n) {
+  const w = g.slice(0, n);
+  return w.length ? w.reduce((a, x) => a + x, 0) / w.length : 0;
+}
+
+const R5 = {
+  id: "catch", num: 5, topic: "Ch. 12 · Diminishing returns and catch-up",
+  legend: '<span class="d"><i></i>Poor country</span> <span class="s"><i></i>Rich country</span>',
+  title: "Catch-Up",
+  lede: "Two countries, identical in every respect except one: how much capital each worker starts with. They save the same share of income, use the same technology, and are run equally well. Watch what happens to their growth rates.",
+  insight: "Over 1960–90 Korea and the United States devoted a similar share of GDP to investment, and Korea grew above 6% a year while the US grew about 2%. Nothing about Koreans was different; what was different was that Korea started with far less capital per worker, where each new machine still had a great deal of work to do. That is the <strong>catch-up effect</strong>, and it is a corollary of diminishing returns rather than an extra assumption. It also predicts its own end: convergence slows as the gap closes, which is why fast growth is easier to start than to keep.",
+  tryit: "Raise the investment share and watch <em>both</em> countries end up richer but neither grow forever — the level rises, the long-run growth rate does not. Then switch on the technology gap: the poor country now converges to a permanently lower path and never catches up at all, however much it saves. That single switch is the difference between the optimistic reading of this chapter and the observed fact that many poor countries have not converged.",
+  mount(root) {
+    const side = $("#side-catch", root), viz = $("#viz-catch", root), cap = $("#cap-catch", root);
+    const st = { s: 20, d: 5, years: 50, gap: false };
+
+    function render() {
+      const base = { A: 1.0, hl: 40, nl: 40, s: st.s, d: st.d, years: st.years };
+      const poor = growPath(Object.assign({}, base, { k0: 5 }));
+      const rich = growPath(Object.assign({}, base, { k0: 50, A: st.gap ? 1.35 : 1.0 }));
+      const xs = [];
+      for (let t = 0; t <= st.years; t++) xs.push(t % 10 === 0 ? String(t) : "");
+      viz.innerHTML = lines([
+        { name: "Rich", v: rich.y, cls: "cS", col: "--supply", lab: "s" },
+        { name: "Poor", v: poor.y, cls: "cD", col: "--demand", lab: "d" }
+      ], { x: xs, ylab: "Output per worker", yf: v => n1(v), alt: "Output per worker for two countries over time" });
+
+      const gp = avgGrowth(poor.g, 10), gr = avgGrowth(rich.g, 10);
+      cap.textContent = "First decade: poor " + n1(gp) + "%/yr · rich " + n1(gr) + "%/yr";
+
+      const gp2 = avgGrowth(poor.g.slice(30), 10), gr2 = avgGrowth(rich.g.slice(30), 10);
+      side.innerHTML = `
+        <div class="card">
+          <div class="slider"><label>Share of income invested <span class="v">${n1(st.s)}%</span></label>
+            <input type="range" min="5" max="40" step="1" value="${st.s}" data-s="1"></div>
+          <div class="slider"><label>Depreciation of capital <span class="v">${n1(st.d)}%</span></label>
+            <input type="range" min="2" max="12" step="0.5" value="${st.d}" data-d="1"></div>
+          <div class="slider"><label>Years simulated <span class="v">${st.years}</span></label>
+            <input type="range" min="20" max="120" step="5" value="${st.years}" data-y="1"></div>
+          <p class="chip-head two" style="margin:14px 0 8px">The honest caveat</p>
+          <div class="chips"><button class="chip" data-gap="1" aria-pressed="${st.gap}">Rich country also has better technology</button></div>
+        </div>
+        <div class="card flat">
+          <table class="ledger">
+            <thead><tr><th></th><th class="num">Years 1–10</th><th class="num">Years 31–40</th></tr></thead>
+            <tbody>
+              <tr><td>Poor country growth</td><td class="num">${n1(gp)}%</td><td class="num">${n1(gp2)}%</td></tr>
+              <tr><td>Rich country growth</td><td class="num">${n1(gr)}%</td><td class="num">${n1(gr2)}%</td></tr>
+              <tr class="marg"><td>Gap in output per worker</td>
+                <td class="num">${n1(rich.y[10] / poor.y[10])}×</td>
+                <td class="num">${n1(rich.y[Math.min(40, st.years)] / poor.y[Math.min(40, st.years)])}×</td></tr>
+            </tbody>
+          </table>
+          <p class="note"><strong>Why the rich country slows to almost nothing.</strong> There is no technological
+          progress in this model — A is fixed — so once capital stops accumulating, growth stops. Real rich
+          economies keep growing at one or two per cent a year because A keeps rising, which is exactly the
+          asymmetry Room 6 asks you to classify. Capital accumulation buys a level; technology buys a rate.</p>
+          <p class="note">${st.gap
+            ? "With a permanent technology gap the poor country still grows, and still never arrives. Saving harder changes where it settles, not who it settles next to."
+            : "Both countries slow down as they accumulate, and both approach the same path. Convergence here is a consequence of one assumption — that they share the same technology."}</p>
+        </div>`;
+    }
+
+    side.addEventListener("input", e => {
+      if (e.target.dataset.s) st.s = +e.target.value;
+      else if (e.target.dataset.d) st.d = +e.target.value;
+      else if (e.target.dataset.y) st.years = +e.target.value;
+      else return;
+      render();
+    });
+    side.addEventListener("click", e => {
+      if (e.target.closest("[data-gap]")) { st.gap = !st.gap; render(); }
+    });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 6 — The Policy Bench
+   ================================================================== */
+const DETERM = [
+  { k: "K", label: "Physical capital per worker (K/L)" },
+  { k: "H", label: "Human capital per worker (H/L)" },
+  { k: "N", label: "Natural resources per worker (N/L)" },
+  { k: "A", label: "Technological knowledge (A)" },
+  { k: "INST", label: "Property rights and political stability" },
+  { k: "BAD", label: "None of these — it is likely to lower growth" }
+];
+const HORIZON = [
+  { k: "level", label: "Raises the level of income; the faster growth fades" },
+  { k: "rate", label: "Can raise the growth rate for as long as it keeps working" },
+  { k: "down", label: "Lowers both" }
+];
+
+const POLICIES = [
+  { t: "Tax incentives for investment by domestic firms", d: "K", h: "level",
+    why: "Saving funds investment, investment raises K/L, and productivity rises with it. But capital runs into <strong>diminishing returns</strong>: the economy grows faster for a while and then settles onto a higher path. The tradeoff is real — producing more capital means producing fewer consumption goods now." },
+  { t: "Tax incentives for foreign firms to build factories here", d: "K", h: "level",
+    why: "Foreign direct investment raises K/L using somebody else's saving, which is why it matters most in countries too poor to fund investment themselves. Some of the returns flow back abroad, so GNP rises less than GDP — and the technology that arrives with the factory is a second, separate benefit." },
+  { t: "Cash payments to families for keeping children in school", d: "H", h: "level",
+    why: "Human capital. In the United States each extra year of schooling raises a worker's wage by about 10%. The tradeoff is the same shape as capital's: a year in school is a year's wages given up now for higher wages later." },
+  { t: "Public nutrition and primary health programmes", d: "H", h: "level",
+    why: "Healthier workers are more productive, so health spending is investment in human capital. Where malnourishment is common the effect is large — Robert Fogel attributed roughly 30% of Britain's growth from 1790 to 1980 to better nutrition." },
+  { t: "Patent protection for new inventions", d: "A", h: "rate",
+    why: "Knowledge is a public good: once discovered it can raise everyone's productivity at no extra cost. That is wonderful for society and ruinous for the inventor's incentive, which is what a patent repairs. <strong>Technological progress is the main reason living standards rise over the long run</strong> — and A is the one term with no diminishing returns." },
+  { t: "Government grants for basic research at universities", d: "A", h: "rate",
+    why: "The same target as patents, reached from the other side: pay for the discovery directly rather than fencing off its returns. Basic research is where the private return is furthest below the social return, which is the standard case for public funding." },
+  { t: "Remove tariffs and open the country to trade", d: "A", h: "rate",
+    why: "Trade acts like a technology: it lets a country obtain goods it is bad at making by giving up goods it is good at making, which raises what its resources can achieve. Outward-oriented economies — South Korea, Singapore, Taiwan after 1960 — generally succeeded." },
+  { t: "Raise tariffs to protect domestic industry from imports", d: "BAD", h: "down",
+    why: "The inward-oriented policy, and the chapter is blunt about its record: countries that tried to raise living standards by avoiding the world economy have generally failed. Argentina across the twentieth century is the standing example." },
+  { t: "Make contracts enforceable and prosecute official corruption", d: "INST", h: "level",
+    why: "Not a determinant of productivity by itself — it is the precondition under which the others can be accumulated at all. When people expect their capital to be stolen or confiscated, they do not build it, and foreigners do not bring theirs. Courts, a stable constitution and honest officials are economic infrastructure." },
+  { t: "Contraception access and female literacy programmes", d: "K", h: "level",
+    why: "Slower population growth means L grows more slowly, so a given capital stock is spread over fewer workers and K/L rises — the chapter calls the opposite effect <strong>diluting the capital stock</strong>. The same argument applies to human capital: fast population growth strains the school system. Female literacy works here by raising the opportunity cost of another child." },
+  { t: "Discover a large offshore gas field", d: "N", h: "level",
+    why: "More natural resources per worker really does raise output per worker — Saudi Arabia is rich this way. But the term is neither necessary nor sufficient: Japan imports nearly all the resources it uses and is rich anyway, and several resource-rich countries are not. A windfall raises the level; it does not by itself raise the growth rate." }
+];
+
+const R6 = {
+  id: "policy", num: 6, topic: "Ch. 12 · Growth and public policy",
+  legend: '<span class="d"><i></i>Before</span> <span class="s"><i></i>After the policy</span>',
+  title: "The Policy Bench",
+  lede: "Eleven policies that all claim to raise living standards. For each one, name the determinant of productivity it actually moves — then say whether it buys a higher level of income or a higher growth rate. The second question is the one that separates the chapters.",
+  insight: "Almost every growth policy is an attempt to raise K/L, H/L, N/L or A, and the first three run into diminishing returns while the fourth does not. That asymmetry is why a country can grow at 6% while it is catching up and cannot grow at 6% for ever, and why the rich world's growth debate is a debate about technology rather than about saving rates. It is also why policies with the same headline — 'boost growth' — have completely different half-lives.",
+  tryit: "Take any policy you classified as <em>level</em> and ask what would have to be true for it to raise the growth rate permanently instead. You will find yourself assuming away diminishing returns in that input. Then ask the harder version: if A has no diminishing returns, what stops any country from simply adopting the world's best technology tomorrow and converging instantly? Your answer to that is a real research question, not a textbook one.",
+  mount(root) {
+    const side = $("#side-policy", root), viz = $("#viz-policy", root), cap = $("#cap-policy", root);
+    let i = 0, stage = 0, clean = 0, streakOk = true;
+
+    function draw(reveal) {
+      const p = POLICIES[i];
+      const s = scale(100, 26);
+      const A0 = 1.0, k0 = 28;
+      const after = reveal
+        ? (p.h === "rate" ? { A: 1.3, k: k0 } : p.h === "down" ? { A: 0.85, k: k0 } : { A: A0, k: 62 })
+        : null;
+      let g = frame(s, { xlab: "Capital per worker (K/L)", ylab: "Output per worker (Y/L)", xticks: 5, yticks: 4 });
+      g += fnXY(x => perWorker(A0, x, 40, 40), s, "cD");
+      const y0 = perWorker(A0, k0, 40, 40);
+      g += dot(s, k0, y0, "before", "d");
+      if (after) {
+        g += fnXY(x => perWorker(after.A, x, 40, 40), s, "cS");
+        const y1 = perWorker(after.A, after.k, 40, 40);
+        g += dot(s, after.k, clamp(y1, 0, s.pmax), "after", "s");
+        g += `<text class="lbl k" x="${s.x(6)}" y="${s.t + 16}">${p.h === "rate"
+          ? "the whole curve lifts — nothing was accumulated"
+          : p.h === "down" ? "the curve sinks" : "we climb the same curve, into flatter ground"}</text>`;
+      }
+      viz.innerHTML = svg(g);
+      cap.textContent = "Policy " + (i + 1) + " of " + POLICIES.length + " · " + clean + " clean";
+    }
+
+    function load() {
+      const p = POLICIES[i];
+      stage = 0; streakOk = true;
+      side.innerHTML = `
+        <div class="scenario"><span class="mkt">Proposed policy</span><p>${p.t}</p></div>
+        <div class="card">
+          <p class="chip-head" style="margin-bottom:12px">Which determinant does it move?</p>
+          <div class="choices">${DETERM.map(d => `<button class="choice" data-k="${d.k}">${d.label}</button>`).join("")}</div>
+        </div>
+        <div class="card" id="p6b" hidden>
+          <h3>Level, or rate?</h3>
+          <div class="choices">${HORIZON.map(h => `<button class="choice" data-h="${h.k}">${h.label}</button>`).join("")}</div>
+        </div>
+        <div id="p6v"></div>
+        <div class="rowbtn" id="p6nav"></div>`;
+      draw(false);
+    }
+
+    side.addEventListener("click", e => {
+      const k = e.target.closest("[data-k]"), h = e.target.closest("[data-h]"), p = POLICIES[i];
+      if (k && stage === 0) {
+        stage = 1;
+        if (k.dataset.k !== p.d) streakOk = false;
+        side.querySelectorAll("[data-k]").forEach(b => {
+          b.disabled = true;
+          if (b.dataset.k === p.d) b.classList.add("right");
+          else if (b === k) b.classList.add("wrong");
+        });
+        $("#p6b", side).hidden = false;
+        return;
+      }
+      if (h && stage === 1) {
+        stage = 2;
+        if (h.dataset.h !== p.h) streakOk = false;
+        if (streakOk) clean += 1;
+        side.querySelectorAll("[data-h]").forEach(b => {
+          b.disabled = true;
+          if (b.dataset.h === p.h) b.classList.add("right");
+          else if (b === h) b.classList.add("wrong");
+        });
+        draw(true);
+        $("#p6v", side).innerHTML =
+          `<div class="verdict ${streakOk ? "ok" : "no"}"><strong>${streakOk ? "Both right." : "Look at the curve."}</strong> ${p.why}</div>`;
+        $("#p6nav", side).innerHTML = i < POLICIES.length - 1
+          ? `<button class="btn" data-next="1">Next policy →</button>`
+          : `<button class="btn ghost" data-again="1">Run the bench again</button>`;
+        return;
+      }
+      if (e.target.closest("[data-next]")) { i += 1; load(); }
+      if (e.target.closest("[data-again]")) { i = 0; clean = 0; load(); }
+    });
+
+    load();
+  }
+};
+
+/* ==================================================================
+   ROOM 7 — Where Saving Comes From
+   Three kinds of saving, one identity, and a tax cut that may or may
+   not leave investment where it found it.
+   ================================================================== */
+/* Pure: the closed-economy saving accounts. Everything else in this room is
+   read off this, so the ledger and the bars cannot disagree. */
+function savingAccounts(Y, C, G, T) {
+  const priv = Y - T - C;
+  const pub = T - G;
+  const nat = Y - C - G;        // identically priv + pub
+  return { priv, pub, nat, I: nat, deficit: Math.max(0, G - T), surplus: Math.max(0, T - G) };
+}
+/* Pure: a tax cut of `cut`, of which households save the fraction `keep`. */
+function taxCut(base, cut, keep) {
+  const T = base.T - cut;
+  const C = base.C + cut * (1 - keep);
+  return { Y: base.Y, C, G: base.G, T };
+}
+
+const INSTITUTIONS = [
+  { k: "bond", kind: "market", label: "A bond", d: "A certificate of indebtedness — the firm or government owes you the principal plus interest." },
+  { k: "stock", kind: "market", label: "A share of stock", d: "A claim to partial ownership of a firm, and to a share of its profits if there are any." },
+  { k: "bank", kind: "inter", label: "A bank", d: "Takes deposits from savers and makes loans to borrowers. Neither side deals with the other." },
+  { k: "mf", kind: "inter", label: "A mutual fund", d: "Sells shares to the public and buys a portfolio of stocks and bonds with the proceeds." }
+];
+
+const R7 = {
+  id: "save", num: 7, topic: "Ch. 13 · The three kinds of saving",
+  legend: '<span class="d"><i></i>Adds to national saving</span> <span class="s"><i></i>Subtracts</span>',
+  title: "Where Saving Comes From",
+  lede: "Private saving, public saving, national saving — and in a closed economy, investment equals the last of them exactly. Set the four aggregates, then cut taxes and decide how much of the cut households put away. Investment is watching.",
+  insight: "Two definitions and one identity do all the work here. Private saving is <span style=\"font-family:'IBM Plex Mono',monospace\">Y − T − C</span>, public saving is <span style=\"font-family:'IBM Plex Mono',monospace\">T − G</span>, and adding them cancels T entirely to give <span style=\"font-family:'IBM Plex Mono',monospace\">Y − C − G</span>. Since a closed economy's output is <span style=\"font-family:'IBM Plex Mono',monospace\">Y = C + I + G</span>, that same quantity <em>is</em> investment. Saving equals investment not because anything balances them, but because they are two names for the output nobody consumed. A budget deficit is then simply negative public saving, which is why it belongs in this arithmetic rather than in a separate moral argument.",
+  tryit: "Cut taxes and set households to save the whole cut: public saving falls, private saving rises by the same amount, national saving and investment do not move at all — Ricardian equivalence, arrived at by accident. Now slide the saved fraction down towards zero and watch investment fall rupee for rupee with the part that got spent. Whether households behave like the first case or the second is an empirical question worth billions, and neither the identity nor this lab can settle it.",
+  mount(root) {
+    const side = $("#side-save", root), viz = $("#viz-save", root), cap = $("#cap-save", root);
+    const base = { Y: 300, C: 195, G: 60, T: 51 };   // ₹ lakh crore
+    const st = { cut: 0, keep: 1 };
+
+    const cr = v => "₹" + n1(v) + " L cr";
+
+    function render() {
+      const now = taxCut(base, st.cut, st.keep);
+      const a0 = savingAccounts(base.Y, base.C, base.G, base.T);
+      const a1 = savingAccounts(now.Y, now.C, now.G, now.T);
+      viz.innerHTML = bars([
+        { k: "Private", v: a1.priv }, { k: "Public", v: a1.pub },
+        { k: "National", v: a1.nat }, { k: "Investment", v: a1.I }
+      ], { ylab: "₹ lakh crore", alt: "Private, public and national saving, and investment" });
+      cap.textContent = st.cut
+        ? "Tax cut ₹" + n1(st.cut) + " L cr · investment " + (a1.I === a0.I ? "unchanged" : (a1.I > a0.I ? "+" : "") + n1(a1.I - a0.I))
+        : "No tax cut yet · investment " + cr(a1.I);
+
+      side.innerHTML = `
+        <div class="card">
+          <div class="slider"><label>Output Y <span class="v">${cr(now.Y)}</span></label>
+            <input type="range" min="200" max="400" step="5" value="${base.Y}" data-k="Y"></div>
+          <div class="slider"><label>Consumption C <span class="v">${cr(now.C)}</span></label>
+            <input type="range" min="100" max="300" step="5" value="${base.C}" data-k="C"></div>
+          <div class="slider"><label>Government purchases G <span class="v">${cr(now.G)}</span></label>
+            <input type="range" min="20" max="120" step="1" value="${base.G}" data-k="G"></div>
+          <div class="slider"><label>Tax revenue T <span class="v">${cr(base.T)}</span></label>
+            <input type="range" min="20" max="120" step="1" value="${base.T}" data-k="T"></div>
+        </div>
+        <div class="card">
+          <p class="chip-head" style="margin-bottom:8px">Now cut taxes</p>
+          <div class="slider"><label>Size of the tax cut <span class="v">${cr(st.cut)}</span></label>
+            <input type="range" min="0" max="20" step="0.5" value="${st.cut}" data-c="1"></div>
+          <p class="chip-head two" style="margin:12px 0 8px">Households save…</p>
+          <div class="chips">
+            <button class="chip" data-keep="1" aria-pressed="${st.keep === 1}">all of it</button>
+            <button class="chip" data-keep="0.25" aria-pressed="${st.keep === 0.25}">a quarter of it</button>
+            <button class="chip" data-keep="0" aria-pressed="${st.keep === 0}">none of it</button>
+          </div>
+        </div>
+        <div class="card flat">
+          <table class="ledger">
+            <thead><tr><th></th><th class="num">Before</th><th class="num">After</th></tr></thead>
+            <tbody>
+              <tr><td>Private saving &nbsp;<span style="opacity:.6">Y − T − C</span></td><td class="num">${cr(a0.priv)}</td><td class="num">${cr(a1.priv)}</td></tr>
+              <tr><td>Public saving &nbsp;<span style="opacity:.6">T − G</span></td><td class="num">${cr(a0.pub)}</td><td class="num">${cr(a1.pub)}</td></tr>
+              <tr class="marg"><td>National saving &nbsp;<span style="opacity:.6">Y − C − G</span></td><td class="num">${cr(a0.nat)}</td><td class="num">${cr(a1.nat)}</td></tr>
+              <tr class="marg"><td>Investment &nbsp;<span style="opacity:.6">= national saving</span></td><td class="num">${cr(a0.I)}</td><td class="num">${cr(a1.I)}</td></tr>
+            </tbody>
+          </table>
+          <p class="note">${a1.pub < 0
+            ? "The government is running a <strong>budget deficit</strong> of " + cr(-a1.pub) + " — that is, public saving of exactly that amount with a minus sign in front of it."
+            : a1.pub > 0 ? "The government is running a <strong>budget surplus</strong> of " + cr(a1.pub) + ", which adds to the pool available for investment."
+            : "The budget is exactly balanced, so public saving is zero and national saving is entirely private."}</p>
+        </div>
+        <div class="card flat">
+          <h3>Who moves the money</h3>
+          <table class="ledger"><tbody>
+            ${INSTITUTIONS.map(x => `<tr><td><strong>${x.label}</strong> — ${x.d}</td>
+              <td class="num">${x.kind === "market" ? "financial market" : "intermediary"}</td></tr>`).join("")}
+          </tbody></table>
+          <p class="note">A <strong>financial market</strong> lets savers hand funds to borrowers directly; an
+          <strong>intermediary</strong> stands between them so that neither needs to find the other. Both do the same
+          job — moving this year's unconsumed output to whoever will build something with it. And note again:
+          buying a bond or a share is <em>saving</em>, not investment. Investment is the new factory the money pays for.</p>
+        </div>`;
+    }
+
+    side.addEventListener("input", e => {
+      const k = e.target.dataset.k;
+      if (k) { base[k] = +e.target.value; render(); }
+      else if (e.target.dataset.c) { st.cut = +e.target.value; render(); }
+    });
+    side.addEventListener("click", e => {
+      const b = e.target.closest("[data-keep]");
+      if (b) { st.keep = +b.dataset.keep; render(); }
+    });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 8 — The Market for Loanable Funds
+   ================================================================== */
+/* Pure: supply comes from saving, demand from investment, in ₹ lakh crore.
+   Calibrated so the three textbook policy experiments land on their textbook
+   answers: 5% and 60 at rest; 4% and 70; 6% and 70; 6% and 50. */
+const LFS = (r, sh) => 10 + 10 * r + (sh || 0);
+const LFD = (r, sh) => 110 - 10 * r + (sh || 0);
+
+function loanable(sShift, dShift) {
+  // 10 + 10r + sShift = 110 - 10r + dShift
+  const r = (100 + dShift - sShift) / 20;
+  return { r, q: LFS(r, sShift) };
+}
+
+const LFPOL = [
+  { k: "none", s: 0, d: 0, label: "Nothing — leave the market alone",
+    why: "The interest rate is doing its one job: it is the return to saving and the cost of borrowing at once, and it moves until the amount savers want to lend equals the amount borrowers want to borrow. That quantity is simultaneously national saving and investment." },
+  { k: "save", s: 1, d: 0, label: "Tax incentives for saving",
+    why: "Saving becomes more attractive at every interest rate, so the <strong>supply</strong> of loanable funds shifts right. The interest rate falls and the equilibrium quantity rises — more investment, financed more cheaply. Note which curve moved: the policy targeted savers, and borrowers got the discount." },
+  { k: "invest", s: 0, d: 1, label: "An investment tax credit",
+    why: "Investment projects become more profitable at every interest rate, so the <strong>demand</strong> for loanable funds shifts right. The interest rate rises and the quantity rises. Same direction for investment as the saving incentive, opposite direction for the interest rate — which is how you tell, from data, which of the two actually happened." },
+  { k: "deficit", s: -1, d: 0, label: "The government runs a budget deficit",
+    why: "A deficit is negative public saving, so national saving falls and the <strong>supply</strong> of loanable funds shifts left. The interest rate rises and investment falls. This is <strong>crowding out</strong>: the government borrows, and the funds it borrows are not available to the firms that would have built something. Chapter 12 supplies the rest of the sentence — less investment means lower K/L, which means lower productivity and a lower standard of living later." }
+];
+
+const R8 = {
+  id: "loan", num: 8, topic: "Ch. 13 · The market for loanable funds",
+  legend: '<span class="d"><i></i>Demand — investment</span> <span class="s"><i></i>Supply — saving</span>',
+  title: "The Market for Loanable Funds",
+  lede: "One market, one interest rate, and everything the financial system does compressed into a single supply-and-demand diagram. Run the three policies and watch which curve each one moves — the answer to that is the whole analysis.",
+  insight: "Supply is saving, demand is investment, and the real interest rate is the price that clears them. Every result in this chapter comes from asking one question of a policy: <em>does it move the curve that comes from saving, or the curve that comes from investment?</em> Saving incentives and budget deficits both move supply, in opposite directions. An investment tax credit moves demand. Get the curve right and the signs follow; get it wrong and no amount of arithmetic will rescue you.",
+  tryit: "Set the deficit as large as the slider allows and read the investment figure — then go back to Room 5 and start the poor country with that much less capital. That chain, from a fiscal decision to a standard of living thirty years out, is the reason this chapter sits between the growth chapter and everything after it. Then find the pair of policies that move investment the same way and the interest rate in opposite directions, and say what you would have to observe to tell them apart.",
+  mount(root) {
+    const side = $("#side-loan", root), viz = $("#viz-loan", root), cap = $("#cap-loan", root);
+    const st = { pol: "none", size: 20 };
+
+    function render() {
+      const P = LFPOL.find(x => x.k === st.pol);
+      const sS = P.s * st.size, dS = P.d * st.size;
+      const e0 = loanable(0, 0), e1 = loanable(sS, dS);
+      const s = scale(120, 10);
+      let g = frame(s, { xlab: "Loanable funds (₹ lakh crore)", ylab: "Real interest rate (%)", xticks: 6, yticks: 5 });
+      // the original pair, ghosted when a policy has moved one of them
+      const moved = sS !== 0 || dS !== 0;
+      g += curve(r => LFS(r, 0), s, "cS" + (moved ? " ghost" : ""));
+      g += curve(r => LFD(r, 0), s, "cD" + (moved ? " ghost" : ""));
+      if (moved) {
+        if (sS) g += curve(r => LFS(r, sS), s, "cS");
+        if (dS) g += curve(r => LFD(r, dS), s, "cD");
+      }
+      g += guides(s, e1.q, e1.r);
+      g += dot(s, e0.q, e0.r, moved ? "before" : "r = " + n1(e0.r) + "%", "k");
+      if (moved) g += dot(s, e1.q, e1.r, "after", "s");
+      viz.innerHTML = svg(g);
+      cap.textContent = "r = " + n1(e1.r) + "% · saving = investment = ₹" + n1(e1.q) + " L cr";
+
+      const dr = e1.r - e0.r, dq = e1.q - e0.q;
+      side.innerHTML = `
+        <div class="card">
+          <p class="chip-head" style="margin-bottom:10px">Policy</p>
+          <div class="chips">${LFPOL.map(x => `<button class="chip" data-p="${x.k}" aria-pressed="${st.pol === x.k}">${x.label}</button>`).join("")}</div>
+          <div class="slider" style="margin-top:14px"><label>How large a shift <span class="v">₹${n1(st.size)} L cr</span></label>
+            <input type="range" min="0" max="40" step="1" value="${st.size}" data-size="1" ${st.pol === "none" ? "disabled" : ""}></div>
+        </div>
+        <div class="card flat">
+          <div class="readout">
+            <div><b>Interest rate</b> ${n1(e1.r)}% <span class="${dr >= 0 ? "up" : "down"}"></span></div>
+            <div><b>Saving = investment</b> ₹${n1(e1.q)} L cr <span class="${dq >= 0 ? "up" : "down"}"></span></div>
+          </div>
+          <table class="ledger">
+            <thead><tr><th></th><th class="num">Before</th><th class="num">After</th></tr></thead>
+            <tbody>
+              <tr><td>Real interest rate</td><td class="num">${n1(e0.r)}%</td><td class="num">${n1(e1.r)}%</td></tr>
+              <tr class="marg"><td>Investment</td><td class="num">₹${n1(e0.q)} L cr</td><td class="num">₹${n1(e1.q)} L cr</td></tr>
+            </tbody>
+          </table>
+          <div class="verdict ${st.pol === "deficit" ? "no" : "ok"}" style="margin-top:12px">
+            <strong>${P.label}.</strong> ${P.why}</div>
+          ${st.pol === "deficit" && dq < 0 ? `<p class="note"><strong>Crowded out:</strong> ₹${n1(-dq)} lakh crore
+            of investment that would have happened did not, because the government borrowed the funds first. Nobody
+            was refused a loan at the old interest rate — the rate simply rose until that much investment stopped
+            being worth doing.</p>` : ""}
+        </div>`;
+    }
+
+    side.addEventListener("input", e => { if (e.target.dataset.size) { st.size = +e.target.value; render(); } });
+    side.addEventListener("click", e => {
+      const b = e.target.closest("[data-p]");
+      if (b) { st.pol = b.dataset.p; render(); }
+    });
+    render();
+  }
+};
+
+/* ==================================================================
+   ROOM 9 — Arguments Worth Having
+   ================================================================== */
+const PROMPTS = [
+  { t: "Ch. 10 · the imputation line",
+    q: "The accounts impute a rent for an owner-occupied house, so that a country of owners does not look poorer than an identical country of renters. They impute nothing for a meal you cook yourself. Both are services you produce and consume at home. What principled rule admits the first and refuses the second?",
+    h: "One of them has an observable market price for a near-identical service nearby. Is observability a principle, or an excuse?" },
+  { t: "Ch. 10 · the reconstruction boom",
+    q: "A cyclone destroys a coastal town; the rebuilding adds several thousand crore to GDP. Everyone agrees the country is worse off. Should the national accounts subtract the destruction — and if so, who values the destroyed houses, at what price, in what year?",
+    h: "There is a real answer involving the capital stock, and it explains why 'net' domestic product exists and why nobody quotes it." },
+  { t: "Ch. 10 · what the headline is for",
+    q: "If GDP misses clean air, unpaid care, leisure and distribution, why does almost every government still set policy against it rather than against one of the composite well-being indices?",
+    h: "Consider what makes a statistic usable: timeliness, comparability, and the difficulty of manipulating it. Then ask which of those an index of well-being can promise." },
+  { t: "Ch. 12 · the convergence that did not happen",
+    q: "Diminishing returns predict that poor countries grow faster and catch up. Korea and Singapore did. Many countries with similar starting capital did not. What is being held constant in the prediction that was not constant in fact?",
+    h: "Room 5 has a switch for exactly one of the candidates. Name three more it does not have." },
+  { t: "Ch. 12 · resources",
+    q: "Saudi Arabia is rich because of what is under it. Japan has almost nothing under it and is also rich. Is N/L in the production function doing any work at all, or is it there for completeness?",
+    h: "Consider a country that has resources and cannot sell them, and a country that has none and can buy them freely. What is the actual constraint?" },
+  { t: "Ch. 12 · the population question",
+    q: "The chapter gives three channels through which population growth affects living standards, and they do not all point the same way: it stretches resources, dilutes the capital stock, and produces more inventors. Under what conditions does the third dominate?",
+    h: "Kremer's evidence is historical and aggregate. Ask what has to be true about the returns to ideas for more people to be unambiguously good." },
+  { t: "Ch. 12 · the uncomfortable policy",
+    q: "If free trade acts like a technology and raises productivity, why do outward-oriented reforms so often lose elections in the places that would gain most from them?",
+    h: "Think about who bears the adjustment, over what timescale, and whether the gains are concentrated or diffuse. This is a question about the distribution of a positive-sum change." },
+  { t: "Ch. 13 · the identity and the argument",
+    q: "Saving equals investment by definition in a closed economy. People nevertheless argue constantly about whether a country saves enough. If the identity always holds, what exactly are they arguing about?",
+    h: "An identity fixes the quantity, not the level at which it is fixed. Ask what determines where the two curves cross rather than whether they cross." },
+  { t: "Ch. 13 · the tax cut nobody agrees about",
+    q: "A tax cut lowers public saving for certain. Whether it lowers national saving depends entirely on how much of it households put away. Which of the chapter's two scenarios is closer to the truth, and what evidence would settle it?",
+    h: "Note what is at stake: in one scenario investment is untouched, in the other it falls rupee for rupee with the spent portion. The same policy, two opposite verdicts on long-run growth." },
+  { t: "Ch. 13 · crowding out, and when it does not",
+    q: "The model says a budget deficit raises the interest rate and crowds out investment. Governments routinely run deficits without interest rates moving much. Name three assumptions in the loanable-funds diagram that could account for the gap.",
+    h: "The model assumes a closed economy, a single interest rate, and an economy already using its resources. Relax each in turn and see which one does the most work." },
+  { t: "Ch. 13 · what the borrowing bought",
+    q: "The model treats every rupee the government borrows as a rupee of investment displaced. Does the conclusion survive if the government borrows to build roads, ports and power lines?",
+    h: "Chapter 12 has a term for publicly built capital, and it is the same K in the same production function. So the question is not whether it is borrowing — it is whether the return beats the private project it displaced." },
+  { t: "Across all three chapters",
+    q: "GDP, the productivity function and the national saving rate are all measurements that shape the policies aimed at them. Name one case in each where the act of targeting the measure would corrupt it.",
+    h: "This is Goodhart's law, stated three times. The interesting part is that the three measures are not equally easy to corrupt — rank them, and say why." }
+];
+
+const R9 = {
+  id: "argue", num: 9, topic: "Open questions",
+  title: "Arguments Worth Having",
+  lede: "Twelve questions with no answer key, in rough order of how badly they break if you answer them carelessly. None of them are collected, graded, or checked. Take the ones that annoy you.",
+  insight: "", tryit: "",
+  mount() { /* rendered as a static deck below */ }
+};
+
+/* ============ boot ============ */
+const ROOMS = [R1, R2, R3, R4, R5, R6, R7, R8, R9];
+
+const panels = $("#panels"), tabsEl = $("#tabs");
+
+tabsEl.innerHTML = ROOMS.map((m, k) =>
+  `<button class="tab" role="tab" id="tab-${m.id}" aria-controls="pan-${m.id}" aria-selected="${k === 0}" data-id="${m.id}">
+     <span class="n">${m.num}</span><span class="t">${m.title}</span></button>`).join("");
+
+panels.innerHTML = ROOMS.slice(0, 8).map(shell).join("") + `
+  <section class="module" id="pan-argue" role="tabpanel" aria-labelledby="tab-argue">
+    <div class="mod-head">
+      <span class="eyebrow">Room ${R9.num} · ${R9.topic}</span>
+      <h2>${R9.title}</h2>
+      <p class="lede">${R9.lede}</p>
+    </div>
+    <div class="deck">${PROMPTS.map(p => `
+      <article class="prompt">
+        <span class="tagline">${p.t}</span>
+        <p>${p.q}</p>
+        <p class="hint">${p.h}</p>
+      </article>`).join("")}</div>
+  </section>`;
+
+let seen = {};
+try { seen = JSON.parse(store("seen") || "{}") || {}; } catch (e) { seen = {}; }
+
+function markSeen(id) {
+  seen[id] = 1;
+  store("seen", JSON.stringify(seen));
+  ROOMS.forEach(m => { const t = $("#tab-" + m.id); if (t) t.dataset.seen = seen[m.id] ? "1" : "0"; });
+  $("#progress").textContent = Object.keys(seen).length + " / " + ROOMS.length + " rooms opened";
+}
+
+const mounted = {};
+function show(id) {
+  ROOMS.forEach(m => {
+    const p = $("#pan-" + m.id), t = $("#tab-" + m.id);
+    const on = m.id === id;
+    p.classList.toggle("on", on);
+    t.setAttribute("aria-selected", on ? "true" : "false");
+  });
+  if (!mounted[id]) {
+    const m = ROOMS.find(x => x.id === id);
+    if (m && m.mount && id !== "argue") { m.mount(document); }
+    mounted[id] = true;
+  }
+  markSeen(id);
+}
+
+tabsEl.addEventListener("click", e => {
+  const t = e.target.closest(".tab");
+  if (t) show(t.dataset.id);
+});
+
+/* theme toggle: cycles system → light → dark */
+const tb = $("#themeBtn");
+const saved = store("theme");
+if (saved === "light" || saved === "dark") document.documentElement.setAttribute("data-theme", saved);
+tb.addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const next = cur === "light" ? "dark" : cur === "dark" ? null : "light";
+  if (next) { document.documentElement.setAttribute("data-theme", next); store("theme", next); }
+  else { document.documentElement.removeAttribute("data-theme"); store("theme", "system"); }
+});
+
+/* The pure economics, exposed so the eval suite can drive it without a browser.
+   A teaching instrument with a wrong answer key is worse than no instrument, so
+   every number this lab asserts is computed by one of these and tested. */
+window.__macro = {
+  LANDS, landsDelta, landsVerdict,
+  YEARS, GOODS, gdpSeries,
+  MISSES, missTotal,
+  EXP, perWorker, mpk, growPath, avgGrowth,
+  POLICIES, DETERM, HORIZON,
+  savingAccounts, taxCut, INSTITUTIONS,
+  LFS, LFD, loanable, LFPOL
+};
+
+show("land");
+markSeen("land");
+</script>
+
+<script src="../assets/site-licence.js"></script>
+</body>
+</html>
