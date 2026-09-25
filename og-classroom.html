@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Econstellar Classroom OG card</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@700;900&display=swap');
+:root{--cyan:#00d4ff;--green:#00ff88;--amber:#f59e0b;--dim:#8b95a3;--mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--disp:'Orbitron',sans-serif}
+html,body{margin:0;padding:0}
+.card{width:1200px;height:630px;background:#000;color:#fff;position:relative;overflow:hidden;font-family:var(--sans);
+  background-image:radial-gradient(circle at 12% 10%,rgba(0,212,255,.12),transparent 38%),radial-gradient(circle at 88% 82%,rgba(0,255,136,.11),transparent 42%);}
+.pad{position:absolute;inset:0;padding:56px 64px;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--disp);font-weight:900;font-size:30px;letter-spacing:1px;color:#fff}
+.brand .d{color:var(--green)}
+.pill{font-family:var(--mono);font-size:18px;color:var(--green);border:1px solid rgba(0,255,136,.4);border-radius:999px;padding:8px 18px}
+.mid{flex:1;display:flex;align-items:center;gap:44px;margin-top:8px}
+.left{flex:1.2}
+.h1{font-family:var(--disp);font-weight:900;font-size:52px;line-height:1.1;margin:0 0 20px}
+.h1 .g{background:linear-gradient(90deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:23px;line-height:1.45;color:#c9d1d9;max-width:31ch}
+.right{flex:.8;background:rgba(10,16,24,.85);border:1px solid rgba(0,212,255,.25);border-radius:18px;padding:22px 24px 16px}
+.rt-lbl{font-family:var(--mono);font-size:16px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+.rt-title{font-family:var(--mono);font-size:20px;color:#fff;margin:4px 0 6px}
+svg{display:block;width:100%;height:auto}
+.ax{stroke:rgba(255,255,255,.3);stroke-width:1.5}
+.gh{stroke:var(--cyan);stroke-width:2.5;fill:none;opacity:.32;stroke-dasharray:6 5}
+.dx{stroke:var(--cyan);stroke-width:3;fill:none}
+.sx{stroke:var(--amber);stroke-width:3;fill:none}
+.lb{font-family:var(--mono);font-size:15px}
+.bottom{font-family:var(--mono);font-size:19px;color:var(--dim);display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.08);padding-top:20px}
+.bottom .u{color:var(--cyan)}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="pad">
+    <div class="top">
+      <div class="brand">◆ ECONSTE<span class="d">LLAR</span> CLASSROOM</div>
+      <div class="pill">free · no account</div>
+    </div>
+    <div class="mid">
+      <div class="left">
+        <div class="h1">Move the curve.<br>Flip the sign.<br><span class="g">Break the conclusion.</span></div>
+        <div class="sub">Free labs and games for introductory economics, for learners, teachers and tutors anywhere.</div>
+      </div>
+      <div class="right">
+        <div class="rt-lbl">Room 1 · shift or slide?</div>
+        <div class="rt-title">demand shifts right</div>
+        <svg viewBox="0 0 360 250" role="img" aria-label="Supply and demand diagram with demand shifting right">
+          <line class="ax" x1="36" y1="12" x2="36" y2="226"/>
+          <line class="ax" x1="36" y1="226" x2="350" y2="226"/>
+          <line class="gh" x1="44" y1="30" x2="262" y2="218"/>
+          <line class="dx" x1="104" y1="30" x2="322" y2="218"/>
+          <line class="sx" x1="44" y1="210" x2="322" y2="42"/>
+          <circle cx="166.7" cy="135.8" r="6" fill="rgba(255,255,255,.45)"/>
+          <circle cx="202" cy="114.5" r="7" fill="var(--green)"/>
+          <text class="lb" x="330" y="222" fill="var(--cyan)">D′</text>
+          <text class="lb" x="268" y="222" fill="var(--cyan)" opacity=".5">D</text>
+          <text class="lb" x="328" y="46" fill="var(--amber)">S</text>
+          <text class="lb" x="10" y="24" fill="var(--dim)">P</text>
+          <text class="lb" x="336" y="245" fill="var(--dim)">Q</text>
+        </svg>
+      </div>
+    </div>
+    <div class="bottom"><span class="u">econstellars.com/classroom</span><span>2 labs · 17 rooms · 2 games · CC BY 4.0</span></div>
+  </div>
+</div>
+</body>
+</html>
