@@ -27,8 +27,9 @@
       prints the exact block to paste below. Nothing is sent anywhere; the page
       only parses the URL you paste.
 
-   4. Paste, commit, done. Until then the game runs fine and simply tells
-      students to copy their result into a Classroom private comment instead.
+   4. Paste, set  submissions: true  below, commit, done. While submissions is
+      false (or no Form is wired) the Submit button stays greyed out, nothing
+      is sent, and players see their run summary on their own screen instead.
 
    ── THE ONE THAT WILL CATCH YOU ───────────────────────────────────────────────
    A new Google Form is NOT publicly reachable until you press "Publish" (the
@@ -44,6 +45,11 @@
 window.MM_CONFIG = {
 
   /* ── submission ─────────────────────────────────────────────────────────── */
+  // Master switch. false = the Submit button is shown greyed out, nothing is
+  // ever sent, and the gate asks only for a display name. The Form wiring
+  // below is kept, so switching submission back on is just setting true.
+  submissions: false,
+
   // The Form's POST endpoint. Ends in /formResponse (NOT /viewform).
   formAction: "https://docs.google.com/forms/d/e/1FAIpQLSdgCzpC3o_7A1XIkHZ8z1VjgQynKSlBD9ig1ijb6GMDbRprdw/formResponse",
 
